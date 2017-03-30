@@ -13,3 +13,4 @@ See individual project `README.md`'s for more information of each.
 - [solar](solar/): A standalone accessory for transporting Efergy API data into Homekit
 - [esp-fw](esp-fw/): Custom ESP/Arduino firmware and libraries used for automation projects
 - [sprinkle](sprinkle/): A standalone accessory to control Sprinkler relays connected via RPi GPIO.
+- [pcbs](pcbs/): A collection of PCB designs for ESP8266 integrated use-cases.
