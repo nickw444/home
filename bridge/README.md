@@ -42,7 +42,7 @@ wish to bridge.
 
 ### Example Config
 
-```
+```yaml
 name: MainBridge
 manufacturer: nickw
 model: homebridge
