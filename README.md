@@ -5,8 +5,7 @@ with Apple Homekit.
 
 See individual project `README.md`'s for more information of each.
 
-![mono-repo](http://i.imgur.com/PBiiZN8.png)
-
+<img alt="mono-repo" src="http://i.imgur.com/PBiiZN8.png" height="200px" />
 
 ## Sub-Projects
 
