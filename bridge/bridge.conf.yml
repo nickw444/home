@@ -1,0 +1,17 @@
+
+name: MainBridge
+manufacturer: nickw
+model: homebridge
+
+accessories:
+  - model: sonoff-switch
+    serial: 5ccf7f9551dc
+    name: Test Room
+
+  - model: sonoff-th10
+    serial: 60194173177
+    name: TempTest
+
+  - model: garagedoor
+    serial: 0000
+    name: GarageTest
