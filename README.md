@@ -5,4 +5,4 @@ with Apple Homekit.
 
 See individual project `README.md`'s for more information of each.
 
-![mono-repo](http://imgur.com/a/bGe6l)
+![mono-repo](http://i.imgur.com/PBiiZN8.png)
