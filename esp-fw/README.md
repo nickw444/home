@@ -16,7 +16,10 @@ Most firmware here targets [ITEAD sonoff](https://www.itead.cc/sonoff-wifi-wirel
 - [SimpleMQTT](lib/SimpleMQTT): A library to generalise connection, subscription and publishes from an ESP/Arduino to an MQTT broker.
 
 
-## Sonoff Resources
+## Sonoff/ESP/FW Resources
 
 - https://www.hackster.io/idreams/getting-started-with-sonoff-rf-98a724
 - https://www.itead.cc/blog/sonoff-esp8266-reprogramming-part-1-control-mains-from-anywhere
+- http://www.esp8266.com/wiki/doku.php?id=esp8266-module-family
+- http://www.forward.com.au/pfod/ESP8266/GPIOpins/ESP8266_01_pin_magic.html
+- http://www.allaboutcircuits.com/projects/breadboard-and-program-an-esp-01-circuit-with-the-arduino-ide/
