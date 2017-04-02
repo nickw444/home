@@ -8,6 +8,7 @@ at the mains power board.
 
 See `PowerService.Update`
 
+```
 ## Usage
 ./solar --help
 usage: solar [<flags>] <accessToken> <accessCode> [<port>]
@@ -19,7 +20,7 @@ Args:
   <accessToken>  Access token used to connect to efergy API
   <accessCode>   Homekit Access code to use
   [<port>]       Port for homekit to listen on
-
+```
 
 ## Building
 
