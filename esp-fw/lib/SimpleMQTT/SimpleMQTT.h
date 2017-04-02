@@ -34,7 +34,7 @@ struct WMSettings {
 class SimpleMQTT {
   public:
     SimpleMQTT(uint8_t buttonPin, uint8_t ledPin, uint16_t eeprom_salt);
-    SimpleMQTT(uint8_t buttonPin, uint8_t ledPin, uint16_t eeprom_salt, String willTopic, char * willMsg);
+    SimpleMQTT(uint8_t buttonPin, uint8_t ledPin, uint16_t eeprom_salt, String willTopic, const char * willMsg);
     void beginConfig();
     void tick();
 
@@ -42,7 +42,7 @@ class SimpleMQTT {
     void onButtonPress(ON_BUTTON_PRESS_SIGNATURE callback);
 
     void subscribeTo(String topic, SIMPLEMQTT_CALLBACK_SIGNATURE callback);
-    void publish(String topic, char * data);
+    void publish(String topic, const char * data);
 
     void reboot();
     void reset();
@@ -62,7 +62,7 @@ class SimpleMQTT {
     uint8_t ledPin;
     uint16_t eepromSalt;
     String willTopic;
-    char * willMsg;
+    const char * willMsg;
 
     bool shouldSaveConfig = false;
 

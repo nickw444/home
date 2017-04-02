@@ -9,7 +9,7 @@ SimpleMQTT::SimpleMQTT(uint8_t buttonPin, uint8_t ledPin, uint16_t eepromSalt) {
   init(buttonPin, ledPin, eepromSalt);
 }
 
-SimpleMQTT::SimpleMQTT(uint8_t buttonPin, uint8_t ledPin, uint16_t eepromSalt, String willTopic, char * willMsg) {
+SimpleMQTT::SimpleMQTT(uint8_t buttonPin, uint8_t ledPin, uint16_t eepromSalt, String willTopic, const char * willMsg) {
   init(buttonPin, ledPin, eepromSalt);
 
   this->willTopic = willTopic;
@@ -159,7 +159,7 @@ String SimpleMQTT::getPlainMac(void) {
 }
 
 
-void SimpleMQTT::publish(String topic, char * data) {
+void SimpleMQTT::publish(String topic, const char * data) {
   if (topic != NULL && data != NULL) {
       client->publish(makeTopicString(topic).c_str(), data);
   }
