@@ -22,6 +22,7 @@ type accessoryConfig struct {
 	Model  string
 	Serial string
 	Name   string
+	Conf   map[string]interface{}
 }
 
 type bridgeConfig struct {
@@ -53,7 +54,8 @@ func parseConfig(filename string) *bridgeConfig {
 
 func makeAccessory(mqttClient mqtt.Client, conf *accessoryConfig) hca.HCAccessory {
 	if conf.Model == "sonoff-switch" {
-		return hca.NewSonoffSwitch(mqttClient, conf.Serial, conf.Name)
+		switchConfig := hca.NewSonoffSwitchConfig(conf.Conf)
+		return hca.NewSonoffSwitch(switchConfig, mqttClient, conf.Serial, conf.Name)
 	} else if conf.Model == "garagedoor" {
 		return hca.NewGarageDoor(mqttClient, conf.Serial, conf.Name)
 	} else if conf.Model == "sonoff-th10" {

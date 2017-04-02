@@ -8,6 +8,10 @@ import (
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 )
 
+type SonoffSwitchConfig struct {
+	FWVersion int
+}
+
 type SonoffSwitch struct {
 	domain          *mqtt_domain.MQTTDomain
 	switchAccessory *accessory.Switch
@@ -25,7 +29,19 @@ const (
 	topicEndpointRelayState = "relay"
 )
 
-func NewSonoffSwitch(client mqtt.Client, identifier string, name string) *SonoffSwitch {
+func NewSonoffSwitchConfig(c map[string]interface{}) SonoffSwitchConfig {
+	conf := SonoffSwitchConfig{}
+	conf.FWVersion = 2
+
+	if val, ok := c["fw-version"]; ok {
+		conf.FWVersion = val.(int)
+	}
+
+	return conf
+}
+
+func NewSonoffSwitch(switchConfig SonoffSwitchConfig, client mqtt.Client,
+	identifier string, name string) *SonoffSwitch {
 
 	acc := accessory.NewSwitch(accessory.Info{
 		SerialNumber: identifier,
@@ -33,7 +49,14 @@ func NewSonoffSwitch(client mqtt.Client, identifier string, name string) *Sonoff
 		Model:        "sonoff-switch",
 	})
 
-	topicSvc := topic_service.NewPrefixedIDTopicService("device", identifier)
+	var prefix string
+	if switchConfig.FWVersion == 1 {
+		prefix = "device"
+	} else {
+		prefix = "esp"
+	}
+
+	topicSvc := topic_service.NewPrefixedIDTopicService(prefix, identifier)
 
 	sonoff := &SonoffSwitch{
 		domain:          mqtt_domain.NewMQTTDomain(client, topicSvc),

@@ -7,6 +7,12 @@ accessories:
   - model: sonoff-switch
     serial: 5ccf7f9551dc
     name: Test Room
+    conf: 
+      fw-version: 1
+
+  - model: sonoff-switch
+    serial: 5ccf7f97a63
+    name: Test Room
 
   - model: sonoff-th10
     serial: 60194173177
