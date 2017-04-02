@@ -8,14 +8,14 @@ import (
 
 type Circuit struct {
 	*service.Switch
-	gpioMgr       GPIOManager
+	gpioMgr       *GPIOManager
 	isIdentifying bool
 	port          int
 	maxDuration   int
 	offTimer      *time.Timer
 }
 
-func NewCircuit(name string, port int, maxDuration int, gpio GPIOManager) *Circuit {
+func NewCircuit(name string, port int, maxDuration int, gpio *GPIOManager) *Circuit {
 
 	svc := service.NewSwitch()
 

@@ -1,34 +1,25 @@
 package main
 
-import (
-	"github.com/stianeikeland/go-rpio"
-)
-
-type GPIOManager interface {
-	Init()
-	Teardown()
-	setPortsLow()
-	setPort(port int, on bool)
-}
-
-type BCMGPIOManager struct {
+type GPIOManager struct {
 	ports       []int
 	initialized bool
+	rpio        RPIO
 }
 
-func NewBCMGPIOManager(ports []int) *BCMGPIOManager {
-	return &BCMGPIOManager{
+func NewGPIOManager(ports []int, rpio RPIO) *GPIOManager {
+	return &GPIOManager{
+		rpio:        rpio,
 		ports:       ports,
 		initialized: false,
 	}
 }
 
-func (mgr *BCMGPIOManager) Init() {
+func (mgr *GPIOManager) Init() {
 	if mgr.initialized {
 		return
 	}
 
-	err := rpio.Open()
+	err := mgr.rpio.Open()
 	if err != nil {
 		log.Panic(err)
 	}
@@ -38,77 +29,40 @@ func (mgr *BCMGPIOManager) Init() {
 	log.Printf("Ports initialized successfully.")
 }
 
-func (mgr *BCMGPIOManager) Teardown() {
+func (mgr *GPIOManager) Teardown() {
 	log.Printf("Tearing down")
 
 	if mgr.initialized {
 		mgr.setPortsLow()
-		rpio.Close()
+		mgr.rpio.Close()
 	}
 }
 
-func (mgr *BCMGPIOManager) setPortsLow() {
+func (mgr *GPIOManager) setPortsLow() {
 	for _, port := range mgr.ports {
-		pin := rpio.Pin(port)
-		pin.Output()
+		mgr.rpio.PinMode(port, Output)
 		mgr.setPort(port, false)
 	}
 }
 
-func (mgr *BCMGPIOManager) setPort(port int, on bool) {
-	log.Printf("Setting port %d to %d", port, on)
+func (mgr *GPIOManager) setPort(port int, on bool) {
 	if !mgr.validPort(port) {
 		log.Println("Invalid port passed to setPort")
 		return
 	}
 
-	pin := rpio.Pin(port)
 	if on {
-		pin.High()
+		mgr.rpio.SetPinHigh(port)
 	} else {
-		pin.Low()
+		mgr.rpio.SetPinLow(port)
 	}
 }
 
-func (mgr *BCMGPIOManager) validPort(port int) bool {
+func (mgr *GPIOManager) validPort(port int) bool {
 	for _, p := range mgr.ports {
 		if port == p {
 			return true
 		}
 	}
 	return false
-}
-
-// FakeGPIOManager is a fake GPIOManager implementation for use for dev without
-// accessible GPIO
-type FakeGPIOManager struct {
-	bcm   *BCMGPIOManager
-	ports []int
-}
-
-func NewFakeGPIOManager(ports []int) *FakeGPIOManager {
-	return &FakeGPIOManager{
-		bcm:   NewBCMGPIOManager(ports),
-		ports: ports,
-	}
-}
-
-func (f *FakeGPIOManager) Init() {
-	f.setPortsLow()
-	log.Printf("Ports initialized successfully.")
-}
-func (f *FakeGPIOManager) Teardown() {
-	f.setPortsLow()
-}
-func (f *FakeGPIOManager) setPortsLow() {
-	for _, port := range f.ports {
-		f.setPort(port, false)
-	}
-}
-func (f *FakeGPIOManager) setPort(port int, on bool) {
-	log.Printf("Setting port %d to %d", port, on)
-	if !f.bcm.validPort(port) {
-		log.Println("Invalid port passed to setPort")
-		return
-	}
 }

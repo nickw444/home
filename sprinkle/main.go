@@ -11,7 +11,7 @@ import (
 
 var log = logrus.New()
 
-func makeBridge(config *Config, gpioMgr GPIOManager) *accessory.Accessory {
+func makeBridge(config *Config, gpioMgr *GPIOManager) *accessory.Accessory {
 	info := accessory.Info{
 		Name:         config.Bridge.Name,
 		Manufacturer: config.Manufacturer,
@@ -46,12 +46,14 @@ func main() {
 
 	run.Action(func(ctx *kingpin.ParseContext) error {
 		config := ParseConfig(*configFile)
-		var gpioMgr GPIOManager
+		var rpio RPIO
 		if *withoutGPIO {
-			gpioMgr = NewFakeGPIOManager(config.GetUsedPorts())
+			rpio = NewFakeRPIO()
 		} else {
-			gpioMgr = NewBCMGPIOManager(config.GetUsedPorts())
+			rpio = NewHardwareRPIO()
 		}
+
+		gpioMgr := NewGPIOManager(config.GetUsedPorts(), rpio)
 
 		defer gpioMgr.Teardown()
 		gpioMgr.Init()
