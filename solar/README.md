@@ -8,8 +8,9 @@ at the mains power board.
 
 See `PowerService.Update`
 
-```
+
 ## Usage
+```
 ./solar --help
 usage: solar [<flags>] <accessToken> <accessCode> [<port>]
 
