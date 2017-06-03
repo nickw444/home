@@ -6,6 +6,7 @@
 #include <EEPROM.h>
 #include <SimpleMQTT.h>
 #include <Timer.h>
+#include <Button.h>
 
 
 #define SONOFF_BUTTON    0
@@ -16,7 +17,9 @@
 // Re-transmit the state every minute
 #define READING_EVERY   1000 * 60
 
-static SimpleMQTT mqtt(SONOFF_BUTTON, SONOFF_LED, EEPROM_SALT);
+// TODO: implement Willmsg.
+static SimpleMQTT mqtt(SONOFF_LED, EEPROM_SALT);
+static Button button(SONOFF_BUTTON, false, true, 20);
 static Timer t;
 
 
@@ -36,7 +39,6 @@ void setup() {
 
   mqtt.subscribeTo("republish", republish);
   mqtt.subscribeTo("relay/set", setRelay);
-  mqtt.onButtonPress(toggle);
   mqtt.onConnect(onConnect);
 
   mqtt.beginConfig();
@@ -49,6 +51,14 @@ void setup() {
 void loop() {
   mqtt.tick();
   t.update();
+
+  button.read();
+  if (button.pressedFor(10000)) {
+    Serial.println("Reset Settings");
+    mqtt.reset();
+  } else if (button.wasReleased()) {
+    toggle();
+  }
 }
 
 void publishReading() {

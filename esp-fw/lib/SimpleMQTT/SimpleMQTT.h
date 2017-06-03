@@ -2,7 +2,6 @@
 #define SIMPLEMQTT_H_
 
 #include <Ticker.h>
-#include <Button.h>
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
 #include <WiFiManager.h>
@@ -14,7 +13,6 @@
 
 #define SIMPLEMQTT_CALLBACK_SIGNATURE std::function<void(char *, unsigned int)>
 #define ON_CONNECT_SIGNATURE std::function<void(void)>
-#define ON_BUTTON_PRESS_SIGNATURE ON_CONNECT_SIGNATURE
 
 class Subscription {
   public:
@@ -33,13 +31,12 @@ struct WMSettings {
 
 class SimpleMQTT {
   public:
-    SimpleMQTT(uint8_t buttonPin, uint8_t ledPin, uint16_t eeprom_salt);
-    SimpleMQTT(uint8_t buttonPin, uint8_t ledPin, uint16_t eeprom_salt, String willTopic, const char * willMsg);
+    SimpleMQTT(uint8_t ledPin, uint16_t eeprom_salt);
+    SimpleMQTT(uint8_t ledPin, uint16_t eeprom_salt, String willTopic, const char * willMsg);
     void beginConfig();
     void tick();
 
     void onConnect(ON_CONNECT_SIGNATURE callback);
-    void onButtonPress(ON_BUTTON_PRESS_SIGNATURE callback);
 
     void subscribeTo(String topic, SIMPLEMQTT_CALLBACK_SIGNATURE callback);
     void publish(String topic, const char * data);
@@ -53,12 +50,10 @@ class SimpleMQTT {
 
   private:
     Ticker ticker;
-    Button* button;
 
     WiFiClientSecure espClient;
     PubSubClient* client;
 
-    uint8_t buttonPin;
     uint8_t ledPin;
     uint16_t eepromSalt;
     String willTopic;
@@ -70,7 +65,6 @@ class SimpleMQTT {
     struct WMSettings settings;
 
     ON_CONNECT_SIGNATURE onConnectCallback;
-    ON_BUTTON_PRESS_SIGNATURE onButtonPressCallback;
 
     void mqttReconnect();
 
@@ -86,7 +80,7 @@ class SimpleMQTT {
     void onSaveConfig();
     static void _onSaveConfig();
 
-    void init(uint8_t buttonPin, uint8_t ledPin, uint16_t eepromSalt);
+    void init(uint8_t ledPin, uint16_t eepromSalt);
     String makeTopicString(String topic);
 };
 

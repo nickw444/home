@@ -7,6 +7,7 @@
 #include "DHT.h"
 #include <SimpleMQTT.h>
 #include <Timer.h>
+#include <Button.h>
 
 #define SONOFF_BUTTON    0
 #define SONOFF_LED      13
@@ -18,15 +19,14 @@
 // How often to transmit a reading in millis
 #define READING_EVERY 1000 * 30
 
-
-static SimpleMQTT mqtt(SONOFF_BUTTON, SONOFF_LED, EEPROM_SALT);
+// TODO: Implement willmsg.
+static SimpleMQTT mqtt(SONOFF_LED, EEPROM_SALT);
+static Button button(SONOFF_BUTTON, false, true, 20);
 static DHT dht(DHTPIN, DHTTYPE);
 static Timer t;
 
-
 void publishReading();
 void republish(char * payload, unsigned int length);
-
 
 void setup() {
   Serial.begin(115200);
@@ -41,6 +41,12 @@ void setup() {
 void loop() {
   mqtt.tick();
   t.update();
+
+  button.read();
+  if (button.pressedFor(10000)) {
+    Serial.println("Reset Settings");
+    mqtt.reset();
+  }
 }
 
 void republish(char * payload, unsigned int length) {

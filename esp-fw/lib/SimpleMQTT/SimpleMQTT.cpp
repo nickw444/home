@@ -5,22 +5,21 @@
 // methods.
 static SimpleMQTT *g_SimpleMQTTInstance;
 
-SimpleMQTT::SimpleMQTT(uint8_t buttonPin, uint8_t ledPin, uint16_t eepromSalt) {
-  init(buttonPin, ledPin, eepromSalt);
+SimpleMQTT::SimpleMQTT(uint8_t ledPin, uint16_t eepromSalt) {
+  init(ledPin, eepromSalt);
 }
 
-SimpleMQTT::SimpleMQTT(uint8_t buttonPin, uint8_t ledPin, uint16_t eepromSalt, String willTopic, const char * willMsg) {
-  init(buttonPin, ledPin, eepromSalt);
+SimpleMQTT::SimpleMQTT(uint8_t ledPin, uint16_t eepromSalt, String willTopic, const char * willMsg) {
+  init(ledPin, eepromSalt);
 
   this->willTopic = willTopic;
   this->willMsg = willMsg;
 }
 
-void SimpleMQTT::init(uint8_t buttonPin, uint8_t ledPin,  uint16_t eepromSalt) {
+void SimpleMQTT::init(uint8_t ledPin,  uint16_t eepromSalt) {
   macAddress = getPlainMac();
   hostname = "esp-" + macAddress;
   this->client = new PubSubClient(espClient);
-  this->button = new Button(buttonPin, false, true, 20);
   this->ledPin = ledPin;
   this->eepromSalt = eepromSalt;
 
@@ -100,17 +99,7 @@ void SimpleMQTT::tick() {
   if (!client->connected()) {
     mqttReconnect();
   }
-
   client->loop();
-  button->read();
-  if (button->pressedFor(10000)) {
-    Serial.println("Reset Settings");
-    reset();
-  } else if (button->wasReleased()) {
-    if (onButtonPressCallback != NULL) {
-      onButtonPressCallback();
-    }
-  }
 }
 
 void SimpleMQTT::subscribeTo(String topic, SIMPLEMQTT_CALLBACK_SIGNATURE callback) {
@@ -123,10 +112,6 @@ void SimpleMQTT::subscribeTo(String topic, SIMPLEMQTT_CALLBACK_SIGNATURE callbac
 
 void SimpleMQTT::onConnect(ON_CONNECT_SIGNATURE fn) {
   onConnectCallback = fn;
-}
-
-void SimpleMQTT::onButtonPress(ON_BUTTON_PRESS_SIGNATURE fn) {
-  onButtonPressCallback = fn;
 }
 
 
@@ -196,7 +181,7 @@ void SimpleMQTT::mqttReconnect() {
       result = client->connect(hostname.c_str(), settings.mqttUser, settings.mqttPassword,
                                willTopic.c_str(), 0, false, (char *)willMsg);
     } else {
-      client->connect(hostname.c_str(), settings.mqttUser, settings.mqttPassword);
+      result = client->connect(hostname.c_str(), settings.mqttUser, settings.mqttPassword);
     }
 
     if (result) {
@@ -212,15 +197,15 @@ void SimpleMQTT::mqttReconnect() {
         Serial.println("Executing on-connect callback");
         onConnectCallback();
       }
-      Serial.println("Notified of current state");
     } else {
       Serial.print("failed, rc=");
       Serial.print(client->state());
-      Serial.println(" try again in 5 seconds");
+      Serial.println(" try again in 1 seconds");
       // Wait 5 seconds before retrying
-      delay(5000);
+      delay(1000);
     }
   }
+  Serial.println("Connected!");
 }
 
 void SimpleMQTT::mqttCallback(char *topic, byte *payload, unsigned int length) {
