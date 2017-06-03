@@ -19,5 +19,5 @@ accessories:
     name: TempTest
 
   - model: garagedoor
-    serial: 0000
+    serial: 5ccf7f84b028
     name: GarageTest

@@ -57,7 +57,7 @@ func makeAccessory(mqttClient mqtt.Client, conf *accessoryConfig) hca.HCAccessor
 		switchConfig := hca.NewSonoffSwitchConfig(conf.Conf)
 		return hca.NewSonoffSwitch(switchConfig, mqttClient, conf.Serial, conf.Name)
 	} else if conf.Model == "garagedoor" {
-		return hca.NewGarageDoor(mqttClient, conf.Serial, conf.Name)
+		return hca.NewGarageDoor(mqttClient, conf.Serial, conf.Name, log.WithField("accessory", "garageDoor"))
 	} else if conf.Model == "sonoff-th10" {
 		return hca.NewThermometer(mqttClient, conf.Serial, conf.Name)
 	}
