@@ -22,11 +22,6 @@ type GarageDoor struct {
 	log       *logrus.Entry
 }
 
-const (
-	topicEndpointTrigger = "trigger"
-	topicEndpointStatus  = "status"
-)
-
 func NewGarageDoor(client mqtt.Client, identifier string, name string, log *logrus.Entry) *GarageDoor {
 	acc := accessory.New(accessory.Info{
 		SerialNumber: identifier,
@@ -52,11 +47,11 @@ func NewGarageDoor(client mqtt.Client, identifier string, name string, log *logr
 			doorSvc.CurrentDoorState.SetValue(characteristic.CurrentDoorStateClosing)
 		}
 
-		door.domain.Publish(topicEndpointTrigger, "")
+		door.domain.Publish("trigger", "")
 	})
 
 	// Subscribe to the door state changing
-	door.domain.Subscribe(topicEndpointStatus, door.handleDoorStatusChange)
+	door.domain.Subscribe("status", door.handleDoorStatusChange)
 
 	// Get the current state
 	door.domain.Republish()

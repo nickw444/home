@@ -60,6 +60,9 @@ func makeAccessory(mqttClient mqtt.Client, conf *accessoryConfig) hca.HCAccessor
 		return hca.NewGarageDoor(mqttClient, conf.Serial, conf.Name, log.WithField("accessory", "garageDoor"))
 	} else if conf.Model == "sonoff-th10" {
 		return hca.NewThermometer(mqttClient, conf.Serial, conf.Name)
+	} else if conf.Model == "latch-lock" {
+		lockConfig := hca.NewLatchLockConfig(conf.Conf)
+		return hca.NewLatchLock(lockConfig, mqttClient, conf.Serial, conf.Name, log.WithField("accessory", "latch-lock"))
 	}
 
 	log.Panicf("Not a valid accessory model: '%s'", conf.Model)
