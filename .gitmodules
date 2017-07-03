@@ -1,0 +1,3 @@
+[submodule "lifx/hklifx"]
+	path = lifx/hklifx
+	url = https://github.com/brutella/hklifx.git
