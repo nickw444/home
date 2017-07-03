@@ -3,16 +3,13 @@ package accessories
 import (
 	"strconv"
 
-	"github.com/nickw444/homekit/bridge/mqtt_domain"
-	"github.com/nickw444/homekit/bridge/topic_service"
-
 	"github.com/brutella/hc/accessory"
 	"github.com/brutella/hc/service"
-	mqtt "github.com/eclipse/paho.mqtt.golang"
+	"github.com/nickw444/homekit/bridge/mqtt"
 )
 
 type Thermometer struct {
-	domain      *mqtt_domain.MQTTDomain
+	domain      *mqtt.Domain
 	humiditySvc *service.HumiditySensor
 	accessory   *accessory.Thermometer
 }
@@ -34,10 +31,10 @@ func NewThermometer(client mqtt.Client, identifier string, name string) *Thermom
 	humidity := service.NewHumiditySensor()
 	acc.AddService(humidity.Service)
 
-	topicSvc := topic_service.NewPrefixedIDTopicService("esp", identifier)
+	topicSvc := mqtt.NewPrefixedIDTopicService("esp", identifier)
 
 	sonoff := &Thermometer{
-		domain:      mqtt_domain.NewMQTTDomain(client, topicSvc),
+		domain:      mqtt.NewDomain(client, topicSvc),
 		accessory:   acc,
 		humiditySvc: humidity,
 	}
@@ -57,14 +54,12 @@ func (t *Thermometer) GetHCAccessory() *accessory.Accessory {
 	return t.accessory.Accessory
 }
 
-func (t *Thermometer) handleTemperatureReceived(c mqtt.Client, msg mqtt.Message) {
-	m := string(msg.Payload())
-	temperature, _ := strconv.ParseFloat(m, 64)
+func (t *Thermometer) handleTemperatureReceived(msg string) {
+	temperature, _ := strconv.ParseFloat(msg, 64)
 	t.accessory.TempSensor.CurrentTemperature.SetValue(temperature)
 }
 
-func (t *Thermometer) handleHumidityReceived(c mqtt.Client, msg mqtt.Message) {
-	m := string(msg.Payload())
-	humidity, _ := strconv.ParseFloat(m, 64)
+func (t *Thermometer) handleHumidityReceived(msg string) {
+	humidity, _ := strconv.ParseFloat(msg, 64)
 	t.humiditySvc.CurrentRelativeHumidity.SetValue(humidity)
 }

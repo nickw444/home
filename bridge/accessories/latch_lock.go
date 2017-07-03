@@ -1,18 +1,13 @@
 package accessories
 
 import (
+	"fmt"
+
 	"github.com/Sirupsen/logrus"
-
-	"github.com/nickw444/homekit/bridge/mqtt_domain"
-	"github.com/nickw444/homekit/bridge/topic_service"
-
 	"github.com/brutella/hc/accessory"
 	"github.com/brutella/hc/characteristic"
 	"github.com/brutella/hc/service"
-
-	mqtt "github.com/eclipse/paho.mqtt.golang"
-
-	"fmt"
+	"github.com/nickw444/homekit/bridge/mqtt"
 )
 
 type LatchLockConfig struct {
@@ -20,7 +15,7 @@ type LatchLockConfig struct {
 }
 
 type LatchLock struct {
-	domain    *mqtt_domain.MQTTDomain
+	domain    *mqtt.Domain
 	accessory *accessory.Accessory
 	lockSvc   *service.LockMechanism
 	log       *logrus.Entry
@@ -48,9 +43,9 @@ func NewLatchLock(lockConfig LatchLockConfig, client mqtt.Client, identifier, na
 	lockSvc := service.NewLockMechanism()
 	acc.AddService(lockSvc.Service)
 
-	topicSvc := topic_service.NewPrefixedIDTopicService("esp", identifier)
+	topicSvc := mqtt.NewPrefixedIDTopicService("esp", identifier)
 	lock := &LatchLock{
-		domain:    mqtt_domain.NewMQTTDomain(client, topicSvc),
+		domain:    mqtt.NewDomain(client, topicSvc),
 		accessory: acc,
 		lockSvc:   lockSvc,
 		log:       log,
@@ -72,11 +67,9 @@ func NewLatchLock(lockConfig LatchLockConfig, client mqtt.Client, identifier, na
 	return lock
 }
 
-func (l *LatchLock) handleLockStatusChange(c mqtt.Client, msg mqtt.Message) {
-	m := string(msg.Payload())
-
-	l.log.Infof("Lock Status Changed to %s\n", m)
-	status, err := NewRelayState(m)
+func (l *LatchLock) handleLockStatusChange(msg string) {
+	l.log.Infof("Lock Status Changed to %s\n", msg)
+	status, err := NewRelayState(msg)
 	if err != nil {
 		l.log.Error(err)
 		return

@@ -1,11 +1,8 @@
 package accessories
 
 import (
-	"github.com/nickw444/homekit/bridge/mqtt_domain"
-	"github.com/nickw444/homekit/bridge/topic_service"
-
 	"github.com/brutella/hc/accessory"
-	mqtt "github.com/eclipse/paho.mqtt.golang"
+	"github.com/nickw444/homekit/bridge/mqtt"
 )
 
 type SonoffSwitchConfig struct {
@@ -13,7 +10,7 @@ type SonoffSwitchConfig struct {
 }
 
 type SonoffSwitch struct {
-	domain          *mqtt_domain.MQTTDomain
+	domain          *mqtt.Domain
 	switchAccessory *accessory.Switch
 }
 
@@ -56,10 +53,10 @@ func NewSonoffSwitch(switchConfig SonoffSwitchConfig, client mqtt.Client,
 		prefix = "esp"
 	}
 
-	topicSvc := topic_service.NewPrefixedIDTopicService(prefix, identifier)
+	topicSvc := mqtt.NewPrefixedIDTopicService(prefix, identifier)
 
 	sonoff := &SonoffSwitch{
-		domain:          mqtt_domain.NewMQTTDomain(client, topicSvc),
+		domain:          mqtt.NewDomain(client, topicSvc),
 		switchAccessory: acc,
 	}
 
@@ -81,12 +78,10 @@ func NewSonoffSwitch(switchConfig SonoffSwitchConfig, client mqtt.Client,
 
 }
 
-func (s *SonoffSwitch) handleRelayStateMsg(c mqtt.Client, msg mqtt.Message) {
-	m := string(msg.Payload())
-
-	if m == "1" {
+func (s *SonoffSwitch) handleRelayStateMsg(msg string) {
+	if msg == "1" {
 		s.switchAccessory.Switch.On.SetValue(true)
-	} else if m == "0" {
+	} else if msg == "0" {
 		s.switchAccessory.Switch.On.SetValue(false)
 	}
 }

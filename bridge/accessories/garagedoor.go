@@ -1,22 +1,17 @@
 package accessories
 
 import (
+	"fmt"
+
 	"github.com/Sirupsen/logrus"
-
-	"github.com/nickw444/homekit/bridge/mqtt_domain"
-	"github.com/nickw444/homekit/bridge/topic_service"
-
 	"github.com/brutella/hc/accessory"
 	"github.com/brutella/hc/characteristic"
 	"github.com/brutella/hc/service"
-
-	mqtt "github.com/eclipse/paho.mqtt.golang"
-
-	"fmt"
+	"github.com/nickw444/homekit/bridge/mqtt"
 )
 
 type GarageDoor struct {
-	domain    *mqtt_domain.MQTTDomain
+	domain    *mqtt.Domain
 	accessory *accessory.Accessory
 	doorSvc   *service.GarageDoorOpener
 	log       *logrus.Entry
@@ -32,9 +27,9 @@ func NewGarageDoor(client mqtt.Client, identifier string, name string, log *logr
 	doorSvc := service.NewGarageDoorOpener()
 	acc.AddService(doorSvc.Service)
 
-	topicSvc := topic_service.NewPrefixedIDTopicService("esp", identifier)
+	topicSvc := mqtt.NewPrefixedIDTopicService("esp", identifier)
 	door := &GarageDoor{
-		domain:    mqtt_domain.NewMQTTDomain(client, topicSvc),
+		domain:    mqtt.NewDomain(client, topicSvc),
 		accessory: acc,
 		doorSvc:   doorSvc,
 		log:       log,
@@ -59,11 +54,9 @@ func NewGarageDoor(client mqtt.Client, identifier string, name string, log *logr
 	return door
 }
 
-func (g *GarageDoor) handleDoorStatusChange(c mqtt.Client, msg mqtt.Message) {
-	m := string(msg.Payload())
-
-	g.log.Infof("Door Status Changed to %s\n", m)
-	status, err := NewDoorStatus(m)
+func (g *GarageDoor) handleDoorStatusChange(msg string) {
+	g.log.Infof("Door Status Changed to %s\n", msg)
+	status, err := NewDoorStatus(msg)
 	if err != nil {
 		g.log.Error(err)
 		return

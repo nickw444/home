@@ -1,4 +1,4 @@
-package topic_service
+package mqtt
 
 // TopicService is an interface for building topic strings
 type TopicService interface {
