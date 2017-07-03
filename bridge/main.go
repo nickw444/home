@@ -94,6 +94,8 @@ func makeAccessory(mqttClient mqtt.Client, conf *accessoryConfig) hca.HCAccessor
 	} else if conf.Model == "latch-lock" {
 		lockConfig := hca.NewLatchLockConfig(conf.Conf)
 		return hca.NewLatchLock(lockConfig, mqttClient, conf.Serial, conf.Name, logger)
+	} else if conf.Model == "raex-blind" {
+		return hca.NewBlind(conf.Serial, conf.Name, logger)
 	}
 
 	log.Panicf("Not a valid accessory model: '%s'", conf.Model)
