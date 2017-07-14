@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 
+	"github.com/nickw444/homekit/blindkit/remote-gen/remote_code"
 	"gopkg.in/alecthomas/kingpin.v2"
 )
 
@@ -20,7 +21,7 @@ func configureInfoCommand(app *kingpin.Application) {
 
 func (i *InfoCommand) Run(c *kingpin.ParseContext) error {
 	fmt.Println("Raw Code:  ", i.rawCode)
-	code, err := Deserialize(i.rawCode)
+	code, err := remote_code.Deserialize(i.rawCode)
 	if err != nil {
 		return err
 	}
@@ -34,6 +35,9 @@ func (i *InfoCommand) Run(c *kingpin.ParseContext) error {
 	if i.validate {
 		if code.Checksum != code.GuessChecksum() {
 			return fmt.Errorf("The guessed checksum value does not match the provided one. %d != %d", code.Checksum, code.GuessChecksum())
+		}
+		if i.rawCode != code.Serialize() {
+			return fmt.Errorf("The serialized code is not equal to the input code. %s\n%s", i.rawCode, code.Serialize())
 		}
 	}
 

@@ -1,10 +1,12 @@
-package main
+package remote_code
 
 import (
 	"fmt"
 	"reflect"
 	"strconv"
 	"strings"
+
+	"github.com/nickw444/homekit/blindkit/remote-gen/blind_action"
 )
 
 // RemoteValue is a lazy-man's union type to access upper/lower
@@ -23,7 +25,7 @@ type RemoteCode struct {
 	LeadingBit uint // Single bit
 	Channel    uint8
 	Remote     RemoteValue
-	Action     BlindAction
+	Action     blind_action.BlindAction
 	Checksum   uint8
 }
 
@@ -52,7 +54,7 @@ func Deserialize(code string) (*RemoteCode, error) {
 	if err != nil {
 		return nil, err
 	}
-	action, err := ActionFromValue(uint8(actionValue))
+	action, err := blind_action.ActionFromValue(uint8(actionValue))
 	if err != nil {
 		return nil, err
 	}
@@ -85,62 +87,6 @@ func (r *RemoteCode) Check() error {
 
 func (r *RemoteCode) GuessChecksum() uint8 {
 	return r.Channel + r.Remote.GetHigh() + r.Remote.GetLow() + r.Action.Value + 3
-}
-
-func (r *RemoteCode) SetChannel(channel uint) {
-	// Determine the difference between our channel and the requested channel.
-	// diff := channel - r.Channel
-
-	// r.Channel = (r.Channel + diff) % (1 << 8)
-	// r.ChannelF = (r.ChannelF + diff) % (1 << 6)
-
-	// if r.Channel < 0 {
-	// 	panic("Channel < 0")
-	// }
-
-	// if r.ChannelF < 0 {
-	// 	r.ChannelF += (1 << 6)
-	// }
-
-	// if err := r.Check(); err != nil {
-	// 	panic(err)
-	// }
-}
-
-func (r *RemoteCode) SetAction(action BlindAction) {
-	// Determine the difference between our action and the requested action.
-	// diff := action - r.Action
-	// aFFisFlipped := r.ActionF != r.ActionFF
-
-	// r.Action = (r.Action + diff) % (1 << 2)
-	// r.ChannelF = (r.ChannelF + diff) % (1 << 6)
-
-	// if r.Action < 0 {
-	// 	panic("Action < 0")
-	// }
-
-	// if r.ChannelF < 0 {
-	// 	r.ChannelF += (1 << 6)
-	// }
-
-	// // Calculate the actionF checksum:
-	// if r.Action == 3 {
-	// 	r.ActionF = 0
-	// } else {
-	// 	r.ActionF = 1
-	// }
-
-	// // Calculate the actionFF checksum:
-	// if aFFisFlipped {
-	// 	r.ActionFF = (r.ActionF + 1) % 2
-	// } else {
-	// 	r.ActionFF = r.ActionF
-	// }
-
-	// if err := r.Check(); err != nil {
-	// 	panic(err)
-	// }
-
 }
 
 type sortableField struct {

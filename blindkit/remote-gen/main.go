@@ -7,17 +7,8 @@ import (
 )
 
 func main() {
-	app := kingpin.New("Remote Generator", "")
-	configureGenerateCommand(app)
+	app := kingpin.New("RAEX Remote Code Generator Tool", "")
 	configureInfoCommand(app)
 	configureCreateCommand(app)
 	kingpin.MustParse(app.Parse(os.Args[1:]))
-
-	// fmt.Println("00000010011110100110010111011111101000100")
-	// code, err := Deserialize("00000010011110100110010111011111101000100")
-	// if err != nil {
-	// 	panic(err)
-	// }
-	// // fmt.Println(code)
-	// fmt.Println(code.Serialize())
 }
