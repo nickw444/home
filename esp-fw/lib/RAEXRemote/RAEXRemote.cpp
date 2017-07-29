@@ -28,8 +28,11 @@ RAEXRemote::RAEXRemote(Scheduler* scheduler, Transmitter* transmitter) {
 
 void RAEXRemote::transmitCode(RAEXRemoteCode* code) {
   agc->writeAGC(300);
-  writeHeader();
-  writeData(code);
+
+  for (size_t i = 0; i < 4; i++) {
+    writeHeader();
+    writeData(code);
+  }
 }
 
 void RAEXRemote::writeHeader() {
