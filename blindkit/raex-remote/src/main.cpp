@@ -18,8 +18,6 @@ static uint8_t channel;
 static uint16_t remote;
 static uint8_t lastAction = 127;
 
-void recvTransmitCommand(String payload);
-
 void setup() {
   Serial.begin(115200);
   pinMode(TX_PIN, OUTPUT);
