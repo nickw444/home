@@ -8,14 +8,11 @@ import (
 	"github.com/Sirupsen/logrus"
 	hca "github.com/nickw444/homekit/bridge/accessories"
 	"github.com/nickw444/homekit/bridge/mqtt"
+	rf_service "github.com/nickw444/homekit/bridge/rf_service"
+	svc_reg "github.com/nickw444/homekit/bridge/service_registry"
 	"gopkg.in/alecthomas/kingpin.v2"
 
-	"crypto/tls"
-	"gopkg.in/yaml.v2"
-	"io/ioutil"
 	"os"
-
-	pahoMqtt "github.com/eclipse/paho.mqtt.golang"
 )
 
 var log = logrus.New()
@@ -28,6 +25,7 @@ func main() {
 		accessCode = app.Arg("accessCode", "Homekit Access code to use").Required().String()
 		port       = app.Flag("port", "Port for Homekit to listen on.").String()
 		debug      = app.Flag("debug", "Enable debug output").Bool()
+		hcDebug    = app.Flag("hc-debug", "Enable debug output for hc library").Bool()
 
 		dummyMqtt         = app.Flag("dummy-mqtt", "Use a dummy MQTT instance").Bool()
 		mqttBroker        = app.Flag("mqtt-broker", "MQTT Broker URL").Default("tls://127.0.0.1:8883").String()
@@ -39,6 +37,9 @@ func main() {
 
 	if *debug {
 		log.Level = logrus.DebugLevel
+	}
+
+	if *hcDebug {
 		hcLog.Debug.Enable()
 		hcLog.Info.Enable()
 	}
@@ -46,13 +47,21 @@ func main() {
 	var mqttClient mqtt.Client
 	if *dummyMqtt {
 		mqttClient = &mqtt.LoggingClient{
-			Log: log.WithField("service", "logging-mqtt-service"),
+			Log: log.WithField("component", "logging-mqtt-client"),
 		}
 	} else {
-		mqttClient = makePahoMqttClient(*mqttBroker, *mqttUser, *mqttPassword, *mqttTlsSkipVerify)
+		logger := log.WithField("component", "paho-mqtt-client")
+		client := mqtt.NewPahoClient(*mqttBroker, *mqttUser, *mqttPassword, *mqttTlsSkipVerify, logger)
+		if err := client.Connect(); err != nil {
+			log.Panic(err)
+		}
+		mqttClient = client
 	}
 
 	config := parseConfig(*configFile)
+	serviceRegistry := svc_reg.NewServiceRegistry()
+	registerServices(serviceRegistry, config.Services, mqttClient)
+
 	// Create the bridge.
 	bridge := accessory.New(accessory.Info{
 		Name:         config.Name,
@@ -63,8 +72,7 @@ func main() {
 	// Make the accessories
 	var accessories []*accessory.Accessory
 	for _, accConf := range config.Accessories {
-		log.Println(accConf)
-		acc := makeAccessory(mqttClient, accConf)
+		acc := makeAccessory(mqttClient, serviceRegistry, accConf)
 		accessories = append(accessories, acc.GetHCAccessory())
 	}
 
@@ -77,12 +85,36 @@ func main() {
 		t.Stop()
 	})
 
-	log.Printf("Started server with access code: %s", *accessCode)
+	log.Printf("Started server with access code: '%s' on port %s", *accessCode, *port)
 	t.Start()
 }
 
-func makeAccessory(mqttClient mqtt.Client, conf *accessoryConfig) hca.HCAccessory {
-	logger := log.WithField("accessory", conf.Model)
+func registerServices(registry *svc_reg.ServiceRegistry, services []*serviceConfig, mqttClient mqtt.Client) {
+	// Register Services.
+	for _, serviceConfig := range services {
+		var service interface{}
+		logger := log.WithField("service", serviceConfig.ID).
+			WithField("id", serviceConfig.ID)
+
+		if serviceConfig.Type == "rf" {
+			rfConfig := rf_service.NewConfig(serviceConfig.Conf)
+			service = rf_service.New(rfConfig, mqttClient, logger)
+		} else {
+			log.Panicf("Not a valid service: '%s'", serviceConfig.Type)
+		}
+
+		registry.Register(serviceConfig.ID, service)
+		logger.Infof("Registered Service")
+	}
+}
+
+func makeAccessory(mqttClient mqtt.Client, serviceRegistry *svc_reg.ServiceRegistry,
+	conf *accessoryConfig) hca.HCAccessory {
+
+	logger := log.WithField("accessory", conf.Model).
+		WithField("serial", conf.Serial)
+
+	logger.Infof("Loading accessory...")
 
 	if conf.Model == "sonoff-switch" {
 		switchConfig := hca.NewSonoffSwitchConfig(conf.Conf)
@@ -95,67 +127,13 @@ func makeAccessory(mqttClient mqtt.Client, conf *accessoryConfig) hca.HCAccessor
 		lockConfig := hca.NewLatchLockConfig(conf.Conf)
 		return hca.NewLatchLock(lockConfig, mqttClient, conf.Serial, conf.Name, logger)
 	} else if conf.Model == "raex-blind" {
-		return hca.NewBlind(conf.Serial, conf.Name, logger)
+		blindConfig := hca.NewRaexBlindConfig(conf.Conf)
+		if err := blindConfig.ResolveServices(serviceRegistry); err != nil {
+			log.Panic(err)
+		}
+		return hca.NewRaexBlind(conf.Serial, conf.Name, blindConfig, logger)
 	}
 
 	log.Panicf("Not a valid accessory model: '%s'", conf.Model)
 	return nil
-}
-
-func makePahoMqttClient(broker string, user string, password string, tlsSkipVerify bool) mqtt.Client {
-	clientOptions := pahoMqtt.NewClientOptions().AddBroker(broker)
-	if user != "" {
-		clientOptions = clientOptions.SetUsername(user)
-	}
-	if password != "" {
-		clientOptions = clientOptions.SetPassword(password)
-	}
-	if tlsSkipVerify {
-		clientOptions = clientOptions.SetTLSConfig(&tls.Config{
-			InsecureSkipVerify: true,
-		})
-	}
-
-	pahoClient := pahoMqtt.NewClient(clientOptions)
-	if token := pahoClient.Connect(); token.Wait() && token.Error() != nil {
-		log.Panic(token.Error())
-	}
-
-	return &mqtt.PahoClient{
-		Client: pahoClient,
-	}
-}
-
-type accessoryConfig struct {
-	Model  string
-	Serial string
-	Name   string
-	Conf   map[string]interface{}
-}
-
-type bridgeConfig struct {
-	Name         string
-	Manufacturer string
-	Model        string
-	Accessories  []*accessoryConfig
-}
-
-func parseConfig(filename string) *bridgeConfig {
-	file, err := os.Open(filename) // For read access.
-	if err != nil {
-		log.Panic(err)
-	}
-
-	bytes, err := ioutil.ReadAll(file)
-	if err != nil {
-		log.Panic(err)
-	}
-
-	var conf bridgeConfig
-	err = yaml.Unmarshal(bytes, &conf)
-	if err != nil {
-		log.Panic(err)
-	}
-
-	return &conf
 }

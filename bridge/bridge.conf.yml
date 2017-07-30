@@ -3,100 +3,19 @@ name: MainBridge
 manufacturer: nickw
 model: homebridge
 
+services:
+  - type: rf
+    id: rf-1
+    conf:
+      serial: 18fe3499d274
+
+
 accessories:
   # - model: sonoff-switch
   #   serial: 5ccf7f9551dc
   #   name: Test Room
   #   conf:
   #     fw-version: 1
-
-  - model: sonoff-switch
-    serial: 5ccf7f97a63
-    name: Test Room
-
-  - model: sonoff-switch
-    serial: 5ccf7f97a63
-    name: Test Room
-
-  - model: sonoff-switch
-    serial: 5ccf7f97a63
-    name: Test Room
-
-  - model: sonoff-switch
-    serial: 5ccf7f97a63
-    name: Test Room
-
-  - model: sonoff-switch
-    serial: 5ccf7f97a63
-    name: Test Room
-
-  - model: sonoff-switch
-    serial: 5ccf7f97a63
-    name: Test Room
-
-  - model: sonoff-switch
-    serial: 5ccf7f97a63
-    name: Test Room
-
-  - model: sonoff-switch
-    serial: 5ccf7f97a63
-    name: Test Room
-
-  - model: sonoff-switch
-    serial: 5ccf7f97a63
-    name: Test Room
-
-  - model: sonoff-switch
-    serial: 5ccf7f97a63
-    name: Test Room
-
-  - model: sonoff-switch
-    serial: 5ccf7f97a63
-    name: Test Room
-
-  - model: sonoff-switch
-    serial: 5ccf7f97a63
-    name: Test Room
-
-  - model: sonoff-switch
-    serial: 5ccf7f97a63
-    name: Test Room
-
-  # - model: sonoff-switch
-  #   serial: 5ccf7f97a63
-  #   name: Test Room
-
-  # - model: sonoff-switch
-  #   serial: 5ccf7f97a63
-  #   name: Test Room
-
-  # - model: sonoff-switch
-  #   serial: 5ccf7f97a63
-  #   name: Test Room
-
-  # - model: sonoff-switch
-  #   serial: 5ccf7f97a63
-  #   name: Test Room
-
-  # - model: sonoff-switch
-  #   serial: 5ccf7f97a63
-  #   name: Test Room
-
-  # - model: sonoff-switch
-  #   serial: 5ccf7f97a63
-  #   name: Test Room
-
-  # - model: sonoff-switch
-  #   serial: 5ccf7f97a63
-  #   name: Test Room
-
-  # - model: sonoff-switch
-  #   serial: 5ccf7f97a63
-  #   name: Test Room
-
-  # - model: sonoff-switch
-  #   serial: 5ccf7f97a63
-  #   name: Test Room
 
   # - model: sonoff-switch
   #   serial: 5ccf7f97a63
@@ -115,3 +34,28 @@ accessories:
   #   name: Front Door
   #   conf:
   #     latch-delay: 5000
+
+
+  - model: raex-blind
+    name: Nick Front
+    serial: 'rf-blind-nick-front'
+    conf:
+      rf-service: rf-1
+      remote: 100
+      channel: 0
+
+  - model: raex-blind
+    name: Nick Side
+    serial: 'rf-blind-nick-side'
+    conf:
+      rf-service: rf-1
+      remote: 100
+      channel: 1
+
+  - model: raex-blind
+    name: Upstairs Hall
+    serial: 'rf-blind-upstairs-hall'
+    conf:
+      rf-service: rf-1
+      remote: 100
+      channel: 2
