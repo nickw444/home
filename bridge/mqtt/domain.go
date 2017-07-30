@@ -1,9 +1,5 @@
 package mqtt
 
-import (
-	"fmt"
-)
-
 const (
 	topicEndpointReboot    = "reboot"
 	topicEndpointRepublish = "republish"
@@ -24,7 +20,6 @@ func NewDomain(client Client, topicService TopicService) *Domain {
 
 func (s *Domain) Republish() {
 	topic := s.topicService.GetTopic(topicEndpointRepublish)
-	fmt.Println(topic)
 	s.client.Publish(topic, 0, false, "")
 }
 
