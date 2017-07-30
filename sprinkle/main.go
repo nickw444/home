@@ -6,6 +6,7 @@ import (
 	"github.com/Sirupsen/logrus"
 	"github.com/brutella/hc"
 	"github.com/brutella/hc/accessory"
+	hcLog "github.com/brutella/hc/log"
 	"gopkg.in/alecthomas/kingpin.v2"
 )
 
@@ -34,6 +35,8 @@ func main() {
 	var (
 		app        = kingpin.New("sprinkle", "Homekit Sprinkler Control")
 		configFile = app.Flag("config", "Provide a configuration file.").Default("sprinkle.conf.yml").String()
+		debug      = app.Flag("debug", "Enable debug output").Bool()
+		hcDebug    = app.Flag("hc-debug", "Enable debug output for hc library").Bool()
 
 		run         = app.Command("run", "Run the HAP Server.").Default()
 		accessCode  = run.Arg("accessCode", "Homekit Access code to use").Required().String()
@@ -43,6 +46,18 @@ func main() {
 		sampleGen   = app.Command("sample-config", "Generate a sample config file")
 		numCircuits = sampleGen.Arg("num-circuits", "Number of circuits to generate in the sample config.").Required().Int()
 	)
+
+	app.PreAction(func(ctx *kingpin.ParseContext) error {
+		if *debug {
+			log.Level = logrus.DebugLevel
+		}
+
+		if *hcDebug {
+			hcLog.Debug.Enable()
+			hcLog.Info.Enable()
+		}
+		return nil
+	})
 
 	run.Action(func(ctx *kingpin.ParseContext) error {
 		config := ParseConfig(*configFile)
