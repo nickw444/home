@@ -120,13 +120,13 @@
 		},
 		{
 			"ImportPath": "github.com/eclipse/paho.mqtt.golang",
-			"Comment": "v1.0.0-46-gad6f78e",
-			"Rev": "ad6f78e8ed29b35fed641a4febe25d47d008260a"
+			"Comment": "v1.0.0-45-g5255135",
+			"Rev": "525513518a2d25691003e6c0b5c7fb5473c2a8ec"
 		},
 		{
 			"ImportPath": "github.com/eclipse/paho.mqtt.golang/packets",
-			"Comment": "v1.0.0-46-gad6f78e",
-			"Rev": "ad6f78e8ed29b35fed641a4febe25d47d008260a"
+			"Comment": "v1.0.0-45-g5255135",
+			"Rev": "525513518a2d25691003e6c0b5c7fb5473c2a8ec"
 		},
 		{
 			"ImportPath": "github.com/gosexy/to",

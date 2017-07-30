@@ -16,7 +16,6 @@ package mqtt
 
 import (
 	"errors"
-	"sync"
 	"time"
 
 	"github.com/eclipse/paho.mqtt.golang/packets"
@@ -25,16 +24,6 @@ import (
 func keepalive(c *client) {
 	DEBUG.Println(PNG, "keepalive starting")
 
-	var condWG sync.WaitGroup
-
-	defer func() {
-		c.keepaliveReset.Broadcast()
-		c.pingResp.Broadcast()
-		c.packetResp.Broadcast()
-		condWG.Wait()
-		c.workers.Done()
-	}()
-
 	receiveInterval := c.options.KeepAlive + (1 * time.Second)
 	pingTimer := timer{Timer: time.NewTimer(c.options.KeepAlive)}
 	receiveTimer := timer{Timer: time.NewTimer(receiveInterval)}
@@ -42,64 +31,25 @@ func keepalive(c *client) {
 
 	pingRespTimer.Stop()
 
-	condWG.Add(3)
-	go func() {
-		defer condWG.Done()
-		for {
-			c.pingResp.L.Lock()
-			c.pingResp.Wait()
-			c.pingResp.L.Unlock()
-			select {
-			case <-c.stop:
-				return
-			default:
-			}
-			DEBUG.Println(NET, "resetting ping timeout timer")
-			pingRespTimer.Stop()
-			pingTimer.Reset(c.options.KeepAlive)
-			receiveTimer.Reset(receiveInterval)
-		}
-	}()
-
-	go func() {
-		defer condWG.Done()
-		for {
-			c.packetResp.L.Lock()
-			c.packetResp.Wait()
-			c.packetResp.L.Unlock()
-			select {
-			case <-c.stop:
-				return
-			default:
-			}
-			DEBUG.Println(NET, "resetting receive timer")
-			receiveTimer.Reset(receiveInterval)
-		}
-	}()
-
-	go func() {
-		defer condWG.Done()
-		for {
-			c.keepaliveReset.L.Lock()
-			c.keepaliveReset.Wait()
-			c.keepaliveReset.L.Unlock()
-			select {
-			case <-c.stop:
-				return
-			default:
-			}
-			DEBUG.Println(NET, "resetting ping timer")
-			pingTimer.Reset(c.options.KeepAlive)
-		}
-	}()
-
 	for {
 		select {
 		case <-c.stop:
 			DEBUG.Println(PNG, "keepalive stopped")
+			c.workers.Done()
 			return
 		case <-pingTimer.C:
 			sendPing(&pingTimer, &pingRespTimer, c)
+		case <-c.keepaliveReset:
+			DEBUG.Println(NET, "resetting ping timer")
+			pingTimer.Reset(c.options.KeepAlive)
+		case <-c.pingResp:
+			DEBUG.Println(NET, "resetting ping timeout timer")
+			pingRespTimer.Stop()
+			pingTimer.Reset(c.options.KeepAlive)
+			receiveTimer.Reset(receiveInterval)
+		case <-c.packetResp:
+			DEBUG.Println(NET, "resetting receive timer")
+			receiveTimer.Reset(receiveInterval)
 		case <-receiveTimer.C:
 			receiveTimer.SetRead(true)
 			receiveTimer.Reset(receiveInterval)
@@ -116,21 +66,16 @@ func keepalive(c *client) {
 }
 
 type timer struct {
-	sync.Mutex
 	*time.Timer
 	readFrom bool
 }
 
 func (t *timer) SetRead(v bool) {
-	t.Lock()
 	t.readFrom = v
-	t.Unlock()
 }
 
 func (t *timer) Stop() bool {
-	t.Lock()
 	defer t.SetRead(true)
-	defer t.Unlock()
 
 	if !t.Timer.Stop() && !t.readFrom {
 		<-t.C
@@ -140,13 +85,8 @@ func (t *timer) Stop() bool {
 }
 
 func (t *timer) Reset(d time.Duration) bool {
-	t.Lock()
 	defer t.SetRead(false)
-	defer t.Unlock()
-	if !t.Timer.Stop() && !t.readFrom {
-		<-t.C
-	}
-
+	t.Stop()
 	return t.Timer.Reset(d)
 }
 
