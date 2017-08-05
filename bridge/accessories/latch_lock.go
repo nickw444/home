@@ -52,19 +52,23 @@ func NewLatchLock(lockConfig LatchLockConfig, client mqtt.Client, identifier, na
 		conf:      lockConfig,
 	}
 
-	lockSvc.LockTargetState.OnValueRemoteUpdate(func(target int) {
-		if target == characteristic.LockTargetStateUnsecured {
-			log.Infof("Triggering for %dms\n", lock.conf.LatchDelay)
-			lock.domain.Publish("trigger", fmt.Sprintf("T%d", lock.conf.LatchDelay))
-		}
-	})
+	return lock
+}
+
+func (l *LatchLock) Start() {
+	l.lockSvc.LockTargetState.OnValueRemoteUpdate(l.onLockTargetStateChange)
 
 	// Subscribe to the door state changing
-	lock.domain.Subscribe("relayState", lock.handleLockStatusChange)
+	l.domain.Subscribe("relayState", l.handleLockStatusChange)
 
-	lock.domain.Republish()
+	l.domain.Republish()
+}
 
-	return lock
+func (l *LatchLock) onLockTargetStateChange(target int) {
+	if target == characteristic.LockTargetStateUnsecured {
+		l.log.Infof("Triggering for %dms\n", l.conf.LatchDelay)
+		l.domain.Publish("trigger", fmt.Sprintf("T%d", l.conf.LatchDelay))
+	}
 }
 
 func (l *LatchLock) handleLockStatusChange(msg string) {
@@ -89,16 +93,16 @@ func (l *LatchLock) GetHCAccessory() *accessory.Accessory {
 	return l.accessory
 }
 
-// RelayState represents a concrete type for relay status
-type RelayState int
+// relayState represents a concrete type for relay status
+type relayState int
 
 const (
-	relayOpen RelayState = iota
+	relayOpen relayState = iota
 	relayClosed
 	relayUnknown
 )
 
-func NewRelayState(val string) (status RelayState, err error) {
+func NewRelayState(val string) (status relayState, err error) {
 	if val == "OPEN" {
 		status = relayOpen
 	} else if val == "CLOSED" {

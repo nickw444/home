@@ -8,8 +8,8 @@ import (
 	"github.com/Sirupsen/logrus"
 	hca "github.com/nickw444/homekit/bridge/accessories"
 	"github.com/nickw444/homekit/bridge/mqtt"
-	rf_service "github.com/nickw444/homekit/bridge/rf_service"
-	svc_reg "github.com/nickw444/homekit/bridge/service_registry"
+	"github.com/nickw444/homekit/bridge/services"
+	"github.com/nickw444/homekit/bridge/services/rf"
 	"gopkg.in/alecthomas/kingpin.v2"
 
 	"os"
@@ -59,7 +59,7 @@ func main() {
 	}
 
 	config := parseConfig(*configFile)
-	serviceRegistry := svc_reg.NewServiceRegistry()
+	serviceRegistry := services.NewRegistry()
 	registerServices(serviceRegistry, config.Services, mqttClient)
 
 	// Create the bridge.
@@ -89,7 +89,7 @@ func main() {
 	t.Start()
 }
 
-func registerServices(registry *svc_reg.ServiceRegistry, services []*serviceConfig, mqttClient mqtt.Client) {
+func registerServices(registry *services.Registry, services []*serviceConfig, mqttClient mqtt.Client) {
 	// Register Services.
 	for _, serviceConfig := range services {
 		var service interface{}
@@ -97,8 +97,8 @@ func registerServices(registry *svc_reg.ServiceRegistry, services []*serviceConf
 			WithField("id", serviceConfig.ID)
 
 		if serviceConfig.Type == "rf" {
-			rfConfig := rf_service.NewConfig(serviceConfig.Conf)
-			service = rf_service.New(rfConfig, mqttClient, logger)
+			rfConfig := rf.NewConfig(serviceConfig.Conf)
+			service = rf.New(rfConfig, mqttClient, logger)
 		} else {
 			log.Panicf("Not a valid service: '%s'", serviceConfig.Type)
 		}
@@ -108,9 +108,8 @@ func registerServices(registry *svc_reg.ServiceRegistry, services []*serviceConf
 	}
 }
 
-func makeAccessory(mqttClient mqtt.Client, serviceRegistry *svc_reg.ServiceRegistry,
-	conf *accessoryConfig) hca.HCAccessory {
-
+func makeAccessory(mqttClient mqtt.Client, serviceRegistry *services.Registry,
+	conf *accessoryConfig) (acc hca.HCAccessory) {
 	logger := log.WithField("accessory", conf.Model).
 		WithField("serial", conf.Serial)
 
@@ -118,22 +117,25 @@ func makeAccessory(mqttClient mqtt.Client, serviceRegistry *svc_reg.ServiceRegis
 
 	if conf.Model == "sonoff-switch" {
 		switchConfig := hca.NewSonoffSwitchConfig(conf.Conf)
-		return hca.NewSonoffSwitch(switchConfig, mqttClient, conf.Serial, conf.Name)
+		acc = hca.NewSonoffSwitch(switchConfig, mqttClient, conf.Serial, conf.Name)
 	} else if conf.Model == "garagedoor" {
-		return hca.NewGarageDoor(mqttClient, conf.Serial, conf.Name, logger)
+		acc = hca.NewGarageDoor(mqttClient, conf.Serial, conf.Name, logger)
 	} else if conf.Model == "sonoff-th10" {
-		return hca.NewThermometer(mqttClient, conf.Serial, conf.Name)
+		acc = hca.NewSonoffTH10(mqttClient, conf.Serial, conf.Name)
 	} else if conf.Model == "latch-lock" {
 		lockConfig := hca.NewLatchLockConfig(conf.Conf)
-		return hca.NewLatchLock(lockConfig, mqttClient, conf.Serial, conf.Name, logger)
+		acc = hca.NewLatchLock(lockConfig, mqttClient, conf.Serial, conf.Name, logger)
 	} else if conf.Model == "raex-blind" {
 		blindConfig := hca.NewRaexBlindConfig(conf.Conf)
 		if err := blindConfig.ResolveServices(serviceRegistry); err != nil {
 			log.Panic(err)
 		}
-		return hca.NewRaexBlind(conf.Serial, conf.Name, blindConfig, logger)
+		acc = hca.NewRaexBlind(conf.Serial, conf.Name, blindConfig, logger)
+	} else {
+		log.Panicf("Not a valid accessory model: '%s'", conf.Model)
 	}
 
-	log.Panicf("Not a valid accessory model: '%s'", conf.Model)
-	return nil
+	acc.Start()
+
+	return acc
 }

@@ -9,8 +9,8 @@ import (
 	"github.com/brutella/hc/characteristic"
 	"github.com/brutella/hc/service"
 
-	"github.com/nickw444/homekit/bridge/rf_service"
-	svc_reg "github.com/nickw444/homekit/bridge/service_registry"
+	"github.com/nickw444/homekit/bridge/services"
+	"github.com/nickw444/homekit/bridge/services/rf"
 )
 
 type RaexBlind struct {
@@ -29,7 +29,7 @@ type RaexBlindConfig struct {
 	channel int
 
 	rfServiceId string
-	rfService   *rf_service.RFService
+	rfService   *rf.RFService
 }
 
 const (
@@ -63,14 +63,14 @@ func NewRaexBlindConfig(c map[string]interface{}) RaexBlindConfig {
 	return conf
 }
 
-func (r *RaexBlindConfig) ResolveServices(registry *svc_reg.ServiceRegistry) error {
+func (r *RaexBlindConfig) ResolveServices(registry *services.Registry) error {
 	svc, err := registry.Get(r.rfServiceId)
 	if err != nil {
 		return err
 	}
 
 	var ok bool
-	if r.rfService, ok = svc.(*rf_service.RFService); !ok {
+	if r.rfService, ok = svc.(*rf.RFService); !ok {
 		return fmt.Errorf("Type assertion failed.")
 	}
 
@@ -91,14 +91,11 @@ func NewRaexBlind(serial string, name string, config RaexBlindConfig, log *logru
 	}
 
 	blind.service = service.NewWindowCovering()
-	blind.service.TargetPosition.OnValueRemoteUpdate(blind.onTargetPositionChange)
 
 	blind.holdPosition = characteristic.NewHoldPosition()
-	blind.holdPosition.OnValueRemoteUpdate(blind.onHoldPositionChange)
 
 	blind.pairingOn = characteristic.NewOn()
 	blind.pairingOn.Description = "Pairing"
-	blind.pairingOn.OnValueRemoteUpdate(blind.onPairingToggleChange)
 
 	blind.service.AddCharacteristic(blind.holdPosition.Characteristic)
 	blind.service.AddCharacteristic(blind.pairingOn.Characteristic)
@@ -106,6 +103,12 @@ func NewRaexBlind(serial string, name string, config RaexBlindConfig, log *logru
 	acc.AddService(blind.service.Service)
 
 	return blind
+}
+
+func (r *RaexBlind) Start() {
+	r.service.TargetPosition.OnValueRemoteUpdate(r.onTargetPositionChange)
+	r.holdPosition.OnValueRemoteUpdate(r.onHoldPositionChange)
+	r.pairingOn.OnValueRemoteUpdate(r.onPairingToggleChange)
 }
 
 func (r *RaexBlind) onHoldPositionChange(pos bool) {

@@ -6,7 +6,7 @@ import (
 )
 
 type SonoffSwitchConfig struct {
-	FWVersion int
+	fwVersion int
 }
 
 type SonoffSwitch struct {
@@ -28,10 +28,10 @@ const (
 
 func NewSonoffSwitchConfig(c map[string]interface{}) SonoffSwitchConfig {
 	conf := SonoffSwitchConfig{}
-	conf.FWVersion = 2
+	conf.fwVersion = 2
 
 	if val, ok := c["fw-version"]; ok {
-		conf.FWVersion = val.(int)
+		conf.fwVersion = val.(int)
 	}
 
 	return conf
@@ -47,35 +47,40 @@ func NewSonoffSwitch(switchConfig SonoffSwitchConfig, client mqtt.Client,
 	})
 
 	var prefix string
-	if switchConfig.FWVersion == 1 {
+	if switchConfig.fwVersion == 1 {
 		prefix = "device"
 	} else {
 		prefix = "esp"
 	}
 
 	topicSvc := mqtt.NewPrefixedIDTopicService(prefix, identifier)
+	domain := mqtt.NewDomain(client, topicSvc)
 
 	sonoff := &SonoffSwitch{
-		domain:          mqtt.NewDomain(client, topicSvc),
+		domain:          domain,
 		switchAccessory: acc,
 	}
 
-	acc.Switch.On.OnValueRemoteUpdate(func(b bool) {
-		if b {
-			sonoff.setState(SonoffRelayStateOn)
-		} else {
-			sonoff.setState(SonoffRelayStateOff)
-		}
-	})
+	return sonoff
+}
+
+func (s *SonoffSwitch) Start() {
+	s.switchAccessory.Switch.On.OnValueRemoteUpdate(s.onSwitchTargetStateChange)
 
 	// Setup the listener
-	sonoff.domain.Subscribe(topicEndpointRelayState, sonoff.handleRelayStateMsg)
+	s.domain.Subscribe(topicEndpointRelayState, s.handleRelayStateMsg)
 
 	// Republish it's existing status so that we can update the switch.
-	sonoff.domain.Republish()
+	s.domain.Republish()
 
-	return sonoff
+}
 
+func (s *SonoffSwitch) onSwitchTargetStateChange(b bool) {
+	if b {
+		s.setState(SonoffRelayStateOn)
+	} else {
+		s.setState(SonoffRelayStateOff)
+	}
 }
 
 func (s *SonoffSwitch) handleRelayStateMsg(msg string) {

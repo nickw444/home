@@ -8,7 +8,7 @@ import (
 	"github.com/nickw444/homekit/bridge/mqtt"
 )
 
-type Thermometer struct {
+type SonoffTH10 struct {
 	domain      *mqtt.Domain
 	humiditySvc *service.HumiditySensor
 	accessory   *accessory.Thermometer
@@ -19,9 +19,8 @@ const (
 	topicEndpointHumidity    = "humidity"
 )
 
-// NewThermometer creates a new Thermometer device.
-func NewThermometer(client mqtt.Client, identifier string, name string) *Thermometer {
-
+// NewSonoffTH10 creates a new Thermometer device.
+func NewSonoffTH10(client mqtt.Client, identifier string, name string) *SonoffTH10 {
 	acc := accessory.NewTemperatureSensor(accessory.Info{
 		SerialNumber: identifier,
 		Name:         name,
@@ -33,33 +32,35 @@ func NewThermometer(client mqtt.Client, identifier string, name string) *Thermom
 
 	topicSvc := mqtt.NewPrefixedIDTopicService("esp", identifier)
 
-	sonoff := &Thermometer{
+	sonoff := &SonoffTH10{
 		domain:      mqtt.NewDomain(client, topicSvc),
 		accessory:   acc,
 		humiditySvc: humidity,
 	}
 
-	// Setup the listener
-	sonoff.domain.Subscribe(topicEndpointTemperature, sonoff.handleTemperatureReceived)
-	sonoff.domain.Subscribe(topicEndpointHumidity, sonoff.handleHumidityReceived)
-
-	// Republish to get the current reading.
-	sonoff.domain.Republish()
-
 	return sonoff
 }
 
+func (s *SonoffTH10) Start() {
+	// Setup the listener
+	s.domain.Subscribe(topicEndpointTemperature, s.handleTemperatureReceived)
+	s.domain.Subscribe(topicEndpointHumidity, s.handleHumidityReceived)
+
+	// Republish to get the current reading.
+	s.domain.Republish()
+}
+
 // GetHCAccessory returns the homekit accessory.
-func (t *Thermometer) GetHCAccessory() *accessory.Accessory {
-	return t.accessory.Accessory
+func (s *SonoffTH10) GetHCAccessory() *accessory.Accessory {
+	return s.accessory.Accessory
 }
 
-func (t *Thermometer) handleTemperatureReceived(msg string) {
+func (s *SonoffTH10) handleTemperatureReceived(msg string) {
 	temperature, _ := strconv.ParseFloat(msg, 64)
-	t.accessory.TempSensor.CurrentTemperature.SetValue(temperature)
+	s.accessory.TempSensor.CurrentTemperature.SetValue(temperature)
 }
 
-func (t *Thermometer) handleHumidityReceived(msg string) {
+func (s *SonoffTH10) handleHumidityReceived(msg string) {
 	humidity, _ := strconv.ParseFloat(msg, 64)
-	t.humiditySvc.CurrentRelativeHumidity.SetValue(humidity)
+	s.humiditySvc.CurrentRelativeHumidity.SetValue(humidity)
 }

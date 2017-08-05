@@ -1,4 +1,4 @@
-package rf_service
+package rf
 
 import (
 	"fmt"
