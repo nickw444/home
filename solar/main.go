@@ -1,22 +1,33 @@
 package main
 
 import (
-	"github.com/brutella/hc"
-	"github.com/brutella/hc/accessory"
-	"log"
+	"os"
 	"time"
 
+	"github.com/Sirupsen/logrus"
+	"github.com/brutella/hc"
+	"github.com/brutella/hc/accessory"
 	"gopkg.in/alecthomas/kingpin.v2"
 )
 
+var log = logrus.New()
+
 func main() {
+	var (
+		app = kingpin.New("Efergy Bridge", "Bridge Efergy API with Homekit")
 
-	accessToken := kingpin.Arg("accessToken", "Access token used to connect to efergy API").Required().String()
-	accessCode := kingpin.Arg("accessCode", "Homekit Access code to use").Required().String()
-	port := kingpin.Arg("port", "Port for homekit to listen on").String()
-	kingpin.Parse()
+		accessCode  = app.Arg("access-code", "Homekit Access code to use").Required().String()
+		accessToken = app.Arg("efergy-access-token", "Access token used to connect to efergy API").
+				Required().String()
 
-	efergyClient := NewEfergyClient(*accessToken)
+		port       = app.Flag("port", "Port for homekit to listen on").Short('p').String()
+		refreshInt = app.Flag("refresh-interval", "Efergy API Refresh Interval").
+				Default("60").Short('r').Int()
+	)
+
+	kingpin.MustParse(app.Parse(os.Args[1:]))
+
+	efergyClient := NewEfergyClient(*accessToken, log.WithField("component", "efergy-client"))
 
 	info := accessory.Info{
 		Name:         "EfergyBridge",
@@ -25,11 +36,11 @@ func main() {
 		SerialNumber: "000001",
 	}
 	a := accessory.New(info, accessory.TypeOther)
-	svc := NewPowerService("Energy", efergyClient)
+	svc := NewPowerService("Energy", efergyClient, log.WithField("component", "hc-service"))
 	a.AddService(svc.Service)
 
 	var timer *time.Timer
-	refresh := time.Second * 60
+	refresh := time.Second * time.Duration(*refreshInt)
 	timer = time.AfterFunc(refresh, func() {
 		svc.Update()
 		timer.Reset(refresh)

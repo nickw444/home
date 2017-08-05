@@ -4,12 +4,15 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+
+	"github.com/Sirupsen/logrus"
 )
 
 const readingsEndpointFmt = "https://engage.efergy.com/mobile_proxy/getCurrentValuesSummary?token=%s"
 
 type EfergyClient struct {
 	token string
+	log   *logrus.Entry
 }
 
 type Reading struct {
@@ -31,9 +34,10 @@ func (reading *Reading) ParseLastValue() {
 	}
 }
 
-func NewEfergyClient(token string) *EfergyClient {
+func NewEfergyClient(token string, log *logrus.Entry) *EfergyClient {
 	return &EfergyClient{
 		token: token,
+		log:   log,
 	}
 }
 
@@ -43,7 +47,7 @@ func (client *EfergyClient) GetLatestReadings() ([]*Reading, error) {
 		return nil, err
 	}
 
-	fmt.Println(resp.Body)
+	client.log.Println(resp.Body)
 
 	var data []*Reading
 	decoder := json.NewDecoder(resp.Body)
@@ -55,9 +59,8 @@ func (client *EfergyClient) GetLatestReadings() ([]*Reading, error) {
 	// Parse the readings.
 	for _, reading := range data {
 		reading.ParseLastValue()
-		fmt.Println(reading)
+		client.log.Println(reading)
 	}
 
 	return data, nil
-
 }

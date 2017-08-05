@@ -3,9 +3,10 @@ package main
 // With inspiration from: https://github.com/brutella/hksymo
 
 import (
+	"github.com/Sirupsen/logrus"
 	"github.com/brutella/hc/characteristic"
 	"github.com/brutella/hc/service"
-	"log"
+
 	"math"
 )
 
@@ -29,6 +30,7 @@ func NewPower(val int) *Power {
 
 type PowerService struct {
 	*service.Service
+	log *logrus.Entry
 
 	EfergyClient *EfergyClient
 	Name         *characteristic.Name
@@ -45,7 +47,7 @@ type PowerService struct {
 	MainsOutput *Power
 }
 
-func NewPowerService(name string, efergyClient *EfergyClient) *PowerService {
+func NewPowerService(name string, efergyClient *EfergyClient, log *logrus.Entry) *PowerService {
 	nameChar := characteristic.NewName()
 	nameChar.SetValue(name)
 
@@ -92,6 +94,7 @@ func NewPowerService(name string, efergyClient *EfergyClient) *PowerService {
 		MainsInput:   mainsInput,
 		BatteryInput: batteryInput,
 		MainsOutput:  mainsOutput,
+		log:          log,
 	}
 }
 
@@ -130,7 +133,7 @@ func NewOrganisedReadings(readings []*Reading) *OrganisedReadings {
 }
 
 func (svc *PowerService) Update() error {
-	log.Printf("Updating...")
+	svc.log.Printf("Updating...")
 	readings, err := svc.EfergyClient.GetLatestReadings()
 	if err != nil {
 		return err
