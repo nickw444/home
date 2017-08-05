@@ -1,18 +1,17 @@
 package main
 
 import (
+	"os"
+
+	"github.com/Sirupsen/logrus"
 	"github.com/brutella/hc"
 	"github.com/brutella/hc/accessory"
 	hcLog "github.com/brutella/hc/log"
-
-	"github.com/Sirupsen/logrus"
 	hca "github.com/nickw444/homekit/bridge/accessories"
 	"github.com/nickw444/homekit/bridge/mqtt"
 	"github.com/nickw444/homekit/bridge/services"
 	"github.com/nickw444/homekit/bridge/services/rf"
 	"gopkg.in/alecthomas/kingpin.v2"
-
-	"os"
 )
 
 var log = logrus.New()
@@ -20,10 +19,10 @@ var log = logrus.New()
 func main() {
 	var (
 		app        = kingpin.New("MQTTBridge", "Homekit MQTT Bridge")
-		configFile = app.Flag("config", "Provide a configuration file.").Default("bridge.conf.yml").String()
+		configFile = app.Flag("config", "Provide a configuration file.").Short('c').Default("bridge.conf.yml").String()
 
-		accessCode = app.Arg("accessCode", "Homekit Access code to use").Required().String()
-		port       = app.Flag("port", "Port for Homekit to listen on.").String()
+		accessCode = app.Arg("access-code", "Homekit Access code to use").Required().String()
+		port       = app.Flag("port", "Port for Homekit to listen on.").Short('p').String()
 		debug      = app.Flag("debug", "Enable debug output").Bool()
 		hcDebug    = app.Flag("hc-debug", "Enable debug output for hc library").Bool()
 
