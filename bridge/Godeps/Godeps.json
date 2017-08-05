@@ -120,13 +120,13 @@
 		},
 		{
 			"ImportPath": "github.com/eclipse/paho.mqtt.golang",
-			"Comment": "v1.0.0-45-g5255135",
-			"Rev": "525513518a2d25691003e6c0b5c7fb5473c2a8ec"
+			"Comment": "v1.1.0",
+			"Rev": "aff15770515e3c57fc6109da73d42b0d46f7f483"
 		},
 		{
 			"ImportPath": "github.com/eclipse/paho.mqtt.golang/packets",
-			"Comment": "v1.0.0-45-g5255135",
-			"Rev": "525513518a2d25691003e6c0b5c7fb5473c2a8ec"
+			"Comment": "v1.1.0",
+			"Rev": "aff15770515e3c57fc6109da73d42b0d46f7f483"
 		},
 		{
 			"ImportPath": "github.com/gosexy/to",
@@ -208,6 +208,31 @@
 		{
 			"ImportPath": "gopkg.in/yaml.v2",
 			"Rev": "25c4ec802a7d637f88d584ab26798e94ad14c13b"
+		},
+		{
+			"ImportPath": "github.com/brutella/hc/vendor/github.com/gosexy/to",
+			"Comment": "v0.1.0-51-g5f75b70",
+			"Rev": "5f75b70715efe858574e7d6719878ce060693db1"
+		},
+		{
+			"ImportPath": "github.com/brutella/hc/vendor/github.com/oleksandr/bonjour",
+			"Comment": "v0.1.0-51-g5f75b70",
+			"Rev": "5f75b70715efe858574e7d6719878ce060693db1"
+		},
+		{
+			"ImportPath": "github.com/brutella/hc/vendor/github.com/agl/ed25519",
+			"Comment": "v0.1.0-51-g5f75b70",
+			"Rev": "5f75b70715efe858574e7d6719878ce060693db1"
+		},
+		{
+			"ImportPath": "github.com/brutella/hc/vendor/github.com/tadglines/go-pkgs/crypto/srp",
+			"Comment": "v0.1.0-51-g5f75b70",
+			"Rev": "5f75b70715efe858574e7d6719878ce060693db1"
+		},
+		{
+			"ImportPath": "github.com/brutella/hc/vendor/github.com/agl/ed25519/edwards25519",
+			"Comment": "v0.1.0-51-g5f75b70",
+			"Rev": "5f75b70715efe858574e7d6719878ce060693db1"
 		}
 	]
 }

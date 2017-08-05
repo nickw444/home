@@ -125,7 +125,7 @@ func incoming(c *client) {
 		case c.ibound <- cp:
 			// Notify keepalive logic that we recently received a packet
 			if c.options.KeepAlive != 0 {
-				c.packetResp <- struct{}{}
+				c.packetResp.Broadcast()
 			}
 		case <-c.stop:
 			// This avoids a deadlock should a message arrive while shutting down.
@@ -205,11 +205,7 @@ func outgoing(c *client) {
 		}
 		// Reset ping timer after sending control packet.
 		if c.options.KeepAlive != 0 {
-			select {
-			case c.keepaliveReset <- struct{}{}:
-			default:
-				DEBUG.Println(NET, "couldn't send keepalive signal in outbound as channel full")
-			}
+			c.keepaliveReset.Broadcast()
 		}
 	}
 }
@@ -232,20 +228,22 @@ func alllogic(c *client) {
 			switch m := msg.(type) {
 			case *packets.PingrespPacket:
 				DEBUG.Println(NET, "received pingresp")
-				c.pingResp <- struct{}{}
+				c.pingResp.Broadcast()
 			case *packets.SubackPacket:
 				DEBUG.Println(NET, "received suback, id:", m.MessageID)
-				token := c.getToken(m.MessageID).(*SubscribeToken)
-				DEBUG.Println(NET, "granted qoss", m.ReturnCodes)
-				for i, qos := range m.ReturnCodes {
-					token.subResult[token.subs[i]] = qos
+				token := c.getToken(m.MessageID)
+				switch t := token.(type) {
+				case *SubscribeToken:
+					DEBUG.Println(NET, "granted qoss", m.ReturnCodes)
+					for i, qos := range m.ReturnCodes {
+						t.subResult[t.subs[i]] = qos
+					}
 				}
 				token.flowComplete()
 				c.freeID(m.MessageID)
 			case *packets.UnsubackPacket:
 				DEBUG.Println(NET, "received unsuback, id:", m.MessageID)
-				token := c.getToken(m.MessageID).(*UnsubscribeToken)
-				token.flowComplete()
+				c.getToken(m.MessageID).flowComplete()
 				c.freeID(m.MessageID)
 			case *packets.PublishPacket:
 				DEBUG.Println(NET, "received publish, msgId:", m.MessageID)
@@ -257,7 +255,10 @@ func alllogic(c *client) {
 					pr := packets.NewControlPacket(packets.Pubrec).(*packets.PubrecPacket)
 					pr.MessageID = m.MessageID
 					DEBUG.Println(NET, "putting pubrec msg on obound")
-					c.oboundP <- &PacketAndToken{p: pr, t: nil}
+					select {
+					case c.oboundP <- &PacketAndToken{p: pr, t: nil}:
+					case <-c.stop:
+					}
 					DEBUG.Println(NET, "done putting pubrec msg on obound")
 				case 1:
 					c.incomingPubChan <- m
@@ -265,10 +266,16 @@ func alllogic(c *client) {
 					pa := packets.NewControlPacket(packets.Puback).(*packets.PubackPacket)
 					pa.MessageID = m.MessageID
 					DEBUG.Println(NET, "putting puback msg on obound")
-					c.oboundP <- &PacketAndToken{p: pa, t: nil}
+					select {
+					case c.oboundP <- &PacketAndToken{p: pa, t: nil}:
+					case <-c.stop:
+					}
 					DEBUG.Println(NET, "done putting puback msg on obound")
 				case 0:
-					c.incomingPubChan <- m
+					select {
+					case c.incomingPubChan <- m:
+					case <-c.stop:
+					}
 					DEBUG.Println(NET, "done putting msg on incomingPubChan")
 				}
 			case *packets.PubackPacket:
@@ -283,7 +290,7 @@ func alllogic(c *client) {
 				prel.MessageID = m.MessageID
 				select {
 				case c.oboundP <- &PacketAndToken{p: prel, t: nil}:
-				case <-time.After(time.Second):
+				case <-c.stop:
 				}
 			case *packets.PubrelPacket:
 				DEBUG.Println(NET, "received pubrel, id:", m.MessageID)
@@ -291,7 +298,7 @@ func alllogic(c *client) {
 				pc.MessageID = m.MessageID
 				select {
 				case c.oboundP <- &PacketAndToken{p: pc, t: nil}:
-				case <-time.After(time.Second):
+				case <-c.stop:
 				}
 			case *packets.PubcompPacket:
 				DEBUG.Println(NET, "received pubcomp, id:", m.MessageID)
@@ -312,7 +319,7 @@ func errorWatch(c *client) {
 		return
 	case err := <-c.errors:
 		ERROR.Println(NET, "error triggered, stopping")
-		c.internalConnLost(err)
+		go c.internalConnLost(err)
 		return
 	}
 }
