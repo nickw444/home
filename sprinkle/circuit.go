@@ -64,7 +64,7 @@ func (c *Circuit) OnUpdate(on bool) {
 	// Turn the port on,
 	c.gpioMgr.setPort(c.port, on)
 	if on && c.maxDuration > 0 {
-		log.Printf("Configuring Expirty for port %d", c.port)
+		log.Printf("Configuring expiry for port %d", c.port)
 		// Turn the port off after the maximum duration
 		cb := func() {
 			log.Printf("Duration expired for port %d", c.port)
