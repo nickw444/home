@@ -11,30 +11,29 @@ services:
 
 
 accessories:
-  # - model: sonoff-switch
-  #   serial: 5ccf7f9551dc
-  #   name: Test Room
-  #   conf:
-  #     fw-version: 1
+  - model: sonoff-switch
+    serial: 5ccf7f9551dc
+    name: Test Room
+    conf:
+      fw-version: 1
 
-  # - model: sonoff-switch
-  #   serial: 5ccf7f97a63
-  #   name: Test Room
+  - model: sonoff-switch
+    serial: 5ccf7f97a63
+    name: Test Room
 
-  # - model: sonoff-th10
-  #   serial: 60194173177
-  #   name: TempTest
+  - model: sonoff-th10
+    serial: 60194173177
+    name: TempTest
 
-  # - model: garagedoor
-  #   serial: 5ccf7f84b028
-  #   name: GarageTest
+  - model: garagedoor
+    serial: 5ccf7f84b028
+    name: GarageTest
 
-  # - model: latch-lock
-  #   serial: 5ccf7f84b87f
-  #   name: Front Door
-  #   conf:
-  #     latch-delay: 5000
-
+  - model: latch-lock
+    serial: 5ccf7f84b87f
+    name: Front Door
+    conf:
+      latch-delay: 5000
 
   - model: raex-blind
     name: Nick Front
@@ -43,19 +42,3 @@ accessories:
       rf-service: rf-1
       remote: 100
       channel: 0
-
-  - model: raex-blind
-    name: Nick Side
-    serial: 'rf-blind-nick-side'
-    conf:
-      rf-service: rf-1
-      remote: 100
-      channel: 1
-
-  - model: raex-blind
-    name: Upstairs Hall
-    serial: 'rf-blind-upstairs-hall'
-    conf:
-      rf-service: rf-1
-      remote: 100
-      channel: 2
