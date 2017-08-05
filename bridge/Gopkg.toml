@@ -26,8 +26,9 @@
   version = "1.0.2"
 
 [[constraint]]
-  branch = "master"
   name = "github.com/brutella/hc"
+  branch = "nwhyte/update-mdns"
+  source = "github.com/nickw444/hc"
 
 [[constraint]]
   name = "github.com/eclipse/paho.mqtt.golang"
