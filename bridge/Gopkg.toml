@@ -41,3 +41,8 @@
 [[constraint]]
   branch = "v2"
   name = "gopkg.in/yaml.v2"
+
+# Fix MDNS issues https://github.com/grandcat/zeroconf/issues/28
+[[override]]
+  name = "github.com/grandcat/zeroconf"
+  revision = "8ad40c89978a7b2102ff98743831bf5cdb454f9f"

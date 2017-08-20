@@ -4,8 +4,8 @@
 [[projects]]
   name = "github.com/Sirupsen/logrus"
   packages = ["."]
-  revision = "a3f95b5c423586578a4e099b11a46c2479628cac"
-  version = "1.0.2"
+  revision = "f006c2ac4710855cf0f916dd6b77acf6b048dc6e"
+  version = "v1.0.3"
 
 [[projects]]
   branch = "master"
@@ -51,16 +51,15 @@
   revision = "c20e083e31230b84ffa23c5d2fb0bc55f5292681"
 
 [[projects]]
-  branch = "master"
   name = "github.com/grandcat/zeroconf"
   packages = ["."]
-  revision = "e4a16e81aad43bf839b50c68f08488c3e865f707"
+  revision = "8ad40c89978a7b2102ff98743831bf5cdb454f9f"
 
 [[projects]]
   branch = "master"
   name = "github.com/miekg/dns"
   packages = ["."]
-  revision = "bbca4873b326f5dc54bfe31148446d4ed79a5a02"
+  revision = "e4205768578dc90c2669e75a2f8a8bf77e3083a4"
 
 [[projects]]
   branch = "master"
@@ -71,8 +70,8 @@
 [[projects]]
   branch = "master"
   name = "golang.org/x/crypto"
-  packages = ["chacha20poly1305","chacha20poly1305/internal/chacha20","curve25519","hkdf","poly1305"]
-  revision = "b176d7def5d71bdd214203491f89843ed217f420"
+  packages = ["chacha20poly1305","chacha20poly1305/internal/chacha20","curve25519","hkdf","poly1305","ssh/terminal"]
+  revision = "eb71ad9bd329b5ac0fd0148dd99bd62e8be8e035"
 
 [[projects]]
   branch = "master"
@@ -83,8 +82,8 @@
 [[projects]]
   branch = "master"
   name = "golang.org/x/sys"
-  packages = ["unix"]
-  revision = "e42485b6e20ae7d2304ec72e535b103ed350cc02"
+  packages = ["unix","windows"]
+  revision = "43e60d72a8e2bd92ee98319ba9a384a0e9837c08"
 
 [[projects]]
   name = "gopkg.in/alecthomas/kingpin.v2"
@@ -96,11 +95,11 @@
   branch = "v2"
   name = "gopkg.in/yaml.v2"
   packages = ["."]
-  revision = "25c4ec802a7d637f88d584ab26798e94ad14c13b"
+  revision = "eb3733d160e74a9c7e442f435eb3bea458e1d19f"
 
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "c7d3a5f81e8a6ddcaa649f10f39d43f85f659b03db0e94716957a588892da286"
+  inputs-digest = "984bcfaeb3754c70e6eeb27fe38474685c8077aca8bc37d37288eec0dd04558d"
   solver-name = "gps-cdcl"
   solver-version = 1
