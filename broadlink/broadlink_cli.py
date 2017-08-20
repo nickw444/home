@@ -45,6 +45,7 @@ if args.sensors:
         print "{} {}".format(key, data[key])
 if args.send:
     data = bytearray.fromhex(args.send)
+    print(repr(data))
     dev.send_data(data)
 if args.learn or args.learnfile:
     dev.enter_learning()
@@ -56,6 +57,7 @@ if args.learn or args.learnfile:
         timeout -= 2
         data = dev.check_data()
     if data:
+        print(data)
         learned = ''.join(format(x, '02x') for x in bytearray(data))
         if args.learn:
             print learned    
