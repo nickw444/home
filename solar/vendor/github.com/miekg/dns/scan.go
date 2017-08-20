@@ -278,8 +278,7 @@ func parseZone(r io.Reader, origin, f string, t chan *Token, include int) {
 				return
 			}
 			neworigin := origin // There may be optionally a new origin set after the filename, if not use current one
-			l := <-c
-			switch l.value {
+			switch l := <-c; l.value {
 			case zBlank:
 				l := <-c
 				if l.value == zString {
@@ -314,7 +313,7 @@ func parseZone(r io.Reader, origin, f string, t chan *Token, include int) {
 				t <- &Token{Error: &ParseError{f, "too deeply nested $INCLUDE", l}}
 				return
 			}
-			parseZone(r1, l.token, neworigin, t, include+1)
+			parseZone(r1, neworigin, l.token, t, include+1)
 			st = zExpectOwnerDir
 		case zExpectDirTtlBl:
 			if l.value != zBlank {
