@@ -1,0 +1,28 @@
+{
+	"AppName": "lifx",
+	"ArtifactsDest": "build",
+	"Tasks": [
+		"interpolate-source",
+		"go-install",
+		"xc",
+		"codesign",
+		"copy-resources",
+		"archive-zip",
+		"archive-tar-gz",
+		"deb",
+		"deb-dev",
+		"rmbin",
+		"publish-github"
+	],
+	"BuildConstraints": "!plan9,!netbsd,!openbsd,!dragonfly,!solaris,!nacl",
+	"MainDirsExclude": "vendor",
+	"PackageVersion": "0.5.1",
+	"TaskSettings": {
+		"publish-github": {
+			"body": "",
+			"owner": "pdf",
+			"repository": "golifx"
+		}
+	},
+	"ConfigVersion": "0.9"
+}

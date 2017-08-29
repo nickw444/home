@@ -1,0 +1,21 @@
+# Glide YAML configuration file
+# Set this to your fully qualified package name, e.g.
+# github.com/Masterminds/foo. This should be the
+# top level package.
+package: github.com/pdf/golifx
+
+# Declare your project's dependencies.
+import:
+  # Fetch package similar to 'go get':
+  #- package: github.com/Masterminds/cookoo
+  # Get and manage a package with Git:
+  #- package: github.com/Masterminds/cookoo
+  #  # The repository URL
+  #  repo: git@github.com:Masterminds/cookoo.git
+  #  # A tag, branch, or SHA
+  #  ref: 1.1.0
+  #  # the VCS type (compare to bzr, hg, svn). You should
+  #  # set this if you know it.
+  #  vcs: git
+  - package: github.com/satori/go.uuid
+    ref: 6b8e5b55d20d01ad47ecfe98e5171688397c61e9

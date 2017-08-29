@@ -26,9 +26,15 @@
   version = "1.0.2"
 
 [[constraint]]
-  branch = "master"
   name = "github.com/brutella/hc"
+  branch = "nwhyte/update-mdns"
+  source = "github.com/nickw444/hc"
 
 [[constraint]]
   name = "gopkg.in/alecthomas/kingpin.v2"
   version = "2.2.5"
+
+# Fix MDNS issues https://github.com/grandcat/zeroconf/issues/28
+[[override]]
+  name = "github.com/grandcat/zeroconf"
+  revision = "8ad40c89978a7b2102ff98743831bf5cdb454f9f"

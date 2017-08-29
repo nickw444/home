@@ -4,8 +4,8 @@
 [[projects]]
   name = "github.com/Sirupsen/logrus"
   packages = ["."]
-  revision = "a3f95b5c423586578a4e099b11a46c2479628cac"
-  version = "1.0.2"
+  revision = "f006c2ac4710855cf0f916dd6b77acf6b048dc6e"
+  version = "v1.0.3"
 
 [[projects]]
   branch = "master"
@@ -26,10 +26,17 @@
   revision = "2efee857e7cfd4f3d0138cc3cbb1b4966962b93a"
 
 [[projects]]
-  branch = "master"
+  branch = "nwhyte/update-mdns"
   name = "github.com/brutella/hc"
   packages = [".","accessory","characteristic","crypto","crypto/chacha20poly1305","crypto/curve25519","crypto/hkdf","db","event","hap","hap/controller","hap/data","hap/endpoint","hap/http","hap/pair","log","service","util"]
-  revision = "5f75b70715efe858574e7d6719878ce060693db1"
+  revision = "298b9f1a838d4fb1338a40c71e2461768529998b"
+  source = "github.com/nickw444/hc"
+
+[[projects]]
+  name = "github.com/cenkalti/backoff"
+  packages = ["."]
+  revision = "32cd0c5b3aef12c76ed64aaf678f6c79736be7dc"
+  version = "v1.0.0"
 
 [[projects]]
   branch = "master"
@@ -38,16 +45,15 @@
   revision = "c20e083e31230b84ffa23c5d2fb0bc55f5292681"
 
 [[projects]]
-  branch = "master"
-  name = "github.com/miekg/dns"
+  name = "github.com/grandcat/zeroconf"
   packages = ["."]
-  revision = "0f3adef2e2201d72e50309a36fc99d8a9d1a4960"
+  revision = "8ad40c89978a7b2102ff98743831bf5cdb454f9f"
 
 [[projects]]
   branch = "master"
-  name = "github.com/oleksandr/bonjour"
+  name = "github.com/miekg/dns"
   packages = ["."]
-  revision = "5dcf00d8b228be86307f952f550f2191d956b9e2"
+  revision = "e4205768578dc90c2669e75a2f8a8bf77e3083a4"
 
 [[projects]]
   branch = "master"
@@ -58,20 +64,20 @@
 [[projects]]
   branch = "master"
   name = "golang.org/x/crypto"
-  packages = ["chacha20poly1305","chacha20poly1305/internal/chacha20","curve25519","hkdf","poly1305"]
-  revision = "42ff06aea7c329876e5a0fe94acc96902accf0ad"
+  packages = ["chacha20poly1305","chacha20poly1305/internal/chacha20","curve25519","hkdf","poly1305","ssh/terminal"]
+  revision = "eb71ad9bd329b5ac0fd0148dd99bd62e8be8e035"
 
 [[projects]]
   branch = "master"
   name = "golang.org/x/net"
   packages = ["bpf","internal/iana","internal/socket","ipv4","ipv6"]
-  revision = "f5079bd7f6f74e23c4d65efa0f4ce14cbd6a3c0f"
+  revision = "1c05540f6879653db88113bc4a2b70aec4bd491f"
 
 [[projects]]
   branch = "master"
   name = "golang.org/x/sys"
-  packages = ["unix"]
-  revision = "d8f5ea21b9295e315e612b4bcf4bedea93454d4d"
+  packages = ["unix","windows"]
+  revision = "43e60d72a8e2bd92ee98319ba9a384a0e9837c08"
 
 [[projects]]
   name = "gopkg.in/alecthomas/kingpin.v2"
@@ -82,6 +88,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "5c6bb7bbe92c2a6112969a3125d3dede3c4e74f55477bd2b3dae21fd7bbc1d12"
+  inputs-digest = "83329f36f625e1373d69a0f63e3c5ca714030657b9d1c8b9578551948615a2a0"
   solver-name = "gps-cdcl"
   solver-version = 1
