@@ -1,9 +1,10 @@
 package main
 
 import (
-	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"os"
+
+	"gopkg.in/yaml.v2"
 )
 
 type accessoryConfig struct {
@@ -13,18 +14,11 @@ type accessoryConfig struct {
 	Conf   map[string]interface{}
 }
 
-type serviceConfig struct {
-	Type string
-	ID   string
-	Conf map[string]interface{}
-}
-
 type bridgeConfig struct {
 	Name         string
 	Manufacturer string
 	Model        string
 	Accessories  []*accessoryConfig
-	Services     []*serviceConfig
 }
 
 func parseConfig(filename string) *bridgeConfig {

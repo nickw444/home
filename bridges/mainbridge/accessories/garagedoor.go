@@ -7,7 +7,7 @@ import (
 	"github.com/brutella/hc/accessory"
 	"github.com/brutella/hc/characteristic"
 	"github.com/brutella/hc/service"
-	"github.com/nickw444/homekit/bridge/mqtt"
+	"github.com/nickw444/homekit/bridges/lib/mqtt"
 )
 
 type GarageDoor struct {

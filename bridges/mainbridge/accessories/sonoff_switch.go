@@ -2,7 +2,7 @@ package accessories
 
 import (
 	"github.com/brutella/hc/accessory"
-	"github.com/nickw444/homekit/bridge/mqtt"
+	"github.com/nickw444/homekit/bridges/lib/mqtt"
 )
 
 type SonoffSwitchConfig struct {
