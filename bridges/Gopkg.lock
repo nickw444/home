@@ -56,6 +56,12 @@
   revision = "822ae18e7187e1bbde923a37081f6c1b8e9ba68a"
 
 [[projects]]
+  name = "github.com/stianeikeland/go-rpio"
+  packages = ["."]
+  revision = "896db2ee1c7f95240dd6a09e56edf9cece107a34"
+  version = "v3.0.0"
+
+[[projects]]
   branch = "master"
   name = "github.com/tadglines/go-pkgs"
   packages = ["crypto/srp"]
@@ -94,6 +100,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "e8c597d17e44d2b5b2a23d9a369453a3e3f689cd80d6f68f2db6b0598955b754"
+  inputs-digest = "8f2e3607dcbae36415b87768dfccd8a52d32ed698fa5c2566ba25c106adb2beb"
   solver-name = "gps-cdcl"
   solver-version = 1
