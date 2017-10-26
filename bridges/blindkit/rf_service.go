@@ -1,6 +1,8 @@
 package main
 
 import (
+	"time"
+
 	"github.com/nickw444/homekit/bridges/lib/mqtt"
 )
 
@@ -35,5 +37,8 @@ func (r *RFService) Transmit(endpoint string, payload string) {
 func (r *RFService) worker() {
 	for transmission := range r.q {
 		r.domain.Publish(transmission.endpoint, transmission.payload)
+		// Sending transmissions back to back appears to crash the RF transmitter.
+		// Until I find time to resolve the issue in firmware, just rate limit.
+		time.Sleep(time.Millisecond * 500)
 	}
 }

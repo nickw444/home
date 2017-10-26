@@ -68,15 +68,12 @@ func (r *RaexBlind) onHoldPositionChange(pos bool) {
 func (r *RaexBlind) onTargetPositionChange(targetPosition int) {
 	var newPosition int
 	r.log.Debugf("Target position changed to: %d", targetPosition)
-
-	// In order to trick Siri into always allowing us to send an Up or a down
-	// command, we set the new position to be a close value to the target.
 	if targetPosition > 70 {
 		r.raexClient.Up()
-		newPosition = 98
+		newPosition = 100
 	} else if targetPosition < 30 {
 		r.raexClient.Down()
-		newPosition = 2
+		newPosition = 0
 	} else {
 		r.raexClient.Hold()
 		newPosition = 50

@@ -52,6 +52,9 @@ func main() {
 	var accessories []*accessory.Accessory
 	for _, blindConfig := range config.Blinds {
 		rfService := rfServices[blindConfig.Transmitter]
+		if rfService == nil {
+			log.Panic("Unknown RF Transmitter", blindConfig.Transmitter)
+		}
 		client := NewRaexBlindClient(blindConfig.Remote, blindConfig.Channel,
 			3, time.Second, rfService)
 		serial := unsafeSerialChars.ReplaceAllString(strings.ToLower(blindConfig.Name), "-")
