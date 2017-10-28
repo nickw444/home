@@ -1,3 +1,6 @@
 [submodule "lifx/hklifx"]
 	path = lifx/hklifx
 	url = https://github.com/brutella/hklifx.git
+[submodule "bridges/hkmiio/hkmiio"]
+	path = bridges/hkmiio/hkmiio
+	url = https://github.com/nickw444/hkmiio.git

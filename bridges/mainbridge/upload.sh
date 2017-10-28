@@ -1,2 +1,2 @@
 #!/bin/sh
-../../tools/upload.sh homebridge2;
+../../tools/upload.sh -n homebridge2;

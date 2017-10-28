@@ -7,8 +7,9 @@ REMOTE_USER="sprinkle";
 
 # Build an ARM binary.
 build() {
-    binary_name=$1;
-    GOOS=linux GOARCH=arm GOARM=5 go build -o $binary_name;
+    out_binary_name=$1;
+    input_path=$2;
+    GOOS=linux GOARCH=arm GOARM=5 go build -o $out_binary_name $input_path;
 }
 
 # Upload a ARM build binary
@@ -31,23 +32,39 @@ replace() {
 EOF
 }
 
-
-main() {
-    set -eux
-    binary_name="$1-arm";
-    proc_name="$1";
-
-    build "$binary_name"; 
-    upload "$binary_name";
-    replace "$binary_name" "$proc_name";
+_usage() {
+  cat << EOF
+Usage $(basename $0):
+  -n    Name of the package. Default to basename of current working dir
+  -s    Source dir of the package. Default to current working dir
+EOF
+  exit 1
 }
 
+set -eu
+name=$(basename $PWD)
+srcdir=$(pwd)
 
-if [ "$#" -gt 1 ]; then
-    echo "Usage $0 <name>";
-    exit 1;
-fi;
+while getopts 'n:s:h' OPTION ;
+  do
+    case "$OPTION" in
+      n)
+        name="$OPTARG"
+        ;;
+      s)
+        srcdir="$OPTARG"
+        ;;
+      h)
+        _usage
+        ;;
+      ?)
+        _usage
+        ;;
+    esac
+done
 
-package=${1:-$(basename $PWD)}
-echo "Performing upload and replace for $package"
-main $package;
+set -eux
+binary_name="$name-arm"
+build "$binary_name" "$srcdir";
+upload "$binary_name";
+replace "$binary_name" "$name";

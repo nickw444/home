@@ -1,2 +1,2 @@
 #!/bin/sh
-../../tools/upload.sh blindkit;
+../../tools/upload.sh;
