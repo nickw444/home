@@ -1,5 +1,5 @@
 [submodule "lifx/hklifx"]
-	path = lifx/hklifx
+	path = bridges/hklifx/hklifx
 	url = https://github.com/brutella/hklifx.git
 [submodule "bridges/hkmiio/hkmiio"]
 	path = bridges/hkmiio/hkmiio
