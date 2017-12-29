@@ -43,7 +43,7 @@ EOF
 
 set -eu
 name=$(basename $PWD)
-srcdir=$(pwd)
+srcdir="."
 
 while getopts 'n:s:h' OPTION ;
   do
