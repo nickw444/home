@@ -1,0 +1,6 @@
+vendor/
+build/
+.vscode/
+cmd/lifx/lifx
+**/*.coverprofile
+.goxc.local.json

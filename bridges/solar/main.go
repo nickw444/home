@@ -3,11 +3,11 @@ package main
 import (
 	"time"
 
-	"github.com/Sirupsen/logrus"
 	"github.com/brutella/hc"
 	"github.com/brutella/hc/accessory"
-	"gopkg.in/alecthomas/kingpin.v2"
 	"github.com/nickw444/homekit/bridges/lib/environment"
+	"github.com/sirupsen/logrus"
+	"gopkg.in/alecthomas/kingpin.v2"
 )
 
 var log = logrus.New()

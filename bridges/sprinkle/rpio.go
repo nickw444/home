@@ -3,7 +3,7 @@ package main
 // A wrapper for RPIO to allow injection and faking.
 
 import (
-	"github.com/Sirupsen/logrus"
+	"github.com/sirupsen/logrus"
 	"github.com/stianeikeland/go-rpio"
 )
 

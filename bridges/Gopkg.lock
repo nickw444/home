@@ -2,12 +2,6 @@
 
 
 [[projects]]
-  name = "github.com/Sirupsen/logrus"
-  packages = ["."]
-  revision = "f006c2ac4710855cf0f916dd6b77acf6b048dc6e"
-  version = "v1.0.3"
-
-[[projects]]
   branch = "master"
   name = "github.com/agl/ed25519"
   packages = [".","edwards25519"]
@@ -27,15 +21,21 @@
 
 [[projects]]
   branch = "master"
+  name = "github.com/benbjohnson/clock"
+  packages = ["."]
+  revision = "7dc76406b6d3c05b5f71a86293cbcf3c4ea03b19"
+
+[[projects]]
+  branch = "master"
   name = "github.com/brutella/dnssd"
   packages = [".","log"]
-  revision = "ca9b207d0b6f17791e3286aea7b64fe5d788ba22"
+  revision = "75c3c0c65b2b195ff1805209b88907db71aad88f"
 
 [[projects]]
   branch = "master"
   name = "github.com/brutella/hc"
   packages = [".","accessory","characteristic","crypto","crypto/chacha20poly1305","crypto/curve25519","crypto/hkdf","db","event","hap","hap/controller","hap/data","hap/endpoint","hap/http","hap/pair","log","service","util"]
-  revision = "a72fd1a6d77ddce137f152802a0b8d8e50afd514"
+  revision = "4acfd1c414ae98200f9d97e71d30d5ff1ffc95ae"
 
 [[projects]]
   name = "github.com/eclipse/paho.mqtt.golang"
@@ -51,9 +51,39 @@
 
 [[projects]]
   branch = "master"
+  name = "github.com/lunixbochs/struc"
+  packages = ["."]
+  revision = "ef56447db6a068ad9e52bc54a1aff5fb9e1ed2dd"
+
+[[projects]]
   name = "github.com/miekg/dns"
-  packages = [".","internal/socket"]
-  revision = "822ae18e7187e1bbde923a37081f6c1b8e9ba68a"
+  packages = ["."]
+  revision = "9271f6595be6734763aaf4b7923f8f1b7a6cc559"
+  version = "v1.0.0"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/nickw444/miio-go"
+  packages = [".","capability","common","device","device/product","protocol","protocol/packet","protocol/transport","subscription","subscription/common","subscription/subscription","subscription/target"]
+  revision = "e279e00b802dcfda5b0826f16218c42629982966"
+
+[[projects]]
+  name = "github.com/pdf/golifx"
+  packages = [".","common","protocol","protocol/v2/device","protocol/v2/packet","protocol/v2/shared"]
+  revision = "4a3b4e6351e362faf6af35ecc789ec69978ed905"
+  version = "v1.0.4"
+
+[[projects]]
+  name = "github.com/satori/go.uuid"
+  packages = ["."]
+  revision = "879c5887cd475cd7864858769793b2ceb0d44feb"
+  version = "v1.1.0"
+
+[[projects]]
+  name = "github.com/sirupsen/logrus"
+  packages = ["."]
+  revision = "d682213848ed68c0a260ca37d6dd5ace8423f5ba"
+  version = "v1.0.4"
 
 [[projects]]
   name = "github.com/stianeikeland/go-rpio"
@@ -70,36 +100,36 @@
 [[projects]]
   branch = "master"
   name = "golang.org/x/crypto"
-  packages = ["chacha20poly1305","chacha20poly1305/internal/chacha20","curve25519","hkdf","poly1305","ssh/terminal"]
-  revision = "edd5e9b0879d13ee6970a50153d85b8fec9f7686"
+  packages = ["chacha20poly1305","chacha20poly1305/internal/chacha20","curve25519","ed25519","ed25519/internal/edwards25519","hkdf","poly1305","ssh/terminal"]
+  revision = "94eea52f7b742c7cbe0b03b22f0c4c8631ece122"
 
 [[projects]]
   branch = "master"
   name = "golang.org/x/net"
   packages = ["bpf","internal/iana","internal/socket","ipv4","ipv6","proxy","websocket"]
-  revision = "cd69bc3fc700721b709c3a59e16e24c67b58f6ff"
+  revision = "d866cfc389cec985d6fda2859936a575a55a3ab6"
 
 [[projects]]
   branch = "master"
   name = "golang.org/x/sys"
   packages = ["unix","windows"]
-  revision = "8dbc5d05d6edcc104950cc299a1ce6641235bc86"
+  revision = "571f7bbbe08da2a8955aed9d4db316e78630e9a3"
 
 [[projects]]
   name = "gopkg.in/alecthomas/kingpin.v2"
   packages = ["."]
-  revision = "1087e65c9441605df944fb12c33f0fe7072d18ca"
-  version = "v2.2.5"
+  revision = "947dcec5ba9c011838740e680966fd7087a71d0d"
+  version = "v2.2.6"
 
 [[projects]]
   branch = "v2"
   name = "gopkg.in/yaml.v2"
   packages = ["."]
-  revision = "eb3733d160e74a9c7e442f435eb3bea458e1d19f"
+  revision = "287cf08546ab5e7e37d55a84f7ed3fd1db036de5"
 
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "8f2e3607dcbae36415b87768dfccd8a52d32ed698fa5c2566ba25c106adb2beb"
+  inputs-digest = "bb587f2eea95f77c81de6b0f78ef64822dad00acb0c1b9ecbd6a7c952824b992"
   solver-name = "gps-cdcl"
   solver-version = 1

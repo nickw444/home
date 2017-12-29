@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/Sirupsen/logrus"
+	"github.com/sirupsen/logrus"
 )
 
 const readingsEndpointFmt = "https://engage.efergy.com/mobile_proxy/getCurrentValuesSummary?token=%s"

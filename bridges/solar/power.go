@@ -3,9 +3,9 @@ package main
 // With inspiration from: https://github.com/brutella/hksymo
 
 import (
-	"github.com/Sirupsen/logrus"
 	"github.com/brutella/hc/characteristic"
 	"github.com/brutella/hc/service"
+	"github.com/sirupsen/logrus"
 
 	"math"
 )

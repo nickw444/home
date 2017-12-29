@@ -3,8 +3,8 @@ package mqtt
 import (
 	"crypto/tls"
 
-	"github.com/Sirupsen/logrus"
 	mqtt "github.com/eclipse/paho.mqtt.golang"
+	"github.com/sirupsen/logrus"
 )
 
 type MessageHandler func(msg string)

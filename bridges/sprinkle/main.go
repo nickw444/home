@@ -3,10 +3,10 @@ package main
 import (
 	"os"
 
-	"github.com/Sirupsen/logrus"
 	"github.com/brutella/hc"
 	"github.com/brutella/hc/accessory"
 	hcLog "github.com/brutella/hc/log"
+	"github.com/sirupsen/logrus"
 	"gopkg.in/alecthomas/kingpin.v2"
 )
 

@@ -1,13 +1,13 @@
 package main
 
 import (
-	"github.com/Sirupsen/logrus"
 	"github.com/brutella/hc"
 	"github.com/brutella/hc/accessory"
 	hcLog "github.com/brutella/hc/log"
 	"github.com/nickw444/homekit/bridges/lib/environment"
 	"github.com/nickw444/homekit/bridges/lib/mqtt"
 	hca "github.com/nickw444/homekit/bridges/mainbridge/accessories"
+	"github.com/sirupsen/logrus"
 	"gopkg.in/alecthomas/kingpin.v2"
 )
 

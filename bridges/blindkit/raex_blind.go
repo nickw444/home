@@ -3,10 +3,10 @@ package main
 import (
 	"time"
 
-	"github.com/Sirupsen/logrus"
 	"github.com/brutella/hc/accessory"
 	"github.com/brutella/hc/characteristic"
 	"github.com/brutella/hc/service"
+	"github.com/sirupsen/logrus"
 )
 
 type RaexBlind struct {

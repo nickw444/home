@@ -7,11 +7,11 @@ import (
 
 	"strings"
 
-	"github.com/Sirupsen/logrus"
 	"github.com/brutella/hc"
 	"github.com/brutella/hc/accessory"
 	"github.com/nickw444/homekit/bridges/lib/environment"
 	"github.com/nickw444/homekit/bridges/lib/mqtt"
+	"github.com/sirupsen/logrus"
 	"gopkg.in/alecthomas/kingpin.v2"
 )
 

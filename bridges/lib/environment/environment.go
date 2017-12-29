@@ -48,7 +48,7 @@ func (e *Environment) WithHC() *Environment {
 	hc := &HC{}
 	e.app.Arg("access-code", "Homekit Access code to use").Required().StringVar(&hc.AccessCode)
 	e.app.Flag("port", "Port for Homekit to listen on.").Short('p').StringVar(&hc.Port)
-	e.app.Flag("hc-Debug", "Enable Debug output for HC library").BoolVar(&hc.Debug)
+	e.app.Flag("hc-debug", "Enable Debug output for HC library").BoolVar(&hc.Debug)
 	e.HC = hc
 	return e
 }
