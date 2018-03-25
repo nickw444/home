@@ -5,3 +5,5 @@
 
 *pws.txt
 *.DS_Store
+*.gch
+config.h
