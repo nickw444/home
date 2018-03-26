@@ -8,6 +8,7 @@ name = "pypi"
 [packages]
 
 "ruamel.yaml" = "*"
+homeassistant = "*"
 
 
 [dev-packages]
