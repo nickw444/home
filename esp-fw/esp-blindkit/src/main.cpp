@@ -99,9 +99,9 @@ void callback(char* topic, byte* payload, unsigned int length) {
       } else if (idx == 1) {
         channel = atoi(token);
       } else if (idx == 2) {
-        if (strcmp("UP", token) == 0) {
+        if (strcmp("OPEN", token) == 0) {
           action = TX_RAEX_ACTION_UP;
-        } else if (strcmp("DOWN", token) == 0) {
+        } else if (strcmp("CLOSE", token) == 0) {
           action = TX_RAEX_ACTION_DOWN;
         } else if (strcmp("STOP", token) == 0) {
           action = TX_RAEX_ACTION_STOP;
@@ -155,6 +155,8 @@ void setup() {
   setupWifi();
   setupMqtt();
   setupOta();
+
+  pinMode(TX_PIN, OUTPUT);
 
   lastConnectionAttempt = millis();
   mqttReconnect();

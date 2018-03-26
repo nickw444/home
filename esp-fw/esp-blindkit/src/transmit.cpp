@@ -49,17 +49,17 @@ static void txRaexWriteHeader(int txPin) {
 static void rxRaexWriteData(int txPin, uint16_t remote, uint8_t channel,
   raex_action_t action, int checksum) {
     // Write fixed first bit.
-    manchesterWriteBit(txPin, CLOCK_WIDTH, 0);
+    manchesterWriteBit(txPin, CLOCK_WIDTH * 2, 0);
     // Write code data.
-    manchesterWriteByteBigEndian(txPin, CLOCK_WIDTH, channel);
-    manchesterWriteByteBigEndian(txPin, CLOCK_WIDTH, remote & 0xFF);
-    manchesterWriteByteBigEndian(txPin, CLOCK_WIDTH, remote >> 8);
-    manchesterWriteByteBigEndian(txPin, CLOCK_WIDTH, action);
-    manchesterWriteByteBigEndian(txPin, CLOCK_WIDTH, checksum);
+    manchesterWriteByteBigEndian(txPin, CLOCK_WIDTH * 2, channel);
+    manchesterWriteByteBigEndian(txPin, CLOCK_WIDTH * 2, remote & 0xFF);
+    manchesterWriteByteBigEndian(txPin, CLOCK_WIDTH * 2, remote >> 8);
+    manchesterWriteByteBigEndian(txPin, CLOCK_WIDTH * 2, action);
+    manchesterWriteByteBigEndian(txPin, CLOCK_WIDTH * 2, checksum);
 
     // Write fixed last bits.
-    manchesterWriteBit(txPin, CLOCK_WIDTH, 0);
-    manchesterWriteBit(txPin, CLOCK_WIDTH, 0);
+    manchesterWriteBit(txPin, CLOCK_WIDTH * 2, 0);
+    manchesterWriteBit(txPin, CLOCK_WIDTH * 2, 0);
 }
 
 static uint8_t txRaexCalculateChecksum(uint16_t remote, uint8_t channel,
@@ -71,6 +71,8 @@ static uint8_t txRaexCalculateChecksum(uint16_t remote, uint8_t channel,
 void txRaexSend(int txPin, uint16_t remote, uint8_t channel, raex_action_t action) {
   uint8_t checksum = txRaexCalculateChecksum(remote, channel, action);
 
-  txRaexWriteHeader(txPin);
-  rxRaexWriteData(txPin, remote, channel, action, checksum);
+  for (int i = 0; i < 4; i++) {
+    txRaexWriteHeader(txPin);
+    rxRaexWriteData(txPin, remote, channel, action, checksum);
+  }
 }
