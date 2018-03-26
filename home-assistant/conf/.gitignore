@@ -4,6 +4,7 @@ secrets.yaml
 .uuid
 .HA_VERSION
 .cloud
+tts
 
 known_devices.yaml
 entity_registry.yaml
