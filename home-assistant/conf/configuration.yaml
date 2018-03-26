@@ -1,0 +1,72 @@
+homeassistant:
+  # Name of the location where Home Assistant is running
+  name: 313A
+  # Location required to calculate the time the sun rises and sets
+  latitude: -33.990236
+  longitude: 151.090537
+  # Impacts weather/sunrise data (altitude above sea level in meters)
+  elevation: 20
+  # metric for Metric, imperial for Imperial
+  unit_system: metric
+  # Pick yours from here: http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+  time_zone: Australia/Sydney
+  # Customization file
+  customize: !include_dir_merge_named ./config/customize
+
+
+mqtt:
+  broker: localhost
+
+# Enables the frontend
+frontend:
+
+# Enables configuration UI
+config:
+
+http:
+  # Secrets are defined in the file secrets.yaml
+  # api_password: !secret http_password
+  # Uncomment this if you are using SSL/TLS, running in Docker container, etc.
+  # base_url: example.duckdns.org:8123
+
+# Checks for available updates
+# Note: This component will send some information about your system to
+# the developers to assist with development of Home Assistant.
+# For more information, please see:
+# https://home-assistant.io/blog/2016/10/25/explaining-the-updater/
+updater:
+  # Optional, allows Home Assistant developers to focus on popular components.
+  # include_used_components: true
+
+# Discover some devices automatically
+discovery:
+
+# Allows you to issue voice commands from the frontend in enabled browsers
+conversation:
+
+# Enables support for tracking state changes over time
+history:
+
+# View all events in a logbook
+logbook:
+
+# Track the sun
+sun:
+
+# Text to speech
+tts:
+  - platform: google
+
+group: !include_dir_merge_named groups/
+automation: !include automations.yaml
+script: !include scripts.yaml
+
+telegram_bot: !include_dir_merge_list config/telegram_bot/
+notify: !include_dir_merge_list config/notify/
+switch: !include_dir_merge_list config/switches/
+cover: !include_dir_merge_list config/covers/
+weather: !include_dir_merge_list config/weather/
+light: !include_dir_merge_list config/lights/
+device_tracker: !include_dir_merge_list config/device_trackers/
+sensor: !include_dir_merge_list config/sensors/
+

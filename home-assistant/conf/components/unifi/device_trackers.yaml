@@ -1,0 +1,11 @@
+- platform: unifi
+  host: localhost
+  username: !secret unifi_username
+  password: !secret unifi_password
+  verify_ssl: false
+  ssid_filter:
+    - 'UniFi'
+    - 'PubNet'
+  new_device_defaults:
+    track_new_devices: False
+    hide_if_away: False

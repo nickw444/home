@@ -1,0 +1,14 @@
+# Upstairs RM Pro
+- platform: broadlink
+  host: 192.168.8.175
+  mac: 34:ea:34:e4:76:65
+
+# Downstairs
+- platform: broadlink
+  host: 192.168.8.153
+  mac: b4:43:0d:e6:35:8f
+
+# RM Mini
+- platform: broadlink
+  host: 192.168.8.173
+  mac: b4:43:0d:f9:24:8a

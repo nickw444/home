@@ -1,0 +1,11 @@
+secrets.yaml
+*.db
+*.log
+.uuid
+.HA_VERSION
+.cloud
+
+known_devices.yaml
+entity_registry.yaml
+plex.conf
+

@@ -1,0 +1,86 @@
+# GPIO Config for https://github.com/flyte/pi-mqtt-gpio
+mqtt:
+  host: 192.168.8.10
+  port: 1883
+  user: ""
+  password: ""
+  topic_prefix: things/sprinkle
+  status_topic: status
+  status_payload_running: online
+  status_payload_stopped: offline
+  status_payload_dead: offline
+
+gpio_modules:
+  - name: raspberrypi
+    module: raspberrypi
+
+digital_outputs:
+  - name: lavender
+    module: raspberrypi
+    pin: 2
+    on_payload: "ON"
+    off_payload: "OFF"
+    retain: true
+
+  - name: lower_lawn
+    module: raspberrypi
+    pin: 3
+    on_payload: "ON"
+    off_payload: "OFF"
+    retain: true
+
+  - name: upper_lawn
+    module: raspberrypi
+    pin: 4
+    on_payload: "ON"
+    off_payload: "OFF"
+    retain: true
+
+  - name: front_terrace
+    module: raspberrypi
+    pin: 14
+    on_payload: "ON"
+    off_payload: "OFF"
+    retain: true
+
+  - name: recycled_front_terrace
+    module: raspberrypi
+    pin: 15
+    on_payload: "ON"
+    off_payload: "OFF"
+    retain: true
+
+  - name: herbs
+    module: raspberrypi
+    pin: 17
+    on_payload: "ON"
+    off_payload: "OFF"
+    retain: true
+
+  - name: back_yard
+    module: raspberrypi
+    pin: 18
+    on_payload: "ON"
+    off_payload: "OFF"
+    retain: true
+
+  - name: back_yard_recycled
+    module: raspberrypi
+    pin: 27
+    on_payload: "ON"
+    off_payload: "OFF"
+    retain: true
+
+  - name: tree_lights
+    module: raspberrypi
+    pin: 22
+    on_payload: "ON"
+    off_payload: "OFF"
+    retain: true
+
+  - name: recycled_pump
+    module: raspberrypi
+    pin: 23
+    on_payload: "ON"
+    off_payload: "OFF"
+    retain: true
