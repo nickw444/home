@@ -1,20 +1,19 @@
 # esp-fw
 
-A collection of custom ESP and Arduino firmware used for these automation 
-projects.
+A collection of custom ESP and Arduino firmware used for these automation projects.
 
-Most firmware here targets [ITEAD sonoff](https://www.itead.cc/sonoff-wifi-wireless-switch.html) products OR [ESP8266](https://www.sparkfun.com/products/13678) chips.
+Firmware here targets [ESP8266](https://www.sparkfun.com/products/13678) chips.
 
 ## Firmware
 
-- [sonoff-relay](sonoff-relay/): Convert an [ITEAD sonoff wireless smart switch](https://www.itead.cc/sonoff-wifi-wireless-switch.html) into an MQTT connected one.
-- [sonoff-th10](sonoff-th10): Convert an [ITEAD TH10/TH16](https://www.itead.cc/smart-home/sonoff-th.html) temp/humidty sensor into an MQTT connected one.
+- esp-blindkit: A firmware designed to expose an API via MQTT to transmit RF 433MHz codes to RAEX Blinds. It could be extended to transmit to other brands and models.
+- esp-garage: A firmware designed to open/close a garage door and detect its state and publish results using MQTT.
 
+In the future, I may adopt using a library such as [esp-home-lib](https://github.com/OttoWinter/esphomelib), however it is not quite mature enough for mainline adoption. I will re-evaluate this decision in the future.
 
-## Libraries
+## iTEAD / Sonoff Firmware
 
-- [SimpleMQTT](lib/SimpleMQTT): A library to generalise connection, subscription and publishes from an ESP/Arduino to an MQTT broker.
-
+In the past, I had written custom firmware for sonoff devices, however since their popularity has skyrocked over the last year, there are now a vast array of open source firmware available for these devices. Most of my requirements are solved by using [ESPurna](https://github.com/xoseperez/espurna). Alternatively, you could give [Sonoff-Tasmota](https://github.com/arendst/Sonoff-Tasmota) a try!
 
 ## Sonoff/ESP/FW Resources
 

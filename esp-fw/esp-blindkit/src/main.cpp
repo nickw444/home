@@ -1,82 +1,174 @@
 #include <ESP8266WiFi.h>
-#include <ESP8266mDNS.h>
-#include <WiFiManager.h>
 #include <PubSubClient.h>
-#include <Ticker.h>
-#include <EEPROM.h>
-#include "DHT.h"
-#include <SimpleMQTT.h>
-#include <Timer.h>
-#include <Button.h>
-#include <RAEXRemote.h>
+#include <ArduinoOTA.h>
 
-#define LED_PIN         13
-#define EEPROM_SALT     532
-#define TX_PIN          3
+#include "../../config.h"
+#include "transmit.h"
+#include "util.h"
 
-static SimpleMQTT mqtt(LED_PIN, EEPROM_SALT);
-static Transmitter transmitter = Transmitter(TX_PIN);
-static Scheduler scheduler = Scheduler();
-static RAEXRemote raexRemote = RAEXRemote(&scheduler, &transmitter);
+#define TX_PIN 3
 
-void controlRaex(char * payload, unsigned int length);
+WiFiClient espClient;
+PubSubClient client(espClient);
 
-void setup() {
-  Serial.begin(115200, SERIAL_8N1, SERIAL_TX_ONLY);
-  pinMode(TX_PIN, OUTPUT);
+String deviceId = get_device_id();
+String sendCodeTopic = "/things/blindkit/" + deviceId + "/send_code";
+String statusTopic = "/things/blindkit/" + deviceId + "/status";
 
-  mqtt.subscribeTo("raex", controlRaex);
-  mqtt.beginConfig();
+void callback(char* topic, byte* payload, unsigned int length);
+
+
+void setupWifi() {
+  Serial.printf("Connecting to %s\n", WIFI_SSID);
+  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+
+  // TODO: Possibly handle ungraceful wifi disconnects.
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+  Serial.println("");
+
+  Serial.println("WiFi connected");
+  Serial.print("IP address: ");
+  Serial.println(WiFi.localIP());
 }
 
-void controlRaex(char * payload, unsigned int length) {
-  // Expect payload in the format: channel:remote:action:.
-  // i.e. 53:64:127:
-  int vals[3];
-  char buf[10];
-  int channel;
-  int remote;
-  int action;
-  size_t vals_pos = 0;
-  size_t buf_pos = 0;
+void setupMqtt() {
+  client.setServer(MQTT_SERVER, 1883);
+  client.setCallback(callback);
+}
 
-  for (size_t i = 0; i < length && vals_pos < 3; i++) {
-    char ch = payload[i];
-    if (ch == ':') {
-      buf[buf_pos] = 0;
-      vals[vals_pos] = atoi(buf);
+void setupOta() {
+  // Intentionally not worrying about username/password protection here –
+  // devices are hosted on an isolated internal network, so less surface
+  // area for an attacker to re-write the firmware.
 
-      buf_pos = 0;
-      vals_pos++;
-    } else if (ch >= '0' && ch <= '9') {
-      buf[buf_pos++] = ch;
-    } else {
-      break;
+  ArduinoOTA.onStart([]() {
+    String type;
+    if (ArduinoOTA.getCommand() == U_FLASH) {
+      type = "sketch";
+    } else { // U_SPIFFS
+      type = "filesystem";
     }
+
+    // NOTE: if updating SPIFFS this would be the place to unmount SPIFFS using SPIFFS.end()
+    Serial.println("Start updating " + type);
+  });
+  ArduinoOTA.onEnd([]() {
+    Serial.println("\nEnd");
+  });
+  ArduinoOTA.onProgress([](unsigned int progress, unsigned int total) {
+    Serial.printf("Progress: %u%%\r", (progress / (total / 100)));
+  });
+  ArduinoOTA.onError([](ota_error_t error) {
+    Serial.printf("Error[%u]: ", error);
+    if (error == OTA_AUTH_ERROR) {
+      Serial.println("Auth Failed");
+    } else if (error == OTA_BEGIN_ERROR) {
+      Serial.println("Begin Failed");
+    } else if (error == OTA_CONNECT_ERROR) {
+      Serial.println("Connect Failed");
+    } else if (error == OTA_RECEIVE_ERROR) {
+      Serial.println("Receive Failed");
+    } else if (error == OTA_END_ERROR) {
+      Serial.println("End Failed");
+    }
+  });
+  ArduinoOTA.begin();
+}
+
+void callback(char* topic, byte* payload, unsigned int length) {
+  if (sendCodeTopic.equals(topic)) {
+    Serial.printf("Send Code Topic!\n");
+
+    char payloadStr[length + 1];
+    strncpy(payloadStr, (char *)payload, length);
+    payloadStr[length] = 0;
+
+    uint16_t remote;
+    uint8_t channel;
+    raex_action_t action;
+    int idx = 0;
+
+    char * token = strtok(payloadStr, ",");
+    while(token != NULL) {
+      Serial.printf("Tok[%d]: [%s]\n", idx, token);
+      if (idx == 0) {
+        remote = atoi(token);
+      } else if (idx == 1) {
+        channel = atoi(token);
+      } else if (idx == 2) {
+        if (strcmp("OPEN", token) == 0) {
+          action = TX_RAEX_ACTION_UP;
+        } else if (strcmp("CLOSE", token) == 0) {
+          action = TX_RAEX_ACTION_DOWN;
+        } else if (strcmp("STOP", token) == 0) {
+          action = TX_RAEX_ACTION_STOP;
+        } else if (strcmp("PAIR", token) == 0) {
+          action = TX_RAEX_ACTION_PAIR;
+        } else {
+          Serial.printf("Malformed payload received. Unknown action [%s]\n", token);
+          return;
+        }
+      } else {
+        Serial.println("Malformed payload received.");
+        return;
+      }
+
+      idx++;
+      token = strtok(NULL, ",");
+    }
+    Serial.printf("Data - remote [%d], channel [%d], action [%d]\n", remote, channel, action);
+
+    // TODO NW: Maybe implement send queue within the loop to avoid blocking
+    // additional MQTT messages.
+    txPrepare(TX_PIN, 200);
+    txRaexSend(TX_PIN, remote, channel, action);
+  } else {
+    Serial.printf("Received message on unknown topic: [%s]\n", topic);
   }
+}
 
-  if (vals_pos < 3) {
-    Serial.println("Bad payload received");
-    return;
+void mqttReconnect() {
+  Serial.println("Attempting MQTT connection...");
+  String clientId = "blindkit-" + deviceId;
+  Serial.printf("Connecting with client id: %s\n", clientId.c_str());
+  Serial.printf("Status topic: %s\n", statusTopic.c_str());
+
+  if (client.connect(clientId.c_str(), statusTopic.c_str(), 1, true, "offline")) {
+    Serial.println("Connected!");
+    // Update device status (with retain)
+    client.publish(statusTopic.c_str(), "online", true);
+    // Subscribe to send_code topic
+    client.subscribe(sendCodeTopic.c_str(), 1);
+  } else {
+    Serial.print("failed to connect, rc=");
+    Serial.println(client.state());
   }
+}
 
-  channel = vals[0];
-  remote = vals[1];
-  action = vals[2];
+int lastConnectionAttempt;
 
-  Serial.print("Channel: ");
-  Serial.print(channel);
-  Serial.print(", Remote: ");
-  Serial.print(remote);
-  Serial.print(", Action: ");
-  Serial.println(action);
+void setup() {
+  Serial.begin(115200);
+  setupWifi();
+  setupMqtt();
+  setupOta();
 
-  RAEXRemoteCode raexRemoteCode = RAEXRemoteCode(channel, remote, action);
-  raexRemote.transmitCode(&raexRemoteCode);
+  pinMode(TX_PIN, OUTPUT);
+
+  lastConnectionAttempt = millis();
+  mqttReconnect();
 }
 
 void loop() {
-  // Serial.println("MEMes");
-  // delay(1000);
-  mqtt.tick();
+  int now = millis();
+
+  if (!client.loop() && now - lastConnectionAttempt > MQTT_CONNECT_RETRY_MS) {
+    lastConnectionAttempt = now;
+    mqttReconnect();
+  }
+
+  ArduinoOTA.handle();
 }

@@ -1,128 +1,161 @@
 #include <ESP8266WiFi.h>
-#include <ESP8266mDNS.h>
-#include <WiFiManager.h>
 #include <PubSubClient.h>
-#include <Ticker.h>
-#include <EEPROM.h>
-#include <SimpleMQTT.h>
-#include <Timer.h>
+#include <ArduinoOTA.h>
 #include <Bounce2.h>
 
-#include "data.h"
+#include "../../config.h"
+#include "util.h"
 
-#define ESP_LED      13
-#define EEPROM_SALT  5734
+#define STATE_GPIO 3 // RX
+#define TRIGGER_GPIO 2 // GPIO2
+#define STATE_DEBOUNCE_DELAY_MS 100
+#define TRIGGER_DURATION_MS 1000
 
-#define TRIGGER_GPIO  2 // (GPIO2)
-#define SENSE_GPIO    3 // (RX)
+WiFiClient esp_client;
+PubSubClient client(esp_client);
+Bounce stateBounce = Bounce();
 
-#define DEBOUNCE_DELAY 100 // Debounce delay in millis.
+String deviceId = getDeviceId();
+String triggerTopic = "/things/garage/" + deviceId + "/trigger";
+String statusTopic = "/things/garage/" + deviceId + "/status";
+String stateTopic = "/things/garage/" + deviceId + "/state";
 
-// How often to transmit a status in millis
-#define PUBLISH_EVERY 1000 * 30 // 30 S
+static int nextRelayOffTime = 0;
 
+void callback(char* topic, byte* payload, unsigned int length);
 
-static SimpleMQTT mqtt(ESP_LED, EEPROM_SALT);
-static Timer t;
-static Bounce b = Bounce();
-static DOOR_STATE lastDoorState = DOOR_UNKNOWN;
-static RELAY_STATE lastRelayState = RELAY_UNKNOWN;
-static int nextRelayOffTime = -1;
+void setupWifi() {
+  Serial.printf("Connecting to %s\n", WIFI_SSID);
+  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
 
-void republish(char * payload, unsigned int length);
-void trigger(char * payload, unsigned int length);
-void unTrigger();
-void publishDoorStatus();
-void publishRelayStatus();
-DOOR_STATE readDoor();
+  // TODO: Possibly handle ungraceful wifi disconnects.
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+  Serial.println("");
+
+  Serial.println("WiFi connected");
+  Serial.print("IP address: ");
+  Serial.println(WiFi.localIP());
+}
+
+void setupMqtt() {
+  client.setServer(MQTT_SERVER, 1883);
+  client.setCallback(callback);
+}
+
+void setupOta() {
+  // Intentionally not worrying about username/password protection here –
+  // devices are hosted on an isolated internal network, so less surface
+  // area for an attacker to re-write the firmware.
+
+  ArduinoOTA.onStart([]() {
+    String type;
+    if (ArduinoOTA.getCommand() == U_FLASH) {
+      type = "sketch";
+    } else { // U_SPIFFS
+      type = "filesystem";
+    }
+
+    // NOTE: if updating SPIFFS this would be the place to unmount SPIFFS using SPIFFS.end()
+    Serial.println("Start updating " + type);
+  });
+  ArduinoOTA.onEnd([]() {
+    Serial.println("\nEnd");
+  });
+  ArduinoOTA.onProgress([](unsigned int progress, unsigned int total) {
+    Serial.printf("Progress: %u%%\r", (progress / (total / 100)));
+  });
+  ArduinoOTA.onError([](ota_error_t error) {
+    Serial.printf("Error[%u]: ", error);
+    if (error == OTA_AUTH_ERROR) {
+      Serial.println("Auth Failed");
+    } else if (error == OTA_BEGIN_ERROR) {
+      Serial.println("Begin Failed");
+    } else if (error == OTA_CONNECT_ERROR) {
+      Serial.println("Connect Failed");
+    } else if (error == OTA_RECEIVE_ERROR) {
+      Serial.println("Receive Failed");
+    } else if (error == OTA_END_ERROR) {
+      Serial.println("End Failed");
+    }
+  });
+  ArduinoOTA.begin();
+}
+
+void callback(char* topic, byte* payload, unsigned int length) {
+  if (triggerTopic.equals(topic)) {
+    Serial.printf("Receieved message on trigger topic. Triggering for %d ms\n", TRIGGER_DURATION_MS);
+    digitalWrite(TRIGGER_GPIO, LOW);
+    nextRelayOffTime = millis() + TRIGGER_DURATION_MS;
+  } else {
+    Serial.printf("Received message on unknown topic: [%s]\n", topic);
+  }
+}
+
+void mqttReconnect() {
+  Serial.println("Attempting MQTT connection...");
+  String clientId = "garage-" + deviceId;
+  Serial.printf("Connecting with client id: %s\n", clientId.c_str());
+  Serial.printf("Status topic: %s\n", statusTopic.c_str());
+
+  if (client.connect(clientId.c_str(), statusTopic.c_str(), 1, true, "offline")) {
+    Serial.println("Connected!");
+    // Update device status (with retain)
+    client.publish(statusTopic.c_str(), "online", true);
+    // Subscribe to send_code topic
+    client.subscribe(triggerTopic.c_str(), 1);
+  } else {
+    Serial.print("failed to connect, rc=");
+    Serial.println(client.state());
+  }
+}
+
+int lastConnectionAttempt;
+int lastState = 99; // Use junk that is not HIGH or LOW to force update
+                         // on boot
 
 void setup() {
   Serial.begin(115200);
+  setupWifi();
+  setupMqtt();
+  setupOta();
 
+  // Setup Trigger GPIO
   pinMode(TRIGGER_GPIO, OUTPUT);
-  pinMode(SENSE_GPIO, INPUT);
   digitalWrite(TRIGGER_GPIO, HIGH);
 
-  mqtt.subscribeTo("trigger", trigger);
-  mqtt.subscribeTo("republish", republish);
+  // Setup the state input
+  pinMode(STATE_GPIO, INPUT);
+  stateBounce.attach(STATE_GPIO);
+  stateBounce.interval(STATE_DEBOUNCE_DELAY_MS);
 
-  mqtt.beginConfig();
-
-  b.interval(DEBOUNCE_DELAY);
-  b.attach(SENSE_GPIO);
-
-  t.every(PUBLISH_EVERY, publishDoorStatus);
+  lastConnectionAttempt = millis();
+  mqttReconnect();
 }
 
 void loop() {
-  mqtt.tick();
-  t.update();
-  b.update();
+  int now = millis();
 
-  DOOR_STATE currDoorStatus = readDoor();
-  if (currDoorStatus != lastDoorState) {
-    // Door status changed. We should notify.
-    Serial.printf("Door status changed from %s to %s\n", serializeDoorState(lastDoorState), serializeDoorState(currDoorStatus));
-    lastDoorState = currDoorStatus;
-    publishDoorStatus();
+  stateBounce.update();
+
+  if (!client.loop() && now - lastConnectionAttempt > MQTT_CONNECT_RETRY_MS) {
+    lastConnectionAttempt = now;
+    mqttReconnect();
   }
 
-  if (nextRelayOffTime > 0 && millis() > nextRelayOffTime) {
-    unTrigger();
-  }
-}
-
-
-void trigger(char * payload, unsigned int length) {
-  // Default to 500ms.
-  int delayTime = 500;
-  if (length >= 2 && payload[0] == 'T') {
-    // Payload specifies a trigger length. We will use it.
-    char safePayload[10]; // Allow up to 9999NUL.
-    memcpy(safePayload, payload + 1, min(9, length - 1));
-    safePayload[min(9, length - 1)] = 0; // Add NUL byte.
-    int intVal = atoi(safePayload);
-    Serial.printf("Converting String %s to Int %d\n", safePayload, intVal);
-    delayTime = intVal;
+  int currState = stateBounce.read();
+  if (lastState != currState) {
+    const char * payload = currState ? "open" : "closed";
+    Serial.printf("State changed - payload: %s\n", payload);
+    client.publish(stateTopic.c_str(), payload, true);
+    lastState = currState;
   }
 
-  Serial.printf("Trigger: Setting Low. Will delay for %d\n", delayTime);
-  digitalWrite(TRIGGER_GPIO, LOW);
-  nextRelayOffTime = millis() + delayTime;
-
-  lastRelayState = RELAY_OPEN;
-  publishRelayStatus();
-}
-
-void unTrigger() {
-  Serial.println("Trigger: Setting High.");
-  digitalWrite(TRIGGER_GPIO, HIGH);
-  nextRelayOffTime = -1;
-  lastRelayState = RELAY_CLOSED;
-  publishRelayStatus();
-}
-
-void republish(char * payload, unsigned int length) {
-  publishDoorStatus();
-  publishRelayStatus();
-}
-
-void publishDoorStatus() {
-  const char * doorState = serializeDoorState(lastDoorState);
-  // Legacy support - publish on existing status topic.
-  mqtt.publish("status", doorState);
-}
-
-void publishRelayStatus() {
-  const char * relayState = serializeRelayState(lastRelayState);
-  mqtt.publish("relayState", relayState);
-}
-
-DOOR_STATE readDoor() {
-  int status = b.read();
-  if (status == HIGH) {
-    return DOOR_OPEN;
-  } else {
-    return DOOR_CLOSED;
+  if (nextRelayOffTime > 0 && now > nextRelayOffTime) {
+    digitalWrite(TRIGGER_GPIO, HIGH);
   }
+
+  ArduinoOTA.handle();
 }
