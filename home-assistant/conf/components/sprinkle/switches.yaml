@@ -1,0 +1,227 @@
+- platform: mqtt
+  availability_topic: things/sprinkle/status
+  name: sprinkle_lavender_power
+  command_topic: things/sprinkle/output/lavender/set
+  state_topic: things/sprinkle/output/lavender
+  payload_on: 'ON'
+  payload_off: 'OFF'
+  qos: 1
+- platform: mqtt
+  availability_topic: things/sprinkle/status
+  name: sprinkle_lavender_trigger
+  command_topic: things/sprinkle/output/lavender/set_on_ms
+  payload_on: 600000
+  qos: 1
+- platform: mqtt
+  availability_topic: things/sprinkle/status
+  name: sprinkle_lower_lawn_power
+  command_topic: things/sprinkle/output/lower_lawn/set
+  state_topic: things/sprinkle/output/lower_lawn
+  payload_on: 'ON'
+  payload_off: 'OFF'
+  qos: 1
+- platform: mqtt
+  availability_topic: things/sprinkle/status
+  name: sprinkle_lower_lawn_trigger
+  command_topic: things/sprinkle/output/lower_lawn/set_on_ms
+  payload_on: 600000
+  qos: 1
+- platform: mqtt
+  availability_topic: things/sprinkle/status
+  name: sprinkle_upper_lawn_power
+  command_topic: things/sprinkle/output/upper_lawn/set
+  state_topic: things/sprinkle/output/upper_lawn
+  payload_on: 'ON'
+  payload_off: 'OFF'
+  qos: 1
+- platform: mqtt
+  availability_topic: things/sprinkle/status
+  name: sprinkle_upper_lawn_trigger
+  command_topic: things/sprinkle/output/upper_lawn/set_on_ms
+  payload_on: 600000
+  qos: 1
+- platform: mqtt
+  availability_topic: things/sprinkle/status
+  name: sprinkle_front_terrace_power
+  command_topic: things/sprinkle/output/front_terrace/set
+  state_topic: things/sprinkle/output/front_terrace
+  payload_on: 'ON'
+  payload_off: 'OFF'
+  qos: 1
+- platform: mqtt
+  availability_topic: things/sprinkle/status
+  name: sprinkle_front_terrace_trigger
+  command_topic: things/sprinkle/output/front_terrace/set_on_ms
+  payload_on: 600000
+  qos: 1
+- platform: mqtt
+  availability_topic: things/sprinkle/status
+  name: sprinkle_recycled_front_terrace_power
+  command_topic: things/sprinkle/output/recycled_front_terrace/set
+  state_topic: things/sprinkle/output/recycled_front_terrace
+  payload_on: 'ON'
+  payload_off: 'OFF'
+  qos: 1
+- platform: mqtt
+  availability_topic: things/sprinkle/status
+  name: sprinkle_recycled_front_terrace_trigger
+  command_topic: things/sprinkle/output/recycled_front_terrace/set_on_ms
+  payload_on: 600000
+  qos: 1
+- platform: mqtt
+  availability_topic: things/sprinkle/status
+  name: sprinkle_herbs_power
+  command_topic: things/sprinkle/output/herbs/set
+  state_topic: things/sprinkle/output/herbs
+  payload_on: 'ON'
+  payload_off: 'OFF'
+  qos: 1
+- platform: mqtt
+  availability_topic: things/sprinkle/status
+  name: sprinkle_herbs_trigger
+  command_topic: things/sprinkle/output/herbs/set_on_ms
+  payload_on: 600000
+  qos: 1
+- platform: mqtt
+  availability_topic: things/sprinkle/status
+  name: sprinkle_back_yard_power
+  command_topic: things/sprinkle/output/back_yard/set
+  state_topic: things/sprinkle/output/back_yard
+  payload_on: 'ON'
+  payload_off: 'OFF'
+  qos: 1
+- platform: mqtt
+  availability_topic: things/sprinkle/status
+  name: sprinkle_back_yard_trigger
+  command_topic: things/sprinkle/output/back_yard/set_on_ms
+  payload_on: 600000
+  qos: 1
+- platform: mqtt
+  availability_topic: things/sprinkle/status
+  name: sprinkle_back_yard_recycled_power
+  command_topic: things/sprinkle/output/back_yard_recycled/set
+  state_topic: things/sprinkle/output/back_yard_recycled
+  payload_on: 'ON'
+  payload_off: 'OFF'
+  qos: 1
+- platform: mqtt
+  availability_topic: things/sprinkle/status
+  name: sprinkle_back_yard_recycled_trigger
+  command_topic: things/sprinkle/output/back_yard_recycled/set_on_ms
+  payload_on: 600000
+  qos: 1
+- platform: mqtt
+  availability_topic: things/sprinkle/status
+  name: sprinkle_tree_lights
+  command_topic: things/sprinkle/output/tree_lights/set
+  state_topic: things/sprinkle/output/tree_lights
+  payload_on: 'ON'
+  payload_off: 'OFF'
+  qos: 1
+- platform: mqtt
+  availability_topic: things/sprinkle/status
+  name: sprinkle_recycled_pump_power
+  command_topic: things/sprinkle/output/recycled_pump/set
+  state_topic: things/sprinkle/output/recycled_pump
+  payload_on: 'ON'
+  payload_off: 'OFF'
+  qos: 1
+- platform: mqtt
+  availability_topic: things/sprinkle/status
+  name: sprinkle_recycled_pump_trigger
+  command_topic: things/sprinkle/output/recycled_pump/set_on_ms
+  payload_on: 600000
+  qos: 1
+- platform: template
+  switches:
+    sprinkle_lavender:
+      value_template: '{{ states.switch.sprinkle_lavender_power.state }}'
+      turn_on:
+        service: switch.turn_on
+        data:
+          entity_id: switch.sprinkle_lavender_trigger
+      turn_off:
+        service: switch.turn_off
+        data:
+          entity_id: switch.sprinkle_lavender_power
+    sprinkle_lower_lawn:
+      value_template: '{{ states.switch.sprinkle_lower_lawn_power.state }}'
+      turn_on:
+        service: switch.turn_on
+        data:
+          entity_id: switch.sprinkle_lower_lawn_trigger
+      turn_off:
+        service: switch.turn_off
+        data:
+          entity_id: switch.sprinkle_lower_lawn_power
+    sprinkle_upper_lawn:
+      value_template: '{{ states.switch.sprinkle_upper_lawn_power.state }}'
+      turn_on:
+        service: switch.turn_on
+        data:
+          entity_id: switch.sprinkle_upper_lawn_trigger
+      turn_off:
+        service: switch.turn_off
+        data:
+          entity_id: switch.sprinkle_upper_lawn_power
+    sprinkle_front_terrace:
+      value_template: '{{ states.switch.sprinkle_front_terrace_power.state }}'
+      turn_on:
+        service: switch.turn_on
+        data:
+          entity_id: switch.sprinkle_front_terrace_trigger
+      turn_off:
+        service: switch.turn_off
+        data:
+          entity_id: switch.sprinkle_front_terrace_power
+    sprinkle_recycled_front_terrace:
+      value_template: '{{ states.switch.sprinkle_recycled_front_terrace_power.state
+        }}'
+      turn_on:
+        service: switch.turn_on
+        data:
+          entity_id: switch.sprinkle_recycled_front_terrace_trigger
+      turn_off:
+        service: switch.turn_off
+        data:
+          entity_id: switch.sprinkle_recycled_front_terrace_power
+    sprinkle_herbs:
+      value_template: '{{ states.switch.sprinkle_herbs_power.state }}'
+      turn_on:
+        service: switch.turn_on
+        data:
+          entity_id: switch.sprinkle_herbs_trigger
+      turn_off:
+        service: switch.turn_off
+        data:
+          entity_id: switch.sprinkle_herbs_power
+    sprinkle_back_yard:
+      value_template: '{{ states.switch.sprinkle_back_yard_power.state }}'
+      turn_on:
+        service: switch.turn_on
+        data:
+          entity_id: switch.sprinkle_back_yard_trigger
+      turn_off:
+        service: switch.turn_off
+        data:
+          entity_id: switch.sprinkle_back_yard_power
+    sprinkle_back_yard_recycled:
+      value_template: '{{ states.switch.sprinkle_back_yard_recycled_power.state }}'
+      turn_on:
+        service: switch.turn_on
+        data:
+          entity_id: switch.sprinkle_back_yard_recycled_trigger
+      turn_off:
+        service: switch.turn_off
+        data:
+          entity_id: switch.sprinkle_back_yard_recycled_power
+    sprinkle_recycled_pump:
+      value_template: '{{ states.switch.sprinkle_recycled_pump_power.state }}'
+      turn_on:
+        service: switch.turn_on
+        data:
+          entity_id: switch.sprinkle_recycled_pump_trigger
+      turn_off:
+        service: switch.turn_off
+        data:
+          entity_id: switch.sprinkle_recycled_pump_power

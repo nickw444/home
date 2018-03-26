@@ -1,0 +1,9 @@
+- name: ESPURNA_173177
+  platform: mqtt
+  state_topic: /things/sonoff-th/ESPURNA_173177/relay/0
+  command_topic: /things/sonoff-th/ESPURNA_173177/relay/0/set
+  payload_on: 1
+  payload_off: 0
+  availability_topic: /things/sonoff-th/ESPURNA_173177/status
+  payload_available: 1
+  payload_not_available: 0

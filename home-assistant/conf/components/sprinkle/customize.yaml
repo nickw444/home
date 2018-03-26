@@ -1,0 +1,56 @@
+switch.sprinkle_lavender_power:
+  hidden: true
+switch.sprinkle_lavender_trigger:
+  hidden: true
+switch.sprinkle_lavender:
+  friendly_name: Lavender
+switch.sprinkle_lower_lawn_power:
+  hidden: true
+switch.sprinkle_lower_lawn_trigger:
+  hidden: true
+switch.sprinkle_lower_lawn:
+  friendly_name: Lower Lawn
+switch.sprinkle_upper_lawn_power:
+  hidden: true
+switch.sprinkle_upper_lawn_trigger:
+  hidden: true
+switch.sprinkle_upper_lawn:
+  friendly_name: Upper Lawn
+switch.sprinkle_front_terrace_power:
+  hidden: true
+switch.sprinkle_front_terrace_trigger:
+  hidden: true
+switch.sprinkle_front_terrace:
+  friendly_name: Front Terrace
+switch.sprinkle_recycled_front_terrace_power:
+  hidden: true
+switch.sprinkle_recycled_front_terrace_trigger:
+  hidden: true
+switch.sprinkle_recycled_front_terrace:
+  friendly_name: Recycled Front Terrace
+switch.sprinkle_herbs_power:
+  hidden: true
+switch.sprinkle_herbs_trigger:
+  hidden: true
+switch.sprinkle_herbs:
+  friendly_name: Herbs
+switch.sprinkle_back_yard_power:
+  hidden: true
+switch.sprinkle_back_yard_trigger:
+  hidden: true
+switch.sprinkle_back_yard:
+  friendly_name: Back Yard
+switch.sprinkle_back_yard_recycled_power:
+  hidden: true
+switch.sprinkle_back_yard_recycled_trigger:
+  hidden: true
+switch.sprinkle_back_yard_recycled:
+  friendly_name: Back Yard Recycled
+switch.sprinkle_tree_lights:
+  friendly_name: Tree Lights
+switch.sprinkle_recycled_pump_power:
+  hidden: true
+switch.sprinkle_recycled_pump_trigger:
+  hidden: true
+switch.sprinkle_recycled_pump:
+  friendly_name: Recycled Pump

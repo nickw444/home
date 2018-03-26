@@ -1,0 +1,11 @@
+- name: Upstairs temperature
+  platform: mqtt
+  device_class: sensor
+  state_topic: /things/sonoff-th/ESPURNA_173177/temperature
+  unit_of_measurement: C
+
+- name: Upstairs humidity
+  platform: mqtt
+  device_class: sensor
+  state_topic: /things/sonoff-th/ESPURNA_173177/humidity
+  unit_of_measurement: '%'

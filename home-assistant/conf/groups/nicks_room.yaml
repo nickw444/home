@@ -1,0 +1,8 @@
+nicks_room:
+  name: Nicks Room
+  view: yes
+  entities:
+    - media_player.chromecast_audio
+    - media_player.nicks_room_speaker
+    - light.bedside
+

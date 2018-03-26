@@ -1,0 +1,5 @@
+- platform: mqtt
+  name: "garage"
+  command_topic: "things/garage/foo/trigger"
+  state_topic: "things/garage/foo/sense"
+  qos: 1

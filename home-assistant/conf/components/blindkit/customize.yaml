@@ -1,0 +1,31 @@
+cover.blindkit_nick_front:
+  friendly_name: Nick Front
+cover.blindkit_nick_side:
+  friendly_name: Nick Side
+cover.blindkit_upstairs_hall:
+  friendly_name: Upstairs Hall
+cover.blindkit_charlotte_side:
+  friendly_name: Charlotte Side
+cover.blindkit_oly_side:
+  friendly_name: Oly Side
+cover.blindkit_oly_back:
+  friendly_name: Oly Back
+cover.blindkit_joe_back:
+  friendly_name: Joe Back
+cover.blindkit_master_front_left:
+  friendly_name: Master Front Left
+cover.blindkit_master_front_right:
+  friendly_name: Master Front Right
+cover.blindkit_back_left:
+  friendly_name: Back Left
+cover.blindkit_back_right:
+  friendly_name: Back Right
+cover.blindkit_front_1_left:
+  friendly_name: Front 1 (Left)
+cover.blindkit_front_2_door_left:
+  friendly_name: Front 2 (Door Left)
+cover.blindkit_front_3_door_right:
+  friendly_name: Front 3 (Door Right)
+cover.blindkit_front_4_right:
+  friendly_name: Front 4 (Right)
+  device_class: window
