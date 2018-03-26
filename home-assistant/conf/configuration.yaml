@@ -38,9 +38,6 @@ updater:
   # Optional, allows Home Assistant developers to focus on popular components.
   # include_used_components: true
 
-# Discover some devices automatically
-discovery:
-
 # Allows you to issue voice commands from the frontend in enabled browsers
 conversation:
 
@@ -69,4 +66,4 @@ weather: !include_dir_merge_list config/weather/
 light: !include_dir_merge_list config/lights/
 device_tracker: !include_dir_merge_list config/device_trackers/
 sensor: !include_dir_merge_list config/sensors/
-
+media_player: !include_dir_merge_list config/media_player/
