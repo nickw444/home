@@ -4,7 +4,6 @@
   mac: 34:ea:34:e4:76:65
   monitored_conditions:
     - 'temperature'
-    - 'humidity'
 
 - platform: broadlink
   name: Downstairs Broadlink
@@ -12,4 +11,3 @@
   mac: b4:43:0d:e6:35:8f
   monitored_conditions:
     - 'temperature'
-    - 'humidity'
