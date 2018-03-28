@@ -1,0 +1,21 @@
+- platform: broadlink
+  name: Upstairs Broadlink
+  host: 192.168.8.175
+  mac: 34:ea:34:e4:76:65
+  monitored_conditions:
+    - 'temperature'
+    - 'humidity'
+    - 'air_quality'
+    - 'light'
+    - 'noise'
+
+- platform: broadlink
+  name: Downstairs Broadlink
+  host: 192.168.8.153
+  mac: b4:43:0d:e6:35:8f
+  monitored_conditions:
+    - 'temperature'
+    - 'humidity'
+    - 'air_quality'
+    - 'light'
+    - 'noise'
