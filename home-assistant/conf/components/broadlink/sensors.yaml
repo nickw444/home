@@ -5,9 +5,6 @@
   monitored_conditions:
     - 'temperature'
     - 'humidity'
-    - 'air_quality'
-    - 'light'
-    - 'noise'
 
 - platform: broadlink
   name: Downstairs Broadlink
@@ -16,6 +13,3 @@
   monitored_conditions:
     - 'temperature'
     - 'humidity'
-    - 'air_quality'
-    - 'light'
-    - 'noise'
