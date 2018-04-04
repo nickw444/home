@@ -1,4 +1,5 @@
 version: "2.2"
+services:
     homeassistant:
         restart: always
         container_name: homeassistant
@@ -14,6 +15,7 @@ version: "2.2"
         image: eclipse-mosquitto
         volumes:
             - "/etc/homekit/production/mosquitto:/mosquitto/config"
+            - "/var/lib/mosquitto:/mosquitto/data"
         ports:
             - "0.0.0.0:1883:1883"
             - "0.0.0.0:9001:9001"
