@@ -4,6 +4,7 @@
 
 #include "../../config.h"
 #include "transmit.h"
+#include "send_queue.h"
 #include "util.h"
 
 #define TX_PIN 3
@@ -16,7 +17,6 @@ String sendCodeTopic = "/things/blindkit/" + deviceId + "/send_code";
 String statusTopic = "/things/blindkit/" + deviceId + "/status";
 
 void callback(char* topic, byte* payload, unsigned int length);
-
 
 void setupWifi() {
   Serial.printf("Connecting to %s\n", WIFI_SSID);
@@ -120,11 +120,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
       token = strtok(NULL, ",");
     }
     Serial.printf("Data - remote [%d], channel [%d], action [%d]\n", remote, channel, action);
-
-    // TODO NW: Maybe implement send queue within the loop to avoid blocking
-    // additional MQTT messages.
-    txPrepare(TX_PIN, 200);
-    txRaexSend(TX_PIN, remote, channel, action);
+    request_raex_tx(remote, channel, action);
   } else {
     Serial.printf("Received message on unknown topic: [%s]\n", topic);
   }
@@ -170,5 +166,6 @@ void loop() {
     mqttReconnect();
   }
 
+  send_pending_raex_tx(TX_PIN, now);
   ArduinoOTA.handle();
 }
