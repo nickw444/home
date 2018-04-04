@@ -4,7 +4,7 @@ Generate a Home Assistant config from a blinds.yaml configuration.
 
 import sys
 import re
-from ruamel.yaml import YAML, scalarstring
+from ruamel.yaml import YAML
 
 yaml = YAML()
 
@@ -31,25 +31,15 @@ def main():
                 blind_info['channel']
             )
 
-            payload_open = payload_prefix + 'OPEN'
-            payload_close = payload_prefix + 'CLOSE'
-            payload_stop = payload_prefix + 'STOP'
-
             blinds.append({
                 'platform': 'mqtt',
                 'name': name,
                 'command_topic': trans_send_topic,
                 'availability_topic': trans_status_topic,
                 'qos': 1,
-                'payload_open': payload_open,
-                'payload_close': payload_close,
-                'payload_stop': payload_stop,
-                'set_position_topic': trans_send_topic,
-                'set_position_template': scalarstring.PreservedScalarString(
-                    '{% if position > 70 %}' + payload_open + '\n'
-                    '{% elif position < 30 %}' + payload_close + '\n'
-                    '{% else %}' + payload_stop + '\n{% endif %}'
-                )
+                'payload_open': payload_prefix + 'OPEN',
+                'payload_close': payload_prefix + 'CLOSE',
+                'payload_stop': payload_prefix + 'STOP',
             })
 
             customize['cover.{}'.format(name)] = {
