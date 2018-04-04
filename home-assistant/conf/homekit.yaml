@@ -1,0 +1,20 @@
+filter:
+  exclude_entities:
+    - switch.sprinkle_lavender_trigger
+    - switch.sprinkle_lower_lawn_trigger
+    - switch.sprinkle_upper_lawn_trigger
+    - switch.sprinkle_front_terrace_trigger
+    - switch.sprinkle_recycled_front_terrace_trigger
+    - switch.sprinkle_herbs_trigger
+    - switch.sprinkle_back_yard_trigger
+    - switch.sprinkle_back_yard_recycled_trigger
+    - switch.sprinkle_recycled_pump_trigger
+    - switch.sprinkle_lavender_power
+    - switch.sprinkle_lower_lawn_power
+    - switch.sprinkle_upper_lawn_power
+    - switch.sprinkle_front_terrace_power
+    - switch.sprinkle_recycled_front_terrace_power
+    - switch.sprinkle_herbs_power
+    - switch.sprinkle_back_yard_power
+    - switch.sprinkle_back_yard_recycled_power
+    - switch.sprinkle_recycled_pump_power
