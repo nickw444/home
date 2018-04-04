@@ -5,6 +5,7 @@ secrets.yaml
 .HA_VERSION
 .cloud
 tts
+.homekit.state
 
 known_devices.yaml
 entity_registry.yaml
