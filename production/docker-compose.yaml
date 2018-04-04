@@ -1,0 +1,39 @@
+version: "2.2"
+    homeassistant:
+        restart: always
+        container_name: homeassistant
+        image: homeassistant/home-assistant:0.66.1
+        volumes:
+            - "/etc/homekit/home-assistant/conf:/config"
+            - "/etc/localtime:/etc/localtime:ro"
+        network_mode: host
+
+    mosquitto:
+        restart: always
+        container_name: mosquitto
+        image: eclipse-mosquitto
+        volumes:
+            - "/etc/homekit/production/mosquitto:/mosquitto/config"
+        ports:
+            - "0.0.0.0:1883:1883"
+            - "0.0.0.0:9001:9001"
+
+    influxdb:
+        restart: always
+        container_name: influxdb
+        image: influxdb
+        volumes:
+            - "/var/lib/influxdb:/var/lib/influxdb"
+        ports:
+            - 8086:8086
+
+    grafana:
+        restart: always
+        container_name: grafana
+        image: grafana/grafana
+        volumes:
+            - "/var/lib/grafana:/var/lib/grafana"
+        links:
+            - influxdb
+        ports:
+            - '0.0.0.0:3000:3000'
