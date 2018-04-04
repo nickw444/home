@@ -6,6 +6,9 @@
   payload_open: 100,0,OPEN
   payload_close: 100,0,CLOSE
   payload_stop: 100,0,STOP
+  set_position_topic: /things/blindkit/18fe3499d274/send_code
+  set_position_template: |-
+    {% if value > 70 %}OPEN{% elif value < 30 %}CLOSE{% else %}STOP{% endif %}
 - platform: mqtt
   name: blindkit_nick_side
   command_topic: /things/blindkit/18fe3499d274/send_code
@@ -14,6 +17,9 @@
   payload_open: 100,1,OPEN
   payload_close: 100,1,CLOSE
   payload_stop: 100,1,STOP
+  set_position_topic: /things/blindkit/18fe3499d274/send_code
+  set_position_template: |-
+    {% if value > 70 %}OPEN{% elif value < 30 %}CLOSE{% else %}STOP{% endif %}
 - platform: mqtt
   name: blindkit_upstairs_hall
   command_topic: /things/blindkit/18fe3499d274/send_code
@@ -22,6 +28,9 @@
   payload_open: 100,2,OPEN
   payload_close: 100,2,CLOSE
   payload_stop: 100,2,STOP
+  set_position_topic: /things/blindkit/18fe3499d274/send_code
+  set_position_template: |-
+    {% if value > 70 %}OPEN{% elif value < 30 %}CLOSE{% else %}STOP{% endif %}
 - platform: mqtt
   name: blindkit_charlotte_side
   command_topic: /things/blindkit/18fe3499d274/send_code
@@ -30,6 +39,9 @@
   payload_open: 100,3,OPEN
   payload_close: 100,3,CLOSE
   payload_stop: 100,3,STOP
+  set_position_topic: /things/blindkit/18fe3499d274/send_code
+  set_position_template: |-
+    {% if value > 70 %}OPEN{% elif value < 30 %}CLOSE{% else %}STOP{% endif %}
 - platform: mqtt
   name: blindkit_oly_side
   command_topic: /things/blindkit/18fe3499d274/send_code
@@ -38,6 +50,9 @@
   payload_open: 100,4,OPEN
   payload_close: 100,4,CLOSE
   payload_stop: 100,4,STOP
+  set_position_topic: /things/blindkit/18fe3499d274/send_code
+  set_position_template: |-
+    {% if value > 70 %}OPEN{% elif value < 30 %}CLOSE{% else %}STOP{% endif %}
 - platform: mqtt
   name: blindkit_oly_back
   command_topic: /things/blindkit/18fe3499d274/send_code
@@ -46,6 +61,9 @@
   payload_open: 100,5,OPEN
   payload_close: 100,5,CLOSE
   payload_stop: 100,5,STOP
+  set_position_topic: /things/blindkit/18fe3499d274/send_code
+  set_position_template: |-
+    {% if value > 70 %}OPEN{% elif value < 30 %}CLOSE{% else %}STOP{% endif %}
 - platform: mqtt
   name: blindkit_joe_back
   command_topic: /things/blindkit/18fe3499d274/send_code
@@ -54,6 +72,9 @@
   payload_open: 100,6,OPEN
   payload_close: 100,6,CLOSE
   payload_stop: 100,6,STOP
+  set_position_topic: /things/blindkit/18fe3499d274/send_code
+  set_position_template: |-
+    {% if value > 70 %}OPEN{% elif value < 30 %}CLOSE{% else %}STOP{% endif %}
 - platform: mqtt
   name: blindkit_master_front_left
   command_topic: /things/blindkit/18fe3499d274/send_code
@@ -62,6 +83,9 @@
   payload_open: 100,7,OPEN
   payload_close: 100,7,CLOSE
   payload_stop: 100,7,STOP
+  set_position_topic: /things/blindkit/18fe3499d274/send_code
+  set_position_template: |-
+    {% if value > 70 %}OPEN{% elif value < 30 %}CLOSE{% else %}STOP{% endif %}
 - platform: mqtt
   name: blindkit_master_front_right
   command_topic: /things/blindkit/18fe3499d274/send_code
@@ -70,6 +94,9 @@
   payload_open: 100,8,OPEN
   payload_close: 100,8,CLOSE
   payload_stop: 100,8,STOP
+  set_position_topic: /things/blindkit/18fe3499d274/send_code
+  set_position_template: |-
+    {% if value > 70 %}OPEN{% elif value < 30 %}CLOSE{% else %}STOP{% endif %}
 - platform: mqtt
   name: blindkit_back_left
   command_topic: /things/blindkit/18fe3499d258/send_code
@@ -78,6 +105,9 @@
   payload_open: 101,0,OPEN
   payload_close: 101,0,CLOSE
   payload_stop: 101,0,STOP
+  set_position_topic: /things/blindkit/18fe3499d258/send_code
+  set_position_template: |-
+    {% if value > 70 %}OPEN{% elif value < 30 %}CLOSE{% else %}STOP{% endif %}
 - platform: mqtt
   name: blindkit_back_right
   command_topic: /things/blindkit/18fe3499d258/send_code
@@ -86,6 +116,9 @@
   payload_open: 101,1,OPEN
   payload_close: 101,1,CLOSE
   payload_stop: 101,1,STOP
+  set_position_topic: /things/blindkit/18fe3499d258/send_code
+  set_position_template: |-
+    {% if value > 70 %}OPEN{% elif value < 30 %}CLOSE{% else %}STOP{% endif %}
 - platform: mqtt
   name: blindkit_front_1_left
   command_topic: /things/blindkit/18fe3499d258/send_code
@@ -94,6 +127,9 @@
   payload_open: 101,2,OPEN
   payload_close: 101,2,CLOSE
   payload_stop: 101,2,STOP
+  set_position_topic: /things/blindkit/18fe3499d258/send_code
+  set_position_template: |-
+    {% if value > 70 %}OPEN{% elif value < 30 %}CLOSE{% else %}STOP{% endif %}
 - platform: mqtt
   name: blindkit_front_2_door_left
   command_topic: /things/blindkit/18fe3499d258/send_code
@@ -102,6 +138,9 @@
   payload_open: 101,3,OPEN
   payload_close: 101,3,CLOSE
   payload_stop: 101,3,STOP
+  set_position_topic: /things/blindkit/18fe3499d258/send_code
+  set_position_template: |-
+    {% if value > 70 %}OPEN{% elif value < 30 %}CLOSE{% else %}STOP{% endif %}
 - platform: mqtt
   name: blindkit_front_3_door_right
   command_topic: /things/blindkit/18fe3499d258/send_code
@@ -110,6 +149,9 @@
   payload_open: 101,4,OPEN
   payload_close: 101,4,CLOSE
   payload_stop: 101,4,STOP
+  set_position_topic: /things/blindkit/18fe3499d258/send_code
+  set_position_template: |-
+    {% if value > 70 %}OPEN{% elif value < 30 %}CLOSE{% else %}STOP{% endif %}
 - platform: mqtt
   name: blindkit_front_4_right
   command_topic: /things/blindkit/18fe3499d258/send_code
@@ -118,3 +160,6 @@
   payload_open: 101,5,OPEN
   payload_close: 101,5,CLOSE
   payload_stop: 101,5,STOP
+  set_position_topic: /things/blindkit/18fe3499d258/send_code
+  set_position_template: |-
+    {% if value > 70 %}OPEN{% elif value < 30 %}CLOSE{% else %}STOP{% endif %}
