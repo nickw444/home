@@ -1,7 +1,7 @@
 #include "send_queue.h"
 
-#define TRANSMIT_RETRIES 4
-#define TRANSMIT_RETRY_DELAY_MS 1500
+#define TRANSMIT_RETRIES 7
+#define TRANSMIT_RETRY_DELAY_MS 1000
 
 struct raex_message {
   int execute_time;
