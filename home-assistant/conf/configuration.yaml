@@ -50,6 +50,8 @@ logbook:
 # Track the sun
 sun:
 
+homekit:
+
 # Text to speech
 tts:
   - platform: google
