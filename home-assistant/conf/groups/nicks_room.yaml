@@ -5,4 +5,27 @@ nicks_room:
     - media_player.chromecast_audio
     - media_player.nicks_room_speaker
     - light.bedside
+    - cover.blindkit_nick_front
+    - cover.blindkit_nick_side
+    - switch.nicks_fairy_lights
 
+kitchen:
+  view: yes
+  name: Kitchen
+  entities:
+    - group.front_blinds
+    - group.back_blinds
+
+front_blinds:
+  name: Front Blinds
+  entities:
+    - cover.blindkit_front_1_left
+    - cover.blindkit_front_2_door_left
+    - cover.blindkit_front_3_door_right
+    - cover.blindkit_front_4_right
+
+back_blinds:
+  name: Back Blinds
+  entities:
+    - cover.blindkit_back_left
+    - cover.blindkit_back_right
