@@ -4,10 +4,20 @@ nicks_room:
   entities:
     - media_player.chromecast_audio
     - media_player.nicks_room_speaker
+    - group.nicks_room_lights
+    - group.nicks_room_blinds
+
+nicks_room_lights:
+  name: Lights
+  entities:
     - light.bedside
+    - switch.nicks_fairy_lights
+
+nicks_room_blinds:
+  name: Nicks Room
+  entities:
     - cover.blindkit_nick_front
     - cover.blindkit_nick_side
-    - switch.nicks_fairy_lights
 
 kitchen:
   view: yes
