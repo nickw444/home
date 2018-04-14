@@ -1,6 +1,6 @@
 - platform: mqtt
   name: garage
   command_topic: /things/garage/5ccf7f84b87f/trigger
-  state_topic: things/garage/5ccf7f84b87f/state
+  state_topic: /things/garage/5ccf7f84b87f/state
   availability_topic: /things/garage/5ccf7f84b87f/status
   qos: 1
