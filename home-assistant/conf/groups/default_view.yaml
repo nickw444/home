@@ -9,6 +9,11 @@ home:
     - cover.garage
     - group.all_automations
 
+    - sensor.bom_sydney_airport_rain_today
+    - sensor.bom_sydney_airport_weather
+    - sensor.downstairs_broadlink_temperature
+
+
 family:
   name: Family
   entities:

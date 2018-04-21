@@ -9,6 +9,10 @@ upstairs:
     - group.master_bedroom
     - group.upstairs_hall
 
+    - sensor.upstairs_broadlink_temperature
+    - sensor.upstairs_humidity
+    - sensor.upstairs_temperature
+
 upstairs_hall:
   name: Hallway
   entities:
