@@ -54,3 +54,7 @@ upstairs_sensors:
     - sensor.upstairs_broadlink_temperature
     - sensor.upstairs_humidity
     - sensor.upstairs_temperature
+
+upstairs_blinds:
+  name: Upstairs Blinds
+  entities: []

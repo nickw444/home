@@ -3,13 +3,26 @@ home:
   view: yes
   icon: mdi:home
   entities:
-    - group.family
+    - group.doors
+    - group.blinds
     - group.power
-    - group.all_automations
-    - group.bom_weather
-    - weather.bom_sydney_airport
-    - cover.garage
     - group.home_sensors
+    - weather.bom_sydney_airport
+    - group.bom_weather
+    - group.family
+    - group.all_automations
+
+doors:
+  name: Doors
+  entities:
+    - cover.garage
+
+blinds:
+  name: Blinds
+  entities:
+    - group.back_blinds
+    - group.front_blinds
+    - group.upstairs_blinds
 
 family:
   name: Family
