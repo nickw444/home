@@ -3,40 +3,22 @@ upstairs:
   view: yes
   entities:
     - group.nicks_bedroom
-    - group.joes_bedroom
-    - group.olys_bedroom
-    - group.charlottes_bedroom
-    - group.master_bedroom
-    - group.upstairs_hall
     - group.upstairs_climate
+    - group.upstairs_blinds
 
-
-upstairs_hall:
-  name: Hallway
+upstairs_blinds:
+  name: Blinds
   entities:
+    - cover.blindkit_group_upstairs
     - cover.blindkit_upstairs_hall
-
-charlottes_bedroom:
-  name: Charlotte's Room
-  entities:
     - cover.blindkit_charlotte_side
-
-joes_bedroom:
-  name: Joe's Room
-  entities:
     - cover.blindkit_joe_back
-
-olys_bedroom:
-  name: Oly's Room
-  entities:
     - cover.blindkit_oly_back
     - cover.blindkit_oly_side
-
-master_bedroom:
-  name: Oly's Room
-  entities:
     - cover.blindkit_master_front_right
     - cover.blindkit_master_front_left
+    - cover.blindkit_nick_front
+    - cover.blindkit_nick_side
 
 nicks_bedroom:
   name: Nick's Room
