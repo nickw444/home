@@ -1,0 +1,20 @@
+outdoor:
+  name: Outdoor
+  view: yes
+  entities:
+    - group.sprinklers
+    - switch.sprinkle_tree_lights
+
+sprinklers:
+  name: Sprinklers
+  entities:
+    - switch.sprinkle_herbs
+    - switch.sprinkle_lavender
+    - switch.sprinkle_back_yard
+    - switch.sprinkle_back_yard_recycled
+    - switch.sprinkle_front_terrace
+    - switch.sprinkle_recycled_front_terrace
+    - switch.sprinkle_lower_lawn
+    - switch.sprinkle_upper_lawn
+    - switch.sprinkle_recycled_pump
+

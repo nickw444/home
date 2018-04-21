@@ -1,0 +1,23 @@
+upstairs:
+  name: Upstairs
+  view: yes
+  entities:
+    - group.nicks_room
+    - cover.blindkit_oly_back
+    - cover.blindkit_oly_side
+    - cover.blindkit_upstairs_hall
+    - cover.blindkit_master_front_right
+    - cover.blindkit_master_front_left
+    - cover.blindkit_joe_back
+    - cover.blindkit_charlotte_side
+
+nicks_room:
+  name: Nicks Room
+  view: yes
+  entities:
+    - media_player.chromecast_audio
+    - media_player.nicks_room_speaker
+    - light.bedside
+    - switch.nicks_fairy_lights
+    - cover.blindkit_nick_front
+    - cover.blindkit_nick_side

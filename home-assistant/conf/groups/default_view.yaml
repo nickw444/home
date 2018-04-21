@@ -1,0 +1,27 @@
+home:
+  name: Home
+  view: yes
+  entities:
+    - group.family
+    - weather.bom_sydney_airport
+    - cover.garage
+    - group.all_automations
+
+family:
+  name: Family
+  entities:
+    - device_tracker.charlottes_iphone
+    - device_tracker.joesiphone
+    - device_tracker.louises7iphone
+    - device_tracker.nicksiphone
+    - device_tracker.oliversiphone
+    - device_tracker.prwiphone6s
+
+power:
+  name: Power
+  entities:
+    - sensor.efergy_731181
+    - sensor.efergy_784242
+    - sensor.sensor.energy_consumed
+    - sensor.mains_output
+    - sensor.mains_input

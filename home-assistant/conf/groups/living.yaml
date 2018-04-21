@@ -1,0 +1,22 @@
+kitchen:
+  view: yes
+  name: Kitchen
+  entities:
+    - group.front_blinds
+    - group.back_blinds
+
+front_blinds:
+  name: Front Blinds
+  entities:
+    - cover.blindkit_front_1_left
+    - cover.blindkit_front_2_door_left
+    - cover.blindkit_front_3_door_right
+    - cover.blindkit_front_4_right
+
+back_blinds:
+  name: Back Blinds
+  entities:
+    - cover.blindkit_back_left
+    - cover.blindkit_back_right
+
+
