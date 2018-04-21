@@ -3,6 +3,7 @@ home:
   view: yes
   entities:
     - group.family
+    - group.power
     - weather.bom_sydney_airport
     - cover.garage
     - group.all_automations
