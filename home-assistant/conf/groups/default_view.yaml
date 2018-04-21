@@ -40,5 +40,7 @@ bom_weather:
 home_sensors:
   name: Temperature
   entities:
-    - group.upstairs_sensors
-    - group.living_sensors
+    - sensor.downstairs_broadlink_temperature
+    - sensor.upstairs_broadlink_temperature
+    - sensor.upstairs_humidity
+    - sensor.upstairs_temperature
