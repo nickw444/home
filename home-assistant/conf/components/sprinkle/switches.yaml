@@ -113,6 +113,7 @@
 - platform: mqtt
   availability_topic: things/sprinkle/status
   name: sprinkle_tree_lights
+  icon: mdi:tree
   command_topic: things/sprinkle/output/tree_lights/set
   state_topic: things/sprinkle/output/tree_lights
   payload_on: 'ON'
@@ -136,7 +137,7 @@
   switches:
     sprinkle_lavender:
       value_template: '{{ states.switch.sprinkle_lavender_power.state }}'
-      icon_template: mdi:water
+      icon: mdi:water
       turn_on:
         service: switch.turn_on
         data:
@@ -147,6 +148,7 @@
           entity_id: switch.sprinkle_lavender_power
     sprinkle_lower_lawn:
       value_template: '{{ states.switch.sprinkle_lower_lawn_power.state }}'
+      icon: mdi:water
       turn_on:
         service: switch.turn_on
         data:
@@ -157,6 +159,7 @@
           entity_id: switch.sprinkle_lower_lawn_power
     sprinkle_upper_lawn:
       value_template: '{{ states.switch.sprinkle_upper_lawn_power.state }}'
+      icon: mdi:water
       turn_on:
         service: switch.turn_on
         data:
@@ -167,6 +170,7 @@
           entity_id: switch.sprinkle_upper_lawn_power
     sprinkle_front_terrace:
       value_template: '{{ states.switch.sprinkle_front_terrace_power.state }}'
+      icon: mdi:water
       turn_on:
         service: switch.turn_on
         data:
@@ -178,6 +182,7 @@
     sprinkle_recycled_front_terrace:
       value_template: '{{ states.switch.sprinkle_recycled_front_terrace_power.state
         }}'
+      icon: mdi:water
       turn_on:
         service: switch.turn_on
         data:
@@ -188,6 +193,7 @@
           entity_id: switch.sprinkle_recycled_front_terrace_power
     sprinkle_herbs:
       value_template: '{{ states.switch.sprinkle_herbs_power.state }}'
+      icon: mdi:water
       turn_on:
         service: switch.turn_on
         data:
@@ -198,6 +204,7 @@
           entity_id: switch.sprinkle_herbs_power
     sprinkle_back_yard:
       value_template: '{{ states.switch.sprinkle_back_yard_power.state }}'
+      icon: mdi:water
       turn_on:
         service: switch.turn_on
         data:
@@ -208,6 +215,7 @@
           entity_id: switch.sprinkle_back_yard_power
     sprinkle_back_yard_recycled:
       value_template: '{{ states.switch.sprinkle_back_yard_recycled_power.state }}'
+      icon: mdi:water
       turn_on:
         service: switch.turn_on
         data:
@@ -218,6 +226,7 @@
           entity_id: switch.sprinkle_back_yard_recycled_power
     sprinkle_recycled_pump:
       value_template: '{{ states.switch.sprinkle_recycled_pump_power.state }}'
+      icon: mdi:water
       turn_on:
         service: switch.turn_on
         data:
