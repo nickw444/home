@@ -8,7 +8,7 @@ upstairs:
     - group.charlottes_bedroom
     - group.master_bedroom
     - group.upstairs_hall
-    - group.upstairs_sensors
+    - group.upstairs_climate
 
 
 upstairs_hall:
@@ -48,13 +48,9 @@ nicks_bedroom:
     - cover.blindkit_nick_front
     - cover.blindkit_nick_side
 
-upstairs_sensors:
-  name: Temperature
+upstairs_climate:
+  name: Climate
   entities:
     - sensor.upstairs_broadlink_temperature
     - sensor.upstairs_humidity
     - sensor.upstairs_temperature
-
-upstairs_blinds:
-  name: Upstairs Blinds
-  entities: []

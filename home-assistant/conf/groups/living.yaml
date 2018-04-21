@@ -4,7 +4,7 @@ living:
   entities:
     - group.front_blinds
     - group.back_blinds
-    - group.living_sensors
+    - group.living_climate
 
 front_blinds:
   name: Front Blinds
@@ -20,7 +20,7 @@ back_blinds:
     - cover.blindkit_back_left
     - cover.blindkit_back_right
 
-living_sensors:
-  name: Temperature
+living_climate:
+  name: Climate
   entities:
     - sensor.downstairs_broadlink_temperature
