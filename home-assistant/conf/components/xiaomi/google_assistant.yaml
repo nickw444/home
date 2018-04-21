@@ -1,0 +1,6 @@
+switch.nicks_fairy_lights:
+  name: Nicks Fairy Lights
+  expose: true
+  room: Nicks Bedroom
+  aliases:
+    - fairy lights

@@ -146,3 +146,9 @@
     - cover.blindkit_joe_back
     - cover.blindkit_master_front_left
     - cover.blindkit_master_front_right
+
+- platform: group
+  name: blindkit_group_nicks_blinds
+  entities:
+    - cover.blindkit_nick_front
+    - cover.blindkit_nick_side
