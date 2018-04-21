@@ -9,8 +9,7 @@ home:
     - cover.garage
     - group.all_automations
 
-    - sensor.bom_sydney_airport_rain_today
-    - sensor.bom_sydney_airport_weather
+
     - sensor.downstairs_broadlink_temperature
 
 
@@ -33,3 +32,10 @@ power:
     - sensor.energy_consumed
     - sensor.mains_output
     - sensor.mains_input
+
+bom_weather:
+  name: BOM Weather
+  entities:
+    - weather.bom_sydney_airport
+    - sensor.bom_sydney_airport_rain_today
+    - sensor.bom_sydney_airport_weather
