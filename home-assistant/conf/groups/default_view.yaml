@@ -1,4 +1,4 @@
-home:
+default_view:
   name: Home
   view: yes
   icon: mdi:home
