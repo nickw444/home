@@ -144,6 +144,7 @@
         service: switch.turn_off
         data:
           entity_id: switch.sprinkle_lavender_power
+      icon_template: mdi:mdi-water
     sprinkle_lower_lawn:
       value_template: '{{ states.switch.sprinkle_lower_lawn_power.state }}'
       turn_on:
