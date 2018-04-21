@@ -32,10 +32,11 @@ power:
     - sensor.mains_input
 
 bom_weather:
-  name: BOM Weather
+  name: Weather
   entities:
     - sensor.bom_sydney_airport_rain_today
     - sensor.bom_sydney_airport_weather
+    - sun.sun
 
 home_sensors:
   name: Temperature
