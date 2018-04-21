@@ -8,6 +8,7 @@ home:
     - weather.bom_sydney_airport
     - cover.garage
     - group.all_automations
+    - group.bom_weather
 
 
     - sensor.downstairs_broadlink_temperature
