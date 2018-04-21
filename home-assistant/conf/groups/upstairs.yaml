@@ -1,18 +1,44 @@
 upstairs:
   name: Upstairs
   view: yes
+  icon: mdi:bed
   entities:
-    - group.nicks_room
-    - cover.blindkit_oly_back
-    - cover.blindkit_oly_side
+    - group.nicks_bedroom
+    - group.joes_bedroom
+    - group.olys_bedroom
+    - group.charlottes_bedroom
+    - group.master_bedroom
+    - group.upstairs_hall
+
+upstairs_hall:
+  name: Hallway
+  entities:
     - cover.blindkit_upstairs_hall
-    - cover.blindkit_master_front_right
-    - cover.blindkit_master_front_left
-    - cover.blindkit_joe_back
+
+charlottes_bedroom:
+  name: Charlotte's Room
+  entities:
     - cover.blindkit_charlotte_side
 
-nicks_room:
-  name: Nicks Room
+joes_bedroom:
+  name: Joe's Room
+  entities:
+    - cover.blindkit_joe_back
+
+olys_bedroom:
+  name: Oly's Room
+  entities:
+    - cover.blindkit_oly_back
+    - cover.blindkit_oly_side
+
+master_bedroom:
+  name: Oly's Room
+  entities:
+    - cover.blindkit_master_front_right
+    - cover.blindkit_master_front_left
+
+nicks_bedroom:
+  name: Nick's Room
   entities:
     - media_player.chromecast_audio
     - media_player.nicks_room_speaker

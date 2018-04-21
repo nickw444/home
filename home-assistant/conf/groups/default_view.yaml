@@ -1,6 +1,7 @@
 home:
   name: Home
   view: yes
+  icon: mdi:home
   entities:
     - group.family
     - group.power
