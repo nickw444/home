@@ -3,4 +3,4 @@ client_id: !secret google_assistant_client_id
 access_token: !secret google_assistant_access_token
 api_key: !secret google_assistant_api_key
 expose_by_default: false
-entity_config: !include_dir_merge_named config/home_assistant/
+entity_config: !include_dir_merge_named config/google_assistant/
