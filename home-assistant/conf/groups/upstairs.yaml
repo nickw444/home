@@ -1,7 +1,6 @@
 upstairs:
   name: Upstairs
   view: yes
-  icon: mdi:bed
   entities:
     - group.nicks_bedroom
     - group.joes_bedroom
