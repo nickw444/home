@@ -67,7 +67,7 @@ def main():
 
             tmpl_switches[base_name] = {
                 'value_template': '{{ states.switch.' + base_name + '_power.state }}',
-                'icon': icon,
+                'icon_template': icon,
                 'turn_on': {
                     'service': 'switch.turn_on',
                     'data': {
