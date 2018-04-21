@@ -71,4 +71,4 @@ sensor: !include_dir_merge_list config/sensors/
 #media_player: !include_dir_merge_list config/media_player/
 
 influxdb:
-google_assistant: !include homekit.yaml
+google_assistant: !include google_assistant.yaml
