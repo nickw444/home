@@ -1,2 +1,9 @@
 weather.bom_sydney_airport:
   friendly_name: Weather
+sensor.bom_sydney_airport_rain_today:
+  icon: mdi:water
+sensor.bom_sydney_airport_weather:
+  icon: mdi:waves
+
+#sensor.bom_sydney_airport_apparent_t:
+#  icon: thermometer

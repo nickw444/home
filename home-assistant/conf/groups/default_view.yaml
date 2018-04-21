@@ -36,12 +36,12 @@ family:
 energy:
   name: Energy
   entities:
-    - sensor.efergy_731181
+    - sensor.mains_output
+    - sensor.mains_input
+    - sensor.efergy_731181 # Solar Input
     - sensor.efergy_784242
     - sensor.efergy_786148
     - sensor.energy_consumed
-    - sensor.mains_output
-    - sensor.mains_input
 
 bom_weather:
   name: Weather
