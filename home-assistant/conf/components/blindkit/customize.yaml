@@ -28,4 +28,13 @@ cover.blindkit_front_3_door_right:
   friendly_name: Front 3 (Door Right)
 cover.blindkit_front_4_right:
   friendly_name: Front 4 (Right)
-  device_class: window
+
+
+# Groups
+cover.blindkit_group_kitchen_front:
+  friendly_name: Kitchen Front
+cover.blindkit_group_kitchen_rear:
+  friendly_name: Kitchen Rear
+cover.blindkit_group_upstairs:
+  friendly_name: Upstairs
+
