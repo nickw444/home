@@ -22,6 +22,7 @@ power:
   entities:
     - sensor.efergy_731181
     - sensor.efergy_784242
-    - sensor.sensor.energy_consumed
+    - sensor.efergy_786148
+    - sensor.energy_consumed
     - sensor.mains_output
     - sensor.mains_input
