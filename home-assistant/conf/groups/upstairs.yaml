@@ -8,10 +8,8 @@ upstairs:
     - group.charlottes_bedroom
     - group.master_bedroom
     - group.upstairs_hall
+    - group.upstairs_sensors
 
-    - sensor.upstairs_broadlink_temperature
-    - sensor.upstairs_humidity
-    - sensor.upstairs_temperature
 
 upstairs_hall:
   name: Hallway
@@ -49,3 +47,10 @@ nicks_bedroom:
     - switch.nicks_fairy_lights
     - cover.blindkit_nick_front
     - cover.blindkit_nick_side
+
+upstairs_sensors:
+  name: Temperature
+  entities:
+    - sensor.upstairs_broadlink_temperature
+    - sensor.upstairs_humidity
+    - sensor.upstairs_temperature

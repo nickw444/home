@@ -5,14 +5,10 @@ home:
   entities:
     - group.family
     - group.power
-    - weather.bom_sydney_airport
-    - cover.garage
     - group.all_automations
     - group.bom_weather
-
-
-    - sensor.downstairs_broadlink_temperature
-
+    - weather.bom_sydney_airport
+    - cover.garage
 
 family:
   name: Family
@@ -37,6 +33,11 @@ power:
 bom_weather:
   name: BOM Weather
   entities:
-    - weather.bom_sydney_airport
     - sensor.bom_sydney_airport_rain_today
     - sensor.bom_sydney_airport_weather
+
+home_sensors:
+  name: Temperature
+  entities:
+    - group.upstairs_sensors
+    - group.living_sensors
