@@ -9,6 +9,7 @@ home:
     - group.bom_weather
     - weather.bom_sydney_airport
     - cover.garage
+    - group.home_sensors
 
 family:
   name: Family
