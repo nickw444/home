@@ -36,9 +36,9 @@ family:
 energy:
   name: Energy
   entities:
-    - sensor.mains_output
     - sensor.mains_input
     - sensor.efergy_731181 # Solar Input
+    - sensor.mains_output
     - sensor.efergy_784242
     - sensor.efergy_786148
     - sensor.energy_consumed
