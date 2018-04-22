@@ -11,7 +11,7 @@ CONFIG_BASE="./config";
 main() {
     cd "${SCRIPT_DIR}/../conf"
 
-    rm -rf config
+    find "${CONFIG_BASE}" -type l -delete;
 
     find "${COMPONENTS_BASE}" -type f -name '*.yaml' | while read -r config_file; do
         local cleaned_file=$(echo $config_file | sed "s@${COMPONENTS_BASE}/@@");

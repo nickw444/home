@@ -7,3 +7,36 @@
   availability_topic: /things/sonoff-th/ESPURNA_173177/status
   payload_available: 1
   payload_not_available: 0
+
+- name: Nick's Ceiling Lights 1
+  icon: mdi:lightbulb
+  platform: mqtt
+  state_topic: /things/sonoff-th/ESPURNA_83CDF6/relay/0
+  command_topic: /things/sonoff-th/ESPURNA_83CDF6/relay/0/set
+  payload_on: 1
+  payload_off: 0
+  availability_topic: /things/sonoff-th/ESPURNA_173177/status
+  payload_available: 1
+  payload_not_available: 0
+
+- name: Nick's Ceiling Lights 2
+  icon: mdi:lightbulb
+  platform: mqtt
+  state_topic: /things/sonoff-th/ESPURNA_83CDF6/relay/1
+  command_topic: /things/sonoff-th/ESPURNA_83CDF6/relay/1/set
+  payload_on: 1
+  payload_off: 0
+  availability_topic: /things/sonoff-th/ESPURNA_173177/status
+  payload_available: 1
+  payload_not_available: 0
+
+- name: Nick's Ceiling Lights 3
+  icon: mdi:lightbulb
+  platform: mqtt
+  state_topic: /things/sonoff-th/ESPURNA_83CDF6/relay/2
+  command_topic: /things/sonoff-th/ESPURNA_83CDF6/relay/2/set
+  payload_on: 1
+  payload_off: 0
+  availability_topic: /things/sonoff-th/ESPURNA_173177/status
+  payload_available: 1
+  payload_not_available: 0

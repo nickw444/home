@@ -7,6 +7,7 @@ outdoor:
 
 sprinklers:
   name: Sprinklers
+  control: hidden
   entities:
     - switch.sprinkle_herbs
     - switch.sprinkle_lavender

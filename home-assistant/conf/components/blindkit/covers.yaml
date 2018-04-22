@@ -118,3 +118,37 @@
   payload_open: 101,5,OPEN
   payload_close: 101,5,CLOSE
   payload_stop: 101,5,STOP
+
+# Cover Groups
+- platform: group
+  name: blindkit_group_kitchen_front
+  entities:
+    - cover.blindkit_front_1_left
+    - cover.blindkit_front_2_door_left
+    - cover.blindkit_front_3_door_right
+    - cover.blindkit_front_4_right
+
+- platform: group
+  name: blindkit_group_kitchen_rear
+  entities:
+    - cover.blindkit_back_left
+    - cover.blindkit_back_right
+
+- platform: group
+  name: blindkit_group_upstairs
+  entities:
+    - cover.blindkit_nick_front
+    - cover.blindkit_nick_side
+    - cover.blindkit_upstairs_hall
+    - cover.blindkit_charlotte_side
+    - cover.blindkit_oly_side
+    - cover.blindkit_oly_back
+    - cover.blindkit_joe_back
+    - cover.blindkit_master_front_left
+    - cover.blindkit_master_front_right
+
+- platform: group
+  name: blindkit_group_nicks_blinds
+  entities:
+    - cover.blindkit_nick_front
+    - cover.blindkit_nick_side

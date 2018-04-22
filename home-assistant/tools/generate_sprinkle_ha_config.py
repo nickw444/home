@@ -1,17 +1,15 @@
 """
 Generate a Home Assistant config from the sprinkle GPIO configuration.
 """
-
+import datetime
 import sys
+
+from collections import defaultdict
 from ruamel.yaml import YAML, scalarstring
 
 yaml = YAML()
-
-on_time_mins_map = {
-    'tree_lights': None,
-}
-default_on_time_mins = 10
-
+config = defaultdict(lambda: (datetime.timedelta(minutes=10), 'mdi:water'))
+config['tree_lights'] = (None, 'mdi:tree')
 
 def main():
     file = sys.argv[1]
@@ -30,17 +28,17 @@ def main():
         base_config = {
             'platform': 'mqtt',
             'availability_topic': availability_topic,
-
         }
         base_topic = topic_prefix + '/output/' + entry['name']
         base_name = 'sprinkle_' + entry['name']
 
-        on_time = on_time_mins_map.get(entry['name'], default_on_time_mins)
+        on_time, icon = config[entry['name']]
 
         if on_time is None:
             switches.append({
                 **base_config,
                 'name': base_name,
+                'icon': icon,
                 'command_topic': base_topic + '/set',
                 'state_topic': base_topic,
                 'payload_on': scalarstring.SingleQuotedScalarString('ON'),
@@ -48,7 +46,7 @@ def main():
                 'qos': 1
             })
         else:
-            on_time_ms = on_time * 1000 * 60
+            on_time_ms = round(on_time.total_seconds() * 1000)
             switches.append({
                 **base_config,
                 'name': base_name + '_power',
@@ -69,6 +67,7 @@ def main():
 
             tmpl_switches[base_name] = {
                 'value_template': '{{ states.switch.' + base_name + '_power.state }}',
+                'icon_template': icon,
                 'turn_on': {
                     'service': 'switch.turn_on',
                     'data': {
@@ -97,6 +96,5 @@ def main():
 
     yaml.dump(switches, sys.stdout)
     yaml.dump(customize, sys.stdout)
-
 
 main()

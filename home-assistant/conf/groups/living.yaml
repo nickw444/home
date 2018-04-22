@@ -1,9 +1,10 @@
-kitchen:
+living:
   view: yes
-  name: Kitchen
+  name: Living
   entities:
     - group.front_blinds
     - group.back_blinds
+    - group.living_climate
 
 front_blinds:
   name: Front Blinds
@@ -19,4 +20,7 @@ back_blinds:
     - cover.blindkit_back_left
     - cover.blindkit_back_right
 
-
+living_climate:
+  name: Climate
+  entities:
+    - sensor.downstairs_broadlink_temperature

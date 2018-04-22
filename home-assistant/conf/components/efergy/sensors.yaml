@@ -1,6 +1,6 @@
 - platform: efergy
   app_token: !secret efergy_app_token
-  utc_offset: -660
+  utc_offset: -600 # 660 for DST.
   monitored_variables:
     - type: amount
       period: day

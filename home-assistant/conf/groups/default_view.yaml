@@ -1,11 +1,27 @@
-home:
+default_view:
   name: Home
   view: yes
+  icon: mdi:home
   entities:
+    - group.doors
+    - group.blinds
+    - group.energy
+    - group.home_climate
+    - group.bom_weather
     - group.family
-    - weather.bom_sydney_airport
-    - cover.garage
     - group.all_automations
+
+doors:
+  name: Doors
+  entities:
+    - cover.garage
+
+blinds:
+  name: Blinds
+  entities:
+    - cover.blindkit_group_kitchen_front
+    - cover.blindkit_group_kitchen_rear
+    - cover.blindkit_group_upstairs
 
 family:
   name: Family
@@ -17,12 +33,29 @@ family:
     - device_tracker.oliversiphone
     - device_tracker.prwiphone6s
 
-power:
-  name: Power
+energy:
+  name: Energy
   entities:
-    - sensor.efergy_731181
+    - sensor.mains_input
+    - sensor.efergy_731181 # Solar Input
+    - sensor.mains_output
     - sensor.efergy_784242
     - sensor.efergy_786148
     - sensor.energy_consumed
-    - sensor.mains_output
-    - sensor.mains_input
+
+bom_weather:
+  name: Weather
+  entities:
+    - sun.sun
+    - sensor.bom_sydney_airport_air_temp_c
+    - sensor.bom_sydney_airport_feels_like_c
+    - sensor.bom_sydney_airport_rain_today
+    - sensor.bom_sydney_airport_weather
+
+home_climate:
+  name: Climate
+  entities:
+    - sensor.downstairs_broadlink_temperature
+    - sensor.upstairs_broadlink_temperature
+    - sensor.upstairs_humidity
+    - sensor.upstairs_temperature

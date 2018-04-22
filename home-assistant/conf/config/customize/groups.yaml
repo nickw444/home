@@ -1,0 +1,6 @@
+group.living:
+  order: 1
+group.upstairs:
+  order: 2
+group.outdoor:
+  order: 3

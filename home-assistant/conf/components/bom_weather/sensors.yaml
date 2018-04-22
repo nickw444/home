@@ -4,3 +4,5 @@
   monitored_conditions:
     - rain_trace
     - weather
+    - apparent_t
+    - air_temp
