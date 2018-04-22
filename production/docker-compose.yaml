@@ -46,5 +46,7 @@ services:
         image: nodered/node-red-docker
         volumes:
             - "/var/lib/node-red:/data"
+        links:
+            - homeassistant
         ports:
             - '0.0.0.0:1880:1880'
