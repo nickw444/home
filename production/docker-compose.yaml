@@ -39,3 +39,12 @@ services:
             - influxdb
         ports:
             - '0.0.0.0:3000:3000'
+
+    nodered:
+        restart: always
+        container_name: nodered
+        image: nodered/node-red-docker
+        volumes:
+            - "/var/lib/node-red:/data"
+        ports:
+            - '0.0.0.0:1880:1880'
