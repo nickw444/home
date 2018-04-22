@@ -23,12 +23,15 @@ upstairs_blinds:
 nicks_bedroom:
   name: Nick's Room
   entities:
-    - media_player.chromecast_audio
-    - media_player.nicks_room_speaker
+    - switch.nicks_ceiling_lights_1
+    - switch.nicks_ceiling_lights_2
+    - switch.nicks_ceiling_lights_3
     - light.bedside
     - switch.nicks_fairy_lights
     - cover.blindkit_nick_front
     - cover.blindkit_nick_side
+    - media_player.chromecast_audio
+    - media_player.nicks_room_speaker
 
 upstairs_climate:
   name: Climate
