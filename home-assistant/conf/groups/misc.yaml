@@ -1,0 +1,13 @@
+misc:
+  name: Misc
+  view: yes
+  entities:
+    - group.nicks_printer
+
+nicks_printer:
+  name: Nick's Printer
+  entities: 
+    - sensor.nicks_printer_toner_black
+    - sensor.nicks_printer_drum_black
+    - sensor.nicks_printer_output_tray_0
+    - sensor.nicks_printer_tray_1  
