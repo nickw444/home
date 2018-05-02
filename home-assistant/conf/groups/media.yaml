@@ -1,0 +1,8 @@
+media:
+  name: Media
+  view: yes
+  entities:
+    - media_player.garage
+    - media_player.pool
+    - media_player.chromecast_audio
+

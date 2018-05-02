@@ -32,7 +32,6 @@ nicks_bedroom:
     - cover.blindkit_nick_front
     - cover.blindkit_nick_side
     - media_player.chromecast_audio
-    - media_player.nicks_room_speaker
 
 joes_bedroom:
   name: Joe's Room

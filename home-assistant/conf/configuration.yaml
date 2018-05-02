@@ -68,7 +68,7 @@ weather: !include_dir_merge_list config/weather/
 light: !include_dir_merge_list config/lights/
 device_tracker: !include_dir_merge_list config/device_trackers/
 sensor: !include_dir_merge_list config/sensors/
-#media_player: !include_dir_merge_list config/media_player/
+media_player: !include_dir_merge_list config/media_player/
 
 influxdb:
 google_assistant: !include google_assistant.yaml
