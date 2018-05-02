@@ -1,55 +1,51 @@
 - alias: Turn on tree lights at sunset
   id: '1521860501554'
   trigger:
-    - event: sunset
-      platform: sun
+  - event: sunset
+    platform: sun
   condition: []
   action:
-    - data:
-        entity_id: switch.sprinkle_tree_lights
-      service: switch.turn_on
-
-- alias: Turn off tree lights 4 hours after sunset
+  - data:
+      entity_id: switch.sprinkle_tree_lights
+    service: switch.turn_on
+- alias: Turn off tree lights at 10:30pm
   id: '1521860693473'
   trigger:
-    - event: sunset
-      offset: 04:00:00
-      platform: sun
+  - at: '22:30'
+    platform: time
   condition: []
   action:
-    - data:
-        entity_id: switch.sprinkle_tree_lights
-      service: switch.turn_off
-
+  - data:
+      entity_id: switch.sprinkle_tree_lights
+    service: switch.turn_off
 - alias: Open Nicks Blinds at 8am weekdays
   id: '1521974624434'
   trigger:
-    - at: 08:00:00
-      platform: time
+  - at: 08:00:00
+    platform: time
   condition:
-    - condition: time
-      weekday:
-        - mon
-        - tue
-        - wed
-        - thu
-        - fri
+  - condition: time
+    weekday:
+    - mon
+    - tue
+    - wed
+    - thu
+    - fri
   action:
-    - service: cover.open_cover
-      data:
-        entity_id: cover.blindkit_nick_front
-    - service: cover.open_cover
-      data:
-        entity_id: cover.blindkit_nick_side
-
+  - service: cover.open_cover
+    data:
+      entity_id: cover.blindkit_nick_front
+  - service: cover.open_cover
+    data:
+      entity_id: cover.blindkit_nick_side
 - alias: Water back yard at sunrise every day
   id: '1521975760989'
   trigger:
-    - event: sunrise
-      offset: '0'
-      platform: sun
+  - event: sunrise
+    offset: '0'
+    platform: sun
   condition: []
   action:
-    - data:
-        entity_id: switch.sprinkle_back_yard
-      service: switch.turn_on
+  - data:
+      entity_id: switch.sprinkle_back_yard
+    service: switch.turn_on
