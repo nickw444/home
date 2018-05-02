@@ -3,6 +3,7 @@ upstairs:
   view: yes
   entities:
     - group.nicks_bedroom
+    - group.joes_bedroom
     - group.upstairs_climate
     - group.upstairs_blinds
 
@@ -12,13 +13,13 @@ upstairs_blinds:
     - cover.blindkit_group_upstairs
     - cover.blindkit_upstairs_hall
     - cover.blindkit_charlotte_side
-    - cover.blindkit_joe_back
     - cover.blindkit_oly_back
     - cover.blindkit_oly_side
     - cover.blindkit_master_front_right
     - cover.blindkit_master_front_left
     - cover.blindkit_nick_front
     - cover.blindkit_nick_side
+    - cover.blindkit_joe_back
 
 nicks_bedroom:
   name: Nick's Room
@@ -32,6 +33,12 @@ nicks_bedroom:
     - cover.blindkit_nick_side
     - media_player.chromecast_audio
     - media_player.nicks_room_speaker
+
+joes_bedroom:
+  name: Joe's Room
+  entities:
+    - light.joes_bedside
+    - cover.blindkit_joe_back
 
 upstairs_climate:
   name: Climate
