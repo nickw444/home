@@ -1,5 +1,7 @@
 secrets.yaml
 *.db
+*.db-shm
+*.db-wal
 *.log
 .uuid
 .HA_VERSION
