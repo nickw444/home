@@ -1,42 +1,37 @@
 cover.blindkit_group_nicks_blinds:
-  name: Nicks Blinds
+  name: Nick's Blinds
   expose: true
-  room: Nicks Bedroom
+  room: Nick's Bedroom
   aliases:
-    - nicks blinds
-    - blinds
+    - Blinds
 
 cover.blindkit_nick_front:
-  name: Nicks Front Blind
+  name: Nick's Front Blind
   expose: true
-  room: Nicks Bedroom
+  room: Nick's Bedroom
   aliases:
-    - nicks front blind
-    - front blind
+    - Front Blind
 
 cover.blindkit_nick_side:
-  name: Nicks Side Blind
+  name: Nick's Side Blind
   expose: true
-  room: Nicks Bedroom
+  room: Nick's Bedroom
   aliases:
-    - nicks side blind
-    - side blind
+    - Side Blind
 
 cover.blindkit_group_kitchen_front:
   name: Kitchen Front Blinds
   expose: true
   room: Kitchen
   aliases:
-    - kitchen front blinds
-    - front blinds
+    - Front Blinds
 
 cover.blindkit_group_kitchen_back:
   name: Kitchen Back Blinds
   expose: true
   room: Kitchen
   aliases:
-    - kitchen back blinds
-    - back blinds
+    - Back Blinds
 
 cover.blindkit_group_upstairs:
   name: Upstairs Blinds
