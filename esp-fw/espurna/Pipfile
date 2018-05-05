@@ -7,9 +7,7 @@ name = "pypi"
 
 [packages]
 
-"ruamel.yaml" = "*"
 requests = "*"
-zeroconf = "*"
 
 
 [dev-packages]
