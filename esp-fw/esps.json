@@ -1,0 +1,59 @@
+[
+  {
+    "name": "Upstairs Cabinet",
+    "model": "Itead Sonoff TH",
+    "mac": "60:01:94:17:31:77",
+    "hostname": "ESPURNA_173177",
+    "ip": "192.168.8.167",
+    "static": false,
+    "mqtt_prefix": "/things/sonoff-th/ESPURNA_173177",
+    "ota_method": "ESPURNA",
+    "admin_page": "http://192.168.8.167/",
+    "espurna_model_slug": "itead-sonoff-th"
+  },
+  {
+    "name": "Nicks Bedroom Wall",
+    "model": "Itead Sonoff T1 3CH",
+    "mac": "60:01:94:83:CD:F6",
+    "hostname": "ESPURNA_83CDF6",
+    "ip": "192.168.8.138",
+    "static": false,
+    "mqtt_prefix": "/things/sonoff-th/ESPURNA_83CDF6",
+    "ota_method": "ESPURNA",
+    "admin_page": "http://192.168.8.138/",
+    "espurna_model_slug": "itead-sonoff-t1-3ch"
+  },
+  {
+    "name": "Upstairs Cabinet Blindkit",
+    "model": "Blindkit",
+    "mac": "18:fe:34:99:d2:58",
+    "hostname": "esp_99d258",
+    "ip": "192.168.8.127",
+    "static": false,
+    "mqtt_prefix": "/things/blindkit/18fe3499d258",
+    "ota_method": "ArduinoOTA",
+    "admin_page": null
+  },
+  {
+    "name": "Downstairs Blindkit",
+    "model": "Blindkit",
+    "mac": "18:fe:34:99:d2:74",
+    "hostname": "esp_99d274",
+    "ip": "192.168.8.185",
+    "static": false,
+    "mqtt_prefix": "/things/blindkit/18fe3499d274",
+    "ota_method": "ArduinoOTA",
+    "admin_page": null
+  },
+  {
+    "name": "Garage Ceiling",
+    "model": "Garage",
+    "mac": "5c:cf:7f:84:b8:7f",
+    "hostname": "esp_84b87f",
+    "ip": "192.168.8.108",
+    "static": false,
+    "mqtt_prefix": "/things/garage/5ccf7f84b87f",
+    "ota_method": "ArduinoOTA",
+    "admin_page": null
+  }
+]
