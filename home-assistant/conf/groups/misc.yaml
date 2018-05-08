@@ -3,6 +3,14 @@ misc:
   view: yes
   entities:
     - group.nicks_printer
+    - group.internet
+
+internet:
+  name: Internet
+  entities:
+    - sensor.speedtest_ping
+    - sensor.speedtest_download
+    - sensor.speedtest_upload
 
 nicks_printer:
   name: Nick's Printer
