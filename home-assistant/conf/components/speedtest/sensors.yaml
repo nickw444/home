@@ -1,0 +1,6 @@
+- platform: speedtest
+  server_id: 2629
+  monitored_conditions:
+    - ping
+    - download
+    - upload
