@@ -2,8 +2,10 @@ cover.blindkit_nick_front:
   friendly_name: Nick's Front
 cover.blindkit_nick_side:
   friendly_name: Nick's Side
-cover.blindkit_upstairs_hall:
-  friendly_name: Upstairs Hall
+cover.blindkit_upstairs_hall_blockout:
+  friendly_name: Upstairs Hall Blockout
+cover.blindkit_upstairs_hall_translucent:
+  friendly_name: Upstairs Hall Translucent
 cover.blindkit_charlotte_side:
   friendly_name: Charlotte Side
 cover.blindkit_oly_side:
@@ -28,7 +30,6 @@ cover.blindkit_front_3_door_right:
   friendly_name: Front 3 (Door Right)
 cover.blindkit_front_4_right:
   friendly_name: Front 4 (Right)
-
 
 # Groups
 cover.blindkit_group_kitchen_front:
