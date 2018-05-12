@@ -12,9 +12,13 @@ transmitters:
         remote: 100
         channel: 1
 
-      - name: Upstairs Hall
+      - name: Upstairs Hall Blockout
         remote: 100
         channel: 2
+
+      - name: Upstairs Hall Translucent
+        remote: 100
+        channel: 9
 
       - name: Charlotte Side
         remote: 100

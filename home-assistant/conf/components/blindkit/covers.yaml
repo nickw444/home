@@ -15,13 +15,21 @@
   payload_close: 100,1,CLOSE
   payload_stop: 100,1,STOP
 - platform: mqtt
-  name: blindkit_upstairs_hall
+  name: blindkit_upstairs_hall_blockout
   command_topic: /things/blindkit/18fe3499d274/send_code
   availability_topic: /things/blindkit/18fe3499d274/status
   qos: 1
   payload_open: 100,2,OPEN
   payload_close: 100,2,CLOSE
   payload_stop: 100,2,STOP
+- platform: mqtt
+  name: blindkit_upstairs_hall_translucent
+  command_topic: /things/blindkit/18fe3499d274/send_code
+  availability_topic: /things/blindkit/18fe3499d274/status
+  qos: 1
+  payload_open: 100,9,OPEN
+  payload_close: 100,9,CLOSE
+  payload_stop: 100,9,STOP
 - platform: mqtt
   name: blindkit_charlotte_side
   command_topic: /things/blindkit/18fe3499d274/send_code
@@ -139,7 +147,8 @@
   entities:
     - cover.blindkit_nick_front
     - cover.blindkit_nick_side
-    - cover.blindkit_upstairs_hall
+    - cover.blindkit_upstairs_hall_blockout
+    - cover.blindkit_upstairs_hall_translucent
     - cover.blindkit_charlotte_side
     - cover.blindkit_oly_side
     - cover.blindkit_oly_back

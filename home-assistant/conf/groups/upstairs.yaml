@@ -11,7 +11,8 @@ upstairs_blinds:
   name: Blinds
   entities:
     - cover.blindkit_group_upstairs
-    - cover.blindkit_upstairs_hall
+    - cover.blindkit_upstairs_hall_blockout
+    - cover.blindkit_upstairs_hall_translucent
     - cover.blindkit_charlotte_side
     - cover.blindkit_oly_back
     - cover.blindkit_oly_side
