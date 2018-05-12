@@ -1,13 +1,11 @@
 - name: Upstairs temperature
-  icon: mdi:thermometer
   platform: mqtt
-  device_class: sensor
+  device_class: temperature
   state_topic: /things/sonoff/ESPURNA_173177/temperature
   unit_of_measurement: C
 
 - name: Upstairs humidity
-  icon: mdi:thermometer
   platform: mqtt
-  device_class: sensor
+  device_class: humidity
   state_topic: /things/sonoff/ESPURNA_173177/humidity
   unit_of_measurement: '%'
