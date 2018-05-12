@@ -2,7 +2,7 @@
   platform: mqtt
   device_class: temperature
   state_topic: /things/sonoff/ESPURNA_173177/temperature
-  unit_of_measurement: C
+  unit_of_measurement: °C
 
 - name: Upstairs humidity
   platform: mqtt
