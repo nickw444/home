@@ -1,0 +1,19 @@
+- platform: ffmpeg
+  input: !secret hik_01_input
+  name: hik01
+
+- platform: ffmpeg
+  input: !secret hik_02_input
+  name: hik02
+
+- platform: ffmpeg
+  input: !secret hik_03_input
+  name: hik03
+
+- platform: ffmpeg
+  input: !secret hik_04_input
+  name: hik04
+
+- platform: ffmpeg
+  input: !secret hik_05_input
+  name: hik05

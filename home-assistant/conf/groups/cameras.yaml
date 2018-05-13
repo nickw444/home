@@ -1,0 +1,9 @@
+cameras:
+  view: yes
+  name: Cameras
+  entities:
+    - camera.hik01
+    - camera.hik02
+    - camera.hik03
+    - camera.hik04
+    - camera.hik05
