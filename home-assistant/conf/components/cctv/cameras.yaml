@@ -1,34 +1,19 @@
-- platform: onvif
-  host: hik-01
-  name: hik-01
-  username: admin
-  password: !secret hikvision_camera_password
-  port: 80
+- platform: ffmpeg
+  input: !secret hik_01_input
+  name: hik01
 
-- platform: onvif
-  host: hik-02
-  name: hik-02
-  username: admin
-  password: !secret hikvision_camera_password
-  port: 80
+- platform: ffmpeg
+  input: !secret hik_02_input
+  name: hik02
 
-- platform: onvif
-  host: hik-03
-  name: hik-03
-  username: admin
-  password: !secret hikvision_camera_password
-  port: 80
+- platform: ffmpeg
+  input: !secret hik_03_input
+  name: hik03
 
-- platform: onvif
-  host: hik-04
-  name: hik-04
-  username: admin
-  password: !secret hikvision_camera_password
-  port: 80
+- platform: ffmpeg
+  input: !secret hik_04_input
+  name: hik04
 
-- platform: onvif
-  host: hik-05
-  name: hik-05
-  username: admin
-  password: !secret hikvision_camera_password
-  port: 80
+- platform: ffmpeg
+  input: !secret hik_05_input
+  name: hik05
