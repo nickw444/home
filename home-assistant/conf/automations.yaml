@@ -51,7 +51,7 @@
     service: switch.turn_on
 - alias: Water herbs at 2:00pm
   trigger:
-  - at: 14:00:00
+  - at: '14:00:00'
     platform: time
   condition: []
   action:
@@ -60,7 +60,7 @@
     service: switch.turn_on
 - alias: Water lavender at 2:10pm
   trigger:
-  - at: 14:10:00
+  - at: '14:10:00'
     platform: time
   condition: []
   action:
