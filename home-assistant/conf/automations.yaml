@@ -49,3 +49,21 @@
   - data:
       entity_id: switch.sprinkle_back_yard
     service: switch.turn_on
+- alias: Water herbs at 2:00pm
+  trigger:
+  - at: 14:00:00
+    platform: time
+  condition: []
+  action:
+  - data:
+      entity_id: switch.sprinkle_herbs
+    service: switch.turn_on
+- alias: Water lavender at 2:10pm
+  trigger:
+  - at: 14:10:00
+    platform: time
+  condition: []
+  action:
+  - data:
+      entity_id: switch.sprinkle_lavender
+    service: switch.turn_on
