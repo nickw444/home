@@ -2,7 +2,12 @@ media:
   name: Media
   view: yes
   entities:
+    - group.plex
     - media_player.garage
     - media_player.pool
     - media_player.chromecast_audio
 
+plex:
+  name: Plex
+  entities:
+    - sensor.plex

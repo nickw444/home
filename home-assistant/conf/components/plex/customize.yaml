@@ -1,0 +1,2 @@
+sensor.plex:
+  friendly_name: 'Active Plex Users'
