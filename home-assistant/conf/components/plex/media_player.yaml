@@ -1,1 +1,2 @@
 - platform: plex
+  entity_namespace: plex
