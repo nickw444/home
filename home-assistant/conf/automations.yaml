@@ -91,9 +91,9 @@
       entity_id: cover.blindkit_back_left
     service: cover.open_cover
 - id: '1528004893114'
-  alias: Family & Kitch Part Down 5:45pm
+  alias: Family & Kitch Part Down 5:30pm
   trigger:
-  - at: '17:45:00'
+  - at: '17:30:00'
     platform: time
   condition: []
   action:
