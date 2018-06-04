@@ -4,6 +4,7 @@ misc:
   entities:
     - group.nicks_printer
     - group.internet
+    - group.all_automations
 
 internet:
   name: Internet
@@ -14,8 +15,8 @@ internet:
 
 nicks_printer:
   name: Nick's Printer
-  entities: 
+  entities:
     - sensor.nicks_printer_toner_black
     - sensor.nicks_printer_drum_black
     - sensor.nicks_printer_output_tray_0
-    - sensor.nicks_printer_tray_1  
+    - sensor.nicks_printer_tray_1

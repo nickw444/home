@@ -9,7 +9,6 @@ default_view:
     - group.home_climate
     - group.bom_weather
     - group.family
-    - group.all_automations
 
 doors:
   name: Doors
