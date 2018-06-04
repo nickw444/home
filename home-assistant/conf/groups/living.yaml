@@ -24,6 +24,9 @@ back_blinds:
 quiet_room:
   name: Quiet Room
   entities:
+    - switch.quiet_center_downlights
+    - switch.quiet_mid_downlights
+    - switch.quiet_outer_downlights
     - cover.blindkit_quiet_room_left_wall_1
     - cover.blindkit_quiet_room_left_wall_2
     - cover.blindkit_quiet_room_main_blockout
