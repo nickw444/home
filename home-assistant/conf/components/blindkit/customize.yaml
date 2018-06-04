@@ -31,13 +31,13 @@ cover.blindkit_front_3_door_right:
 cover.blindkit_front_4_right:
   friendly_name: Front 4 (Right)
 cover.blindkit_quiet_room_left_wall_1:
-  friendly_name: Quiet Room Left Wall 1
+  friendly_name: Left Wall 1
 cover.blindkit_quiet_room_left_wall_2:
-  friendly_name: Quiet Room Left Wall 2
+  friendly_name: Left Wall 2
 cover.blindkit_quiet_room_main_blockout:
-  friendly_name: Quiet Room Main Blockout
+  friendly_name: Main Blockout
 cover.blindkit_quiet_room_main_translucent:
-  friendly_name: Quiet Room Main Translucent
+  friendly_name: Main Translucent
 
 # Groups
 cover.blindkit_group_kitchen_front:
