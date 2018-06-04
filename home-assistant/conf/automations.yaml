@@ -38,12 +38,11 @@
   - service: cover.open_cover
     data:
       entity_id: cover.blindkit_nick_side
-- alias: Water back yard at sunrise every day
-  id: '1521975760989'
+- id: '1521975760989'
+  alias: Water backyard at 9am
   trigger:
-  - event: sunrise
-    offset: '0'
-    platform: sun
+  - at: 09:00:00
+    platform: time
   condition: []
   action:
   - data:
@@ -58,6 +57,7 @@
   - data:
       entity_id: switch.sprinkle_herbs
     service: switch.turn_on
+  id: eb5b8733e87443b99407c3ff5054200b
 - alias: Water lavender at 2:10pm
   trigger:
   - at: '14:10:00'
@@ -67,3 +67,91 @@
   - data:
       entity_id: switch.sprinkle_lavender
     service: switch.turn_on
+  id: 27e25a964ccd4cd8a82d57bc0e2faa48
+- id: '1527999374641'
+  alias: Family & Kitch up 6.15am
+  trigger:
+  - at: 06:15:00
+    platform: time
+  condition: []
+  action:
+  - data:
+      entity_id: cover.blindkit_front_3_door_right
+    service: cover.open_cover
+  - data:
+      entity_id: cover.blindkit_front_2_door_left
+    service: cover.open_cover
+  - data:
+      entity_id: cover.blindkit_front_1_left
+    service: cover.open_cover
+  - data:
+      entity_id: cover.blindkit_back_right
+    service: cover.open_cover
+  - data:
+      entity_id: cover.blindkit_back_left
+    service: cover.open_cover
+- id: '1528004893114'
+  alias: Family & Kitch Part Down 5:45pm
+  trigger:
+  - at: '17:45:00'
+    platform: time
+  condition: []
+  action:
+  - alias: ''
+    data:
+      entity_id: cover.blindkit_front_4_right
+    service: cover.close_cover
+  - data:
+      entity_id: cover.blindkit_front_2_door_left
+    service: cover.close_cover
+  - data:
+      entity_id: cover.blindkit_front_1_left
+    service: cover.close_cover
+  - data:
+      entity_id: cover.blindkit_back_left
+    service: cover.close_cover
+- id: '1528005097586'
+  alias: Family & Kitch Down all 10pm
+  trigger:
+  - at: '22:00:00'
+    platform: time
+  condition: []
+  action:
+  - data:
+      entity_id: cover.blindkit_front_4_right
+    service: cover.close_cover
+  - data:
+      entity_id: cover.blindkit_front_3_door_right
+    service: cover.close_cover
+  - data:
+      entity_id: cover.blindkit_front_2_door_left
+    service: cover.close_cover
+  - data:
+      entity_id: cover.blindkit_front_1_left
+    service: cover.close_cover
+  - data:
+      entity_id: cover.blindkit_back_right
+    service: cover.close_cover
+  - data:
+      entity_id: cover.blindkit_back_left
+    service: cover.close_cover
+- id: '1528005630746'
+  alias: Up-Hall Blockout Open 6.45am
+  trigger:
+  - at: 06:45:00
+    platform: time
+  condition: []
+  action:
+  - data:
+      entity_id: cover.blindkit_upstairs_hall_blockout
+    service: cover.open_cover
+- id: '1528005697426'
+  alias: Up-Hall Blockout Down 5.30pm
+  trigger:
+  - at: '17:30:00'
+    platform: time
+  condition: []
+  action:
+  - data:
+      entity_id: cover.blindkit_upstairs_hall_blockout
+    service: cover.close_cover
