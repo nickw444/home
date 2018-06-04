@@ -7,6 +7,19 @@
 - platform: broadlink
   host: 192.168.8.153
   mac: b4:43:0d:e6:35:8f
+  switches:
+    quiet_center_downlights:
+      friendly_name: Center Downlights
+      command_on: sgw0AA0kDSQkDSQNDSQNJCQNJA0kDSQNJA0NJCQNDSQkDSQNDSQkDSQNDSQNJA0kJA0kDQwAAW8AAAAA
+      command_off: sgw0AA0kJA0kDQ0kDSQkDQ0kJA0kDSQNDSQkDSQNJA0NJCQNDSQNJCQNJA0NJCQNJA0NJAwAAW8AAAAA
+    quiet_mid_downlights:
+      friendly_name: Mid Downlights
+      command_on: sgw0ACQNJA0kDSQNDSQkDQ0kDSQNJA0kJA0kDSQNJA0kDSQNJA0NJCQNJA0NJA0kDSQkDQwAAW8AAAAA
+      command_off: sgw0AA0kDSQNJA0kDSQNJA0kJA0kDQ0kDSQkDQ0kDSQkDQ0kJA0NJA0kDSQNJA0kDSQkDQwAAW8AAAAA
+    quiet_outer_downlights:
+      friendly_name: Outer Downlights
+      command_on:  sgw0AA0kDSQNJCQNJA0NJCQNJA0kDQ0kJA0NJA0kDSQNJA0kJA0kDQ0kJA0NJCQNDSQkDQwAAW8AAAAA
+      command_off: sgw0ACQNDSQNJA0kDSQNJCQNJA0kDSQNJA0kDQ0kJA0kDQ0kJA0kDQ0kDSQkDSQNDSQNJAwAAW8AAAAA
 
 # RM Mini
 - platform: broadlink

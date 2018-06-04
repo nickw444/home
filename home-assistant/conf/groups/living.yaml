@@ -5,6 +5,7 @@ living:
     - group.front_blinds
     - group.back_blinds
     - group.living_climate
+    - group.quiet_room
 
 front_blinds:
   name: Front Blinds
@@ -19,6 +20,17 @@ back_blinds:
   entities:
     - cover.blindkit_back_left
     - cover.blindkit_back_right
+
+quiet_room:
+  name: Quiet Room
+  entities:
+    - switch.quiet_center_downlights
+    - switch.quiet_mid_downlights
+    - switch.quiet_outer_downlights
+    - cover.blindkit_quiet_room_left_wall_1
+    - cover.blindkit_quiet_room_left_wall_2
+    - cover.blindkit_quiet_room_main_blockout
+    - cover.blindkit_quiet_room_main_translucent
 
 living_climate:
   name: Climate

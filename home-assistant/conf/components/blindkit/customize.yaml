@@ -30,6 +30,14 @@ cover.blindkit_front_3_door_right:
   friendly_name: Front 3 (Door Right)
 cover.blindkit_front_4_right:
   friendly_name: Front 4 (Right)
+cover.blindkit_quiet_room_left_wall_1:
+  friendly_name: Left Wall 1
+cover.blindkit_quiet_room_left_wall_2:
+  friendly_name: Left Wall 2
+cover.blindkit_quiet_room_main_blockout:
+  friendly_name: Main Blockout
+cover.blindkit_quiet_room_main_translucent:
+  friendly_name: Main Translucent
 
 # Groups
 cover.blindkit_group_kitchen_front:
@@ -38,4 +46,5 @@ cover.blindkit_group_kitchen_rear:
   friendly_name: Kitchen Rear
 cover.blindkit_group_upstairs:
   friendly_name: Upstairs
-
+cover.blindkit_group_quiet_room:
+  friendly_name: Quiet Room

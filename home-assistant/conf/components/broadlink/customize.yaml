@@ -1,0 +1,6 @@
+switch.quiet_center_downlights:
+  icon: mdi:lightbulb
+switch.quiet_outer_downlights:
+  icon: mdi:lightbulb
+switch.quiet_mid_downlights:
+  icon: mdi:lightbulb
