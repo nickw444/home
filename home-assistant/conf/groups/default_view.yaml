@@ -21,6 +21,7 @@ blinds:
   entities:
     - cover.blindkit_group_kitchen_front
     - cover.blindkit_group_kitchen_rear
+    - cover.blindkit_group_quiet_room
     - cover.blindkit_group_upstairs
 
 family:
