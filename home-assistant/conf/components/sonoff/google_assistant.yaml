@@ -1,17 +1,17 @@
-switch.nicks_ceiling_lights_1:
-  name: Nick's Desk Lights
+switch.nicks_downlights_bed:
+  name: Nick's Bed Downlights
   expose: true
   room: Nick's Bedroom
   aliases:
-    - Desk Lights
-    - Desk Ceiling Lights
-    - Desk Downlights
-
-switch.nicks_ceiling_lights_2:
-  name: Nick's Bed Lights
-  expose: true
-  room: Nick's Bedroom
-  aliases:
+    - Bed Downlights
     - Bed Lights
     - Bed Ceiling Lights
-    - Bed Downlights
+
+switch.nicks_downlights_desk:
+  name: Nick's Desk Downlights
+  expose: true
+  room: Nick's Bedroom
+  aliases:
+    - Desk Downlights
+    - Desk Lights
+    - Desk Ceiling Lights

@@ -25,9 +25,8 @@ upstairs_blinds:
 nicks_bedroom:
   name: Nick's Room
   entities:
-    - switch.nicks_ceiling_lights_1
-    - switch.nicks_ceiling_lights_2
-    - switch.nicks_ceiling_lights_3
+    - switch.nicks_downlights_bed
+    - switch.nicks_downlights_desk
     - light.bedside
     - switch.nicks_fairy_lights
     - cover.blindkit_nick_front

@@ -8,7 +8,7 @@
   payload_available: 1
   payload_not_available: 0
 
-- name: Nick's Ceiling Lights 1
+- name: Nick's Downlights Bed
   icon: mdi:lightbulb
   platform: mqtt
   state_topic: /things/sonoff/ESPURNA_83CDF6/relay/0
@@ -19,7 +19,7 @@
   payload_available: 1
   payload_not_available: 0
 
-- name: Nick's Ceiling Lights 2
+- name: Nick's Downlights Desk
   icon: mdi:lightbulb
   platform: mqtt
   state_topic: /things/sonoff/ESPURNA_83CDF6/relay/1
@@ -30,7 +30,7 @@
   payload_available: 1
   payload_not_available: 0
 
-- name: Nick's Ceiling Lights 3
+- name: Nick's Downlights 3
   icon: mdi:lightbulb
   platform: mqtt
   state_topic: /things/sonoff/ESPURNA_83CDF6/relay/2
