@@ -19,11 +19,12 @@ cover.blindkit_group_kitchen_front:
   aliases:
     - Front Blinds
 
-cover.blindkit_group_kitchen_back:
-  name: Kitchen Back Blinds
+cover.blindkit_group_kitchen_rear:
+  name: Kitchen Rear Blinds
   expose: true
   room: Kitchen
   aliases:
+    - Rear Blinds
     - Back Blinds
 
 cover.blindkit_group_upstairs:
