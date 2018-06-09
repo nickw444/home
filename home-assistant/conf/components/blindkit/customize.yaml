@@ -1,50 +1,74 @@
 cover.blindkit_nick_front:
   friendly_name: Nick's Front
+  assumed_state: true
 cover.blindkit_nick_side:
   friendly_name: Nick's Side
+  assumed_state: true
 cover.blindkit_upstairs_hall_blockout:
   friendly_name: Upstairs Hall Blockout
+  assumed_state: true
 cover.blindkit_upstairs_hall_translucent:
   friendly_name: Upstairs Hall Translucent
+  assumed_state: true
 cover.blindkit_charlotte_side:
   friendly_name: Charlotte Side
+  assumed_state: true
 cover.blindkit_oly_side:
   friendly_name: Oly Side
+  assumed_state: true
 cover.blindkit_oly_back:
   friendly_name: Oly Back
+  assumed_state: true
 cover.blindkit_joe_back:
   friendly_name: Joe Back
+  assumed_state: true
 cover.blindkit_master_front_left:
   friendly_name: Master Front Left
+  assumed_state: true
 cover.blindkit_master_front_right:
   friendly_name: Master Front Right
+  assumed_state: true
 cover.blindkit_back_left:
   friendly_name: Back Left
+  assumed_state: true
 cover.blindkit_back_right:
   friendly_name: Back Right
+  assumed_state: true
 cover.blindkit_front_1_left:
   friendly_name: Front 1 (Left)
+  assumed_state: true
 cover.blindkit_front_2_door_left:
   friendly_name: Front 2 (Door Left)
+  assumed_state: true
 cover.blindkit_front_3_door_right:
   friendly_name: Front 3 (Door Right)
+  assumed_state: true
 cover.blindkit_front_4_right:
   friendly_name: Front 4 (Right)
+  assumed_state: true
 cover.blindkit_quiet_room_left_wall_1:
   friendly_name: Left Wall 1
+  assumed_state: true
 cover.blindkit_quiet_room_left_wall_2:
   friendly_name: Left Wall 2
+  assumed_state: true
 cover.blindkit_quiet_room_main_blockout:
   friendly_name: Main Blockout
+  assumed_state: true
 cover.blindkit_quiet_room_main_translucent:
   friendly_name: Main Translucent
+  assumed_state: true
 
 # Groups
 cover.blindkit_group_kitchen_front:
   friendly_name: Kitchen Front
+  assumed_state: true
 cover.blindkit_group_kitchen_rear:
   friendly_name: Kitchen Rear
+  assumed_state: true
 cover.blindkit_group_upstairs:
   friendly_name: Upstairs
+  assumed_state: true
 cover.blindkit_group_quiet_room:
   friendly_name: Quiet Room
+  assumed_state: true
