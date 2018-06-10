@@ -4,11 +4,11 @@ transmitters:
   upstairs:
     mac: 18fe3499d274
     blinds:
-      - name: Nick Front
+      - name: Nick's Front
         remote: 100
         channel: 0
 
-      - name: Nick Side
+      - name: Nick's Side
         remote: 100
         channel: 1
 
@@ -71,18 +71,22 @@ transmitters:
         remote: 101
         channel: 5
 
-      - name: Quiet Room Left Wall 1
+      - name: Left Wall 1
+        slug: blindkit_quiet_room_left_wall_1
         remote: 101
         channel: 6
 
-      - name: Quiet Room Left Wall 2
+      - name: Left Wall 2
+        slug: blindkit_quiet_room_left_wall_2
         remote: 101
         channel: 7
 
-      - name: Quiet Room Main Blockout
+      - name: Main Blockout
+        slug: blindkit_quiet_room_main_blockout
         remote: 101
         channel: 8
 
-      - name: Quiet Room Main Translucent
+      - name: Main Translucent
+        slug: blindkit_quiet_room_main_translucent
         remote: 101
         channel: 9

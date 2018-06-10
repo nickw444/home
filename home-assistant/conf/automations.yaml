@@ -34,10 +34,10 @@
   action:
   - service: cover.open_cover
     data:
-      entity_id: cover.blindkit_nick_front
+      entity_id: cover.blindkit_nicks_front
   - service: cover.open_cover
     data:
-      entity_id: cover.blindkit_nick_side
+      entity_id: cover.blindkit_nicks_side
 - id: '1521975760989'
   alias: Water backyard at 9am
   trigger:
