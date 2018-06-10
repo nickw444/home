@@ -24,6 +24,7 @@ upstairs_blinds:
 
 nicks_bedroom:
   name: Nick's Room
+  control: hidden
   entities:
     - switch.nicks_downlights_bed
     - switch.nicks_downlights_desk
