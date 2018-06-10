@@ -8,6 +8,7 @@ from ruamel.yaml import YAML
 
 yaml = YAML()
 
+
 def main():
     file = sys.argv[1]
     f = open(file)
@@ -25,7 +26,7 @@ def main():
         trans_status_topic = trans_base_topic + status_topic
 
         for blind_info in trans_info['blinds']:
-            name = camelize(blind_info['name'])
+            name = blind_info.get('slug', camelize(blind_info['name']))
             payload_prefix = '{},{},'.format(
                 blind_info['remote'],
                 blind_info['channel']
@@ -52,7 +53,7 @@ def main():
 
 
 def camelize(s):
-    s = re.sub(r'[^A-Za-z0-9\s]','', s).lower()
+    s = re.sub(r'[^A-Za-z0-9\s]', '', s).lower()
     return 'blindkit_' + '_'.join(s.split(' '))
 
 
