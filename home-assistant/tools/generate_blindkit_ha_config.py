@@ -43,7 +43,8 @@ def main():
             })
 
             customize['cover.{}'.format(name)] = {
-                'friendly_name': blind_info['name']
+                'friendly_name': blind_info['name'],
+                'assumed_state': True,
             }
 
     yaml.dump(blinds, sys.stdout)

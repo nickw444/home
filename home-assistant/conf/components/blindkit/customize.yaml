@@ -1,7 +1,7 @@
-cover.blindkit_nick_front:
+cover.blindkit_nicks_front:
   friendly_name: Nick's Front
   assumed_state: true
-cover.blindkit_nick_side:
+cover.blindkit_nicks_side:
   friendly_name: Nick's Side
   assumed_state: true
 cover.blindkit_upstairs_hall_blockout:

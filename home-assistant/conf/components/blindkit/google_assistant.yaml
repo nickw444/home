@@ -1,11 +1,11 @@
-cover.blindkit_nick_front:
+cover.blindkit_nicks_front:
   name: Nick's Front Blind
   expose: true
   room: Nick's Bedroom
   aliases:
     - Front Blind
 
-cover.blindkit_nick_side:
+cover.blindkit_nicks_side:
   name: Nick's Side Blind
   expose: true
   room: Nick's Bedroom

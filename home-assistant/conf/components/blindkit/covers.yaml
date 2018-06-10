@@ -1,5 +1,5 @@
 - platform: mqtt
-  name: blindkit_nick_front
+  name: blindkit_nicks_front
   command_topic: /things/blindkit/18fe3499d274/send_code
   availability_topic: /things/blindkit/18fe3499d274/status
   qos: 1
@@ -7,7 +7,7 @@
   payload_close: 100,0,CLOSE
   payload_stop: 100,0,STOP
 - platform: mqtt
-  name: blindkit_nick_side
+  name: blindkit_nicks_side
   command_topic: /things/blindkit/18fe3499d274/send_code
   availability_topic: /things/blindkit/18fe3499d274/status
   qos: 1
@@ -177,8 +177,8 @@
 - platform: group
   name: blindkit_group_upstairs
   entities:
-    - cover.blindkit_nick_front
-    - cover.blindkit_nick_side
+    - cover.blindkit_nicks_front
+    - cover.blindkit_nicks_side
     - cover.blindkit_upstairs_hall_blockout
     - cover.blindkit_upstairs_hall_translucent
     - cover.blindkit_charlotte_side
@@ -191,8 +191,8 @@
 - platform: group
   name: blindkit_group_nicks_blinds
   entities:
-    - cover.blindkit_nick_front
-    - cover.blindkit_nick_side
+    - cover.blindkit_nicks_front
+    - cover.blindkit_nicks_side
 
 - platform: group
   name: blindkit_group_quiet_room
