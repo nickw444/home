@@ -32,8 +32,8 @@ nicks_bedroom:
     - switch.nicks_fairy_lights
     - cover.blindkit_nicks_front
     - cover.blindkit_nicks_side
-    - sensor.nicks_room_temperature
-    - sensor.nicks_room_humidity
+    - sensor.nicks_temperature
+    - sensor.nicks_humidity
 
 joes_bedroom:
   name: Joe's Room

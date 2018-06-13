@@ -25,7 +25,7 @@
   payload_available: 1
   payload_not_available: 0
 
-- name: Nick's humidity
+- name: Nick's Humidity
   platform: mqtt
   device_class: humidity
   state_topic: nicks_bedroom_thermometer/humidity
