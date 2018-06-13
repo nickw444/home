@@ -1,11 +1,35 @@
 - name: Upstairs temperature
   platform: mqtt
   device_class: temperature
-  state_topic: /things/sonoff/ESPURNA_173177/temperature
+  state_topic: upstairs_cabinet/temperature
   unit_of_measurement: °C
+  availability_topic: upstairs_cabinet/status
+  payload_available: 1
+  payload_not_available: 0
 
 - name: Upstairs humidity
   platform: mqtt
   device_class: humidity
-  state_topic: /things/sonoff/ESPURNA_173177/humidity
+  state_topic: upstairs_cabinet/humidity
   unit_of_measurement: '%'
+  availability_topic: upstairs_cabinet/status
+  payload_available: 1
+  payload_not_available: 0
+
+- name: Nick's Temperature
+  platform: mqtt
+  device_class: temperature
+  state_topic: nicks_bedroom_thermometer/temperature
+  unit_of_measurement: °C
+  availability_topic: nicks_bedroom_thermometer/status
+  payload_available: 1
+  payload_not_available: 0
+
+- name: Nick's humidity
+  platform: mqtt
+  device_class: humidity
+  state_topic: nicks_bedroom_thermometer/humidity
+  unit_of_measurement: '%'
+  availability_topic: nicks_bedroom_thermometer/status
+  payload_available: 1
+  payload_not_available: 0

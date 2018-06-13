@@ -1,42 +1,32 @@
-- name: ESPURNA_173177
-  platform: mqtt
-  state_topic: /things/sonoff/ESPURNA_173177/relay/0
-  command_topic: /things/sonoff/ESPURNA_173177/relay/0/set
-  payload_on: 1
-  payload_off: 0
-  availability_topic: /things/sonoff/ESPURNA_173177/status
-  payload_available: 1
-  payload_not_available: 0
-
 - name: Nick's Downlights Bed
   icon: mdi:lightbulb
   platform: mqtt
-  state_topic: /things/sonoff/ESPURNA_83CDF6/relay/0
-  command_topic: /things/sonoff/ESPURNA_83CDF6/relay/0/set
+  state_topic: nicks_bedroom_wall/relay/0
+  command_topic: nicks_bedroom_wall/relay/0/set
   payload_on: 1
   payload_off: 0
-  availability_topic: /things/sonoff/ESPURNA_83CDF6/status
+  availability_topic: nicks_bedroom_wall/status
   payload_available: 1
   payload_not_available: 0
 
 - name: Nick's Downlights Desk
   icon: mdi:lightbulb
   platform: mqtt
-  state_topic: /things/sonoff/ESPURNA_83CDF6/relay/1
-  command_topic: /things/sonoff/ESPURNA_83CDF6/relay/1/set
+  state_topic: nicks_bedroom_wall/relay/1
+  command_topic: nicks_bedroom_wall/relay/1/set
   payload_on: 1
   payload_off: 0
-  availability_topic: /things/sonoff/ESPURNA_83CDF6/status
+  availability_topic: nicks_bedroom_wall/status
   payload_available: 1
   payload_not_available: 0
 
 - name: Nick's Downlights 3
   icon: mdi:lightbulb
   platform: mqtt
-  state_topic: /things/sonoff/ESPURNA_83CDF6/relay/2
-  command_topic: /things/sonoff/ESPURNA_83CDF6/relay/2/set
+  state_topic: nicks_bedroom_wall/relay/2
+  command_topic: nicks_bedroom_wall/relay/2/set
   payload_on: 1
   payload_off: 0
-  availability_topic: /things/sonoff/ESPURNA_83CDF6/status
+  availability_topic: nicks_bedroom_wall/status
   payload_available: 1
   payload_not_available: 0

@@ -6,7 +6,7 @@
     "hostname": "ESPURNA_173177",
     "ip": "192.168.8.167",
     "static": false,
-    "mqtt_prefix": "/things/sonoff-th/ESPURNA_173177",
+    "mqtt_prefix": "upstairs_cabinet",
     "ota_method": "ESPURNA",
     "admin_page": "http://192.168.8.167/",
     "espurna_model_slug": "itead-sonoff-th"
@@ -18,7 +18,7 @@
     "hostname": "ESPURNA_83CDF6",
     "ip": "192.168.8.138",
     "static": false,
-    "mqtt_prefix": "/things/sonoff-th/ESPURNA_83CDF6",
+    "mqtt_prefix": "nicks_bedroom_wall",
     "ota_method": "ESPURNA",
     "admin_page": "http://192.168.8.138/",
     "espurna_model_slug": "itead-sonoff-t1-3ch"
@@ -55,5 +55,17 @@
     "mqtt_prefix": "/things/garage/5ccf7f84b87f",
     "ota_method": "ArduinoOTA",
     "admin_page": null
+  },
+  {
+    "name": "Nicks Bedroom Themometer",
+    "model": "Itead Sonoff TH",
+    "mac": "60:01:94:17:2B:50",
+    "hostname": "ESPURNA_172B50",
+    "ip": "192.168.8.208",
+    "static": false,
+    "mqtt_prefix": "nicks_bedroom_thermometer",
+    "ota_method": "ESPURNA",
+    "admin_page": "http://192.168.8.208/",
+    "espurna_model_slug": "itead-sonoff-th"
   }
 ]
