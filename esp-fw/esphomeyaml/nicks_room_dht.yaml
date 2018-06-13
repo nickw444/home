@@ -6,6 +6,7 @@ esphomeyaml:
 wifi:
   ssid: 'UniFi'
   password: !secret WIFI_PASSWORD
+  domain: .home
 
 mqtt:
   broker: '192.168.8.10'
@@ -24,4 +25,4 @@ sensor:
       name: "Nick's Room Temperature"
     humidity:
       name: "Nick's Room Humidity"
-    update_interval: 15s
+    update_interval: 1min
