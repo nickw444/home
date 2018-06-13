@@ -1,0 +1,27 @@
+esphomeyaml:
+  name: nicks_room_dht
+  platform: ESP8266
+  board: esp01_1m
+
+wifi:
+  ssid: 'UniFi'
+  password: !secret WIFI_PASSWORD
+
+mqtt:
+  broker: '192.168.8.10'
+  username: ''
+  password: ''
+
+# Enable logging
+logger:
+
+ota:
+
+sensor:
+  - platform: dht
+    pin: 2
+    temperature:
+      name: "Nick's Room Temperature"
+    humidity:
+      name: "Nick's Room Humidity"
+    update_interval: 15s
