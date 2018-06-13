@@ -1,10 +1,3 @@
-cover.blindkit_group_nicks_blinds:
-  name: Nick's Blinds
-  expose: true
-  room: Nick's Bedroom
-  aliases:
-    - Blinds
-
 cover.blindkit_nicks_front:
   name: Nick's Front Blind
   expose: true
