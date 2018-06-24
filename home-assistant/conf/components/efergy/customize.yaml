@@ -16,3 +16,5 @@ sensor.mains_output:
   icon: mdi:arrow-right
 sensor.mains_input:
   icon: mdi:arrow-left
+sensor.current_load:
+  icon: mdi:power
