@@ -30,3 +30,9 @@
         {% else %}
           {{ states.sensor.efergy_731181.state|float - states.sensor.efergy_784242.state|float }}
         {% endif %}
+
+    current_load:
+      friendly_name: Current Load
+      unit_of_measurement: 'W'
+      value_template: |
+        {{ states("sensor.efergy_784242") | float +  states("sensor.efergy_786148") | float }}

@@ -39,6 +39,7 @@ energy:
     - sensor.mains_input
     - sensor.efergy_731181 # Solar Input
     - sensor.mains_output
+    - sensor.current_load
     - sensor.efergy_784242
     - sensor.efergy_786148
     - sensor.energy_consumed
