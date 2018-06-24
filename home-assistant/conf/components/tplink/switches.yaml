@@ -1,0 +1,2 @@
+- platform: tplink
+  host: 192.168.8.213
