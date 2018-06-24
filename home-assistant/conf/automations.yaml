@@ -136,9 +136,9 @@
       entity_id: cover.blindkit_back_left
     service: cover.close_cover
 - id: '1528005630746'
-  alias: Up-Hall Blockout Open 6.45am
+  alias: Up-Hall Blockout Open 7.30am
   trigger:
-  - at: 06:45:00
+  - at: 07:30:00
     platform: time
   condition: []
   action:
