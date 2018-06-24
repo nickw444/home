@@ -83,3 +83,8 @@ camera: !include_dir_merge_list config/cameras/
 influxdb:
 google_assistant: !include google_assistant.yaml
 ffmpeg:
+
+panel_iframe:
+  grafana:
+    title: Grafana
+    url: 'https://grafana.store.home'
