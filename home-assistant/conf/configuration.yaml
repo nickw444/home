@@ -87,4 +87,5 @@ ffmpeg:
 panel_iframe:
   grafana:
     title: Grafana
+    icon: mdi:chart-line
     url: 'https://grafana.store.home'
