@@ -4,6 +4,7 @@ misc:
   entities:
     - group.nicks_printer
     - group.internet
+    - group.fuel
     - group.all_automations
 
 internet:
@@ -20,3 +21,9 @@ nicks_printer:
     - sensor.nicks_printer_drum_black
     - sensor.nicks_printer_output_tray_0
     - sensor.nicks_printer_tray_1
+
+fuel:
+  name: Fuel
+  entities:
+    - sensor.caltex_woolworths_blakehurst_e10
+    - sensor.caltex_woolworths_blakehurst_p95
