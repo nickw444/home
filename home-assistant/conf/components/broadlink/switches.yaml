@@ -1,11 +1,11 @@
 # Upstairs RM Pro
 - platform: broadlink
-  host: 192.168.8.175
+  host: 192.168.8.35
   mac: 34:ea:34:e4:76:65
 
 # Downstairs
 - platform: broadlink
-  host: 192.168.8.153
+  host: 192.168.8.33
   mac: b4:43:0d:e6:35:8f
   switches:
     quiet_center_downlights:
@@ -23,5 +23,5 @@
 
 # RM Mini
 - platform: broadlink
-  host: 192.168.8.173
+  host: 192.168.8.34
   mac: b4:43:0d:f9:24:8a
