@@ -39,6 +39,8 @@ services:
             - influxdb
         ports:
             - '0.0.0.0:3000:3000'
+        environment:
+            GF_AUTH_ANONYMOUS_ENABLED: 'true'
 
     nodered:
         restart: always
