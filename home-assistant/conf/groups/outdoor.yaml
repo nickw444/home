@@ -4,6 +4,7 @@ outdoor:
   entities:
     - group.sprinklers
     - switch.sprinkle_tree_lights
+    - group.weather
 
 sprinklers:
   name: Sprinklers
