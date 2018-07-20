@@ -19,3 +19,8 @@ sprinklers:
     - switch.sprinkle_upper_lawn
     - switch.sprinkle_recycled_pump
 
+weather:
+  name: Weather
+  entities:
+    - sensor.outdoor_temperature
+    - sensor.outdoor_humidity
