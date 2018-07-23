@@ -4,6 +4,7 @@ outdoor:
   entities:
     - group.sprinklers
     - switch.sprinkle_tree_lights
+    - group.weather
 
 sprinklers:
   name: Sprinklers
@@ -19,3 +20,8 @@ sprinklers:
     - switch.sprinkle_upper_lawn
     - switch.sprinkle_recycled_pump
 
+weather:
+  name: Weather
+  entities:
+    - sensor.outdoor_temperature
+    - sensor.outdoor_humidity

@@ -48,6 +48,8 @@ bom_weather:
   name: Weather
   entities:
     - sun.sun
+    - sensor.outdoor_temperature
+    - sensor.outdoor_humidity
     - sensor.bom_sydney_airport_air_temp_c
     - sensor.bom_sydney_airport_feels_like_c
     - sensor.bom_sydney_airport_rain_today
