@@ -1,19 +1,9 @@
 push:
   categories:
-    - name: Alarm
-      identifier: 'alarm'
+    - name: Garage Door Open
+      identifier: 'garage_door_open'
       actions:
-        - identifier: 'SOUND_ALARM'
-          title: 'Sound Alarm'
+        - identifier: 'GARAGE_DOOR_CLOSE'
+          title: 'Close Garage Door'
           activationMode: 'background'
-          authenticationRequired: yes
-          destructive: yes
-          behavior: 'default'
-        - identifier: 'SILENCE_ALARM'
-          title: 'Silence Alarm'
-          activationMode: 'background'
-          authenticationRequired: yes
-          destructive: no
-          behavior: 'textInput'
-          textInputButtonTitle: 'Silencio!'
-          textInputPlaceholder: 'Placeholder'
+          authenticationRequired: no
