@@ -1,0 +1,10 @@
+- name: Native Apps
+  platform: group
+  services:
+    - service: ios_nicksiphone
+
+- name: All Apps
+  platform: group
+  services:
+    - service: native_apps
+    - service: telegram
