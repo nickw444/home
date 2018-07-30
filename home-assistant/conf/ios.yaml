@@ -3,7 +3,7 @@ push:
     - name: Garage Door Open
       identifier: 'garage_door_open'
       actions:
-      - identifier: 'GARAGE_DOOR_CLOSE'
-        title: 'Close Garage Door'
-        activationMode: 'background'
-        authenticationRequired: no
+        - identifier: 'GARAGE_DOOR_CLOSE'
+          title: 'Close Garage Door'
+          activationMode: 'background'
+          authenticationRequired: no
