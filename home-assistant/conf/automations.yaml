@@ -155,3 +155,17 @@
   - data:
       entity_id: cover.blindkit_upstairs_hall_blockout
     service: cover.close_cover
+- id: '1532953292008'
+  alias: Notify Garage Door 11pm
+  trigger:
+  - at: '23:00:00'
+    platform: time
+  condition:
+  - condition: state
+    entity_id: cover.garage
+    state: open
+  action:
+  - data:
+      message: It is after 11pm and it appears the garage door is still open
+      title: Garage Door Still Open
+    service: notify.all_apps

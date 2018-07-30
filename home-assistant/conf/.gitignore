@@ -12,3 +12,5 @@ tts
 known_devices.yaml
 entity_registry.yaml
 plex.conf
+.ios.conf
+deps
