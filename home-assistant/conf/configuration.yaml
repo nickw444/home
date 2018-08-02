@@ -68,7 +68,7 @@ tts:
 ios: !include ios.yaml
 
 group: !include_dir_merge_named groups/
-automation: !include automations.yaml
+automation: !include_dir_merge_list config/automations/
 script: !include scripts.yaml
 
 telegram_bot: !include_dir_merge_list config/telegram_bot/

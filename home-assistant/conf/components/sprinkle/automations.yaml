@@ -1,0 +1,54 @@
+- id: '1521975760989'
+  alias: Water backyard at 9am
+  trigger:
+  - at: 09:00:00
+    platform: time
+  condition: []
+  action:
+  - data:
+      entity_id: switch.sprinkle_back_yard
+    service: switch.turn_on
+
+- alias: Water herbs at 2:00pm
+  trigger:
+  - at: '14:00:00'
+    platform: time
+  condition: []
+  action:
+  - data:
+      entity_id: switch.sprinkle_herbs
+    service: switch.turn_on
+  id: eb5b8733e87443b99407c3ff5054200b
+
+- alias: Water lavender at 2:10pm
+  trigger:
+  - at: '14:10:00'
+    platform: time
+  condition: []
+  action:
+  - data:
+      entity_id: switch.sprinkle_lavender
+    service: switch.turn_on
+  id: 27e25a964ccd4cd8a82d57bc0e2faa48
+
+- alias: Turn on tree lights at sunset
+  id: '1521860501554'
+  trigger:
+  - event: sunset
+    platform: sun
+  condition: []
+  action:
+  - data:
+      entity_id: switch.sprinkle_tree_lights
+    service: switch.turn_on
+
+- alias: Turn off tree lights at 10:30pm
+  id: '1521860693473'
+  trigger:
+  - at: '22:30'
+    platform: time
+  condition: []
+  action:
+  - data:
+      entity_id: switch.sprinkle_tree_lights
+    service: switch.turn_off
