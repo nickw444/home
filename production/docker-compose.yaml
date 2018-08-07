@@ -45,9 +45,11 @@ services:
     nodered:
         restart: always
         container_name: nodered
-        image: nodered/node-red-docker
+        image: nodered/node-red-docker:0.18.7-v8
         volumes:
             - "/var/lib/node-red:/data"
+            - "/etc/homekit/node-red:/data"
+            - "/etc/localtime:/etc/localtime:ro"
         network_mode: host
         ports:
             - '0.0.0.0:1880:1880'
