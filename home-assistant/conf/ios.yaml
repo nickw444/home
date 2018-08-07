@@ -1,2 +1,9 @@
 push:
-  categories: !include_dir_merge_list config/categories/
+  categories:
+    - name: Garage Door Open
+      identifier: 'garage_door_open'
+      actions:
+        - identifier: 'GARAGE_DOOR_CLOSE'
+          title: 'Close Garage Door'
+          activationMode: 'background'
+          authenticationRequired: no
