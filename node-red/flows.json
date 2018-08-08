@@ -502,42 +502,13 @@
         "constraintsmustmatch": "all",
         "outputs": 2,
         "customoutputs": [],
-        "x": 171.5,
-        "y": 141,
+        "x": 172.5,
+        "y": 101,
         "wires": [
             [
-                "4a23578d.7942d8"
+                "4a23578d.7942d8",
+                "aa8852dc.0fc9"
             ],
-            []
-        ]
-    },
-    {
-        "id": "f936f744.c7d848",
-        "type": "trigger-state",
-        "z": "562c7339.e576bc",
-        "name": "Sunrise",
-        "server": "a5b319a.98d53e8",
-        "entityid": "sun.sun",
-        "debugenabled": false,
-        "constraints": [
-            {
-                "id": "wvxinxv876m",
-                "targetType": "this_entity",
-                "targetValue": "",
-                "propertyType": "current_state",
-                "propertyValue": "new_state.state",
-                "comparatorType": "is",
-                "comparatorValueDatatype": "str",
-                "comparatorValue": "above_horizon"
-            }
-        ],
-        "constraintsmustmatch": "all",
-        "outputs": 2,
-        "customoutputs": [],
-        "x": 167,
-        "y": 83,
-        "wires": [
-            [],
             []
         ]
     },
@@ -553,11 +524,12 @@
         "crontab": "30 22 * * *",
         "once": false,
         "onceDelay": 0.1,
-        "x": 144.5,
-        "y": 199,
+        "x": 146.5,
+        "y": 221,
         "wires": [
             [
-                "91ce1f70.029d4"
+                "91ce1f70.029d4",
+                "b92a9b33.be0908"
             ]
         ]
     },
@@ -571,8 +543,8 @@
         "service": "turn_on",
         "data": "{           \"entity_id\": \"switch.sprinkle_tree_lights\"         }",
         "mergecontext": "",
-        "x": 381.5,
-        "y": 135,
+        "x": 380.5,
+        "y": 134,
         "wires": [
             []
         ]
@@ -587,8 +559,8 @@
         "service": "turn_off",
         "data": "{           \"entity_id\": \"switch.sprinkle_tree_lights\"         }",
         "mergecontext": "",
-        "x": 382,
-        "y": 196,
+        "x": 383,
+        "y": 221,
         "wires": [
             []
         ]
@@ -605,11 +577,12 @@
         "crontab": "00 09 * * *",
         "once": false,
         "onceDelay": 0.1,
-        "x": 136,
-        "y": 330,
+        "x": 132,
+        "y": 381,
         "wires": [
             [
-                "5c6c2387.39738c"
+                "5c6c2387.39738c",
+                "a9f367e2.5da228"
             ]
         ]
     },
@@ -623,8 +596,8 @@
         "service": "turn_on",
         "data": "{\"entity_id\": \"switch.sprinkle_back_yard\"}",
         "mergecontext": "",
-        "x": 412.5,
-        "y": 330,
+        "x": 408.5,
+        "y": 381,
         "wires": [
             []
         ]
@@ -641,12 +614,13 @@
         "crontab": "00 14 * * *",
         "once": false,
         "onceDelay": 0.1,
-        "x": 134,
-        "y": 391,
+        "x": 133,
+        "y": 544,
         "wires": [
             [
                 "5fa08b99.040db4",
-                "c33c28c.a46d0d8"
+                "c33c28c.a46d0d8",
+                "ad9bc52c.159608"
             ]
         ]
     },
@@ -660,8 +634,8 @@
         "service": "turn_on",
         "data": "{\"entity_id\": \"switch.sprinkle_herbs\"}",
         "mergecontext": "",
-        "x": 371.5,
-        "y": 391,
+        "x": 370.5,
+        "y": 544,
         "wires": [
             []
         ]
@@ -681,8 +655,8 @@
         "randomLast": "5",
         "randomUnits": "seconds",
         "drop": false,
-        "x": 369.5,
-        "y": 441,
+        "x": 370.5,
+        "y": 584,
         "wires": [
             [
                 "d10891a6.d56e4"
@@ -699,8 +673,8 @@
         "service": "turn_on",
         "data": "{\"entity_id\": \"switch.sprinkle_lavender\"}",
         "mergecontext": "",
-        "x": 560,
-        "y": 441,
+        "x": 561,
+        "y": 584,
         "wires": [
             []
         ]
@@ -721,8 +695,8 @@
         "z": "25f1e9b0.2f2f06",
         "name": "Family & Kitch Part Down 5:30pm",
         "info": "",
-        "x": 190,
-        "y": 157,
+        "x": 184,
+        "y": 202,
         "wires": []
     },
     {
@@ -731,8 +705,8 @@
         "z": "25f1e9b0.2f2f06",
         "name": "Family & Kitch Down all 10pm",
         "info": "",
-        "x": 181,
-        "y": 267,
+        "x": 151,
+        "y": 369,
         "wires": []
     },
     {
@@ -741,8 +715,8 @@
         "z": "25f1e9b0.2f2f06",
         "name": "Up-Hall Blockout Open 7.30am",
         "info": "",
-        "x": 176.5,
-        "y": 394,
+        "x": 160.5,
+        "y": 536,
         "wires": []
     },
     {
@@ -751,8 +725,8 @@
         "z": "25f1e9b0.2f2f06",
         "name": "Up-Hall Blockout Down 5.30pm",
         "info": "",
-        "x": 172.5,
-        "y": 512,
+        "x": 157.5,
+        "y": 663,
         "wires": []
     },
     {
@@ -761,8 +735,8 @@
         "z": "25f1e9b0.2f2f06",
         "name": "Open Nicks Blinds at 8am weekdays",
         "info": "",
-        "x": 178.5,
-        "y": 650,
+        "x": 162.5,
+        "y": 813,
         "wires": []
     },
     {
@@ -781,7 +755,8 @@
         "y": 96,
         "wires": [
             [
-                "a00a0e18.77987"
+                "a00a0e18.77987",
+                "5054fff2.88504"
             ]
         ]
     },
@@ -797,11 +772,12 @@
         "crontab": "30 17 * * *",
         "once": false,
         "onceDelay": 0.1,
-        "x": 157,
-        "y": 211,
+        "x": 147,
+        "y": 254,
         "wires": [
             [
-                "64df3f98.6fd26"
+                "64df3f98.6fd26",
+                "26044a9.8012db6"
             ]
         ]
     },
@@ -815,8 +791,8 @@
         "service": "close_cover",
         "data": "",
         "mergecontext": "",
-        "x": 658,
-        "y": 335,
+        "x": 649,
+        "y": 418,
         "wires": [
             []
         ]
@@ -833,11 +809,12 @@
         "crontab": "00 22 * * *",
         "once": false,
         "onceDelay": 0.1,
-        "x": 156,
-        "y": 332,
+        "x": 147,
+        "y": 415,
         "wires": [
             [
-                "49e47dd5.96f184"
+                "49e47dd5.96f184",
+                "d242ba92.ba8df8"
             ]
         ]
     },
@@ -849,8 +826,8 @@
         "func": "msg.payload.forEach(elem => {\n    node.send({\n        payload: {\n            data: {\n                \"entity_id\": elem \n            }\n        }\n    })\n})",
         "outputs": 1,
         "noerr": 0,
-        "x": 476.5,
-        "y": 335,
+        "x": 467.5,
+        "y": 418,
         "wires": [
             [
                 "3941aea3.6241c2"
@@ -868,8 +845,8 @@
         "syntax": "plain",
         "template": "[\n    \"cover.blindkit_front_4_right\",\n    \"cover.blindkit_front_2_door_left\",\n    \"cover.blindkit_front_1_left\",\n    \"cover.blindkit_back_left\"\n]",
         "output": "json",
-        "x": 337,
-        "y": 211,
+        "x": 327,
+        "y": 254,
         "wires": [
             [
                 "d731944c.4fdc28"
@@ -887,8 +864,8 @@
         "syntax": "plain",
         "template": "[\n    \"cover.blindkit_front_4_right\",\n    \"cover.blindkit_front_3_door_right\",\n    \"cover.blindkit_front_2_door_left\",\n    \"cover.blindkit_front_1_left\",\n    \"cover.blindkit_back_right\",\n    \"cover.blindkit_back_left\"\n]",
         "output": "json",
-        "x": 332,
-        "y": 334,
+        "x": 323,
+        "y": 417,
         "wires": [
             [
                 "5222aeea.afd08"
@@ -1103,8 +1080,8 @@
         "service": "close_cover",
         "data": "",
         "mergecontext": "",
-        "x": 671,
-        "y": 211,
+        "x": 661,
+        "y": 254,
         "wires": [
             []
         ]
@@ -1117,8 +1094,8 @@
         "func": "msg.payload.forEach(elem => {\n    node.send({\n        payload: {\n            data: {\n                \"entity_id\": elem \n            }\n        }\n    })\n})",
         "outputs": 1,
         "noerr": 0,
-        "x": 489.5,
-        "y": 211,
+        "x": 479.5,
+        "y": 254,
         "wires": [
             [
                 "2e9fc997.5ccc66"
@@ -1167,8 +1144,8 @@
         "service": "open_cover",
         "data": "{ \"entity_id\": \"cover.blindkit_upstairs_hall_blockout\" }",
         "mergecontext": "",
-        "x": 658,
-        "y": 453,
+        "x": 641,
+        "y": 586,
         "wires": [
             []
         ]
@@ -1185,11 +1162,12 @@
         "crontab": "30 07 * * *",
         "once": false,
         "onceDelay": 0.1,
-        "x": 160,
-        "y": 452,
+        "x": 143,
+        "y": 585,
         "wires": [
             [
-                "348f5dc.893c1a2"
+                "348f5dc.893c1a2",
+                "1cb67081.6f4f4f"
             ]
         ]
     },
@@ -1203,8 +1181,8 @@
         "service": "close_cover",
         "data": "{ \"entity_id\": \"cover.blindkit_upstairs_hall_blockout\" }",
         "mergecontext": "",
-        "x": 660,
-        "y": 577,
+        "x": 645,
+        "y": 728,
         "wires": [
             []
         ]
@@ -1221,11 +1199,12 @@
         "crontab": "30 17 * * *",
         "once": false,
         "onceDelay": 0.1,
-        "x": 162,
-        "y": 576,
+        "x": 147,
+        "y": 727,
         "wires": [
             [
-                "1edc7927.fc7817"
+                "1edc7927.fc7817",
+                "191477c1.b305d8"
             ]
         ]
     },
@@ -1239,8 +1218,8 @@
         "service": "open_cover",
         "data": "{ \"entity_id\": \"cover.blindkit_nicks_front\" }",
         "mergecontext": "",
-        "x": 660,
-        "y": 711,
+        "x": 645,
+        "y": 862,
         "wires": [
             []
         ]
@@ -1257,12 +1236,13 @@
         "crontab": "00 08 * * 1,2,3,4,5",
         "once": false,
         "onceDelay": 0.1,
-        "x": 162,
-        "y": 710,
+        "x": 147,
+        "y": 861,
         "wires": [
             [
                 "945f03d3.c35cf",
-                "245249de.f27826"
+                "245249de.f27826",
+                "c1a7b568.e03628"
             ]
         ]
     },
@@ -1276,8 +1256,8 @@
         "service": "open_cover",
         "data": "{ \"entity_id\": \"cover.blindkit_nicks_side\" }",
         "mergecontext": "",
-        "x": 661,
-        "y": 751,
+        "x": 646,
+        "y": 902,
         "wires": [
             []
         ]
@@ -1434,5 +1414,225 @@
                 "9b559595.91ef38"
             ]
         ]
+    },
+    {
+        "id": "b92a9b33.be0908",
+        "type": "api-call-service",
+        "z": "562c7339.e576bc",
+        "name": "Log Automation",
+        "server": "a5b319a.98d53e8",
+        "service_domain": "logbook",
+        "service": "log",
+        "data": "{ \"name\": \"Automation Started\", \"message\": \"Turn tree lights off at 22:30\" }",
+        "mergecontext": "",
+        "x": 382,
+        "y": 265,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "aa8852dc.0fc9",
+        "type": "api-call-service",
+        "z": "562c7339.e576bc",
+        "name": "Log Automation",
+        "server": "a5b319a.98d53e8",
+        "service_domain": "logbook",
+        "service": "log",
+        "data": "{ \"name\": \"Automation Started\", \"message\": \"Turn tree lights on at sunset\" }",
+        "mergecontext": "",
+        "x": 381,
+        "y": 95,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "a9f367e2.5da228",
+        "type": "api-call-service",
+        "z": "562c7339.e576bc",
+        "name": "Log Automation",
+        "server": "a5b319a.98d53e8",
+        "service_domain": "logbook",
+        "service": "log",
+        "data": "{ \"name\": \"Automation Started\", \"message\": \"Turn on backyard sprinklers at 9am\" }",
+        "mergecontext": "",
+        "x": 378,
+        "y": 420,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "ad9bc52c.159608",
+        "type": "api-call-service",
+        "z": "562c7339.e576bc",
+        "name": "Log Automation",
+        "server": "a5b319a.98d53e8",
+        "service_domain": "logbook",
+        "service": "log",
+        "data": "{ \"name\": \"Automation Started\", \"message\": \"Water herbs & lavender at 2pm\" }",
+        "mergecontext": "",
+        "x": 380,
+        "y": 635,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "d242ba92.ba8df8",
+        "type": "api-call-service",
+        "z": "25f1e9b0.2f2f06",
+        "name": "Log Automation",
+        "server": "a5b319a.98d53e8",
+        "service_domain": "logbook",
+        "service": "log",
+        "data": "{ \"name\": \"Automation Started\", \"message\": \"Family & Kitch Down all 10pm\" }",
+        "mergecontext": "",
+        "x": 347,
+        "y": 460,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "26044a9.8012db6",
+        "type": "api-call-service",
+        "z": "25f1e9b0.2f2f06",
+        "name": "Log Automation",
+        "server": "a5b319a.98d53e8",
+        "service_domain": "logbook",
+        "service": "log",
+        "data": "{ \"name\": \"Automation Started\", \"message\": \"Family & Kitch Part Down 5:30pm\" }",
+        "mergecontext": "",
+        "x": 346,
+        "y": 299,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "5054fff2.88504",
+        "type": "api-call-service",
+        "z": "25f1e9b0.2f2f06",
+        "name": "Log Automation",
+        "server": "a5b319a.98d53e8",
+        "service_domain": "logbook",
+        "service": "log",
+        "data": "{ \"name\": \"Automation Started\", \"message\": \"Family & Kitch up 6.15am\" }",
+        "mergecontext": "",
+        "x": 351,
+        "y": 133,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "1cb67081.6f4f4f",
+        "type": "api-call-service",
+        "z": "25f1e9b0.2f2f06",
+        "name": "Log Automation",
+        "server": "a5b319a.98d53e8",
+        "service_domain": "logbook",
+        "service": "log",
+        "data": "{ \"name\": \"Automation Started\", \"message\": \"Up-Hall Blockout Open 7.30am\" }",
+        "mergecontext": "",
+        "x": 355,
+        "y": 616,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "191477c1.b305d8",
+        "type": "api-call-service",
+        "z": "25f1e9b0.2f2f06",
+        "name": "Log Automation",
+        "server": "a5b319a.98d53e8",
+        "service_domain": "logbook",
+        "service": "log",
+        "data": "{ \"name\": \"Automation Started\", \"message\": \"Up-Hall Blockout Down 5.30pm\" }",
+        "mergecontext": "",
+        "x": 358,
+        "y": 763,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "c1a7b568.e03628",
+        "type": "api-call-service",
+        "z": "25f1e9b0.2f2f06",
+        "name": "Log Automation",
+        "server": "a5b319a.98d53e8",
+        "service_domain": "logbook",
+        "service": "log",
+        "data": "{ \"name\": \"Automation Started\", \"message\": \"Open Nicks Blinds at 8am weekdays\" }",
+        "mergecontext": "",
+        "x": 358,
+        "y": 922,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "abe1a708.65d4b8",
+        "type": "inject",
+        "z": "25f1e9b0.2f2f06",
+        "name": "",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 1042.5,
+        "y": 141,
+        "wires": [
+            [
+                "5054fff2.88504"
+            ]
+        ]
+    },
+    {
+        "id": "7c0abf60.b8986",
+        "type": "comment",
+        "z": "562c7339.e576bc",
+        "name": "Turn tree lights on at sunset",
+        "info": "",
+        "x": 167.5,
+        "y": 52,
+        "wires": []
+    },
+    {
+        "id": "8f88db72.ddc928",
+        "type": "comment",
+        "z": "562c7339.e576bc",
+        "name": "Turn tree lights off at 22:30",
+        "info": "",
+        "x": 156,
+        "y": 177,
+        "wires": []
+    },
+    {
+        "id": "b693511.7c75ab",
+        "type": "comment",
+        "z": "562c7339.e576bc",
+        "name": "Turn on backyard sprinklers at 9am",
+        "info": "",
+        "x": 179.5,
+        "y": 335,
+        "wires": []
+    },
+    {
+        "id": "81d1692c.3e0038",
+        "type": "comment",
+        "z": "562c7339.e576bc",
+        "name": "Water herbs & lavender at 2pm",
+        "info": "",
+        "x": 157.5,
+        "y": 493,
+        "wires": []
     }
 ]
