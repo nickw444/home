@@ -9,6 +9,7 @@ filter:
     - switch.nicks_downlights_bed
     - switch.nicks_downlights_desk
     - switch.nicks_fairy_lights
+    - script.nick_bedtime
 entity_config:
   cover.blindkit_nicks_front:
     name: Nick's Front Blind
@@ -61,3 +62,8 @@ entity_config:
     room: Nick's Bedroom
     aliases:
       - Fairy Lights
+  script.nick_bedtime:
+    name: Nick Bedtime
+    room: Nick's Bedroom
+    aliases:
+      - Bedtime

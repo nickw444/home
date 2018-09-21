@@ -1,0 +1,22 @@
+nick_bedtime:
+  # Turns on the lifx bedside lamp, turns off the downlights + fairy lights, then fade to darkness over 5 minutes.
+  sequence:
+    - service: switch.turn_off
+      data:
+        entity_id: switch.nicks_fairy_lights
+    - service: switch.turn_off
+      data:
+        entity_id: switch.nicks_downlights_bed
+    - service: switch.turn_off
+      data:
+        entity_id: switch.nicks_downlights_desk
+    - service: light.turn_on
+      data:
+        entity_id: light.bedside
+    - delay:
+        seconds: 10
+    - service: light.lifx_set_state
+      data:
+        entity_id: light.bedside
+        transition: 300 # 5 minutes
+        power: false
