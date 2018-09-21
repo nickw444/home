@@ -12,7 +12,12 @@ homeassistant:
   time_zone: Australia/Sydney
   # Customization file
   customize: !include_dir_merge_named ./config/customize
+  auth_providers:
+    - type: homeassistant
+    - type: legacy_api_password
+    - type: trusted_networks
 
+cloud:
 
 mqtt:
   broker: localhost
@@ -27,12 +32,18 @@ config:
 
 http:
   # Secrets are defined in the file secrets.yaml
-  # api_password: !secret http_password
+  api_password: !secret http_password
   # Uncomment this if you are using SSL/TLS, running in Docker container, etc.
   # base_url: example.duckdns.org:8123
   cors_allowed_origins:
     - https://reformedreality.com
     - http://reformedreality.com
+  use_x_forwarded_for: true
+  trusted_proxies:
+    - 127.0.0.1
+    - ::1
+  trusted_networks:
+    - 192.168.8.0/24
 
 # Checks for available updates
 # Note: This component will send some information about your system to
