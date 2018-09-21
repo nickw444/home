@@ -19,6 +19,11 @@ filter:
     - switch.sprinkle_back_yard_recycled_power
     - switch.sprinkle_recycled_pump_power
     - switch.nicks_downlights_3
+    - cover.blindkit_group_upstairs
+    - cover.blindkit_group_quiet_room
+    - cover.blindkit_group_nicks_blinds
+    - cover.blindkit_group_kitchen_rear
+    - cover.blindkit_group_kitchen_front
   exclude_domains:
     - device_tracker
     - script
