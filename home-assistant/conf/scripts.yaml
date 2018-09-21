@@ -1,5 +1,6 @@
 nick_bedtime:
   # Turns on the lifx bedside lamp, turns off the downlights + fairy lights, then fade to darkness over 5 minutes.
+  alias: Bedtime
   sequence:
     - service: switch.turn_off
       data:
