@@ -27,4 +27,3 @@ filter:
   exclude_domains:
     - device_tracker
     - script
-
