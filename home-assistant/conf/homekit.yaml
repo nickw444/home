@@ -18,6 +18,7 @@ filter:
     - switch.sprinkle_back_yard_power
     - switch.sprinkle_back_yard_recycled_power
     - switch.sprinkle_recycled_pump_power
+    - switch.nicks_downlights_3
   exclude_domains:
     - device_tracker
     - script
