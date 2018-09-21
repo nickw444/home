@@ -1,0 +1,63 @@
+filter:
+  include_entities:
+    - cover.blindkit_nicks_front
+    - cover.blindkit_nicks_side
+    - cover.blindkit_group_kitchen_front
+    - cover.blindkit_group_kitchen_rear
+    - cover.blindkit_group_upstairs
+    - light.bedside
+    - switch.nicks_downlights_bed
+    - switch.nicks_downlights_desk
+    - switch.nicks_fairy_lights
+entity_config:
+  cover.blindkit_nicks_front:
+    name: Nick's Front Blind
+    room: Nick's Bedroom
+    aliases:
+      - Front Blind
+      - Front Blinds
+  cover.blindkit_nicks_side:
+    name: Nick's Side Blind
+    room: Nick's Bedroom
+    aliases:
+      - Side Blind
+      - Side Blinds
+  cover.blindkit_group_kitchen_front:
+    name: Kitchen Front Blinds
+    room: Kitchen
+    aliases:
+      - Front Blinds
+  cover.blindkit_group_kitchen_rear:
+    name: Kitchen Rear Blinds
+    room: Kitchen
+    aliases:
+      - Rear Blinds
+      - Back Blinds
+  cover.blindkit_group_upstairs:
+    name: Upstairs Blinds
+    room: Upstairs
+  light.bedside:
+    name: Nicks Bedside
+    room: Nick's Bedroom
+    aliases:
+      - Bedside
+      - Bedside Lamp
+  switch.nicks_downlights_bed:
+    name: Nick's Bed Downlights
+    room: Nick's Bedroom
+    aliases:
+      - Bed Downlights
+      - Bed Lights
+      - Bed Ceiling Lights
+  switch.nicks_downlights_desk:
+    name: Nick's Desk Downlights
+    room: Nick's Bedroom
+    aliases:
+      - Desk Downlights
+      - Desk Lights
+      - Desk Ceiling Lights
+  switch.nicks_fairy_lights:
+    name: Nicks Fairy Lights
+    room: Nick's Bedroom
+    aliases:
+      - Fairy Lights

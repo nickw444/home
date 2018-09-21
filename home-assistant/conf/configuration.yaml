@@ -18,6 +18,7 @@ homeassistant:
     - type: trusted_networks
 
 cloud:
+  google_actions: !include google_actions.yaml
 
 mqtt:
   broker: localhost
@@ -92,7 +93,6 @@ media_player: !include_dir_merge_list config/media_player/
 camera: !include_dir_merge_list config/cameras/
 
 influxdb:
-google_assistant: !include google_assistant.yaml
 ffmpeg:
 
 panel_iframe:

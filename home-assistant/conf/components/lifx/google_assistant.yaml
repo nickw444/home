@@ -1,7 +1,0 @@
-light.bedside:
-  name: Nicks Bedside
-  expose: true
-  room: Nick's Bedroom
-  aliases:
-    - Bedside
-    - Bedside Lamp
