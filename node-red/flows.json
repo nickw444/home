@@ -28,6 +28,13 @@
         "info": ""
     },
     {
+        "id": "b7e87350.04a83",
+        "type": "tab",
+        "label": "Checkin",
+        "disabled": false,
+        "info": ""
+    },
+    {
         "id": "a5b319a.98d53e8",
         "type": "server",
         "z": "",
@@ -110,8 +117,8 @@
         "z": "e3920ec8.cf4b3",
         "name": "",
         "pauseType": "delay",
-        "timeout": "30",
-        "timeoutUnits": "seconds",
+        "timeout": "2",
+        "timeoutUnits": "minutes",
         "rate": "1",
         "nbRateUnits": "1",
         "rateUnits": "second",
@@ -1634,5 +1641,40 @@
         "x": 157.5,
         "y": 493,
         "wires": []
+    },
+    {
+        "id": "c42bc641.bb3e68",
+        "type": "inject",
+        "z": "b7e87350.04a83",
+        "name": "Every hour",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "3600",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 126.5,
+        "y": 211,
+        "wires": [
+            [
+                "5fbd87bb.9ddca8"
+            ]
+        ]
+    },
+    {
+        "id": "5fbd87bb.9ddca8",
+        "type": "http request",
+        "z": "b7e87350.04a83",
+        "name": "",
+        "method": "POST",
+        "ret": "txt",
+        "url": "https://hc-ping.com/fba5380e-fc82-4a16-b4d4-95470d269a2c",
+        "tls": "",
+        "x": 367.5,
+        "y": 211,
+        "wires": [
+            []
+        ]
     }
 ]
