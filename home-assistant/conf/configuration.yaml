@@ -18,6 +18,7 @@ homeassistant:
     - type: trusted_networks
 
 cloud:
+  google_actions: !include google_actions.yaml
 
 mqtt:
   broker: localhost

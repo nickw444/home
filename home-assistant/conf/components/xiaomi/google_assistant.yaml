@@ -1,6 +1,0 @@
-switch.nicks_fairy_lights:
-  name: Nicks Fairy Lights
-  expose: true
-  room: Nick's Bedroom
-  aliases:
-    - Fairy Lights
