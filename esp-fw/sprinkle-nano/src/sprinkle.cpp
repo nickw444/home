@@ -14,6 +14,8 @@
 uint8_t MAC_ADDRESS[6] = {0x12, 0xe0, 0x14, 0xec, 0x13, 0x82};
 String clientId = "sprinkle";
 String statusTopic = clientId + "/status";
+String uptimeTopic = clientId + "/uptime";
+String ipTopic = clientId + "/ip";
 String setTopic = clientId + "/+/set";
 
 EthernetClient ethClient;
@@ -51,8 +53,20 @@ void publishOutput(output *o) {
 }
 
 void publish() {
+  char buf[12];
+
   Serial.println(F("Publishing state"));
   mqttClient.publish(statusTopic.c_str(), STATUS_PAYLOAD_ONLINE, true);
+
+  // Publish Uptime
+  snprintf(buf, sizeof(buf), "%lu", millis());
+  mqttClient.publish(uptimeTopic.c_str(), buf, true);
+
+  // Publish IP
+  IPAddress ip = Ethernet.localIP();
+  snprintf(buf, sizeof(buf), "%d.%d.%d.%d", ip[0], ip[1], ip[2], ip[3]);
+  mqttClient.publish(ipTopic.c_str(), buf, true);
+
   for (size_t i = 0; i < NUM_OUTPUTS; i++) {
     output *o = &outputs[i];
     publishOutput(o);
