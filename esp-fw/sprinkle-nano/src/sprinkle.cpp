@@ -28,6 +28,7 @@ enum outputState {
 };
 
 struct output {
+  uint8_t id;
   uint8_t pin;
   outputState state;
   unsigned long offTime;
@@ -48,12 +49,12 @@ bool isOnState(outputState state) {
 
 void publishOutput(output *o) {
   char topic[20];
-  snprintf(topic, sizeof(topic), "%s/%d", clientId.c_str(), o->pin);
+  snprintf(topic, sizeof(topic), "%s/%d", clientId.c_str(), o->id);
   mqttClient.publish(topic, isOnState(o->state) ? "ON" : "OFF", true);
 }
 
 void publish() {
-  char buf[12];
+  char buf[16];
 
   Serial.println(F("Publishing state"));
   mqttClient.publish(statusTopic.c_str(), STATUS_PAYLOAD_ONLINE, true);
@@ -79,12 +80,12 @@ void writeOutput(output *o) {
 
 
 void callback(char* topic, byte* payload, unsigned int length) {
-  unsigned int pinNumber;
-  sscanf(topic + clientId.length() + 1, "%u/set", &pinNumber);
+  unsigned int outputId;
+  sscanf(topic + clientId.length() + 1, "%u/set", &outputId);
 
   output *o;
   for (size_t i = 0; i < NUM_OUTPUTS; i++) {
-    if (outputs[i].pin == pinNumber) {
+    if (outputs[i].id == outputId) {
       o = &outputs[i];
       break;
     }
@@ -141,7 +142,7 @@ void updateOutputs(unsigned long now) {
     output *o = &outputs[i];
     if (o->state == OUTPUT_STATE_TIMER && o->offTime < now) {
       Serial.print(F("Timer for output "));
-      Serial.print(o->pin);
+      Serial.print(o->id);
       Serial.println(F(" has expired"));
       o->state = OUTPUT_STATE_OFF;
       o->offTime = 0;
@@ -157,6 +158,7 @@ void initOutputs() {
   for (size_t i = 0; i < NUM_OUTPUTS; i++) {
     output *o = &outputs[i];
     o->pin = AVAILABLE_OUTPUTS[i];
+    o->id = i + 1;
     o->offTime = 0;
     o->state = OUTPUT_STATE_OFF;
     pinMode(o->pin, OUTPUT);
