@@ -105,8 +105,8 @@ void callback(char* topic, byte* payload, unsigned int length) {
     o->offTime = 0;
     o->state = OUTPUT_STATE_OFF;
   } else if (strncmp(buf, "ON", 2) == 0) {
-    unsigned int duration = 0;
-    if(sscanf(buf, "ON:%u", &duration) == 1) {
+    unsigned long duration = 0;
+    if(sscanf(buf, "ON:%lu", &duration) == 1) {
       o->offTime = millis() + duration * 1000;
       o->state = OUTPUT_STATE_TIMER;
     } else {
