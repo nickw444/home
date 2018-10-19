@@ -26,12 +26,12 @@ blinds:
 family:
   name: Family
   entities:
-    - device_tracker.charlottes_iphone
+    - device_tracker.charlotte_phone
     - device_tracker.joesiphone
     - device_tracker.louises7iphone
     - device_tracker.nicksiphone
     - device_tracker.oliversiphone
-    - device_tracker.prwiphone6s
+    - device_tracker.peter_phone
 
 energy:
   name: Energy
