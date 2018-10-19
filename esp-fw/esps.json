@@ -39,7 +39,7 @@
     "model": "Blindkit",
     "mac": "18:fe:34:99:d2:74",
     "hostname": "esp_99d274",
-    "ip": "192.168.8.185",
+    "ip": "192.168.8.155",
     "static": false,
     "mqtt_prefix": "/things/blindkit/18fe3499d274",
     "ota_method": "ArduinoOTA",

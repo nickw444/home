@@ -20,6 +20,7 @@ void callback(char* topic, byte* payload, unsigned int length);
 
 void setupWifi() {
   Serial.printf("Connecting to %s\n", WIFI_SSID);
+  WiFi.mode(WIFI_STA);
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
 
   // TODO: Possibly handle ungraceful wifi disconnects.
