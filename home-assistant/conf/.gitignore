@@ -14,3 +14,5 @@ entity_registry.yaml
 plex.conf
 deps
 .ios.conf
+.storage
+
