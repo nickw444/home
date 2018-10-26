@@ -144,7 +144,7 @@
         "halt_if": "",
         "override_topic": true,
         "override_payload": true,
-        "entity_id": "group.all_devices",
+        "entity_id": "group.family",
         "x": 510.5,
         "y": 222,
         "wires": [
@@ -235,7 +235,7 @@
         "z": "e3920ec8.cf4b3",
         "name": "family not home",
         "server": "a5b319a.98d53e8",
-        "entityid": "group.all_devices",
+        "entityid": "group.family",
         "debugenabled": false,
         "constraints": [],
         "constraintsmustmatch": "all",
@@ -897,7 +897,7 @@
         "id": "58f57586.49402c",
         "type": "comment",
         "z": "e3920ec8.cf4b3",
-        "name": "Wait 30s to ensure that family devices connect to wifi",
+        "name": "Wait 2min to ensure that family devices connect to wifi",
         "info": "",
         "x": 478.5,
         "y": 98,
@@ -1673,6 +1673,59 @@
         "tls": "",
         "x": 367.5,
         "y": 211,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "a6b9d0e2.6180b",
+        "type": "inject",
+        "z": "b7e87350.04a83",
+        "name": "3am Every Day",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "00 03 * * *",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 136.5,
+        "y": 275,
+        "wires": [
+            [
+                "fd98af35.01ac1",
+                "13027f67.63b651"
+            ]
+        ]
+    },
+    {
+        "id": "fd98af35.01ac1",
+        "type": "api-call-service",
+        "z": "b7e87350.04a83",
+        "name": "Purge History (Keep 10 Days)",
+        "server": "a5b319a.98d53e8",
+        "service_domain": "recorder",
+        "service": "purge",
+        "data": "{\"keep_days\": 10, \"repack\": true}",
+        "mergecontext": "",
+        "x": 419.5,
+        "y": 275,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "13027f67.63b651",
+        "type": "api-call-service",
+        "z": "b7e87350.04a83",
+        "name": "Log Automation",
+        "server": "a5b319a.98d53e8",
+        "service_domain": "logbook",
+        "service": "log",
+        "data": "{ \"name\": \"Automation Started\", \"message\": \"History purge requested\" }",
+        "mergecontext": "",
+        "x": 380,
+        "y": 318,
         "wires": [
             []
         ]
