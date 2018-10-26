@@ -45,7 +45,7 @@ services:
     nodered:
         restart: always
         container_name: nodered
-        image: nodered/node-red-docker:0.18.7-v8
+        image: nodered/node-red-docker:0.19.4-v8
         volumes:
             - "/etc/homekit/node-red:/data"
             - "/etc/localtime:/etc/localtime:ro"

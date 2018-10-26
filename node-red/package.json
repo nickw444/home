@@ -3,6 +3,11 @@
   "description": "A Node-RED Project",
   "version": "0.0.1",
   "dependencies": {
-    "node-red-contrib-home-assistant": "~0.3.2"
+    "node-red-contrib-home-assistant": "^0.3.2",
+    "node-red-node-email": "~1.0.6",
+    "node-red-node-feedparser": "~0.1.14",
+    "node-red-node-random": "^0.1.2",
+    "node-red-node-rbe": "~0.2.4",
+    "node-red-node-twitter": "~1.1.4"
   }
 }
