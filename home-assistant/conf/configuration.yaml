@@ -104,3 +104,6 @@ panel_iframe:
     title: Node Red
     icon: mdi:robot
     url: 'https://node-red.store.home'
+
+# Enable Lifx component
+lifx:
