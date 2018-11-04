@@ -5,6 +5,7 @@ outdoor:
     - group.sprinklers
     - switch.sprinkle_tree_lights
     - group.weather
+    - group.stats
 
 sprinklers:
   name: Sprinklers
@@ -25,3 +26,8 @@ weather:
   entities:
     - sensor.outdoor_temperature
     - sensor.outdoor_humidity
+
+stats:
+  name: Stats
+  entities:
+    - sensor.sprinkle_uptime_friendly
