@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include <PubSubClient.h>
-#include <UIPEthernet.h>
+#include <Ethernet.h>
+
 
 #include "../../config.h"
 

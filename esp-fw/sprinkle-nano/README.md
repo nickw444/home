@@ -18,13 +18,11 @@ Payload will be in the following formats:
 - `ON:12320` - turn on for `12320` seconds
 
 
-## Wiring ENC28J60
+## Wiring W5100
 
-The firmware uses UIPEthernet which has the following pin configuration:
-
-- `CS` -> `D10`
-- `SO` -> `D12`
-- `SI` -> `D11`
-- `SCK` -> `D13`
-- `VCC` -> `VCC`
+- `CS` (`NSS`) -> `D10`
+- `MOSI` (`MO`) -> `D11`
+- `MISO` (`MI`) -> `D12`
+- `SCK` (`SOK`) -> `D13`
+- `VCC` -> `5v`
 - `GND` -> `GND`
