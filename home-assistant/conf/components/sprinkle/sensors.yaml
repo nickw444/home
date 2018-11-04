@@ -9,5 +9,5 @@
     sprinkle_uptime_friendly:
       friendly_name: Sprinkle Uptime
       value_template: >-
-        {{states('sensor.sprinkle_uptime') | int / 1000 / 60 }}
+        {{(states('sensor.sprinkle_uptime') | int / 1000 / 60) | round(0) }}
       unit_of_measurement: minutes
