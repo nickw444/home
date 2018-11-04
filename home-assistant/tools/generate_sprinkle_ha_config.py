@@ -8,33 +8,35 @@ from collections import defaultdict
 from ruamel.yaml import YAML, scalarstring
 
 yaml = YAML()
-config = defaultdict(lambda: (datetime.timedelta(minutes=10), 'mdi:water'))
-config['tree_lights'] = (None, 'mdi:tree')
 
 def main():
     file = sys.argv[1]
     f = open(file)
     data = yaml.load(f)
 
-    topic_prefix = data['mqtt']['topic_prefix']
+    topic_prefix = data['topic_prefix']
 
-    availability_topic = topic_prefix + '/' + data['mqtt']['status_topic']
+    availability_topic = topic_prefix + '/' + data['status_topic']
 
     tmpl_switches = {}
     switches = []
     customize = {}
 
-    for entry in data['digital_outputs']:
+    for entry in data['outputs']:
         base_config = {
             'platform': 'mqtt',
             'availability_topic': availability_topic,
         }
-        base_topic = topic_prefix + '/output/' + entry['name']
+        base_topic = '{}/{}'.format(
+            topic_prefix,
+            entry['id']
+        )
         base_name = 'sprinkle_' + entry['name']
 
-        on_time, icon = config[entry['name']]
+        duration = entry.get('duration')
+        icon = entry['icon']
 
-        if on_time is None:
+        if duration is None:
             switches.append({
                 **base_config,
                 'name': base_name,
@@ -46,7 +48,6 @@ def main():
                 'qos': 1
             })
         else:
-            on_time_ms = round(on_time.total_seconds() * 1000)
             switches.append({
                 **base_config,
                 'name': base_name + '_power',
@@ -60,8 +61,8 @@ def main():
             switches.append({
                 **base_config,
                 'name': base_name + '_trigger',
-                'command_topic': base_topic + '/set_on_ms',
-                'payload_on': on_time_ms,
+                'command_topic': base_topic + '/set',
+                'payload_on': 'ON:{}'.format(duration),
                 'qos': 1
             })
 

@@ -15,7 +15,7 @@ sprinklers:
     - switch.sprinkle_back_yard
     - switch.sprinkle_back_yard_recycled
     - switch.sprinkle_front_terrace
-    - switch.sprinkle_recycled_front_terrace
+    - switch.sprinkle_front_terrace_recycled
     - switch.sprinkle_lower_lawn
     - switch.sprinkle_upper_lawn
     - switch.sprinkle_recycled_pump
