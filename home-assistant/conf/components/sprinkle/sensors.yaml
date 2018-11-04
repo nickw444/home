@@ -1,0 +1,5 @@
+- platform: mqtt
+  name: Sprinkle Uptime
+  state_topic: sprinkle/uptime
+  availability_topic: sprinkle/status
+  unit_of_measurement: ms
