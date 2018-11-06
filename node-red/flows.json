@@ -1859,57 +1859,5 @@
         "wires": [
             []
         ]
-    },
-    {
-        "id": "aa229471.c1c638",
-        "type": "api-current-state",
-        "z": "e3920ec8.cf4b3",
-        "name": "garage state",
-        "server": "a5b319a.98d53e8",
-        "halt_if": "",
-        "override_topic": true,
-        "override_payload": true,
-        "entity_id": "cover.garage",
-        "x": 206,
-        "y": 407,
-        "wires": [
-            [
-                "aa992239.120fb"
-            ]
-        ]
-    },
-    {
-        "id": "aa992239.120fb",
-        "type": "debug",
-        "z": "e3920ec8.cf4b3",
-        "name": "",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "x": 385.5,
-        "y": 384,
-        "wires": []
-    },
-    {
-        "id": "3a650176.4e5ece",
-        "type": "inject",
-        "z": "e3920ec8.cf4b3",
-        "name": "",
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "x": 106,
-        "y": 336,
-        "wires": [
-            [
-                "aa229471.c1c638"
-            ]
-        ]
     }
 ]
