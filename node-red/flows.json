@@ -39,8 +39,7 @@
         "type": "server",
         "z": "",
         "name": "Home Assistant",
-        "url": "http://localhost:8123",
-        "pass": ""
+        "legacy": true
     },
     {
         "id": "7dbe3d22.ccacd4",
@@ -493,7 +492,7 @@
         "name": "Sunset",
         "server": "a5b319a.98d53e8",
         "entityid": "sun.sun",
-        "debugenabled": false,
+        "debugenabled": true,
         "constraints": [
             {
                 "id": "wzm8naqcds",
@@ -509,8 +508,8 @@
         "constraintsmustmatch": "all",
         "outputs": 2,
         "customoutputs": [],
-        "x": 172.5,
-        "y": 101,
+        "x": 133.5,
+        "y": 102,
         "wires": [
             [
                 "4a23578d.7942d8",
@@ -613,12 +612,12 @@
         "id": "446b0a54.1695a4",
         "type": "inject",
         "z": "562c7339.e576bc",
-        "name": "Daily at 14:00",
+        "name": "Daily at 10:00",
         "topic": "",
         "payload": "",
         "payloadType": "date",
         "repeat": "",
-        "crontab": "00 14 * * *",
+        "crontab": "00 10 * * *",
         "once": false,
         "onceDelay": 0.1,
         "x": 133,
@@ -909,6 +908,7 @@
         "z": "e3920ec8.cf4b3",
         "name": "",
         "server": "a5b319a.98d53e8",
+        "event_type": "",
         "x": 177.5,
         "y": 672,
         "wires": [
@@ -1478,7 +1478,7 @@
         "server": "a5b319a.98d53e8",
         "service_domain": "logbook",
         "service": "log",
-        "data": "{ \"name\": \"Automation Started\", \"message\": \"Water herbs & lavender at 2pm\" }",
+        "data": "{ \"name\": \"Automation Started\", \"message\": \"Water herbs & lavender at 10am\" }",
         "mergecontext": "",
         "x": 380,
         "y": 635,
@@ -1583,26 +1583,6 @@
         ]
     },
     {
-        "id": "abe1a708.65d4b8",
-        "type": "inject",
-        "z": "25f1e9b0.2f2f06",
-        "name": "",
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "x": 1042.5,
-        "y": 141,
-        "wires": [
-            [
-                "5054fff2.88504"
-            ]
-        ]
-    },
-    {
         "id": "7c0abf60.b8986",
         "type": "comment",
         "z": "562c7339.e576bc",
@@ -1636,7 +1616,7 @@
         "id": "81d1692c.3e0038",
         "type": "comment",
         "z": "562c7339.e576bc",
-        "name": "Water herbs & lavender at 2pm",
+        "name": "Water herbs & lavender at 10am",
         "info": "",
         "x": 157.5,
         "y": 493,
@@ -1726,6 +1706,145 @@
         "mergecontext": "",
         "x": 380,
         "y": 318,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "36470df7.a2a892",
+        "type": "api-current-state",
+        "z": "562c7339.e576bc",
+        "name": "Current Temperature",
+        "server": "a5b319a.98d53e8",
+        "halt_if": "",
+        "override_topic": true,
+        "override_payload": true,
+        "entity_id": "sensor.bom_sydney_airport_air_temp_c",
+        "x": 265.5,
+        "y": 822,
+        "wires": [
+            [
+                "d10a9d3a.2eded"
+            ]
+        ]
+    },
+    {
+        "id": "48112af4.521d84",
+        "type": "inject",
+        "z": "562c7339.e576bc",
+        "name": "Daily at 15:00",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "00 15 * * *",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 123,
+        "y": 765,
+        "wires": [
+            [
+                "36470df7.a2a892"
+            ]
+        ]
+    },
+    {
+        "id": "2d7de9da.060866",
+        "type": "comment",
+        "z": "562c7339.e576bc",
+        "name": "Water herbs & lavender at 3pm if it is hot",
+        "info": "",
+        "x": 193,
+        "y": 719,
+        "wires": []
+    },
+    {
+        "id": "2df5f742.a9d0c8",
+        "type": "switch",
+        "z": "562c7339.e576bc",
+        "name": "> 27º",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "gt",
+                "v": "27",
+                "vt": "num"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 213.5,
+        "y": 912,
+        "wires": [
+            [
+                "6f55e62b.dff2f8",
+                "b90bc789.5d16d8",
+                "1b71fa15.c41fb6"
+            ]
+        ]
+    },
+    {
+        "id": "d10a9d3a.2eded",
+        "type": "function",
+        "z": "562c7339.e576bc",
+        "name": "parseInt",
+        "func": "return {\n    payload: Number(msg.payload)\n}",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 224.5,
+        "y": 869,
+        "wires": [
+            [
+                "2df5f742.a9d0c8"
+            ]
+        ]
+    },
+    {
+        "id": "6f55e62b.dff2f8",
+        "type": "api-call-service",
+        "z": "562c7339.e576bc",
+        "name": "Log Automation",
+        "server": "a5b319a.98d53e8",
+        "service_domain": "logbook",
+        "service": "log",
+        "data": "{ \"name\": \"Automation Started\", \"message\": \"Water herbs & lavender at 3pm when it is hot\" }",
+        "mergecontext": "",
+        "x": 293,
+        "y": 971,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "b90bc789.5d16d8",
+        "type": "api-call-service",
+        "z": "562c7339.e576bc",
+        "name": "Herbs (on)",
+        "server": "a5b319a.98d53e8",
+        "service_domain": "switch",
+        "service": "turn_on",
+        "data": "{\"entity_id\": \"switch.sprinkle_herbs\"}",
+        "mergecontext": "",
+        "x": 284,
+        "y": 1009,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "1b71fa15.c41fb6",
+        "type": "api-call-service",
+        "z": "562c7339.e576bc",
+        "name": "Notify",
+        "server": "a5b319a.98d53e8",
+        "service_domain": "telegram_bot",
+        "service": "send_message",
+        "data": "{\"message\": \"It's hot today, so I am giving the herbs some extra water\"}",
+        "mergecontext": "",
+        "x": 265,
+        "y": 1047,
         "wires": [
             []
         ]

@@ -45,6 +45,7 @@ http:
     - ::1
   trusted_networks:
     - 192.168.8.0/24
+    - 192.168.24.0/24
 
 # Checks for available updates
 # Note: This component will send some information about your system to
