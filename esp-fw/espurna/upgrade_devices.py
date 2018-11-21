@@ -34,6 +34,8 @@ def download_binary(name, url):
     with open(out_file_path, 'wb') as out_file:
         out_file.write(resp.content)
 
+    return out_file_path
+
 
 def main():
     latest_release = find_latest_release()
