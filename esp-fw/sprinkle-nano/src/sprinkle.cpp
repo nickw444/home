@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include <PubSubClient.h>
 #include <Ethernet.h>
+#include <avr/wdt.h>
 
 
 #include "../../config.h"
@@ -170,6 +171,7 @@ void initOutputs() {
 void initNetwork() {
   Serial.println(F("Ethernet connecting.."));
   while (Ethernet.begin(MAC_ADDRESS) == 0) {
+    wdt_reset();
     Serial.println(F("DHCP failed. Retrying.."));
   }
   Serial.print(F("Ethernet connected. IP: "));
@@ -187,6 +189,11 @@ unsigned long lastRelayUpdateTime;
 unsigned long lastPublishTime;
 
 void setup() {
+  wdt_disable();
+  // Force a pause to allow an IDE to reconnect/flash.
+  delay(2L * 1000L);
+  wdt_enable(WDTO_8S);
+
   Serial.begin(115200);
 
   initOutputs();
@@ -199,10 +206,13 @@ void setup() {
   // Request a publish immediately on connect.
   lastPublishTime = 0;
 
+  wdt_reset();
   mqttReconnect();
 }
 
 void loop() {
+  wdt_reset();
+  
   unsigned long now = millis();
 
   if (!mqttClient.loop() && now - lastConnectionAttempt > MQTT_CONNECT_RETRY_MS) {
