@@ -673,7 +673,7 @@
         "randomUnits": "seconds",
         "drop": false,
         "x": 370.5,
-        "y": 584,
+        "y": 600,
         "wires": [
             [
                 "d10891a6.d56e4"
@@ -691,7 +691,7 @@
         "data": "{\"entity_id\": \"switch.sprinkle_lavender\"}",
         "mergecontext": "",
         "x": 561,
-        "y": 584,
+        "y": 600,
         "wires": [
             []
         ]
@@ -1492,7 +1492,7 @@
         "data": "{ \"name\": \"Automation Started\", \"message\": \"Water herbs & lavender at 10am\" }",
         "mergecontext": "",
         "x": 380,
-        "y": 635,
+        "y": 651,
         "wires": [
             []
         ]
@@ -1787,7 +1787,7 @@
         "repair": false,
         "outputs": 1,
         "x": 213.5,
-        "y": 912,
+        "y": 937,
         "wires": [
             [
                 "6f55e62b.dff2f8",
@@ -1805,7 +1805,7 @@
         "outputs": 1,
         "noerr": 0,
         "x": 224.5,
-        "y": 869,
+        "y": 894,
         "wires": [
             [
                 "2df5f742.a9d0c8"
@@ -1822,8 +1822,8 @@
         "service": "log",
         "data": "{ \"name\": \"Automation Started\", \"message\": \"Water herbs & lavender at 3pm when it is hot\" }",
         "mergecontext": "",
-        "x": 293,
-        "y": 971,
+        "x": 408,
+        "y": 934,
         "wires": [
             []
         ]
@@ -1838,8 +1838,8 @@
         "service": "turn_on",
         "data": "{\"entity_id\": \"switch.sprinkle_herbs\"}",
         "mergecontext": "",
-        "x": 284,
-        "y": 1009,
+        "x": 398,
+        "y": 988,
         "wires": [
             []
         ]
@@ -1854,8 +1854,8 @@
         "service": "send_message",
         "data": "{\"message\": \"It's hot today, so I am giving the herbs some extra water\"}",
         "mergecontext": "",
-        "x": 265,
-        "y": 1047,
+        "x": 376,
+        "y": 1042,
         "wires": [
             []
         ]
