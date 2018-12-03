@@ -15,3 +15,4 @@ plex.conf
 deps
 .ios.conf
 .storage
+custom_components
