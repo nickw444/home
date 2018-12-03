@@ -108,3 +108,26 @@ panel_iframe:
 
 # Enable Lifx component
 lifx:
+
+ness_alarm:
+  host: alarm.home
+  port: 2401
+  zones:
+    - name: Garage x2
+      id: 1
+    - name: Storeroom
+      id: 2
+    - name: Kitchen
+      id: 3
+    - name: Front Entrance
+      id: 4
+    - name: Quiet Room
+      id: 5
+    - name: Toy Room
+      id: 6
+    - name: Joes Bedroom
+      id: 7
+    - name: Master Bedroom
+      id: 8
+    - name: Upstairs Hall
+      id: 9

@@ -6,6 +6,7 @@ default_view:
     - group.doors
     - group.blinds
     - group.energy
+    - group.alarm
     - group.home_climate
     - group.bom_weather
     - group.family
@@ -62,3 +63,18 @@ home_climate:
     - sensor.upstairs_broadlink_temperature
     - sensor.upstairs_humidity
     - sensor.upstairs_temperature
+
+alarm:
+  name: Alarm
+  entities:
+    - alarm_control_panel.alarm_panel
+    - binary_sensor.front_entrance
+    - binary_sensor.garage_x2
+    - binary_sensor.joes_bedroom
+    - binary_sensor.kitchen
+    - binary_sensor.master_bedroom
+    - binary_sensor.quiet_room
+    - binary_sensor.storeroom
+    - binary_sensor.toy_room
+    - binary_sensor.upstairs_hall
+
