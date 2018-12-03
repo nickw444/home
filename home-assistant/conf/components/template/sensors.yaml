@@ -1,5 +1,0 @@
-- platform: template
-  sensors:
-    people_at_home:
-      friendly_name: "People at home"
-      value_template: "{{states.device_tracker | selectattr('state_with_unit', 'equalto', 'home') |list | length}}"
