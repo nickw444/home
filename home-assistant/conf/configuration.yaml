@@ -111,7 +111,7 @@ lifx:
 
 ness_alarm:
   host: alarm.home
-  port: 2401
+  port: 8234
   zones:
     - name: Garage x2
       id: 1
