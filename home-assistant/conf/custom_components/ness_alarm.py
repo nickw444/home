@@ -4,7 +4,6 @@ Support for Ness D8X/D16X devices.
 For more details about this component, please refer to the documentation at
 https://home-assistant.io/components/ness_alarm/
 """
-import asyncio
 import logging
 from collections import namedtuple
 
@@ -16,7 +15,7 @@ from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers.discovery import async_load_platform
 from homeassistant.helpers.dispatcher import async_dispatcher_send
 
-REQUIREMENTS = ['nessclient==0.9.2']
+REQUIREMENTS = ['nessclient==0.9.6']
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -29,9 +28,9 @@ CONF_ZONES = 'zones'
 CONF_ZONE_NAME = 'name'
 CONF_ZONE_TYPE = 'type'
 CONF_ZONE_ID = 'id'
-CONF_CODE = 'code'
-CONF_OUTPUT_ID = 'output_id'
-CONF_STATE = 'state'
+ATTR_CODE = 'code'
+ATTR_OUTPUT_ID = 'output_id'
+ATTR_STATE = 'state'
 
 SIGNAL_ZONE_CHANGED = 'ness_alarm.zone_changed'
 SIGNAL_ARMING_STATE_CHANGED = 'ness_alarm.arming_state_changed'
@@ -57,11 +56,11 @@ SERVICE_PANIC = 'panic'
 SERVICE_AUX = 'aux'
 
 SERVICE_SCHEMA_PANIC = vol.Schema({
-    vol.Required(CONF_CODE): cv.string,
+    vol.Required(ATTR_CODE): cv.string,
 })
 SERVICE_SCHEMA_AUX = vol.Schema({
-    vol.Required(CONF_OUTPUT_ID): cv.positive_int,
-    vol.Optional(CONF_STATE, default=True): cv.boolean,
+    vol.Required(ATTR_OUTPUT_ID): cv.positive_int,
+    vol.Optional(ATTR_STATE, default=True): cv.boolean,
 })
 
 
@@ -70,26 +69,23 @@ async def async_setup(hass, config):
     from nessclient import Client, ArmingState
     conf = config[DOMAIN]
 
-    zones = conf.get(CONF_ZONES)
-    host = conf.get(CONF_DEVICE_HOST)
-    port = conf.get(CONF_DEVICE_PORT)
+    zones = conf.get(CONF_ZONES, [])
+    host = conf[CONF_DEVICE_HOST]
+    port = conf[CONF_DEVICE_PORT]
 
     client = Client(host=host, port=port, loop=hass.loop)
     hass.data[DATA_NESS] = client
 
-    async def _close():
-        client.close()
+    async def _close(event):
+        await client.close()
 
-    hass.bus.async_listen_once(EVENT_HOMEASSISTANT_STOP, _close())
+    hass.bus.async_listen_once(EVENT_HOMEASSISTANT_STOP, _close)
 
-    task_zones = hass.async_create_task(
-        async_load_platform(
-            hass, 'binary_sensor', DOMAIN, {CONF_ZONES: zones}, config))
-    task_control_panel = hass.async_create_task(
-        async_load_platform(
-            hass, 'alarm_control_panel', DOMAIN, conf, config))
-
-    await asyncio.wait([task_zones, task_control_panel])
+    hass.async_create_task(
+        async_load_platform(hass, 'binary_sensor', DOMAIN, {CONF_ZONES: zones},
+                            config))
+    hass.async_create_task(
+        async_load_platform(hass, 'alarm_control_panel', DOMAIN, {}, config))
 
     def on_zone_change(zone_id: int, state: bool):
         """Receives and propagates zone state updates."""
@@ -110,10 +106,10 @@ async def async_setup(hass, config):
     hass.loop.create_task(client.update())
 
     async def handle_panic(call):
-        await client.panic(call.data[CONF_CODE])
+        await client.panic(call.data[ATTR_CODE])
 
     async def handle_aux(call):
-        await client.aux(call.data[CONF_OUTPUT_ID], call.data[CONF_STATE])
+        await client.aux(call.data[ATTR_OUTPUT_ID], call.data[ATTR_STATE])
 
     hass.services.async_register(DOMAIN, 'panic', handle_panic,
                                  schema=SERVICE_SCHEMA_PANIC)

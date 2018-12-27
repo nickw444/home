@@ -21,23 +21,24 @@ _LOGGER = logging.getLogger(__name__)
 DEPENDENCIES = ['ness_alarm']
 
 
-async def async_setup_platform(hass, config, async_add_devices,
+async def async_setup_platform(hass, config, async_add_entities,
                                discovery_info=None):
     """Set up the Ness Alarm alarm control panel devices."""
-    if not discovery_info:
+    if discovery_info is None:
         return
 
-    device = NessAlarmPanel('Alarm Panel')
-    async_add_devices([device])
+    device = NessAlarmPanel(hass.data[DATA_NESS], 'Alarm Panel')
+    async_add_entities([device])
 
 
 class NessAlarmPanel(alarm.AlarmControlPanel):
     """Representation of a Ness alarm panel."""
 
-    def __init__(self, name):
+    def __init__(self, client, name):
         """Initialize the alarm panel."""
+        self._client = client
         self._name = name
-        self._state = STATE_UNKNOWN
+        self._state = None
         self._available = False
 
     async def async_added_to_hass(self):
@@ -73,19 +74,19 @@ class NessAlarmPanel(alarm.AlarmControlPanel):
 
     async def async_alarm_disarm(self, code=None):
         """Send disarm command."""
-        await self.hass.data[DATA_NESS].disarm(code)
+        await self._client.disarm(code)
 
     async def async_alarm_arm_away(self, code=None):
         """Send arm away command."""
-        await self.hass.data[DATA_NESS].arm_away(code)
+        await self._client.arm_away(code)
 
     async def async_alarm_arm_home(self, code=None):
         """Send arm home command."""
-        await self.hass.data[DATA_NESS].arm_home(code)
+        await self._client.arm_home(code)
 
     async def async_alarm_trigger(self, code=None):
         """Send trigger/panic command."""
-        await self.hass.data[DATA_NESS].panic(code)
+        await self._client.panic(code)
 
     @callback
     def _handle_arming_state_change(self, arming_state):
@@ -94,7 +95,7 @@ class NessAlarmPanel(alarm.AlarmControlPanel):
 
         self._available = True
         if arming_state == ArmingState.UNKNOWN:
-            self._state = STATE_UNKNOWN
+            self._state = None
         elif arming_state == ArmingState.DISARMED:
             self._state = STATE_ALARM_DISARMED
         elif arming_state == ArmingState.ARMING:
