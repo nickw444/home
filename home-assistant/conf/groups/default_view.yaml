@@ -68,6 +68,7 @@ alarm:
   name: Alarm
   entities:
     - alarm_control_panel.alarm_panel
+    - input_boolean.alarm_auto_arm
     - binary_sensor.front_entrance
     - binary_sensor.garage_x2
     - binary_sensor.joes_bedroom
@@ -77,4 +78,3 @@ alarm:
     - binary_sensor.storeroom
     - binary_sensor.toy_room
     - binary_sensor.upstairs_hall
-
