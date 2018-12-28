@@ -92,6 +92,7 @@ device_tracker: !include_dir_merge_list config/device_trackers/
 sensor: !include_dir_merge_list config/sensors/
 media_player: !include_dir_merge_list config/media_player/
 camera: !include_dir_merge_list config/cameras/
+input_boolean: !include_dir_merge_named config/input_booleans/
 
 influxdb:
 ffmpeg:
@@ -109,25 +110,4 @@ panel_iframe:
 # Enable Lifx component
 lifx:
 
-ness_alarm:
-  host: alarm.home
-  port: 8234
-  zones:
-    - name: Garage x2
-      id: 1
-    - name: Storeroom
-      id: 2
-    - name: Kitchen
-      id: 3
-    - name: Front Entrance
-      id: 4
-    - name: Quiet Room
-      id: 5
-    - name: Toy Room
-      id: 6
-    - name: Joes Bedroom
-      id: 7
-    - name: Master Bedroom
-      id: 8
-    - name: Upstairs Hall
-      id: 9
+ness_alarm: !include components/alarm/ness_alarm.yaml
