@@ -139,6 +139,11 @@ void setup() {
 void loop() {
   int now = millis();
 
+  if (WiFi.status() != WL_CONNECTED) {
+    Serial.printf("WiFI not connected. Resetting...");
+    ESP.reset();
+  }
+
   stateBounce.update();
 
   if (!client.loop() && now - lastConnectionAttempt > MQTT_CONNECT_RETRY_MS) {
