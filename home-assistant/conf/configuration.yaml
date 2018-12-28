@@ -110,4 +110,4 @@ panel_iframe:
 # Enable Lifx component
 lifx:
 
-ness_alarm: !include components/ness_alarm.yaml
+ness_alarm: !include components/alarm/ness_alarm.yaml
