@@ -92,7 +92,7 @@ device_tracker: !include_dir_merge_list config/device_trackers/
 sensor: !include_dir_merge_list config/sensors/
 media_player: !include_dir_merge_list config/media_player/
 camera: !include_dir_merge_list config/cameras/
-input_boolean: !include_dir_merge_list config/input_booleans/
+input_boolean: !include_dir_merge_named config/input_booleans/
 
 influxdb:
 ffmpeg:
