@@ -35,11 +35,21 @@
         "info": ""
     },
     {
+        "id": "2ecd8f9e.7058d",
+        "type": "tab",
+        "label": "Alarm",
+        "disabled": false,
+        "info": ""
+    },
+    {
         "id": "a5b319a.98d53e8",
         "type": "server",
         "z": "",
         "name": "Home Assistant",
-        "legacy": true
+        "legacy": false,
+        "hassio": false,
+        "rejectUnauthorizedCerts": false,
+        "ha_boolean": "y|yes|true|on|home|open"
     },
     {
         "id": "7dbe3d22.ccacd4",
@@ -85,6 +95,7 @@
         "name": "garage opened",
         "server": "a5b319a.98d53e8",
         "entityid": "cover.garage",
+        "entityidfiltertype": "exact",
         "debugenabled": false,
         "constraints": [
             {
@@ -144,6 +155,7 @@
         "override_topic": true,
         "override_payload": true,
         "entity_id": "group.family",
+        "outputs": 1,
         "x": 510.5,
         "y": 222,
         "wires": [
@@ -191,6 +203,7 @@
         "override_topic": true,
         "override_payload": true,
         "entity_id": "cover.garage",
+        "outputs": 1,
         "x": 511.5,
         "y": 271,
         "wires": [
@@ -232,15 +245,17 @@
         "id": "45494b98.c08134",
         "type": "trigger-state",
         "z": "e3920ec8.cf4b3",
-        "name": "family not home",
+        "name": "family state change",
         "server": "a5b319a.98d53e8",
         "entityid": "group.family",
+        "entityidfiltertype": "exact",
         "debugenabled": false,
         "constraints": [],
         "constraintsmustmatch": "all",
         "outputs": 2,
         "customoutputs": [],
-        "x": 142,
+        "outputinitially": false,
+        "x": 152,
         "y": 115,
         "wires": [
             [
@@ -324,6 +339,7 @@
         "override_topic": true,
         "override_payload": true,
         "entity_id": "switch.nicks_fairy_lights",
+        "outputs": 1,
         "x": 366.5,
         "y": 137,
         "wires": [
@@ -342,6 +358,7 @@
         "override_topic": true,
         "override_payload": true,
         "entity_id": "light.bedside",
+        "outputs": 1,
         "x": 355,
         "y": 179,
         "wires": [
@@ -477,6 +494,7 @@
         "override_topic": true,
         "override_payload": true,
         "entity_id": "cover.garage",
+        "outputs": 1,
         "x": 504,
         "y": 486,
         "wires": [
@@ -702,7 +720,7 @@
         "z": "25f1e9b0.2f2f06",
         "name": "Family & Kitch up 6.15am",
         "info": "",
-        "x": 172.5,
+        "x": 170.5,
         "y": 46,
         "wires": []
     },
@@ -710,17 +728,17 @@
         "id": "c22e5247.8cc18",
         "type": "comment",
         "z": "25f1e9b0.2f2f06",
-        "name": "Family & Kitch Part Down 5:30pm",
+        "name": "Family & Kitch Part Down 7:00pm",
         "info": "",
-        "x": 184,
-        "y": 202,
+        "x": 178,
+        "y": 205,
         "wires": []
     },
     {
         "id": "252a75a5.276bba",
         "type": "comment",
         "z": "25f1e9b0.2f2f06",
-        "name": "Family & Kitch Down all 10pm",
+        "name": "Family & Kitch Down all 11pm",
         "info": "",
         "x": 151,
         "y": 369,
@@ -740,10 +758,10 @@
         "id": "be4269c6.94dff8",
         "type": "comment",
         "z": "25f1e9b0.2f2f06",
-        "name": "Up-Hall Blockout Down 5.30pm",
+        "name": "Up-Hall Blockout Down 7:00pm",
         "info": "",
         "x": 157.5,
-        "y": 663,
+        "y": 676,
         "wires": []
     },
     {
@@ -781,12 +799,12 @@
         "id": "15faf7e1.506d88",
         "type": "inject",
         "z": "25f1e9b0.2f2f06",
-        "name": "Daily at 5:30pm",
+        "name": "Daily at 7:00pm",
         "topic": "",
         "payload": "",
         "payloadType": "date",
         "repeat": "",
-        "crontab": "30 17 * * *",
+        "crontab": "00 19 * * *",
         "once": false,
         "onceDelay": 0.1,
         "x": 147,
@@ -818,12 +836,12 @@
         "id": "a7753acf.02d068",
         "type": "inject",
         "z": "25f1e9b0.2f2f06",
-        "name": "Daily at 10:00pm",
+        "name": "Daily at 11:00pm",
         "topic": "",
         "payload": "",
         "payloadType": "date",
         "repeat": "",
-        "crontab": "00 22 * * *",
+        "crontab": "00 23 * * *",
         "once": false,
         "onceDelay": 0.1,
         "x": 147,
@@ -1004,6 +1022,7 @@
         "override_topic": true,
         "override_payload": true,
         "entity_id": "cover.garage",
+        "outputs": 1,
         "x": 843,
         "y": 671,
         "wires": [
@@ -1209,15 +1228,15 @@
         "id": "6d5a4cd7.e20e14",
         "type": "inject",
         "z": "25f1e9b0.2f2f06",
-        "name": "Daily at 5:30pm",
+        "name": "Daily at 7pm",
         "topic": "",
         "payload": "",
         "payloadType": "date",
         "repeat": "",
-        "crontab": "30 17 * * *",
+        "crontab": "00 19 * * *",
         "once": false,
         "onceDelay": 0.1,
-        "x": 147,
+        "x": 137,
         "y": 727,
         "wires": [
             [
@@ -1236,8 +1255,8 @@
         "service": "open_cover",
         "data": "{ \"entity_id\": \"cover.blindkit_nicks_front\" }",
         "mergecontext": "",
-        "x": 645,
-        "y": 862,
+        "x": 767,
+        "y": 864,
         "wires": [
             []
         ]
@@ -1246,12 +1265,12 @@
         "id": "d1979b14.89b638",
         "type": "inject",
         "z": "25f1e9b0.2f2f06",
-        "name": "Daily at 8:00am",
+        "name": "Daily at 10:30am",
         "topic": "",
         "payload": "",
         "payloadType": "date",
         "repeat": "",
-        "crontab": "00 08 * * 1,2,3,4,5",
+        "crontab": "30 10 * * *",
         "once": false,
         "onceDelay": 0.1,
         "x": 147,
@@ -1274,8 +1293,8 @@
         "service": "open_cover",
         "data": "{ \"entity_id\": \"cover.blindkit_nicks_side\" }",
         "mergecontext": "",
-        "x": 646,
-        "y": 902,
+        "x": 768,
+        "y": 904,
         "wires": [
             []
         ]
@@ -1309,7 +1328,10 @@
         "service_domain": "telegram_bot",
         "service": "answer_callback_query",
         "data": "",
+        "render_data": false,
         "mergecontext": "",
+        "output_location": "payload",
+        "output_location_type": "msg",
         "x": 1325,
         "y": 599,
         "wires": [
@@ -1587,8 +1609,8 @@
         "service": "log",
         "data": "{ \"name\": \"Automation Started\", \"message\": \"Open Nicks Blinds at 8am weekdays\" }",
         "mergecontext": "",
-        "x": 358,
-        "y": 922,
+        "x": 751,
+        "y": 944,
         "wires": [
             []
         ]
@@ -1722,40 +1744,22 @@
         ]
     },
     {
-        "id": "36470df7.a2a892",
-        "type": "api-current-state",
-        "z": "562c7339.e576bc",
-        "name": "Current Temperature",
-        "server": "a5b319a.98d53e8",
-        "halt_if": "",
-        "override_topic": true,
-        "override_payload": true,
-        "entity_id": "sensor.bom_sydney_airport_air_temp_c",
-        "x": 265.5,
-        "y": 822,
-        "wires": [
-            [
-                "d10a9d3a.2eded"
-            ]
-        ]
-    },
-    {
         "id": "48112af4.521d84",
         "type": "inject",
         "z": "562c7339.e576bc",
-        "name": "Daily at 15:00",
+        "name": "Daily at 16:00",
         "topic": "",
         "payload": "",
         "payloadType": "date",
         "repeat": "",
-        "crontab": "00 15 * * *",
+        "crontab": "00 16 * * *",
         "once": false,
         "onceDelay": 0.1,
         "x": 123,
         "y": 765,
         "wires": [
             [
-                "36470df7.a2a892"
+                "956ba9ab.d9e758"
             ]
         ]
     },
@@ -1786,29 +1790,13 @@
         "checkall": "true",
         "repair": false,
         "outputs": 1,
-        "x": 213.5,
-        "y": 937,
+        "x": 768.5,
+        "y": 765,
         "wires": [
             [
                 "6f55e62b.dff2f8",
                 "b90bc789.5d16d8",
                 "1b71fa15.c41fb6"
-            ]
-        ]
-    },
-    {
-        "id": "d10a9d3a.2eded",
-        "type": "function",
-        "z": "562c7339.e576bc",
-        "name": "parseInt",
-        "func": "return {\n    payload: Number(msg.payload)\n}",
-        "outputs": 1,
-        "noerr": 0,
-        "x": 224.5,
-        "y": 894,
-        "wires": [
-            [
-                "2df5f742.a9d0c8"
             ]
         ]
     },
@@ -1822,8 +1810,8 @@
         "service": "log",
         "data": "{ \"name\": \"Automation Started\", \"message\": \"Water herbs & lavender at 3pm when it is hot\" }",
         "mergecontext": "",
-        "x": 408,
-        "y": 934,
+        "x": 963,
+        "y": 762,
         "wires": [
             []
         ]
@@ -1838,8 +1826,8 @@
         "service": "turn_on",
         "data": "{\"entity_id\": \"switch.sprinkle_herbs\"}",
         "mergecontext": "",
-        "x": 398,
-        "y": 988,
+        "x": 953,
+        "y": 816,
         "wires": [
             []
         ]
@@ -1854,8 +1842,995 @@
         "service": "send_message",
         "data": "{\"message\": \"It's hot today, so I am giving the herbs some extra water\"}",
         "mergecontext": "",
-        "x": 376,
-        "y": 1042,
+        "x": 931,
+        "y": 870,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "a487978b.41c5d8",
+        "type": "trigger-state",
+        "z": "2ecd8f9e.7058d",
+        "name": "when family home",
+        "server": "a5b319a.98d53e8",
+        "entityid": "group.family",
+        "entityidfiltertype": "exact",
+        "debugenabled": false,
+        "constraints": [
+            {
+                "id": "kdbiahpgzms",
+                "targetType": "this_entity",
+                "targetValue": "",
+                "propertyType": "previous_state",
+                "propertyValue": "old_state.state",
+                "comparatorType": "is",
+                "comparatorValueDatatype": "str",
+                "comparatorValue": "not_home"
+            },
+            {
+                "id": "doraahvr7lm",
+                "targetType": "this_entity",
+                "targetValue": "",
+                "propertyType": "current_state",
+                "propertyValue": "new_state.state",
+                "comparatorType": "is",
+                "comparatorValueDatatype": "str",
+                "comparatorValue": "home"
+            }
+        ],
+        "constraintsmustmatch": "all",
+        "outputs": 2,
+        "customoutputs": [],
+        "outputinitially": false,
+        "state_type": "str",
+        "x": 230,
+        "y": 125,
+        "wires": [
+            [
+                "d5b714fd.88bc28",
+                "6ad62785.62d948"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "4cbf65cd.73b5cc",
+        "type": "trigger-state",
+        "z": "2ecd8f9e.7058d",
+        "name": "when family not home",
+        "server": "a5b319a.98d53e8",
+        "entityid": "group.family",
+        "entityidfiltertype": "exact",
+        "debugenabled": false,
+        "constraints": [
+            {
+                "id": "ugq0l27ur9q",
+                "targetType": "this_entity",
+                "targetValue": "",
+                "propertyType": "previous_state",
+                "propertyValue": "old_state.state",
+                "comparatorType": "is",
+                "comparatorValueDatatype": "str",
+                "comparatorValue": "home"
+            },
+            {
+                "id": "ww21kiffgc",
+                "targetType": "this_entity",
+                "targetValue": "",
+                "propertyType": "current_state",
+                "propertyValue": "new_state.state",
+                "comparatorType": "is",
+                "comparatorValueDatatype": "str",
+                "comparatorValue": "not_home"
+            }
+        ],
+        "constraintsmustmatch": "all",
+        "outputs": 2,
+        "customoutputs": [],
+        "outputinitially": false,
+        "state_type": "str",
+        "x": 238,
+        "y": 374,
+        "wires": [
+            [
+                "68b41944.2ac628"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "22ecaeb5.bb1a72",
+        "type": "api-call-service",
+        "z": "2ecd8f9e.7058d",
+        "name": "Arm",
+        "server": "a5b319a.98d53e8",
+        "service_domain": "alarm_control_panel",
+        "service": "alarm_arm_away",
+        "data": "{\"entity_id\":\"alarm_control_panel.alarm_panel\",\"code\":\"{{ msg.arming_code }}\"}",
+        "render_data": true,
+        "mergecontext": "",
+        "output_location": "payload",
+        "output_location_type": "msg",
+        "x": 1058.5,
+        "y": 537,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "8a887774.399df8",
+        "type": "api-call-service",
+        "z": "2ecd8f9e.7058d",
+        "name": "Disarm",
+        "server": "a5b319a.98d53e8",
+        "service_domain": "alarm_control_panel",
+        "service": "alarm_disarm",
+        "data": "{\"entity_id\":\"alarm_control_panel.alarm_panel\",\"code\":\"{{ msg.arming_code }}\"}",
+        "render_data": true,
+        "mergecontext": "",
+        "output_location": "payload",
+        "output_location_type": "msg",
+        "x": 812,
+        "y": 80,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "6293251c.5751ac",
+        "type": "api-current-state",
+        "z": "2ecd8f9e.7058d",
+        "name": "Get family state",
+        "server": "a5b319a.98d53e8",
+        "halt_if": "",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "override_topic": true,
+        "override_payload": true,
+        "override_data": true,
+        "entity_id": "group.family",
+        "state_type": "str",
+        "outputs": 1,
+        "x": 321.5,
+        "y": 488,
+        "wires": [
+            [
+                "fadd29fd.a84f78"
+            ]
+        ]
+    },
+    {
+        "id": "2cbef5bc.a9b41a",
+        "type": "api-call-service",
+        "z": "2ecd8f9e.7058d",
+        "name": "Notify",
+        "server": "a5b319a.98d53e8",
+        "service_domain": "telegram_bot",
+        "service": "send_message",
+        "data": "{\"message\":\"Test: Someone has arrived home, so I will disarm the alarm.\"}",
+        "render_data": false,
+        "mergecontext": "",
+        "output_location": "payload",
+        "output_location_type": "msg",
+        "x": 642,
+        "y": 125,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "d6ef46e1.8e1a48",
+        "type": "comment",
+        "z": "2ecd8f9e.7058d",
+        "name": "Disarm when someone arrives home",
+        "info": "When someone arrives home\nIf the alarm is armed\n- Disarm the alarm\n- Notify",
+        "x": 278.5,
+        "y": 67,
+        "wires": []
+    },
+    {
+        "id": "4a6b5e61.3c24d",
+        "type": "comment",
+        "z": "2ecd8f9e.7058d",
+        "name": "Arm when nobody is home",
+        "info": "When no one is home\nWait 10 minutes\nIf\n- No one is home and\n- Alarm is not armed and\n- Not during exclusion period and\n- Manual override is not on\n\nThen\n\n- Arm alarm\n- Notify \n\n",
+        "x": 241,
+        "y": 274,
+        "wires": []
+    },
+    {
+        "id": "956ba9ab.d9e758",
+        "type": "api-get-history",
+        "z": "562c7339.e576bc",
+        "name": "Get Temperature History",
+        "server": "a5b319a.98d53e8",
+        "startdate": "",
+        "enddate": "",
+        "entityid": "sensor.bom_sydney_airport_air_temp_c",
+        "entityidtype": "is",
+        "x": 349.5,
+        "y": 765,
+        "wires": [
+            [
+                "cdd22f02.4938d"
+            ]
+        ]
+    },
+    {
+        "id": "cdd22f02.4938d",
+        "type": "function",
+        "z": "562c7339.e576bc",
+        "name": "Get Max Temperature",
+        "func": "return {\n    payload: Math.max(...msg.payload[0].map(v => Number(v.state)))\n}",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 581.5,
+        "y": 765,
+        "wires": [
+            [
+                "2df5f742.a9d0c8"
+            ]
+        ]
+    },
+    {
+        "id": "88e81492.42a728",
+        "type": "credentials",
+        "z": "2ecd8f9e.7058d",
+        "name": "arming code",
+        "props": [
+            {
+                "value": "arming_code",
+                "type": "msg"
+            }
+        ],
+        "x": 915,
+        "y": 537,
+        "wires": [
+            [
+                "22ecaeb5.bb1a72"
+            ]
+        ]
+    },
+    {
+        "id": "878efe80.f84e",
+        "type": "credentials",
+        "z": "2ecd8f9e.7058d",
+        "name": "arming code",
+        "props": [
+            {
+                "value": "arming_code",
+                "type": "msg"
+            }
+        ],
+        "x": 661,
+        "y": 80,
+        "wires": [
+            [
+                "8a887774.399df8"
+            ]
+        ]
+    },
+    {
+        "id": "16f8538a.56508c",
+        "type": "api-current-state",
+        "z": "2ecd8f9e.7058d",
+        "name": "Get alarm_auto_arm state",
+        "server": "a5b319a.98d53e8",
+        "halt_if": "",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "override_topic": true,
+        "override_payload": true,
+        "override_data": true,
+        "entity_id": "input_boolean.alarm_auto_arm",
+        "state_type": "str",
+        "outputs": 1,
+        "x": 352.5,
+        "y": 536,
+        "wires": [
+            [
+                "fadd29fd.a84f78"
+            ]
+        ]
+    },
+    {
+        "id": "39a40bd1.d09314",
+        "type": "api-current-state",
+        "z": "2ecd8f9e.7058d",
+        "name": "Get alarm state",
+        "server": "a5b319a.98d53e8",
+        "halt_if": "",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "override_topic": true,
+        "override_payload": true,
+        "override_data": true,
+        "entity_id": "alarm_control_panel.alarm_panel",
+        "state_type": "str",
+        "outputs": 1,
+        "x": 322,
+        "y": 441,
+        "wires": [
+            [
+                "fadd29fd.a84f78"
+            ]
+        ]
+    },
+    {
+        "id": "fadd29fd.a84f78",
+        "type": "join",
+        "z": "2ecd8f9e.7058d",
+        "name": "",
+        "mode": "custom",
+        "build": "object",
+        "property": "payload",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "accumulate": false,
+        "timeout": "",
+        "count": "3",
+        "reduceRight": false,
+        "reduceExp": "",
+        "reduceInit": "",
+        "reduceInitType": "num",
+        "reduceFixup": "",
+        "x": 552.5,
+        "y": 488,
+        "wires": [
+            [
+                "a5ab80d0.7ba89"
+            ]
+        ]
+    },
+    {
+        "id": "a1806245.1f074",
+        "type": "inject",
+        "z": "2ecd8f9e.7058d",
+        "name": "Disable Auto-Arm (Cleaner)",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "00 08 * * 4",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 260.5,
+        "y": 632,
+        "wires": [
+            [
+                "e6f273ff.a5508"
+            ]
+        ]
+    },
+    {
+        "id": "7ba4651d.a5058c",
+        "type": "inject",
+        "z": "2ecd8f9e.7058d",
+        "name": "Enable Auto-Arm (Cleaner)",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "00 12 * * 4",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 261,
+        "y": 671,
+        "wires": [
+            [
+                "94cd74da.d7d498"
+            ]
+        ]
+    },
+    {
+        "id": "94cd74da.d7d498",
+        "type": "function",
+        "z": "2ecd8f9e.7058d",
+        "name": "enabled = true",
+        "func": "flow.set('enabled', true)",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 496.5,
+        "y": 671,
+        "wires": [
+            [
+                "ee9f2730.64a608"
+            ]
+        ]
+    },
+    {
+        "id": "e6f273ff.a5508",
+        "type": "function",
+        "z": "2ecd8f9e.7058d",
+        "name": "enabled = false",
+        "func": "flow.set('enabled', false)",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 496,
+        "y": 632,
+        "wires": [
+            [
+                "79760c2f.e33894"
+            ]
+        ]
+    },
+    {
+        "id": "8446df15.f498f",
+        "type": "api-call-service",
+        "z": "2ecd8f9e.7058d",
+        "name": "Notify",
+        "server": "a5b319a.98d53e8",
+        "service_domain": "telegram_bot",
+        "service": "send_message",
+        "data": "{\"message\":\"test: No one is home, so I will arm the alarm.\"}",
+        "render_data": false,
+        "mergecontext": "",
+        "output_location": "payload",
+        "output_location_type": "msg",
+        "x": 895,
+        "y": 487,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "d5b714fd.88bc28",
+        "type": "api-current-state",
+        "z": "2ecd8f9e.7058d",
+        "name": "armed?",
+        "server": "a5b319a.98d53e8",
+        "halt_if": "disarmed",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "override_topic": true,
+        "override_payload": true,
+        "override_data": true,
+        "entity_id": "alarm_control_panel.alarm_panel",
+        "state_type": "str",
+        "outputs": 2,
+        "x": 446,
+        "y": 124,
+        "wires": [
+            [
+                "2cbef5bc.a9b41a",
+                "96406b16.5c5d88"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "ea24ba7.af0a848",
+        "type": "function",
+        "z": "2ecd8f9e.7058d",
+        "name": "auto_armed = true",
+        "func": "flow.set('auto_armed', true)",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 934,
+        "y": 452,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "6ad62785.62d948",
+        "type": "switch",
+        "z": "2ecd8f9e.7058d",
+        "name": "auto_armed",
+        "property": "auto_armed",
+        "propertyType": "flow",
+        "rules": [
+            {
+                "t": "true"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 455.5,
+        "y": 181,
+        "wires": [
+            [
+                "2cbef5bc.a9b41a",
+                "96406b16.5c5d88"
+            ]
+        ]
+    },
+    {
+        "id": "96406b16.5c5d88",
+        "type": "function",
+        "z": "2ecd8f9e.7058d",
+        "name": "auto_armed = false",
+        "func": "flow.set('auto_armed', false)",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 685,
+        "y": 175,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "79760c2f.e33894",
+        "type": "link out",
+        "z": "2ecd8f9e.7058d",
+        "name": "disarm",
+        "links": [
+            "9ae9e876.f89ed8"
+        ],
+        "x": 618,
+        "y": 631,
+        "wires": []
+    },
+    {
+        "id": "ee9f2730.64a608",
+        "type": "link out",
+        "z": "2ecd8f9e.7058d",
+        "name": "arm",
+        "links": [
+            "9449eb8e.d7abc8"
+        ],
+        "x": 618,
+        "y": 672,
+        "wires": []
+    },
+    {
+        "id": "9449eb8e.d7abc8",
+        "type": "link in",
+        "z": "2ecd8f9e.7058d",
+        "name": "",
+        "links": [
+            "ee9f2730.64a608",
+            "68b41944.2ac628",
+            "3d8261d1.514d7e"
+        ],
+        "x": 151.5,
+        "y": 464,
+        "wires": [
+            [
+                "39a40bd1.d09314",
+                "6293251c.5751ac",
+                "16f8538a.56508c"
+            ]
+        ]
+    },
+    {
+        "id": "9ae9e876.f89ed8",
+        "type": "link in",
+        "z": "2ecd8f9e.7058d",
+        "name": "",
+        "links": [
+            "79760c2f.e33894"
+        ],
+        "x": 306.5,
+        "y": 167,
+        "wires": [
+            [
+                "d5b714fd.88bc28",
+                "6ad62785.62d948"
+            ]
+        ]
+    },
+    {
+        "id": "68b41944.2ac628",
+        "type": "link out",
+        "z": "2ecd8f9e.7058d",
+        "name": "arm",
+        "links": [
+            "9449eb8e.d7abc8"
+        ],
+        "x": 426,
+        "y": 372,
+        "wires": []
+    },
+    {
+        "id": "4a89a471.4d81dc",
+        "type": "inject",
+        "z": "2ecd8f9e.7058d",
+        "name": "",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 279.5,
+        "y": 331,
+        "wires": [
+            [
+                "68b41944.2ac628"
+            ]
+        ]
+    },
+    {
+        "id": "a5ab80d0.7ba89",
+        "type": "function",
+        "z": "2ecd8f9e.7058d",
+        "name": "Should Send",
+        "func": "if (msg.payload['group.family'] == 'not_home' && \n        msg.payload['alarm_control_panel.alarm_panel'] == 'disarmed' &&\n        msg.payload['input_boolean.alarm_auto_arm'] == 'on' &&\n        flow.get('enabled')) {\n    return [msg, null]\n}\nreturn [null, msg]",
+        "outputs": 2,
+        "noerr": 0,
+        "x": 704.5,
+        "y": 488,
+        "wires": [
+            [
+                "ea24ba7.af0a848",
+                "8446df15.f498f"
+            ],
+            []
+        ],
+        "outputLabels": [
+            "Allowed",
+            "Blocked"
+        ]
+    },
+    {
+        "id": "8b77b610.cc6568",
+        "type": "api-get-history",
+        "z": "25f1e9b0.2f2f06",
+        "name": "Nick's Room",
+        "server": "a5b319a.98d53e8",
+        "startdate": "",
+        "enddate": "",
+        "entityid": "group.nicks_bedroom",
+        "entityidtype": "is",
+        "x": 333.5,
+        "y": 977,
+        "wires": [
+            [
+                "860d7c1f.69164"
+            ]
+        ]
+    },
+    {
+        "id": "860d7c1f.69164",
+        "type": "function",
+        "z": "25f1e9b0.2f2f06",
+        "name": "Should open",
+        "func": "const today = new Date();\n\nconst payload = msg.payload[0]\n    .filter(s => {\n        const d = new Date(s.last_updated)\n        return sameDay(d, today) && \n            d.getHours() > 4 &&\n            s.state == 'on';\n    })\n\nreturn payload.length > 0 ? \n    [Object.assign({}, msg, { payload }), null] : \n    [null, msg];\n\nfunction sameDay(d1, d2) {\n  return d1.getFullYear() === d2.getFullYear() &&\n    d1.getMonth() === d2.getMonth() &&\n    d1.getDate() === d2.getDate();\n}",
+        "outputs": 2,
+        "noerr": 0,
+        "x": 522.5,
+        "y": 978,
+        "wires": [
+            [
+                "945f03d3.c35cf",
+                "245249de.f27826",
+                "c1a7b568.e03628"
+            ],
+            []
+        ],
+        "outputLabels": [
+            "allowed",
+            "blocked"
+        ]
+    },
+    {
+        "id": "30831796.00cf18",
+        "type": "inject",
+        "z": "25f1e9b0.2f2f06",
+        "name": "Daily at 8:00am",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "00 08 * * *",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 146,
+        "y": 911,
+        "wires": [
+            [
+                "8b77b610.cc6568"
+            ]
+        ]
+    },
+    {
+        "id": "631c7f9e.d98cb",
+        "type": "trigger-state",
+        "z": "562c7339.e576bc",
+        "name": "Herbs State Unavailable",
+        "server": "a5b319a.98d53e8",
+        "entityid": "switch.sprinkle_herbs_trigger",
+        "entityidfiltertype": "exact",
+        "debugenabled": false,
+        "constraints": [
+            {
+                "id": "68d543ea22u",
+                "targetType": "this_entity",
+                "targetValue": "",
+                "propertyType": "current_state",
+                "propertyValue": "new_state.state",
+                "comparatorType": "is",
+                "comparatorValueDatatype": "str",
+                "comparatorValue": "unavailable"
+            }
+        ],
+        "constraintsmustmatch": "all",
+        "outputs": 2,
+        "customoutputs": [],
+        "outputinitially": false,
+        "state_type": "str",
+        "x": 147.5,
+        "y": 929,
+        "wires": [
+            [
+                "a70e862f.cd3c48"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "a70e862f.cd3c48",
+        "type": "api-call-service",
+        "z": "562c7339.e576bc",
+        "name": "Notify",
+        "server": "a5b319a.98d53e8",
+        "service_domain": "telegram_bot",
+        "service": "send_message",
+        "data": "{\"message\":\"The sprinklers are unavailable and probably requires a reboot. No plants will be watered until this occurs.\"}",
+        "render_data": false,
+        "mergecontext": "",
+        "output_location": "payload",
+        "output_location_type": "msg",
+        "x": 370,
+        "y": 928,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "63cd024f.608d3c",
+        "type": "trigger-state",
+        "z": "562c7339.e576bc",
+        "name": "Herbs State Available",
+        "server": "a5b319a.98d53e8",
+        "entityid": "switch.sprinkle_herbs_trigger",
+        "entityidfiltertype": "exact",
+        "debugenabled": false,
+        "constraints": [
+            {
+                "id": "ch9g6a1ww46",
+                "targetType": "this_entity",
+                "targetValue": "",
+                "propertyType": "previous_state",
+                "propertyValue": "old_state.state",
+                "comparatorType": "is",
+                "comparatorValueDatatype": "str",
+                "comparatorValue": "unavailable"
+            },
+            {
+                "id": "l5jqnndjkh",
+                "targetType": "this_entity",
+                "targetValue": "",
+                "propertyType": "current_state",
+                "propertyValue": "new_state.state",
+                "comparatorType": "is_not",
+                "comparatorValueDatatype": "str",
+                "comparatorValue": "unavailable"
+            }
+        ],
+        "constraintsmustmatch": "all",
+        "outputs": 2,
+        "customoutputs": [],
+        "outputinitially": false,
+        "state_type": "str",
+        "x": 138,
+        "y": 981,
+        "wires": [
+            [
+                "f466405e.23c22"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "f466405e.23c22",
+        "type": "api-call-service",
+        "z": "562c7339.e576bc",
+        "name": "Notify",
+        "server": "a5b319a.98d53e8",
+        "service_domain": "telegram_bot",
+        "service": "send_message",
+        "data": "{\"message\":\"The sprinklers are back online\"}",
+        "render_data": false,
+        "mergecontext": "",
+        "output_location": "payload",
+        "output_location_type": "msg",
+        "x": 373,
+        "y": 982,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "b54ea42f.55c658",
+        "type": "comment",
+        "z": "562c7339.e576bc",
+        "name": "Notify on sprinkler unavailable",
+        "info": "",
+        "x": 151,
+        "y": 883,
+        "wires": []
+    },
+    {
+        "id": "d863dd1e.07bba",
+        "type": "api-call-service",
+        "z": "25f1e9b0.2f2f06",
+        "name": "",
+        "server": "a5b319a.98d53e8",
+        "service_domain": "cover",
+        "service": "open_cover",
+        "data": "{\"entity_id\":\"cover.blindkit_master_front_left\"}",
+        "render_data": false,
+        "mergecontext": "",
+        "output_location": "payload",
+        "output_location_type": "msg",
+        "x": 651,
+        "y": 1115,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "904cd7f.ea8a028",
+        "type": "inject",
+        "z": "25f1e9b0.2f2f06",
+        "name": "Daily at 8am",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "00 08 * * *",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 143,
+        "y": 1114,
+        "wires": [
+            [
+                "d863dd1e.07bba",
+                "662d5d6f.2e1e14",
+                "5a143152.a79e3"
+            ]
+        ]
+    },
+    {
+        "id": "662d5d6f.2e1e14",
+        "type": "api-call-service",
+        "z": "25f1e9b0.2f2f06",
+        "name": "Log Automation",
+        "server": "a5b319a.98d53e8",
+        "service_domain": "logbook",
+        "service": "log",
+        "data": "{\"name\":\"Automation Started\",\"message\":\"Master Bedroom Blinds Up 8am\"}",
+        "render_data": false,
+        "mergecontext": "",
+        "output_location": "payload",
+        "output_location_type": "msg",
+        "x": 364,
+        "y": 1150,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "bbc5c9aa.1d1698",
+        "type": "comment",
+        "z": "25f1e9b0.2f2f06",
+        "name": "Open Master Bedroom blinds at 8am",
+        "info": "",
+        "x": 191,
+        "y": 1062,
+        "wires": []
+    },
+    {
+        "id": "5a143152.a79e3",
+        "type": "api-call-service",
+        "z": "25f1e9b0.2f2f06",
+        "name": "",
+        "server": "a5b319a.98d53e8",
+        "service_domain": "cover",
+        "service": "open_cover",
+        "data": "{\"entity_id\":\"cover.blindkit_master_front_right\"}",
+        "render_data": false,
+        "mergecontext": "",
+        "output_location": "payload",
+        "output_location_type": "msg",
+        "x": 649,
+        "y": 1159,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "775faab.a11c954",
+        "type": "api-call-service",
+        "z": "25f1e9b0.2f2f06",
+        "name": "",
+        "server": "a5b319a.98d53e8",
+        "service_domain": "cover",
+        "service": "close_cover",
+        "data": "{\"entity_id\":\"cover.blindkit_master_front_left\"}",
+        "render_data": false,
+        "mergecontext": "",
+        "output_location": "payload",
+        "output_location_type": "msg",
+        "x": 656,
+        "y": 1270,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "a7ffff0b.af6f5",
+        "type": "inject",
+        "z": "25f1e9b0.2f2f06",
+        "name": "Daily at 9pm",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "00 21 * * *",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 148,
+        "y": 1269,
+        "wires": [
+            [
+                "775faab.a11c954",
+                "6104a783.bcdfe8",
+                "5addecf7.d756b4"
+            ]
+        ]
+    },
+    {
+        "id": "6104a783.bcdfe8",
+        "type": "api-call-service",
+        "z": "25f1e9b0.2f2f06",
+        "name": "Log Automation",
+        "server": "a5b319a.98d53e8",
+        "service_domain": "logbook",
+        "service": "log",
+        "data": "{\"name\":\"Automation Started\",\"message\":\"Master Bedroom Blinds Down 9pm\"}",
+        "render_data": false,
+        "mergecontext": "",
+        "output_location": "payload",
+        "output_location_type": "msg",
+        "x": 369,
+        "y": 1305,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "98b919f.d7c94e8",
+        "type": "comment",
+        "z": "25f1e9b0.2f2f06",
+        "name": "Close Master Bedroom blinds at 9pm",
+        "info": "",
+        "x": 196,
+        "y": 1217,
+        "wires": []
+    },
+    {
+        "id": "5addecf7.d756b4",
+        "type": "api-call-service",
+        "z": "25f1e9b0.2f2f06",
+        "name": "",
+        "server": "a5b319a.98d53e8",
+        "service_domain": "cover",
+        "service": "close_cover",
+        "data": "{\"entity_id\":\"cover.blindkit_master_front_right\"}",
+        "render_data": false,
+        "mergecontext": "",
+        "output_location": "payload",
+        "output_location_type": "msg",
+        "x": 654,
+        "y": 1314,
         "wires": [
             []
         ]
