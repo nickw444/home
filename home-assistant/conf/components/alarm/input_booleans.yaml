@@ -1,4 +1,3 @@
 alarm_auto_arm:
   name: Auto Arm
-  initial: off
   icon: mdi:alarm-light
