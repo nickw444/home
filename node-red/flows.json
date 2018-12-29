@@ -2555,11 +2555,11 @@
         "customoutputs": [],
         "outputinitially": false,
         "state_type": "str",
-        "x": 147.5,
-        "y": 929,
+        "x": 148.5,
+        "y": 943,
         "wires": [
             [
-                "a70e862f.cd3c48"
+                "a0bc54f1.5b4618"
             ],
             []
         ]
@@ -2577,8 +2577,8 @@
         "mergecontext": "",
         "output_location": "payload",
         "output_location_type": "msg",
-        "x": 370,
-        "y": 928,
+        "x": 929,
+        "y": 942,
         "wires": [
             []
         ]
@@ -2620,10 +2620,10 @@
         "outputinitially": false,
         "state_type": "str",
         "x": 138,
-        "y": 981,
+        "y": 996,
         "wires": [
             [
-                "f466405e.23c22"
+                "423829a1.1839b8"
             ],
             []
         ]
@@ -2641,8 +2641,8 @@
         "mergecontext": "",
         "output_location": "payload",
         "output_location_type": "msg",
-        "x": 373,
-        "y": 982,
+        "x": 745,
+        "y": 1032,
         "wires": [
             []
         ]
@@ -2831,6 +2831,106 @@
         "output_location_type": "msg",
         "x": 654,
         "y": 1314,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "a0bc54f1.5b4618",
+        "type": "delay",
+        "z": "562c7339.e576bc",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "1",
+        "timeoutUnits": "minutes",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "x": 380.5,
+        "y": 944,
+        "wires": [
+            [
+                "11577f48.033d51"
+            ]
+        ]
+    },
+    {
+        "id": "11577f48.033d51",
+        "type": "api-current-state",
+        "z": "562c7339.e576bc",
+        "name": "",
+        "server": "a5b319a.98d53e8",
+        "halt_if": "unavailable",
+        "halt_if_type": "str",
+        "halt_if_compare": "is_not",
+        "override_topic": true,
+        "override_payload": true,
+        "override_data": true,
+        "entity_id": "switch.sprinkle_herbs_trigger",
+        "state_type": "str",
+        "outputs": 2,
+        "x": 644.5,
+        "y": 947,
+        "wires": [
+            [
+                "a70e862f.cd3c48",
+                "47313877.2613d8"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "47313877.2613d8",
+        "type": "function",
+        "z": "562c7339.e576bc",
+        "name": "sprinkle_unavailable_notified = true",
+        "func": "flow.set('sprinkle_unavailable_notified', true)",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1025,
+        "y": 994,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "423829a1.1839b8",
+        "type": "switch",
+        "z": "562c7339.e576bc",
+        "name": "sprinkle_unavailable_notified == true",
+        "property": "sprinkle_unavailable_notified",
+        "propertyType": "flow",
+        "rules": [
+            {
+                "t": "true"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 468.5,
+        "y": 995,
+        "wires": [
+            [
+                "f466405e.23c22",
+                "c9bcb637.bb5f18"
+            ]
+        ]
+    },
+    {
+        "id": "c9bcb637.bb5f18",
+        "type": "function",
+        "z": "562c7339.e576bc",
+        "name": "sprinkle_unavailable_notified = false",
+        "func": "flow.set('sprinkle_unavailable_notified', false)",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 843,
+        "y": 1083,
         "wires": [
             []
         ]
