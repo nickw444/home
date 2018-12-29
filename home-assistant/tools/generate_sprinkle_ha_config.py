@@ -9,6 +9,7 @@ from ruamel.yaml import YAML, scalarstring
 
 yaml = YAML()
 
+
 def main():
     file = sys.argv[1]
     f = open(file)
@@ -66,8 +67,9 @@ def main():
                 'qos': 1
             })
 
+            power_entity_id = 'switch.' + base_name + '_power'
             tmpl_switches[base_name] = {
-                'value_template': '{{ states.switch.' + base_name + '_power.state }}',
+                'value_template': f"{{ is_state('{power_entity_id}', 'on') }}",
                 'icon_template': icon,
                 'turn_on': {
                     'service': 'switch.turn_on',
