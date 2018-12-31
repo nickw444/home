@@ -728,7 +728,7 @@
         "id": "c22e5247.8cc18",
         "type": "comment",
         "z": "25f1e9b0.2f2f06",
-        "name": "Family & Kitch Part Down 7:00pm",
+        "name": "Family & Kitch Part Down 8:30pm",
         "info": "",
         "x": 178,
         "y": 205,
@@ -799,12 +799,12 @@
         "id": "15faf7e1.506d88",
         "type": "inject",
         "z": "25f1e9b0.2f2f06",
-        "name": "Daily at 7:00pm",
+        "name": "Daily at 8:30pm",
         "topic": "",
         "payload": "",
         "payloadType": "date",
         "repeat": "",
-        "crontab": "00 19 * * *",
+        "crontab": "30 20 * * *",
         "once": false,
         "onceDelay": 0.1,
         "x": 147,
@@ -1888,8 +1888,7 @@
         "y": 125,
         "wires": [
             [
-                "d5b714fd.88bc28",
-                "6ad62785.62d948"
+                "d5b714fd.88bc28"
             ],
             []
         ]
@@ -2296,60 +2295,8 @@
         "wires": [
             [
                 "2cbef5bc.a9b41a",
-                "96406b16.5c5d88"
+                "878efe80.f84e"
             ],
-            []
-        ]
-    },
-    {
-        "id": "ea24ba7.af0a848",
-        "type": "function",
-        "z": "2ecd8f9e.7058d",
-        "name": "auto_armed = true",
-        "func": "flow.set('auto_armed', true)",
-        "outputs": 1,
-        "noerr": 0,
-        "x": 934,
-        "y": 452,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "6ad62785.62d948",
-        "type": "switch",
-        "z": "2ecd8f9e.7058d",
-        "name": "auto_armed",
-        "property": "auto_armed",
-        "propertyType": "flow",
-        "rules": [
-            {
-                "t": "true"
-            }
-        ],
-        "checkall": "true",
-        "repair": false,
-        "outputs": 1,
-        "x": 455.5,
-        "y": 181,
-        "wires": [
-            [
-                "2cbef5bc.a9b41a",
-                "96406b16.5c5d88"
-            ]
-        ]
-    },
-    {
-        "id": "96406b16.5c5d88",
-        "type": "function",
-        "z": "2ecd8f9e.7058d",
-        "name": "auto_armed = false",
-        "func": "flow.set('auto_armed', false)",
-        "outputs": 1,
-        "noerr": 0,
-        "x": 685,
-        "y": 175,
-        "wires": [
             []
         ]
     },
@@ -2409,8 +2356,7 @@
         "y": 167,
         "wires": [
             [
-                "d5b714fd.88bc28",
-                "6ad62785.62d948"
+                "d5b714fd.88bc28"
             ]
         ]
     },
@@ -2458,8 +2404,8 @@
         "y": 488,
         "wires": [
             [
-                "ea24ba7.af0a848",
-                "8446df15.f498f"
+                "8446df15.f498f",
+                "88e81492.42a728"
             ],
             []
         ],
