@@ -17,7 +17,7 @@ DEPENDENCIES = ['ness_alarm']
 _LOGGER = logging.getLogger(__name__)
 
 
-async def async_setup_platform(hass, config, async_add_devices,
+async def async_setup_platform(hass, config, async_add_entities,
                                discovery_info=None):
     """Set up the Ness Alarm binary sensor devices."""
     if not discovery_info:
@@ -35,7 +35,7 @@ async def async_setup_platform(hass, config, async_add_devices,
                                       zone_type=zone_type)
         devices.append(device)
 
-    async_add_devices(devices)
+    async_add_entities(devices)
 
 
 class NessZoneBinarySensor(BinarySensorDevice):
@@ -47,17 +47,11 @@ class NessZoneBinarySensor(BinarySensorDevice):
         self._name = name
         self._type = zone_type
         self._state = 0
-        self._available = False
 
     async def async_added_to_hass(self):
         """Register callbacks."""
         async_dispatcher_connect(
             self.hass, SIGNAL_ZONE_CHANGED, self._handle_zone_change)
-
-    @property
-    def available(self):
-        """Return True if entity is available."""
-        return self._available
 
     @property
     def name(self):
@@ -83,6 +77,5 @@ class NessZoneBinarySensor(BinarySensorDevice):
     def _handle_zone_change(self, data: ZoneChangedData):
         """Handle zone state update."""
         if self._zone_id == data.zone_id:
-            self._available = True
             self._state = data.state
             self.async_schedule_update_ha_state()
