@@ -2,8 +2,13 @@ cameras:
   view: yes
   name: Cameras
   entities:
-    - camera.hik01
-    - camera.hik02
-    - camera.hik03
-    - camera.hik04
-    - camera.hik05
+    - camera.no_303
+    - camera.no_313a
+    - camera.top_driveway
+    - camera.garage
+    - camera.front_door
+    - camera.north_side
+    - camera.back_door
+    - camera.pool
+    - camera.sideway_west
+    - camera.sideway_east
