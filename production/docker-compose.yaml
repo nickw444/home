@@ -12,7 +12,7 @@ services:
     mosquitto:
         restart: always
         container_name: mosquitto
-        image: eclipse-mosquitto
+        image: eclipse-mosquitto:1.5.6
         volumes:
             - "/etc/homekit/production/mosquitto:/mosquitto/config"
             - "/var/lib/mosquitto:/mosquitto/data"
@@ -23,7 +23,7 @@ services:
     influxdb:
         restart: always
         container_name: influxdb
-        image: influxdb
+        image: influxdb:1.7.3
         volumes:
             - "/var/lib/influxdb:/var/lib/influxdb"
         ports:
@@ -32,7 +32,7 @@ services:
     grafana:
         restart: always
         container_name: grafana
-        image: grafana/grafana
+        image: grafana/grafana:5.4.3
         volumes:
             - "/var/lib/grafana:/var/lib/grafana"
         links:
