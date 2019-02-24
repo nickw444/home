@@ -8,6 +8,7 @@
   availability_topic: nicks_bedroom_wall/status
   payload_available: 1
   payload_not_available: 0
+  unique_id: 6442BDA8-93A1-4AC6-9D3E-D4B3EADF09E3
 
 - name: Nick's Downlights Desk
   icon: mdi:lightbulb
@@ -19,6 +20,7 @@
   availability_topic: nicks_bedroom_wall/status
   payload_available: 1
   payload_not_available: 0
+  unique_id: 851A651A-68C0-4CAE-BCC9-5D5030921906
 
 - name: Nick's Downlights 3
   icon: mdi:lightbulb
@@ -30,3 +32,4 @@
   availability_topic: nicks_bedroom_wall/status
   payload_available: 1
   payload_not_available: 0
+  unique_id: 9012CFCF-1148-49DC-85D9-A026087C42CB

@@ -1,4 +1,4 @@
 - platform: yeelight
   devices:
     192.168.8.37:
-      name: Joe's Bedside
+      name: joes_bedside

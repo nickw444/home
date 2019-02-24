@@ -1,0 +1,7 @@
+server_id: 2629
+scan_interval:
+  minutes: 30
+monitored_conditions:
+  - ping
+  - download
+  - upload

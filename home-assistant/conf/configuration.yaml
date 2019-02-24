@@ -111,3 +111,6 @@ panel_iframe:
 lifx:
 
 ness_alarm: !include components/alarm/ness_alarm.yaml
+speedtestdotnet: !include speedtestdotnet.yaml
+person: !include people.yaml
+system_health:
