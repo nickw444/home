@@ -24,6 +24,7 @@
   availability_topic: nicks_bedroom_thermometer/status
   payload_available: 1
   payload_not_available: 0
+  unique_id: 86C7468D-4D94-44E0-8F5B-7F4D9245AF19
 
 - name: Nick's Humidity
   platform: mqtt
@@ -33,6 +34,7 @@
   availability_topic: nicks_bedroom_thermometer/status
   payload_available: 1
   payload_not_available: 0
+  unique_id: 73CB893D-8B7C-462B-99BE-579231F72306
 
 - name: Outdoor Temperature
   platform: mqtt
