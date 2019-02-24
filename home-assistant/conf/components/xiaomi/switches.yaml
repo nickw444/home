@@ -1,5 +1,5 @@
 - platform: xiaomi_miio
-  name: Nick's Fairy Lights
+  name: nicks_fairy_lights
   host: 192.168.8.38
   token: !secret xiaomi_token_fairy_lights
   model: chuangmi.plug.m1
