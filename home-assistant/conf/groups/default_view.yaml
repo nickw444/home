@@ -33,6 +33,7 @@ family:
     - device_tracker.nicksiphone
     - device_tracker.oliversiphone
     - device_tracker.peter_phone
+    - device_tracker.katesiphone_2
 
 energy:
   name: Energy
