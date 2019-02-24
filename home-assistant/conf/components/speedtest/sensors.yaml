@@ -4,3 +4,6 @@
     - ping
     - download
     - upload
+  minute:
+    - 0
+    - 30
