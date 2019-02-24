@@ -271,6 +271,7 @@
         "name": "Downlights On",
         "server": "a5b319a.98d53e8",
         "entityid": "switch.nicks_downlights_3",
+        "entityidfiltertype": "exact",
         "debugenabled": false,
         "constraints": [
             {
@@ -604,12 +605,12 @@
         "id": "bfdd4f08.a32bb",
         "type": "inject",
         "z": "562c7339.e576bc",
-        "name": "Daily at 09:00",
+        "name": "Daily at 07:30",
         "topic": "",
         "payload": "",
         "payloadType": "date",
         "repeat": "",
-        "crontab": "00 09 * * *",
+        "crontab": "30 07 * * *",
         "once": false,
         "onceDelay": 0.1,
         "x": 132,
@@ -641,12 +642,12 @@
         "id": "446b0a54.1695a4",
         "type": "inject",
         "z": "562c7339.e576bc",
-        "name": "Daily at 10:00",
+        "name": "Daily at 7:00",
         "topic": "",
         "payload": "",
         "payloadType": "date",
         "repeat": "",
-        "crontab": "00 10 * * *",
+        "crontab": "00 07 * * *",
         "once": false,
         "onceDelay": 0.1,
         "x": 133,
@@ -742,16 +743,6 @@
         "info": "",
         "x": 151,
         "y": 369,
-        "wires": []
-    },
-    {
-        "id": "4f042ea3.255d2",
-        "type": "comment",
-        "z": "25f1e9b0.2f2f06",
-        "name": "Up-Hall Blockout Open 7.30am",
-        "info": "",
-        "x": 160.5,
-        "y": 536,
         "wires": []
     },
     {
@@ -1172,43 +1163,6 @@
         ]
     },
     {
-        "id": "348f5dc.893c1a2",
-        "type": "api-call-service",
-        "z": "25f1e9b0.2f2f06",
-        "name": "",
-        "server": "a5b319a.98d53e8",
-        "service_domain": "cover",
-        "service": "open_cover",
-        "data": "{ \"entity_id\": \"cover.blindkit_upstairs_hall_blockout\" }",
-        "mergecontext": "",
-        "x": 641,
-        "y": 586,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "5ec0f0dd.8b6b1",
-        "type": "inject",
-        "z": "25f1e9b0.2f2f06",
-        "name": "Daily at 07:30am",
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "repeat": "",
-        "crontab": "30 07 * * *",
-        "once": false,
-        "onceDelay": 0.1,
-        "x": 143,
-        "y": 585,
-        "wires": [
-            [
-                "348f5dc.893c1a2",
-                "1cb67081.6f4f4f"
-            ]
-        ]
-    },
-    {
         "id": "1edc7927.fc7817",
         "type": "api-call-service",
         "z": "25f1e9b0.2f2f06",
@@ -1253,10 +1207,13 @@
         "server": "a5b319a.98d53e8",
         "service_domain": "cover",
         "service": "open_cover",
-        "data": "{ \"entity_id\": \"cover.blindkit_nicks_front\" }",
+        "data": "{\"entity_id\":\"cover.blindkit_nicks_front\"}",
+        "render_data": false,
         "mergecontext": "",
-        "x": 767,
-        "y": 864,
+        "output_location": "payload",
+        "output_location_type": "msg",
+        "x": 1014,
+        "y": 860,
         "wires": [
             []
         ]
@@ -1277,9 +1234,7 @@
         "y": 861,
         "wires": [
             [
-                "945f03d3.c35cf",
-                "245249de.f27826",
-                "c1a7b568.e03628"
+                "3a26b07.6beea5"
             ]
         ]
     },
@@ -1293,8 +1248,8 @@
         "service": "open_cover",
         "data": "{ \"entity_id\": \"cover.blindkit_nicks_side\" }",
         "mergecontext": "",
-        "x": 768,
-        "y": 904,
+        "x": 1015,
+        "y": 900,
         "wires": [
             []
         ]
@@ -1568,22 +1523,6 @@
         ]
     },
     {
-        "id": "1cb67081.6f4f4f",
-        "type": "api-call-service",
-        "z": "25f1e9b0.2f2f06",
-        "name": "Log Automation",
-        "server": "a5b319a.98d53e8",
-        "service_domain": "logbook",
-        "service": "log",
-        "data": "{ \"name\": \"Automation Started\", \"message\": \"Up-Hall Blockout Open 7.30am\" }",
-        "mergecontext": "",
-        "x": 355,
-        "y": 616,
-        "wires": [
-            []
-        ]
-    },
-    {
         "id": "191477c1.b305d8",
         "type": "api-call-service",
         "z": "25f1e9b0.2f2f06",
@@ -1609,8 +1548,8 @@
         "service": "log",
         "data": "{ \"name\": \"Automation Started\", \"message\": \"Open Nicks Blinds at 8am weekdays\" }",
         "mergecontext": "",
-        "x": 751,
-        "y": 944,
+        "x": 998,
+        "y": 940,
         "wires": [
             []
         ]
@@ -1639,9 +1578,9 @@
         "id": "b693511.7c75ab",
         "type": "comment",
         "z": "562c7339.e576bc",
-        "name": "Turn on backyard sprinklers at 9am",
+        "name": "Turn on backyard sprinklers at 7:30am",
         "info": "",
-        "x": 179.5,
+        "x": 189.5,
         "y": 335,
         "wires": []
     },
@@ -1649,9 +1588,9 @@
         "id": "81d1692c.3e0038",
         "type": "comment",
         "z": "562c7339.e576bc",
-        "name": "Water herbs & lavender at 10am",
+        "name": "Water herbs & lavender at 7am",
         "info": "",
-        "x": 157.5,
+        "x": 177.5,
         "y": 493,
         "wires": []
     },
@@ -1747,12 +1686,12 @@
         "id": "48112af4.521d84",
         "type": "inject",
         "z": "562c7339.e576bc",
-        "name": "Daily at 16:00",
+        "name": "Daily at 13:00",
         "topic": "",
         "payload": "",
         "payloadType": "date",
         "repeat": "",
-        "crontab": "00 16 * * *",
+        "crontab": "00 13 * * *",
         "once": false,
         "onceDelay": 0.1,
         "x": 123,
@@ -1767,7 +1706,7 @@
         "id": "2d7de9da.060866",
         "type": "comment",
         "z": "562c7339.e576bc",
-        "name": "Water herbs & lavender at 3pm if it is hot",
+        "name": "Water herbs & lavender at 1pm if it is hot",
         "info": "",
         "x": 193,
         "y": 719,
@@ -1783,14 +1722,14 @@
         "rules": [
             {
                 "t": "gt",
-                "v": "27",
+                "v": "29",
                 "vt": "num"
             }
         ],
         "checkall": "true",
         "repair": false,
         "outputs": 1,
-        "x": 768.5,
+        "x": 760.5,
         "y": 765,
         "wires": [
             [
@@ -1946,13 +1885,13 @@
         "server": "a5b319a.98d53e8",
         "service_domain": "alarm_control_panel",
         "service": "alarm_arm_away",
-        "data": "{\"entity_id\":\"alarm_control_panel.alarm_panel\",\"code\":\"{{ msg.arming_code }}\"}",
+        "data": "{\"entity_id\":\"alarm_control_panel.alarm_panel\"}",
         "render_data": true,
         "mergecontext": "",
         "output_location": "payload",
         "output_location_type": "msg",
-        "x": 1058.5,
-        "y": 537,
+        "x": 889.5,
+        "y": 586,
         "wires": [
             []
         ]
@@ -1965,12 +1904,12 @@
         "server": "a5b319a.98d53e8",
         "service_domain": "alarm_control_panel",
         "service": "alarm_disarm",
-        "data": "{\"entity_id\":\"alarm_control_panel.alarm_panel\",\"code\":\"{{ msg.arming_code }}\"}",
-        "render_data": true,
+        "data": "{\"entity_id\":\"alarm_control_panel.alarm_panel\"}",
+        "render_data": false,
         "mergecontext": "",
         "output_location": "payload",
         "output_location_type": "msg",
-        "x": 812,
+        "x": 949,
         "y": 80,
         "wires": [
             []
@@ -1991,8 +1930,8 @@
         "entity_id": "group.family",
         "state_type": "str",
         "outputs": 1,
-        "x": 321.5,
-        "y": 488,
+        "x": 314.5,
+        "y": 536,
         "wires": [
             [
                 "fadd29fd.a84f78"
@@ -2024,8 +1963,8 @@
         "z": "2ecd8f9e.7058d",
         "name": "Disarm when someone arrives home",
         "info": "When someone arrives home\nIf the alarm is armed\n- Disarm the alarm\n- Notify",
-        "x": 278.5,
-        "y": 67,
+        "x": 279.5,
+        "y": 36,
         "wires": []
     },
     {
@@ -2073,25 +2012,6 @@
         ]
     },
     {
-        "id": "88e81492.42a728",
-        "type": "credentials",
-        "z": "2ecd8f9e.7058d",
-        "name": "arming code",
-        "props": [
-            {
-                "value": "arming_code",
-                "type": "msg"
-            }
-        ],
-        "x": 915,
-        "y": 537,
-        "wires": [
-            [
-                "22ecaeb5.bb1a72"
-            ]
-        ]
-    },
-    {
         "id": "878efe80.f84e",
         "type": "credentials",
         "z": "2ecd8f9e.7058d",
@@ -2099,14 +2019,14 @@
         "props": [
             {
                 "value": "arming_code",
-                "type": "msg"
+                "type": "flow"
             }
         ],
         "x": 661,
         "y": 80,
         "wires": [
             [
-                "8a887774.399df8"
+                "fa3cfadd.705f78"
             ]
         ]
     },
@@ -2125,8 +2045,8 @@
         "entity_id": "input_boolean.alarm_auto_arm",
         "state_type": "str",
         "outputs": 1,
-        "x": 352.5,
-        "y": 536,
+        "x": 345.5,
+        "y": 584,
         "wires": [
             [
                 "fadd29fd.a84f78"
@@ -2148,8 +2068,8 @@
         "entity_id": "alarm_control_panel.alarm_panel",
         "state_type": "str",
         "outputs": 1,
-        "x": 322,
-        "y": 441,
+        "x": 315,
+        "y": 489,
         "wires": [
             [
                 "fadd29fd.a84f78"
@@ -2176,8 +2096,8 @@
         "reduceInit": "",
         "reduceInitType": "num",
         "reduceFixup": "",
-        "x": 552.5,
-        "y": 488,
+        "x": 545.5,
+        "y": 536,
         "wires": [
             [
                 "a5ab80d0.7ba89"
@@ -2196,8 +2116,8 @@
         "crontab": "00 08 * * 4",
         "once": false,
         "onceDelay": 0.1,
-        "x": 260.5,
-        "y": 632,
+        "x": 259.5,
+        "y": 673,
         "wires": [
             [
                 "e6f273ff.a5508"
@@ -2216,8 +2136,8 @@
         "crontab": "00 12 * * 4",
         "once": false,
         "onceDelay": 0.1,
-        "x": 261,
-        "y": 671,
+        "x": 260,
+        "y": 712,
         "wires": [
             [
                 "94cd74da.d7d498"
@@ -2232,8 +2152,8 @@
         "func": "flow.set('enabled', true)",
         "outputs": 1,
         "noerr": 0,
-        "x": 496.5,
-        "y": 671,
+        "x": 495.5,
+        "y": 712,
         "wires": [
             [
                 "ee9f2730.64a608"
@@ -2248,8 +2168,8 @@
         "func": "flow.set('enabled', false)",
         "outputs": 1,
         "noerr": 0,
-        "x": 496,
-        "y": 632,
+        "x": 495,
+        "y": 673,
         "wires": [
             [
                 "79760c2f.e33894"
@@ -2269,8 +2189,8 @@
         "mergecontext": "",
         "output_location": "payload",
         "output_location_type": "msg",
-        "x": 895,
-        "y": 487,
+        "x": 888,
+        "y": 535,
         "wires": [
             []
         ]
@@ -2308,8 +2228,8 @@
         "links": [
             "9ae9e876.f89ed8"
         ],
-        "x": 618,
-        "y": 631,
+        "x": 617,
+        "y": 672,
         "wires": []
     },
     {
@@ -2320,8 +2240,8 @@
         "links": [
             "9449eb8e.d7abc8"
         ],
-        "x": 618,
-        "y": 672,
+        "x": 617,
+        "y": 713,
         "wires": []
     },
     {
@@ -2334,8 +2254,8 @@
             "68b41944.2ac628",
             "3d8261d1.514d7e"
         ],
-        "x": 151.5,
-        "y": 464,
+        "x": 144.5,
+        "y": 512,
         "wires": [
             [
                 "39a40bd1.d09314",
@@ -2396,83 +2316,22 @@
         "id": "a5ab80d0.7ba89",
         "type": "function",
         "z": "2ecd8f9e.7058d",
-        "name": "Should Send",
+        "name": "Should Arm?",
         "func": "if (msg.payload['group.family'] == 'not_home' && \n        msg.payload['alarm_control_panel.alarm_panel'] == 'disarmed' &&\n        msg.payload['input_boolean.alarm_auto_arm'] == 'on' &&\n        flow.get('enabled')) {\n    return [msg, null]\n}\nreturn [null, msg]",
         "outputs": 2,
         "noerr": 0,
-        "x": 704.5,
-        "y": 488,
+        "x": 697.5,
+        "y": 536,
         "wires": [
             [
                 "8446df15.f498f",
-                "88e81492.42a728"
+                "22ecaeb5.bb1a72"
             ],
             []
         ],
         "outputLabels": [
             "Allowed",
             "Blocked"
-        ]
-    },
-    {
-        "id": "8b77b610.cc6568",
-        "type": "api-get-history",
-        "z": "25f1e9b0.2f2f06",
-        "name": "Nick's Room",
-        "server": "a5b319a.98d53e8",
-        "startdate": "",
-        "enddate": "",
-        "entityid": "group.nicks_bedroom",
-        "entityidtype": "is",
-        "x": 333.5,
-        "y": 977,
-        "wires": [
-            [
-                "860d7c1f.69164"
-            ]
-        ]
-    },
-    {
-        "id": "860d7c1f.69164",
-        "type": "function",
-        "z": "25f1e9b0.2f2f06",
-        "name": "Should open",
-        "func": "const today = new Date();\n\nconst payload = msg.payload[0]\n    .filter(s => {\n        const d = new Date(s.last_updated)\n        return sameDay(d, today) && \n            d.getHours() > 4 &&\n            s.state == 'on';\n    })\n\nreturn payload.length > 0 ? \n    [Object.assign({}, msg, { payload }), null] : \n    [null, msg];\n\nfunction sameDay(d1, d2) {\n  return d1.getFullYear() === d2.getFullYear() &&\n    d1.getMonth() === d2.getMonth() &&\n    d1.getDate() === d2.getDate();\n}",
-        "outputs": 2,
-        "noerr": 0,
-        "x": 522.5,
-        "y": 978,
-        "wires": [
-            [
-                "945f03d3.c35cf",
-                "245249de.f27826",
-                "c1a7b568.e03628"
-            ],
-            []
-        ],
-        "outputLabels": [
-            "allowed",
-            "blocked"
-        ]
-    },
-    {
-        "id": "30831796.00cf18",
-        "type": "inject",
-        "z": "25f1e9b0.2f2f06",
-        "name": "Daily at 8:00am",
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "repeat": "",
-        "crontab": "00 08 * * *",
-        "once": false,
-        "onceDelay": 0.1,
-        "x": 146,
-        "y": 911,
-        "wires": [
-            [
-                "8b77b610.cc6568"
-            ]
         ]
     },
     {
@@ -2616,8 +2475,8 @@
         "mergecontext": "",
         "output_location": "payload",
         "output_location_type": "msg",
-        "x": 651,
-        "y": 1115,
+        "x": 652,
+        "y": 1344,
         "wires": [
             []
         ]
@@ -2634,8 +2493,8 @@
         "crontab": "00 08 * * *",
         "once": false,
         "onceDelay": 0.1,
-        "x": 143,
-        "y": 1114,
+        "x": 144,
+        "y": 1343,
         "wires": [
             [
                 "d863dd1e.07bba",
@@ -2657,8 +2516,8 @@
         "mergecontext": "",
         "output_location": "payload",
         "output_location_type": "msg",
-        "x": 364,
-        "y": 1150,
+        "x": 365,
+        "y": 1379,
         "wires": [
             []
         ]
@@ -2669,8 +2528,8 @@
         "z": "25f1e9b0.2f2f06",
         "name": "Open Master Bedroom blinds at 8am",
         "info": "",
-        "x": 191,
-        "y": 1062,
+        "x": 192,
+        "y": 1291,
         "wires": []
     },
     {
@@ -2686,8 +2545,8 @@
         "mergecontext": "",
         "output_location": "payload",
         "output_location_type": "msg",
-        "x": 649,
-        "y": 1159,
+        "x": 650,
+        "y": 1388,
         "wires": [
             []
         ]
@@ -2705,8 +2564,8 @@
         "mergecontext": "",
         "output_location": "payload",
         "output_location_type": "msg",
-        "x": 656,
-        "y": 1270,
+        "x": 657,
+        "y": 1499,
         "wires": [
             []
         ]
@@ -2723,8 +2582,8 @@
         "crontab": "00 21 * * *",
         "once": false,
         "onceDelay": 0.1,
-        "x": 148,
-        "y": 1269,
+        "x": 149,
+        "y": 1498,
         "wires": [
             [
                 "775faab.a11c954",
@@ -2746,8 +2605,8 @@
         "mergecontext": "",
         "output_location": "payload",
         "output_location_type": "msg",
-        "x": 369,
-        "y": 1305,
+        "x": 370,
+        "y": 1534,
         "wires": [
             []
         ]
@@ -2758,8 +2617,8 @@
         "z": "25f1e9b0.2f2f06",
         "name": "Close Master Bedroom blinds at 9pm",
         "info": "",
-        "x": 196,
-        "y": 1217,
+        "x": 197,
+        "y": 1446,
         "wires": []
     },
     {
@@ -2775,8 +2634,8 @@
         "mergecontext": "",
         "output_location": "payload",
         "output_location_type": "msg",
-        "x": 654,
-        "y": 1314,
+        "x": 655,
+        "y": 1543,
         "wires": [
             []
         ]
@@ -2877,6 +2736,286 @@
         "noerr": 0,
         "x": 843,
         "y": 1083,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "fa3cfadd.705f78",
+        "type": "template",
+        "z": "2ecd8f9e.7058d",
+        "name": "",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "{\n    \"data\": {\n        \"code\": \"{{flow.arming_code}}\"\n    }\n}",
+        "output": "json",
+        "x": 810,
+        "y": 80,
+        "wires": [
+            [
+                "8a887774.399df8"
+            ]
+        ]
+    },
+    {
+        "id": "4f042ea3.255d2",
+        "type": "comment",
+        "z": "25f1e9b0.2f2f06",
+        "name": "Up-Hall Blockout Open 7.30am - Disabled for summer",
+        "info": "",
+        "x": 230.5,
+        "y": 536,
+        "wires": []
+    },
+    {
+        "id": "348f5dc.893c1a2",
+        "type": "api-call-service",
+        "z": "25f1e9b0.2f2f06",
+        "name": "",
+        "server": "a5b319a.98d53e8",
+        "service_domain": "cover",
+        "service": "open_cover",
+        "data": "{ \"entity_id\": \"cover.blindkit_upstairs_hall_blockout\" }",
+        "mergecontext": "",
+        "x": 641,
+        "y": 586,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "5ec0f0dd.8b6b1",
+        "type": "inject",
+        "z": "25f1e9b0.2f2f06",
+        "name": "Daily at 07:30am",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "30 07 * * *",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 143,
+        "y": 585,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "1cb67081.6f4f4f",
+        "type": "api-call-service",
+        "z": "25f1e9b0.2f2f06",
+        "name": "Log Automation",
+        "server": "a5b319a.98d53e8",
+        "service_domain": "logbook",
+        "service": "log",
+        "data": "{ \"name\": \"Automation Started\", \"message\": \"Up-Hall Blockout Open 7.30am\" }",
+        "mergecontext": "",
+        "x": 355,
+        "y": 616,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "f598e1c7.40a2d",
+        "type": "inject",
+        "z": "2ecd8f9e.7058d",
+        "name": "",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 259.5,
+        "y": 212,
+        "wires": [
+            [
+                "d5b714fd.88bc28"
+            ]
+        ]
+    },
+    {
+        "id": "b87dcb11.b2caa8",
+        "type": "trigger-state",
+        "z": "2ecd8f9e.7058d",
+        "name": "auto arm enabled",
+        "server": "a5b319a.98d53e8",
+        "entityid": "input_boolean.alarm_auto_arm",
+        "entityidfiltertype": "exact",
+        "debugenabled": false,
+        "constraints": [
+            {
+                "id": "smoieqe3ms",
+                "targetType": "this_entity",
+                "targetValue": "",
+                "propertyType": "previous_state",
+                "propertyValue": "old_state.state",
+                "comparatorType": "is",
+                "comparatorValueDatatype": "str",
+                "comparatorValue": "off"
+            },
+            {
+                "id": "r3bzt276xjf",
+                "targetType": "this_entity",
+                "targetValue": "",
+                "propertyType": "current_state",
+                "propertyValue": "new_state.state",
+                "comparatorType": "is",
+                "comparatorValueDatatype": "str",
+                "comparatorValue": "on"
+            }
+        ],
+        "constraintsmustmatch": "all",
+        "outputs": 2,
+        "customoutputs": [],
+        "outputinitially": false,
+        "state_type": "str",
+        "x": 246.5,
+        "y": 423,
+        "wires": [
+            [
+                "68b41944.2ac628"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "b16f7c1c.54f37",
+        "type": "trigger-state",
+        "z": "2ecd8f9e.7058d",
+        "name": "auto arm disabled",
+        "server": "a5b319a.98d53e8",
+        "entityid": "input_boolean.alarm_auto_arm",
+        "entityidfiltertype": "exact",
+        "debugenabled": false,
+        "constraints": [
+            {
+                "id": "dbull5v271s",
+                "targetType": "this_entity",
+                "targetValue": "",
+                "propertyType": "previous_state",
+                "propertyValue": "old_state.state",
+                "comparatorType": "is",
+                "comparatorValueDatatype": "str",
+                "comparatorValue": "on"
+            },
+            {
+                "id": "o53cu0b34in",
+                "targetType": "this_entity",
+                "targetValue": "",
+                "propertyType": "current_state",
+                "propertyValue": "new_state.state",
+                "comparatorType": "is",
+                "comparatorValueDatatype": "str",
+                "comparatorValue": "off"
+            }
+        ],
+        "constraintsmustmatch": "all",
+        "outputs": 2,
+        "customoutputs": [],
+        "outputinitially": false,
+        "state_type": "str",
+        "x": 231,
+        "y": 81,
+        "wires": [
+            [
+                "d5b714fd.88bc28"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "3a26b07.6beea5",
+        "type": "api-get-history",
+        "z": "25f1e9b0.2f2f06",
+        "name": "Nick's Room Blinds",
+        "server": "a5b319a.98d53e8",
+        "startdate": "",
+        "enddate": "",
+        "entityid": "cover.blindkit_nicks_",
+        "entityidtype": "includes",
+        "x": 494,
+        "y": 860,
+        "wires": [
+            [
+                "ce9afdd8.be7b9"
+            ]
+        ]
+    },
+    {
+        "id": "ce9afdd8.be7b9",
+        "type": "function",
+        "z": "25f1e9b0.2f2f06",
+        "name": "Has opened/closed today?",
+        "func": "const today = new Date();\n\nconst payload = msg.payload\n    .reduce((acc, el) => {\n        return acc.concat(el)\n    }, [])\n    .filter(s => {\n        const d = new Date(s.last_updated)\n        return sameDay(d, today) && \n            d.getHours() > 4 &&\n            (s.state == 'open' || s.state == 'closed')\n    })\n    \nconst newMsg = Object.assign({}, msg, { payload });\n\nif (payload.length > 0) {\n    node.status({fill:\"green\",shape:\"dot\",text:\"has opened\"});\n    return [newMsg, null];\n} else {\n    node.status({fill:\"red\",shape:\"dot\",text:\"not opened\"});\n    return [null, newMsg];\n}\n    \n\nfunction sameDay(d1, d2) {\n  return d1.getFullYear() === d2.getFullYear() &&\n    d1.getMonth() === d2.getMonth() &&\n    d1.getDate() === d2.getDate();\n}",
+        "outputs": 2,
+        "noerr": 0,
+        "x": 725,
+        "y": 861,
+        "wires": [
+            [],
+            [
+                "245249de.f27826",
+                "945f03d3.c35cf",
+                "c1a7b568.e03628",
+                "809ae4c0.85c858",
+                "18c86f24.205f71"
+            ]
+        ],
+        "outputLabels": [
+            "allowed",
+            "blocked"
+        ]
+    },
+    {
+        "id": "fd6c023a.c76b5",
+        "type": "comment",
+        "z": "25f1e9b0.2f2f06",
+        "name": "Open Nicks Blinds when the lights turn on",
+        "info": "",
+        "x": 182,
+        "y": 937,
+        "wires": []
+    },
+    {
+        "id": "809ae4c0.85c858",
+        "type": "api-call-service",
+        "z": "25f1e9b0.2f2f06",
+        "name": "switch.nicks_downlights_bed: off",
+        "server": "a5b319a.98d53e8",
+        "service_domain": "switch",
+        "service": "turn_off",
+        "data": "{\"entity_id\":\"switch.nicks_downlights_bed\"}",
+        "render_data": false,
+        "mergecontext": "",
+        "output_location": "payload",
+        "output_location_type": "msg",
+        "x": 1055.5,
+        "y": 997,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "18c86f24.205f71",
+        "type": "api-call-service",
+        "z": "25f1e9b0.2f2f06",
+        "name": "switch.nicks_downlights_desk: off",
+        "server": "a5b319a.98d53e8",
+        "service_domain": "switch",
+        "service": "turn_off",
+        "data": "{\"entity_id\":\"switch.nicks_downlights_desk\"}",
+        "render_data": false,
+        "mergecontext": "",
+        "output_location": "payload",
+        "output_location_type": "msg",
+        "x": 1056,
+        "y": 1035,
         "wires": [
             []
         ]
