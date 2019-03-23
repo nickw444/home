@@ -1946,7 +1946,7 @@
         "server": "a5b319a.98d53e8",
         "service_domain": "telegram_bot",
         "service": "send_message",
-        "data": "{\"message\":\"Test: Someone has arrived home, so I will disarm the alarm.\"}",
+        "data": "{\"message\":\"Someone has arrived home, so I will disarm the alarm.\"}",
         "render_data": false,
         "mergecontext": "",
         "output_location": "payload",
@@ -2184,7 +2184,7 @@
         "server": "a5b319a.98d53e8",
         "service_domain": "telegram_bot",
         "service": "send_message",
-        "data": "{\"message\":\"test: No one is home, so I will arm the alarm.\"}",
+        "data": "{\"message\":\"No one is home, so I will arm the alarm.\"}",
         "render_data": false,
         "mergecontext": "",
         "output_location": "payload",
@@ -3018,6 +3018,273 @@
         "y": 1035,
         "wires": [
             []
+        ]
+    },
+    {
+        "id": "40172868.7a5628",
+        "type": "trigger-state",
+        "z": "2ecd8f9e.7058d",
+        "name": "alarm triggered",
+        "server": "a5b319a.98d53e8",
+        "entityid": "alarm_control_panel.alarm_panel",
+        "entityidfiltertype": "exact",
+        "debugenabled": false,
+        "constraints": [
+            {
+                "id": "7bnxzy7qo8j",
+                "targetType": "this_entity",
+                "targetValue": "",
+                "propertyType": "previous_state",
+                "propertyValue": "old_state.state",
+                "comparatorType": "is_not",
+                "comparatorValueDatatype": "str",
+                "comparatorValue": "triggered"
+            },
+            {
+                "id": "mfe6agf802r",
+                "targetType": "this_entity",
+                "targetValue": "",
+                "propertyType": "current_state",
+                "propertyValue": "new_state.state",
+                "comparatorType": "is",
+                "comparatorValueDatatype": "str",
+                "comparatorValue": "triggered"
+            }
+        ],
+        "constraintsmustmatch": "all",
+        "outputs": 2,
+        "customoutputs": [],
+        "outputinitially": false,
+        "state_type": "str",
+        "x": 194.5,
+        "y": 863,
+        "wires": [
+            [
+                "541093c4.3bb394",
+                "324b7e11.14daba"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "541093c4.3bb394",
+        "type": "api-call-service",
+        "z": "2ecd8f9e.7058d",
+        "name": "Notify",
+        "server": "a5b319a.98d53e8",
+        "service_domain": "telegram_bot",
+        "service": "send_message",
+        "data": "{\"message\":\"The alarm was triggered!\"}",
+        "render_data": false,
+        "mergecontext": "",
+        "output_location": "payload",
+        "output_location_type": "msg",
+        "x": 393,
+        "y": 860,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "119ce8d.3cf4e97",
+        "type": "trigger-state",
+        "z": "2ecd8f9e.7058d",
+        "name": "alarm disarmed",
+        "server": "a5b319a.98d53e8",
+        "entityid": "alarm_control_panel.alarm_panel",
+        "entityidfiltertype": "exact",
+        "debugenabled": false,
+        "constraints": [
+            {
+                "id": "lht80qx9zsf",
+                "targetType": "this_entity",
+                "targetValue": "",
+                "propertyType": "current_state",
+                "propertyValue": "new_state.state",
+                "comparatorType": "is",
+                "comparatorValueDatatype": "str",
+                "comparatorValue": "disarmed"
+            },
+            {
+                "id": "e3xt995fqig",
+                "targetType": "this_entity",
+                "targetValue": "",
+                "propertyType": "previous_state",
+                "propertyValue": "old_state.state",
+                "comparatorType": "is",
+                "comparatorValueDatatype": "str",
+                "comparatorValue": "triggered"
+            }
+        ],
+        "constraintsmustmatch": "all",
+        "outputs": 2,
+        "customoutputs": [],
+        "outputinitially": false,
+        "state_type": "str",
+        "x": 195,
+        "y": 797,
+        "wires": [
+            [
+                "2252fe5e.efc9e2"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "2252fe5e.efc9e2",
+        "type": "api-call-service",
+        "z": "2ecd8f9e.7058d",
+        "name": "Notify",
+        "server": "a5b319a.98d53e8",
+        "service_domain": "telegram_bot",
+        "service": "send_message",
+        "data": "{\"message\":\"The alarm was disarmed.\"}",
+        "render_data": false,
+        "mergecontext": "",
+        "output_location": "payload",
+        "output_location_type": "msg",
+        "x": 388,
+        "y": 790,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "324b7e11.14daba",
+        "type": "template",
+        "z": "2ecd8f9e.7058d",
+        "name": "cameras",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "json",
+        "syntax": "mustache",
+        "template": "[\n    \"front_door\",\n    \"garage\",\n    \"north_side\",\n    \"top_driveway\",\n    \"sideway_east\",\n    \"sideway_west\"\n]",
+        "output": "json",
+        "x": 405.5,
+        "y": 923,
+        "wires": [
+            [
+                "bc7db76f.efa6d8"
+            ]
+        ]
+    },
+    {
+        "id": "bc7db76f.efa6d8",
+        "type": "function",
+        "z": "2ecd8f9e.7058d",
+        "name": "Build snapshot payload",
+        "func": "const newPayload = msg.payload.map(entity_id => ({ \n    data: {\n        entity_id: `camera.${entity_id}`,\n        filename: `/tmp/homekit/${entity_id}.jpeg`,\n    }\n}));\n\nreturn {\n    payload: newPayload,\n}",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 635.5,
+        "y": 923,
+        "wires": [
+            [
+                "3b02d7bc.060d1"
+            ]
+        ]
+    },
+    {
+        "id": "3b02d7bc.060d1",
+        "type": "split",
+        "z": "2ecd8f9e.7058d",
+        "name": "",
+        "splt": "\\n",
+        "spltType": "str",
+        "arraySplt": 1,
+        "arraySpltType": "len",
+        "stream": false,
+        "addname": "",
+        "x": 822.5,
+        "y": 922,
+        "wires": [
+            [
+                "4e90912f.2c9bd"
+            ]
+        ]
+    },
+    {
+        "id": "4e90912f.2c9bd",
+        "type": "api-call-service",
+        "z": "2ecd8f9e.7058d",
+        "name": "Snapshot",
+        "server": "a5b319a.98d53e8",
+        "service_domain": "camera",
+        "service": "snapshot",
+        "data": "{\"entity_id\":\"camera.front_door\"}",
+        "render_data": false,
+        "mergecontext": "",
+        "output_location": "payload",
+        "output_location_type": "msg",
+        "x": 407,
+        "y": 989,
+        "wires": [
+            [
+                "fad0547e.6ff078"
+            ]
+        ]
+    },
+    {
+        "id": "fad0547e.6ff078",
+        "type": "join",
+        "z": "2ecd8f9e.7058d",
+        "name": "",
+        "mode": "auto",
+        "build": "string",
+        "property": "payload",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "accumulate": false,
+        "timeout": "",
+        "count": "",
+        "reduceRight": false,
+        "reduceExp": "",
+        "reduceInit": "",
+        "reduceInitType": "",
+        "reduceFixup": "",
+        "x": 573.5,
+        "y": 988,
+        "wires": [
+            [
+                "b3aa0736.5cf1c"
+            ]
+        ]
+    },
+    {
+        "id": "73ef840c.8514b4",
+        "type": "api-call-service",
+        "z": "2ecd8f9e.7058d",
+        "name": "Notify",
+        "server": "a5b319a.98d53e8",
+        "service_domain": "notify",
+        "service": "telegram",
+        "data": "",
+        "render_data": false,
+        "mergecontext": "",
+        "output_location": "payload",
+        "output_location_type": "msg",
+        "x": 969,
+        "y": 987,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "b3aa0736.5cf1c",
+        "type": "function",
+        "z": "2ecd8f9e.7058d",
+        "name": "Build Telegram message",
+        "func": "const photos = msg.payload.map(result => ({\n    file: result.data.filename\n}))\n\nreturn {\n    payload: {\n        data: {\n            message: \"Camera Snapshots:\",\n            data: {\n                photo: photos,\n            },\n        }\n    }\n}",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 782.5,
+        "y": 987,
+        "wires": [
+            [
+                "73ef840c.8514b4"
+            ]
         ]
     }
 ]
