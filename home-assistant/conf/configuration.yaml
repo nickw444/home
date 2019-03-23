@@ -12,6 +12,8 @@ homeassistant:
   time_zone: Australia/Sydney
   # Customization file
   customize: !include_dir_merge_named ./config/customize
+  whitelist_external_dirs:
+    - "/tmp/homekit"
 
 cloud:
   google_actions: !include google_actions.yaml
