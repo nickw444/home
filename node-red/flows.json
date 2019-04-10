@@ -2122,7 +2122,7 @@
         "payload": "",
         "payloadType": "date",
         "repeat": "",
-        "crontab": "00 08 * * 4",
+        "crontab": "00 07 * * 4",
         "once": false,
         "onceDelay": 0.1,
         "x": 259.5,
@@ -2224,7 +2224,8 @@
         "wires": [
             [
                 "2cbef5bc.a9b41a",
-                "878efe80.f84e"
+                "878efe80.f84e",
+                "61cd844.84b7bfc"
             ],
             []
         ]
@@ -2334,7 +2335,8 @@
         "wires": [
             [
                 "8446df15.f498f",
-                "22ecaeb5.bb1a72"
+                "22ecaeb5.bb1a72",
+                "7cd70ad6.127424"
             ],
             []
         ],
@@ -3106,8 +3108,8 @@
         "mergecontext": "",
         "output_location": "payload",
         "output_location_type": "msg",
-        "x": 969,
-        "y": 987,
+        "x": 1223,
+        "y": 938,
         "wires": [
             []
         ]
@@ -3120,8 +3122,8 @@
         "func": "const photos = msg.payload.map(result => ({\n    file: result.data.filename\n}))\n\nreturn {\n    payload: {\n        data: {\n            message: \"Camera snapshots:\",\n            data: {\n                photo: photos,\n            },\n        }\n    }\n}",
         "outputs": 1,
         "noerr": 0,
-        "x": 773.5,
-        "y": 988,
+        "x": 940.5,
+        "y": 990,
         "wires": [
             [
                 "73ef840c.8514b4"
@@ -3148,8 +3150,8 @@
         "reduceInit": "",
         "reduceInitType": "",
         "reduceFixup": "",
-        "x": 573.5,
-        "y": 988,
+        "x": 740.5,
+        "y": 990,
         "wires": [
             [
                 "b3aa0736.5cf1c"
@@ -3169,8 +3171,8 @@
         "mergecontext": "",
         "output_location": "payload",
         "output_location_type": "msg",
-        "x": 407,
-        "y": 989,
+        "x": 574,
+        "y": 991,
         "wires": [
             [
                 "fad0547e.6ff078"
@@ -3188,8 +3190,8 @@
         "arraySpltType": "len",
         "stream": false,
         "addname": "",
-        "x": 822.5,
-        "y": 922,
+        "x": 989.5,
+        "y": 924,
         "wires": [
             [
                 "4e90912f.2c9bd"
@@ -3204,8 +3206,8 @@
         "func": "const newPayload = msg.payload.map(entity_id => ({ \n    data: {\n        entity_id: `camera.${entity_id}`,\n        filename: `/tmp/homekit/${entity_id}.jpeg`,\n    }\n}));\n\nreturn {\n    payload: newPayload,\n}",
         "outputs": 1,
         "noerr": 0,
-        "x": 635.5,
-        "y": 923,
+        "x": 802.5,
+        "y": 925,
         "wires": [
             [
                 "3b02d7bc.060d1"
@@ -3223,8 +3225,8 @@
         "syntax": "mustache",
         "template": "[\n    \"front_door\",\n    \"garage\",\n    \"back_door\",\n    \"sideway_east\",\n    \"sideway_west\",\n    \"north_side\",\n    \"no_313a\"\n]",
         "output": "json",
-        "x": 405.5,
-        "y": 923,
+        "x": 572.5,
+        "y": 925,
         "wires": [
             [
                 "bc7db76f.efa6d8"
@@ -3271,8 +3273,8 @@
         "y": 863,
         "wires": [
             [
-                "324b7e11.14daba",
-                "541093c4.3bb394"
+                "541093c4.3bb394",
+                "1f5439b0.baf1be"
             ],
             []
         ]
@@ -3289,11 +3291,11 @@
         "crontab": "",
         "once": false,
         "onceDelay": 0.1,
-        "x": 172.5,
-        "y": 946,
+        "x": 214.5,
+        "y": 929,
         "wires": [
             [
-                "324b7e11.14daba"
+                "1f5439b0.baf1be"
             ]
         ]
     },
@@ -3312,6 +3314,82 @@
         "output_location_type": "msg",
         "x": 393,
         "y": 860,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "375a2ffd.7af7a8",
+        "type": "api-call-service",
+        "z": "2ecd8f9e.7058d",
+        "name": "Notify",
+        "server": "a5b319a.98d53e8",
+        "service_domain": "notify",
+        "service": "telegram_nick",
+        "data": "",
+        "render_data": false,
+        "mergecontext": "",
+        "output_location": "payload",
+        "output_location_type": "msg",
+        "x": 1220,
+        "y": 989,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "1f5439b0.baf1be",
+        "type": "throttle",
+        "z": "2ecd8f9e.7058d",
+        "name": "",
+        "throttleType": "time",
+        "timeLimit": "60",
+        "timeLimitType": "seconds",
+        "countLimit": 0,
+        "blockSize": 0,
+        "locked": false,
+        "x": 391.5,
+        "y": 927,
+        "wires": [
+            [
+                "324b7e11.14daba"
+            ]
+        ]
+    },
+    {
+        "id": "7cd70ad6.127424",
+        "type": "api-call-service",
+        "z": "2ecd8f9e.7058d",
+        "name": "Log Automation",
+        "server": "a5b319a.98d53e8",
+        "service_domain": "logbook",
+        "service": "log",
+        "data": "{\"name\":\"Automation Started\",\"message\":\"Auto arm alarm\"}",
+        "render_data": false,
+        "mergecontext": "",
+        "output_location": "payload",
+        "output_location_type": "msg",
+        "x": 920,
+        "y": 488,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "61cd844.84b7bfc",
+        "type": "api-call-service",
+        "z": "2ecd8f9e.7058d",
+        "name": "Log Automation",
+        "server": "a5b319a.98d53e8",
+        "service_domain": "logbook",
+        "service": "log",
+        "data": "{\"name\":\"Automation Started\",\"message\":\"Auto disarm alarm\"}",
+        "render_data": false,
+        "mergecontext": "",
+        "output_location": "payload",
+        "output_location_type": "msg",
+        "x": 672,
+        "y": 166,
         "wires": [
             []
         ]
