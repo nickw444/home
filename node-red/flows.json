@@ -52,6 +52,28 @@
         "ha_boolean": "y|yes|true|on|home|open"
     },
     {
+        "id": "9fa26dd7.88bcd",
+        "type": "mqtt-broker",
+        "z": "",
+        "name": "localhost",
+        "broker": "localhost",
+        "port": "1883",
+        "clientid": "",
+        "usetls": false,
+        "compatmode": true,
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": ""
+    },
+    {
         "id": "7dbe3d22.ccacd4",
         "type": "api-call-service",
         "z": "e3920ec8.cf4b3",
@@ -1836,7 +1858,8 @@
         "y": 125,
         "wires": [
             [
-                "d5b714fd.88bc28"
+                "d5b714fd.88bc28",
+                "58d58116.b7a95"
             ],
             []
         ]
@@ -1881,7 +1904,8 @@
         "y": 374,
         "wires": [
             [
-                "68b41944.2ac628"
+                "68b41944.2ac628",
+                "cca91799.07387"
             ],
             []
         ]
@@ -2109,7 +2133,8 @@
         "y": 536,
         "wires": [
             [
-                "a5ab80d0.7ba89"
+                "a5ab80d0.7ba89",
+                "34dc4a4c.624bd6"
             ]
         ]
     },
@@ -2158,14 +2183,15 @@
         "type": "function",
         "z": "2ecd8f9e.7058d",
         "name": "enabled = true",
-        "func": "flow.set('enabled', true)",
+        "func": "flow.set('enabled', true)\nreturn { payload: true };",
         "outputs": 1,
         "noerr": 0,
         "x": 495.5,
         "y": 712,
         "wires": [
             [
-                "ee9f2730.64a608"
+                "ee9f2730.64a608",
+                "5594af65.44ca18"
             ]
         ]
     },
@@ -2174,14 +2200,15 @@
         "type": "function",
         "z": "2ecd8f9e.7058d",
         "name": "enabled = false",
-        "func": "flow.set('enabled', false)",
+        "func": "flow.set('enabled', false)\nreturn { payload: false }",
         "outputs": 1,
         "noerr": 0,
         "x": 495,
         "y": 673,
         "wires": [
             [
-                "79760c2f.e33894"
+                "79760c2f.e33894",
+                "5594af65.44ca18"
             ]
         ]
     },
@@ -2193,13 +2220,13 @@
         "server": "a5b319a.98d53e8",
         "service_domain": "notify",
         "service": "telegram",
-        "data": "{\"message\":\"No one is home, so I will arm the alarm.\"}",
+        "data": "",
         "render_data": false,
         "mergecontext": "",
         "output_location": "payload",
         "output_location_type": "msg",
-        "x": 888,
-        "y": 535,
+        "x": 1175,
+        "y": 718,
         "wires": [
             []
         ]
@@ -2223,9 +2250,9 @@
         "y": 124,
         "wires": [
             [
-                "2cbef5bc.a9b41a",
                 "878efe80.f84e",
-                "61cd844.84b7bfc"
+                "61cd844.84b7bfc",
+                "c38b00d.a8bdd"
             ],
             []
         ]
@@ -2334,9 +2361,10 @@
         "y": 536,
         "wires": [
             [
-                "8446df15.f498f",
                 "22ecaeb5.bb1a72",
-                "7cd70ad6.127424"
+                "7cd70ad6.127424",
+                "34dc4a4c.624bd6",
+                "6a6b9ac7.14144c"
             ],
             []
         ],
@@ -3389,9 +3417,183 @@
         "output_location": "payload",
         "output_location_type": "msg",
         "x": 672,
-        "y": 166,
+        "y": 173,
         "wires": [
             []
         ]
+    },
+    {
+        "id": "34dc4a4c.624bd6",
+        "type": "debug",
+        "z": "2ecd8f9e.7058d",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "x": 861.5,
+        "y": 352,
+        "wires": []
+    },
+    {
+        "id": "cca91799.07387",
+        "type": "debug",
+        "z": "2ecd8f9e.7058d",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "x": 483,
+        "y": 315,
+        "wires": []
+    },
+    {
+        "id": "58d58116.b7a95",
+        "type": "debug",
+        "z": "2ecd8f9e.7058d",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "x": 455,
+        "y": 190,
+        "wires": []
+    },
+    {
+        "id": "6a6b9ac7.14144c",
+        "type": "api-get-history",
+        "z": "2ecd8f9e.7058d",
+        "name": "Device Trackers",
+        "server": "a5b319a.98d53e8",
+        "startdate": "",
+        "enddate": "",
+        "entityid": "device_tracker.*",
+        "entityidtype": "includes",
+        "x": 913,
+        "y": 654,
+        "wires": [
+            [
+                "cf6f936f.6a19c"
+            ]
+        ]
+    },
+    {
+        "id": "cf6f936f.6a19c",
+        "type": "function",
+        "z": "2ecd8f9e.7058d",
+        "name": "Who Left Home in last 10 mins",
+        "func": "const ENTITY_NAMES = {\n    'device_tracker.nicksiphone': 'Nick',\n    'device_tracker.charlotte_phone': 'Charlotte',\n    'device_tracker.joesiphone': 'Joe',\n    'device_tracker.katesiphone_2': 'Kate',\n    'device_tracker.louises7iphone': 'Louise',\n    'device_tracker.oliversiphone': 'Oliver',\n    'device_tracker.peter_phone': 'Peter',\n}\n\nconst states = msg.payload\n    .reduce((states, acc) => acc.concat(states), [])\n    .filter(s => s.state === 'not_home')\n    .filter(s => within(s.last_updated, 60 * 10))\n    .sort((s1, s2) => cmpDates(s1.last_updated, s2.last_updated))\n    .map(s => ENTITY_NAMES[s.entity_id])\n    .filter(s => !!s);\n\nreturn {\n    payload: states\n}\n\nfunction cmpDates(d1, d2) {\n    return new Date(d1) - new Date(d2);\n}\n\nfunction within(d, seconds) {\n    return new Date(d) > new Date(new Date().getTime() - seconds * 1000);\n}\n\n",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1161.5,
+        "y": 655,
+        "wires": [
+            [
+                "66705893.c84"
+            ]
+        ]
+    },
+    {
+        "id": "66705893.c84",
+        "type": "function",
+        "z": "2ecd8f9e.7058d",
+        "name": "Build Telegram message",
+        "func": "\nfunction getPeople() {\n    if (msg.payload.length === 0) {\n        return \"Someone\";\n    }\n    \n    if (msg.payload.length === 1) {\n        return msg.payload[0];\n    }\n    \n    const [last, ...people] = msg.payload;\n    return `${people.join(', ')} and ${last}`;\n}\n\nconst people = getPeople();\n\nreturn {\n    payload: {\n        data: {\n            message: `${people} just left home, so I will arm the alarm.`,\n        }\n    }\n}",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 952,
+        "y": 719,
+        "wires": [
+            [
+                "8446df15.f498f"
+            ]
+        ]
+    },
+    {
+        "id": "6cb32c8.9a8dad4",
+        "type": "function",
+        "z": "2ecd8f9e.7058d",
+        "name": "Who Arrived Home last minute",
+        "func": "const ENTITY_NAMES = {\n    'device_tracker.nicksiphone': 'Nick',\n    'device_tracker.charlotte_phone': 'Charlotte',\n    'device_tracker.joesiphone': 'Joe',\n    'device_tracker.katesiphone_2': 'Kate',\n    'device_tracker.louises7iphone': 'Louise',\n    'device_tracker.oliversiphone': 'Oliver',\n    'device_tracker.peter_phone': 'Peter',\n}\n\nconst states = msg.payload\n    .reduce((states, acc) => acc.concat(states), [])\n    .filter(s => s.state === 'home')\n    .filter(s => within(s.last_updated, 60))\n    .sort((s1, s2) => cmpDates(s1.last_updated, s2.last_updated))\n    .map(s => ENTITY_NAMES[s.entity_id])\n    .filter(s => !!s);\n\nreturn {\n    payload: states\n}\n\nfunction cmpDates(d1, d2) {\n    return new Date(d1) - new Date(d2);\n}\n\nfunction within(d, seconds) {\n    return new Date(d) > new Date(new Date().getTime() - seconds * 1000);\n}\n\n",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 939,
+        "y": 227,
+        "wires": [
+            [
+                "9a9fde8d.1ac02"
+            ]
+        ]
+    },
+    {
+        "id": "9a9fde8d.1ac02",
+        "type": "function",
+        "z": "2ecd8f9e.7058d",
+        "name": "Build Telegram message",
+        "func": "\nfunction getPeople() {\n    if (msg.payload.length === 0) {\n        return \"Someone\";\n    }\n    \n    if (msg.payload.length === 1) {\n        return msg.payload[0];\n    }\n    \n    const [last, ...people] = msg.payload;\n    return `${people.join(', ')} and ${last}`;\n}\n\nconst people = getPeople();\n\nreturn {\n    payload: {\n        data: {\n            \n            message: `${people} has arrived home, so I will disarm the alarm.`,\n        }\n    }\n}",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1216,
+        "y": 225,
+        "wires": [
+            [
+                "d9f9551c.72c418"
+            ]
+        ]
+    },
+    {
+        "id": "d9f9551c.72c418",
+        "type": "api-call-service",
+        "z": "2ecd8f9e.7058d",
+        "name": "Notify",
+        "server": "a5b319a.98d53e8",
+        "service_domain": "notify",
+        "service": "telegram",
+        "data": "",
+        "render_data": false,
+        "mergecontext": "",
+        "output_location": "payload",
+        "output_location_type": "msg",
+        "x": 1414,
+        "y": 224,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "c38b00d.a8bdd",
+        "type": "api-get-history",
+        "z": "2ecd8f9e.7058d",
+        "name": "Device Trackers",
+        "server": "a5b319a.98d53e8",
+        "startdate": "",
+        "enddate": "",
+        "entityid": "device_tracker.*",
+        "entityidtype": "includes",
+        "x": 676,
+        "y": 224,
+        "wires": [
+            [
+                "6cb32c8.9a8dad4"
+            ]
+        ]
+    },
+    {
+        "id": "5594af65.44ca18",
+        "type": "mqtt out",
+        "z": "2ecd8f9e.7058d",
+        "name": "",
+        "topic": "nodered/alarm/auto-arm",
+        "qos": "1",
+        "retain": "true",
+        "broker": "9fa26dd7.88bcd",
+        "x": 711.5,
+        "y": 760,
+        "wires": []
     }
 ]
