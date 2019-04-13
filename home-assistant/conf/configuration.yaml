@@ -30,8 +30,6 @@ frontend:
 config:
 
 http:
-  # Secrets are defined in the file secrets.yaml
-  api_password: !secret http_password
   use_x_forwarded_for: true
   trusted_proxies:
     - 127.0.0.1
