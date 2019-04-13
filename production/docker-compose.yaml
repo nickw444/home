@@ -3,7 +3,7 @@ services:
     homeassistant:
         restart: always
         container_name: homeassistant
-        image: homeassistant/home-assistant:0.89.2
+        image: homeassistant/home-assistant:0.91.2
         volumes:
             - "/etc/homekit/home-assistant/conf:/config"
             - "/etc/localtime:/etc/localtime:ro"
@@ -13,7 +13,7 @@ services:
     mosquitto:
         restart: always
         container_name: mosquitto
-        image: eclipse-mosquitto:1.5.6
+        image: eclipse-mosquitto:1.5.8
         volumes:
             - "/etc/homekit/production/mosquitto:/mosquitto/config"
             - "/var/lib/mosquitto:/mosquitto/data"
@@ -24,7 +24,7 @@ services:
     influxdb:
         restart: always
         container_name: influxdb
-        image: influxdb:1.7.3
+        image: influxdb:1.7.5
         volumes:
             - "/var/lib/influxdb:/var/lib/influxdb"
         ports:
@@ -33,7 +33,7 @@ services:
     grafana:
         restart: always
         container_name: grafana
-        image: grafana/grafana:5.4.3
+        image: grafana/grafana:6.1.3
         volumes:
             - "/var/lib/grafana:/var/lib/grafana"
         links:
@@ -46,7 +46,7 @@ services:
     nodered:
         restart: always
         container_name: nodered
-        image: nodered/node-red-docker:0.19.5-v8
+        image: nodered/node-red-docker:0.20.5-v8
         volumes:
             - "/etc/homekit/node-red:/data"
             - "/etc/localtime:/etc/localtime:ro"
