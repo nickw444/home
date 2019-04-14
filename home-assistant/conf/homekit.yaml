@@ -1,29 +1,30 @@
 filter:
   exclude_entities:
-    - switch.sprinkle_lavender_trigger
-    - switch.sprinkle_lower_lawn_trigger
-    - switch.sprinkle_upper_lawn_trigger
-    - switch.sprinkle_front_terrace_trigger
-    - switch.sprinkle_recycled_front_terrace_trigger
-    - switch.sprinkle_herbs_trigger
-    - switch.sprinkle_back_yard_trigger
-    - switch.sprinkle_back_yard_recycled_trigger
-    - switch.sprinkle_recycled_pump_trigger
-    - switch.sprinkle_lavender_power
-    - switch.sprinkle_lower_lawn_power
-    - switch.sprinkle_upper_lawn_power
-    - switch.sprinkle_front_terrace_power
-    - switch.sprinkle_recycled_front_terrace_power
-    - switch.sprinkle_herbs_power
     - switch.sprinkle_back_yard_power
+    - switch.sprinkle_back_yard_trigger
     - switch.sprinkle_back_yard_recycled_power
+    - switch.sprinkle_back_yard_recycled_trigger
+    - switch.sprinkle_front_terrace_power
+    - switch.sprinkle_front_terrace_trigger
+    - switch.sprinkle_front_terrace_recycled_power
+    - switch.sprinkle_front_terrace_recycled_trigger
+    - switch.sprinkle_herbs_power
+    - switch.sprinkle_herbs_trigger
+    - switch.sprinkle_lavender_power
+    - switch.sprinkle_lavender_trigger
+    - switch.sprinkle_lower_lawn_power
+    - switch.sprinkle_lower_lawn_trigger
     - switch.sprinkle_recycled_pump_power
+    - switch.sprinkle_recycled_pump_trigger
+    - switch.sprinkle_upper_lawn_power
+    - switch.sprinkle_upper_lawn_trigger
     - switch.nicks_downlights_3
     - cover.blindkit_group_upstairs
     - cover.blindkit_group_quiet_room
     - cover.blindkit_group_nicks_blinds
     - cover.blindkit_group_kitchen_rear
     - cover.blindkit_group_kitchen_front
+    - binary_sensor.remote_ui
   exclude_domains:
     - device_tracker
     - script
