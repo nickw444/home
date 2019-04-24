@@ -8,6 +8,7 @@
   host: 192.168.8.33
   mac: b4:43:0d:e6:35:8f
   switches:
+    # Codes can be generated at https://dimagoltsman.github.io/Random-Broadlink-RM-Code-Generator/
     quiet_center_downlights:
       friendly_name: Center Downlights
       command_on: sgw0AA0kDSQkDSQNDSQNJCQNJA0kDSQNJA0NJCQNDSQkDSQNDSQkDSQNDSQNJA0kJA0kDQwAAW8AAAAA
