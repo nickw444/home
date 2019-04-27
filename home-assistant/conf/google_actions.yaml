@@ -62,6 +62,18 @@ entity_config:
     room: Nick's Bedroom
     aliases:
       - Fairy Lights
+  cover.blindkit_group_quiet_room:
+    name: Blinds
+    room: Quiet Room
+  switch.quiet_center_downlights:
+    name: Center Downlights
+    room: Quiet Room
+  switch.quiet_mid_downlights:
+    name: Mid Downlights
+    room: Quiet Room
+  switch.quiet_outer_downlights:
+    name: Outer Downlights
+    room: Quiet Room
   script.nick_bedtime:
     name: Nick Bedtime
     room: Nick's Bedroom
