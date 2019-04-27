@@ -67,17 +67,25 @@ entity_config:
     aliases:
       - Fairy Lights
   cover.blindkit_group_quiet_room:
-    name: Blinds
+    name: Quiet Room Blinds
     room: Quiet Room
+    aliases:
+      - Blinds
   switch.quiet_center_downlights:
-    name: Center Downlights
+    name: Quiet Room Center Downlights
     room: Quiet Room
+    aliases:
+      - Center Downlights
   switch.quiet_mid_downlights:
-    name: Mid Downlights
+    name: Quiet Room Mid Downlights
     room: Quiet Room
+    aliases:
+      - Mid Downlights
   switch.quiet_outer_downlights:
-    name: Outer Downlights
+    name: Quiet Room Outer Downlights
     room: Quiet Room
+    aliases:
+      - Outer Downlights
   script.nick_bedtime:
     name: Nick Bedtime
     room: Nick's Bedroom
