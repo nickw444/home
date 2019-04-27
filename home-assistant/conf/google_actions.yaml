@@ -10,6 +10,10 @@ filter:
     - switch.nicks_downlights_desk
     - switch.nicks_fairy_lights
     - script.nick_bedtime
+    - cover.blindkit_group_quiet_room
+    - switch.quiet_center_downlights
+    - switch.quiet_mid_downlights
+    - switch.quiet_outer_downlights
 entity_config:
   cover.blindkit_nicks_front:
     name: Nick's Front Blind
