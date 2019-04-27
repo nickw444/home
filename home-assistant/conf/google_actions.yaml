@@ -76,16 +76,19 @@ entity_config:
     room: Quiet Room
     aliases:
       - Center Downlights
+      - Center Lights
   switch.quiet_mid_downlights:
     name: Quiet Room Mid Downlights
     room: Quiet Room
     aliases:
       - Mid Downlights
+      - Mid Lights
   switch.quiet_outer_downlights:
     name: Quiet Room Outer Downlights
     room: Quiet Room
     aliases:
       - Outer Downlights
+      - Outer Lights
   script.nick_bedtime:
     name: Nick Bedtime
     room: Nick's Bedroom
