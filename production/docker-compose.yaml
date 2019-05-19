@@ -3,7 +3,7 @@ services:
     homeassistant:
         restart: always
         container_name: homeassistant
-        image: homeassistant/home-assistant:0.91.2
+        image: homeassistant/home-assistant:0.93.1
         volumes:
             - "/etc/homekit/home-assistant/conf:/config"
             - "/etc/localtime:/etc/localtime:ro"
