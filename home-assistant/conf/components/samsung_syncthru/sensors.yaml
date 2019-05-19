@@ -1,8 +1,3 @@
 - platform: syncthru
   resource: http://print.home
   name: Nick's Printer
-  monitored_conditions:
-    - toner_black
-    - drum_black
-    - tray_1
-    - output_tray_0
