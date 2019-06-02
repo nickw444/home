@@ -3595,5 +3595,236 @@
         "x": 711.5,
         "y": 760,
         "wires": []
+    },
+    {
+        "id": "5464d2f9.1844d4",
+        "type": "api-call-service",
+        "z": "50bf183e.dccfb8",
+        "name": "Nicks Bedside (On)",
+        "server": "a5b319a.98d53e8",
+        "service_domain": "light",
+        "service": "turn_on",
+        "data": "{   \"entity_id\": \"light.bedside\" }",
+        "mergecontext": "",
+        "x": 465,
+        "y": 545,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "2aea6435.36ff0c",
+        "type": "delay",
+        "z": "50bf183e.dccfb8",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "10",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "x": 436.5,
+        "y": 597,
+        "wires": [
+            [
+                "484e2bad.6b6464",
+                "c8bb2ff6.eb931",
+                "45b326fe.419c68",
+                "800904f.ceb76f8"
+            ]
+        ]
+    },
+    {
+        "id": "484e2bad.6b6464",
+        "type": "api-call-service",
+        "z": "50bf183e.dccfb8",
+        "name": "Nicks Fairy Lights (Off)",
+        "server": "a5b319a.98d53e8",
+        "service_domain": "switch",
+        "service": "turn_off",
+        "data": "{\"entity_id\":\"switch.nicks_fairy_lights\"}",
+        "render_data": false,
+        "mergecontext": "",
+        "output_location": "payload",
+        "output_location_type": "msg",
+        "x": 659,
+        "y": 589,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "c8bb2ff6.eb931",
+        "type": "api-call-service",
+        "z": "50bf183e.dccfb8",
+        "name": "Nicks Downlights Bed (Off)",
+        "server": "a5b319a.98d53e8",
+        "service_domain": "switch",
+        "service": "turn_off",
+        "data": "{\"entity_id\":\"switch.nicks_downlights_bed\"}",
+        "render_data": false,
+        "mergecontext": "",
+        "output_location": "payload",
+        "output_location_type": "msg",
+        "x": 680.5,
+        "y": 628,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "45b326fe.419c68",
+        "type": "api-call-service",
+        "z": "50bf183e.dccfb8",
+        "name": "Nicks Downlights Desk (Off)",
+        "server": "a5b319a.98d53e8",
+        "service_domain": "switch",
+        "service": "turn_off",
+        "data": "{\"entity_id\":\"switch.nicks_downlights_desk\"}",
+        "render_data": false,
+        "mergecontext": "",
+        "output_location": "payload",
+        "output_location_type": "msg",
+        "x": 681,
+        "y": 672,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "800904f.ceb76f8",
+        "type": "api-call-service",
+        "z": "50bf183e.dccfb8",
+        "name": "Nicks Bedside Fade Out",
+        "server": "a5b319a.98d53e8",
+        "service_domain": "light",
+        "service": "lifx_set_state",
+        "data": "{\"entity_id\":\"light.bedside\",\"transition\":300,\"power\":false}",
+        "render_data": false,
+        "mergecontext": "",
+        "output_location": "payload",
+        "output_location_type": "msg",
+        "x": 668,
+        "y": 719,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "269c30c1.5b9298",
+        "type": "delay",
+        "z": "50bf183e.dccfb8",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "10",
+        "timeoutUnits": "minutes",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "x": 448.5,
+        "y": 787,
+        "wires": [
+            [
+                "89262d68.487d98"
+            ]
+        ]
+    },
+    {
+        "id": "89262d68.487d98",
+        "type": "api-call-service",
+        "z": "50bf183e.dccfb8",
+        "name": "Electric Blanket (Off)",
+        "server": "a5b319a.98d53e8",
+        "service_domain": "switch",
+        "service": "turn_off",
+        "data": "{\"entity_id\":\"switch.my_smart_plug\"}",
+        "render_data": false,
+        "mergecontext": "",
+        "output_location": "payload",
+        "output_location_type": "msg",
+        "x": 657,
+        "y": 787,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "ff867183.85d938",
+        "type": "api-call-service",
+        "z": "50bf183e.dccfb8",
+        "name": "Smart Plug (On)",
+        "server": "a5b319a.98d53e8",
+        "service_domain": "switch",
+        "service": "turn_on",
+        "data": "{\"entity_id\":\"switch.my_smart_plug\"}",
+        "render_data": false,
+        "mergecontext": "",
+        "output_location": "payload",
+        "output_location_type": "msg",
+        "x": 456,
+        "y": 493,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "b0290b79.e4ff58",
+        "type": "inject",
+        "z": "50bf183e.dccfb8",
+        "name": "at 6am",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "00 06 * * *",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 256.5,
+        "y": 492,
+        "wires": [
+            [
+                "ff867183.85d938"
+            ]
+        ]
+    },
+    {
+        "id": "93b2be30.8d3ae",
+        "type": "server-events",
+        "z": "50bf183e.dccfb8",
+        "name": "",
+        "server": "a5b319a.98d53e8",
+        "event_type": "bedtime_start",
+        "x": 217,
+        "y": 543,
+        "wires": [
+            [
+                "5464d2f9.1844d4",
+                "2aea6435.36ff0c",
+                "269c30c1.5b9298",
+                "626c1d54.b2bf74"
+            ]
+        ]
+    },
+    {
+        "id": "626c1d54.b2bf74",
+        "type": "debug",
+        "z": "50bf183e.dccfb8",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "x": 269.5,
+        "y": 668,
+        "wires": []
     }
 ]
