@@ -24,7 +24,7 @@ services:
     influxdb:
         restart: always
         container_name: influxdb
-        image: influxdb:1.7.5
+        image: influxdb:1.7.6
         volumes:
             - "/var/lib/influxdb:/var/lib/influxdb"
         ports:
