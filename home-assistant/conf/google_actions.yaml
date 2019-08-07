@@ -1,7 +1,7 @@
 filter:
   include_entities:
-    - cover.blindkit_nicks_front
-    - cover.blindkit_nicks_side
+    - cover.blindkit_olivers_front
+    - cover.blindkit_olivers_side
     - cover.blindkit_group_kitchen_front
     - cover.blindkit_group_kitchen_rear
     - cover.blindkit_group_upstairs
@@ -12,13 +12,13 @@ filter:
     - switch.quiet_mid_downlights
     - switch.quiet_outer_downlights
 entity_config:
-  cover.blindkit_nicks_front:
+  cover.blindkit_olivers_front:
     name: Nick's Front Blind
     room: Nick's Bedroom
     aliases:
       - Front Blind
       - Front Blinds
-  cover.blindkit_nicks_side:
+  cover.blindkit_olivers_side:
     name: Nick's Side Blind
     room: Nick's Bedroom
     aliases:

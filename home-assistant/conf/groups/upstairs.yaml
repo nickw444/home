@@ -18,8 +18,8 @@ upstairs_blinds:
     - cover.blindkit_oly_side
     - cover.blindkit_master_front_right
     - cover.blindkit_master_front_left
-    - cover.blindkit_nicks_front
-    - cover.blindkit_nicks_side
+    - cover.blindkit_olivers_front
+    - cover.blindkit_olivers_side
     - cover.blindkit_joe_back
 
 nicks_bedroom:
@@ -28,8 +28,8 @@ nicks_bedroom:
   entities:
     - switch.nicks_downlights_bed
     - switch.nicks_downlights_desk
-    - cover.blindkit_nicks_front
-    - cover.blindkit_nicks_side
+    - cover.blindkit_olivers_front
+    - cover.blindkit_olivers_side
 
 joes_bedroom:
   name: Joe's Room
