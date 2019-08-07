@@ -5,22 +5,22 @@ filter:
     - cover.blindkit_group_kitchen_front
     - cover.blindkit_group_kitchen_rear
     - cover.blindkit_group_upstairs
-    - switch.nicks_downlights_bed
-    - switch.nicks_downlights_desk
+    - switch.olivers_downlights_bed
+    - switch.olivers_downlights_desk
     - cover.blindkit_group_quiet_room
     - switch.quiet_center_downlights
     - switch.quiet_mid_downlights
     - switch.quiet_outer_downlights
 entity_config:
   cover.blindkit_olivers_front:
-    name: Nick's Front Blind
-    room: Nick's Bedroom
+    name: Oliver's Front Blind
+    room: Oliver's Bedroom
     aliases:
       - Front Blind
       - Front Blinds
   cover.blindkit_olivers_side:
-    name: Nick's Side Blind
-    room: Nick's Bedroom
+    name: Oliver's Side Blind
+    room: Oliver's Bedroom
     aliases:
       - Side Blind
       - Side Blinds
@@ -38,16 +38,16 @@ entity_config:
   cover.blindkit_group_upstairs:
     name: Upstairs Blinds
     room: Upstairs
-  switch.nicks_downlights_bed:
-    name: Nick's Bed Downlights
-    room: Nick's Bedroom
+  switch.olivers_downlights_bed:
+    name: Oliver's Bed Downlights
+    room: Oliver's Bedroom
     aliases:
       - Bed Downlights
       - Bed Lights
       - Bed Ceiling Lights
-  switch.nicks_downlights_desk:
-    name: Nick's Desk Downlights
-    room: Nick's Bedroom
+  switch.olivers_downlights_desk:
+    name: Oliver's Desk Downlights
+    room: Oliver's Bedroom
     aliases:
       - Desk Downlights
       - Desk Lights

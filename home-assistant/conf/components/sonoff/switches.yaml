@@ -1,4 +1,4 @@
-- name: Nick's Downlights Bed
+- name: Oliver's Downlights Bed
   icon: mdi:lightbulb
   platform: mqtt
   state_topic: nicks_bedroom_wall/relay/0
@@ -10,7 +10,7 @@
   payload_not_available: 0
   unique_id: 6442BDA8-93A1-4AC6-9D3E-D4B3EADF09E3
 
-- name: Nick's Downlights Desk
+- name: Oliver's Downlights Desk
   icon: mdi:lightbulb
   platform: mqtt
   state_topic: nicks_bedroom_wall/relay/1
@@ -22,7 +22,7 @@
   payload_not_available: 0
   unique_id: 851A651A-68C0-4CAE-BCC9-5D5030921906
 
-- name: Nick's Downlights 3
+- name: Oliver's Downlights 3
   icon: mdi:lightbulb
   platform: mqtt
   state_topic: nicks_bedroom_wall/relay/2
