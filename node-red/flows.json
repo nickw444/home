@@ -7,13 +7,6 @@
         "info": ""
     },
     {
-        "id": "50bf183e.dccfb8",
-        "type": "tab",
-        "label": "Nick's Switches",
-        "disabled": false,
-        "info": ""
-    },
-    {
         "id": "562c7339.e576bc",
         "type": "tab",
         "label": "Sprinklers",
@@ -82,7 +75,6 @@
         "service_domain": "notify",
         "service": "telegram",
         "data": "{\"message\":\"The garage door is open and no one is home\",\"data\":{\"inline_keyboard\":[\"Close Garage:/close-garage\"]}}",
-        "render_data": false,
         "mergecontext": "",
         "output_location": "payload",
         "output_location_type": "msg",
@@ -176,11 +168,11 @@
         "z": "e3920ec8.cf4b3",
         "name": "family home",
         "server": "a5b319a.98d53e8",
+        "outputs": 1,
         "halt_if": "",
         "override_topic": true,
-        "override_payload": true,
         "entity_id": "group.family",
-        "outputs": 1,
+        "override_payload": true,
         "x": 510.5,
         "y": 222,
         "wires": [
@@ -224,11 +216,11 @@
         "z": "e3920ec8.cf4b3",
         "name": "garage state",
         "server": "a5b319a.98d53e8",
+        "outputs": 1,
         "halt_if": "",
         "override_topic": true,
-        "override_payload": true,
         "entity_id": "cover.garage",
-        "outputs": 1,
+        "override_payload": true,
         "x": 511.5,
         "y": 271,
         "wires": [
@@ -290,207 +282,6 @@
         ]
     },
     {
-        "id": "8e9e324.78648d",
-        "type": "trigger-state",
-        "z": "50bf183e.dccfb8",
-        "name": "Downlights On",
-        "server": "a5b319a.98d53e8",
-        "entityid": "switch.nicks_downlights_3",
-        "entityidfiltertype": "exact",
-        "debugenabled": false,
-        "constraints": [
-            {
-                "id": "vhjhmct8h7",
-                "targetType": "this_entity",
-                "targetValue": "",
-                "propertyType": "current_state",
-                "propertyValue": "new_state.state",
-                "comparatorType": "is",
-                "comparatorValueDatatype": "str",
-                "comparatorValue": "on"
-            }
-        ],
-        "constraintsmustmatch": "all",
-        "outputs": 2,
-        "customoutputs": [],
-        "x": 141.5,
-        "y": 161,
-        "wires": [
-            [
-                "ade776bd.972078",
-                "864051dc.41f37"
-            ],
-            []
-        ]
-    },
-    {
-        "id": "e8713a3.31496c8",
-        "type": "api-call-service",
-        "z": "50bf183e.dccfb8",
-        "name": "Nicks Bedside (On)",
-        "server": "a5b319a.98d53e8",
-        "service_domain": "light",
-        "service": "turn_on",
-        "data": "{   \"entity_id\": \"light.bedside\" }",
-        "mergecontext": "",
-        "x": 899.5,
-        "y": 63,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "c2e97a35.5dcf98",
-        "type": "api-call-service",
-        "z": "50bf183e.dccfb8",
-        "name": "Nicks Fairy Lights (On)",
-        "server": "a5b319a.98d53e8",
-        "service_domain": "switch",
-        "service": "turn_on",
-        "data": "{   \"entity_id\": \"switch.nicks_fairy_lights\" }",
-        "mergecontext": "",
-        "x": 911,
-        "y": 102,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "ade776bd.972078",
-        "type": "api-current-state",
-        "z": "50bf183e.dccfb8",
-        "name": "Fairy Lights",
-        "server": "a5b319a.98d53e8",
-        "halt_if": "",
-        "override_topic": true,
-        "override_payload": true,
-        "entity_id": "switch.nicks_fairy_lights",
-        "outputs": 1,
-        "x": 366.5,
-        "y": 137,
-        "wires": [
-            [
-                "444a39.54c5d5c8"
-            ]
-        ]
-    },
-    {
-        "id": "864051dc.41f37",
-        "type": "api-current-state",
-        "z": "50bf183e.dccfb8",
-        "name": "Bedside",
-        "server": "a5b319a.98d53e8",
-        "halt_if": "",
-        "override_topic": true,
-        "override_payload": true,
-        "entity_id": "light.bedside",
-        "outputs": 1,
-        "x": 355,
-        "y": 179,
-        "wires": [
-            [
-                "444a39.54c5d5c8"
-            ]
-        ]
-    },
-    {
-        "id": "444a39.54c5d5c8",
-        "type": "join",
-        "z": "50bf183e.dccfb8",
-        "name": "",
-        "mode": "custom",
-        "build": "object",
-        "property": "payload",
-        "propertyType": "msg",
-        "key": "topic",
-        "joiner": "\\n",
-        "joinerType": "str",
-        "accumulate": false,
-        "timeout": "10",
-        "count": "2",
-        "reduceRight": false,
-        "reduceExp": "",
-        "reduceInit": "",
-        "reduceInitType": "",
-        "reduceFixup": "",
-        "x": 535.5,
-        "y": 165,
-        "wires": [
-            [
-                "dd79fb29.3e00a8"
-            ]
-        ]
-    },
-    {
-        "id": "dd79fb29.3e00a8",
-        "type": "switch",
-        "z": "50bf183e.dccfb8",
-        "name": "on?",
-        "property": "payload",
-        "propertyType": "msg",
-        "rules": [
-            {
-                "t": "jsonata_exp",
-                "v": "payload.'switch.nicks_fairy_lights' = 'off' and payload.'light.bedside' = 'off'",
-                "vt": "jsonata"
-            },
-            {
-                "t": "else"
-            }
-        ],
-        "checkall": "true",
-        "repair": false,
-        "outputs": 2,
-        "x": 670.5,
-        "y": 166,
-        "wires": [
-            [
-                "e8713a3.31496c8",
-                "c2e97a35.5dcf98"
-            ],
-            [
-                "19ddf8a7.95f717",
-                "6e9e4a05.c6d4d4"
-            ]
-        ],
-        "outputLabels": [
-            "all off",
-            "otherwise"
-        ]
-    },
-    {
-        "id": "19ddf8a7.95f717",
-        "type": "api-call-service",
-        "z": "50bf183e.dccfb8",
-        "name": "Nicks Bedside (Off)",
-        "server": "a5b319a.98d53e8",
-        "service_domain": "light",
-        "service": "turn_off",
-        "data": "{   \"entity_id\": \"light.bedside\" }",
-        "mergecontext": "",
-        "x": 903,
-        "y": 227,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "6e9e4a05.c6d4d4",
-        "type": "api-call-service",
-        "z": "50bf183e.dccfb8",
-        "name": "Nicks Fairy Lights (Off)",
-        "server": "a5b319a.98d53e8",
-        "service_domain": "switch",
-        "service": "turn_off",
-        "data": "{   \"entity_id\": \"switch.nicks_fairy_lights\" }",
-        "mergecontext": "",
-        "x": 914.5,
-        "y": 266,
-        "wires": [
-            []
-        ]
-    },
-    {
         "id": "63ebe245.3f2e3c",
         "type": "inject",
         "z": "e3920ec8.cf4b3",
@@ -516,11 +307,11 @@
         "z": "e3920ec8.cf4b3",
         "name": "garage state",
         "server": "a5b319a.98d53e8",
+        "outputs": 1,
         "halt_if": "",
         "override_topic": true,
-        "override_payload": true,
         "entity_id": "cover.garage",
-        "outputs": 1,
+        "override_payload": true,
         "x": 504,
         "y": 486,
         "wires": [
@@ -781,16 +572,6 @@
         "wires": []
     },
     {
-        "id": "d6824fd7.463f6",
-        "type": "comment",
-        "z": "25f1e9b0.2f2f06",
-        "name": "Open Nicks Blinds at 8am weekdays",
-        "info": "",
-        "x": 162.5,
-        "y": 813,
-        "wires": []
-    },
-    {
         "id": "a5288667.f7f6a8",
         "type": "inject",
         "z": "25f1e9b0.2f2f06",
@@ -1034,11 +815,11 @@
         "z": "e3920ec8.cf4b3",
         "name": "garage state",
         "server": "a5b319a.98d53e8",
+        "outputs": 1,
         "halt_if": "",
         "override_topic": true,
-        "override_payload": true,
         "entity_id": "cover.garage",
-        "outputs": 1,
+        "override_payload": true,
         "x": 843,
         "y": 671,
         "wires": [
@@ -1225,61 +1006,6 @@
         ]
     },
     {
-        "id": "945f03d3.c35cf",
-        "type": "api-call-service",
-        "z": "25f1e9b0.2f2f06",
-        "name": "",
-        "server": "a5b319a.98d53e8",
-        "service_domain": "cover",
-        "service": "open_cover",
-        "data": "{\"entity_id\":\"cover.blindkit_nicks_front\"}",
-        "render_data": false,
-        "mergecontext": "",
-        "output_location": "payload",
-        "output_location_type": "msg",
-        "x": 1014,
-        "y": 860,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "d1979b14.89b638",
-        "type": "inject",
-        "z": "25f1e9b0.2f2f06",
-        "name": "Daily at 10:30am",
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "repeat": "",
-        "crontab": "30 10 * * *",
-        "once": false,
-        "onceDelay": 0.1,
-        "x": 147,
-        "y": 861,
-        "wires": [
-            [
-                "3a26b07.6beea5"
-            ]
-        ]
-    },
-    {
-        "id": "245249de.f27826",
-        "type": "api-call-service",
-        "z": "25f1e9b0.2f2f06",
-        "name": "",
-        "server": "a5b319a.98d53e8",
-        "service_domain": "cover",
-        "service": "open_cover",
-        "data": "{ \"entity_id\": \"cover.blindkit_nicks_side\" }",
-        "mergecontext": "",
-        "x": 1015,
-        "y": 900,
-        "wires": [
-            []
-        ]
-    },
-    {
         "id": "c76bec1b.d2d52",
         "type": "inject",
         "z": "e3920ec8.cf4b3",
@@ -1308,7 +1034,6 @@
         "service_domain": "telegram_bot",
         "service": "answer_callback_query",
         "data": "",
-        "render_data": false,
         "mergecontext": "",
         "output_location": "payload",
         "output_location_type": "msg",
@@ -1408,7 +1133,6 @@
         "service_domain": "notify",
         "service": "telegram",
         "data": "{\"message\":\"It is after 11pm and it appears the garage door is still open\",\"data\":{\"inline_keyboard\":[\"Close Garage:/close-garage\"]}}",
-        "render_data": false,
         "mergecontext": "",
         "output_location": "payload",
         "output_location_type": "msg",
@@ -1562,22 +1286,6 @@
         "mergecontext": "",
         "x": 358,
         "y": 763,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "c1a7b568.e03628",
-        "type": "api-call-service",
-        "z": "25f1e9b0.2f2f06",
-        "name": "Log Automation",
-        "server": "a5b319a.98d53e8",
-        "service_domain": "logbook",
-        "service": "log",
-        "data": "{ \"name\": \"Automation Started\", \"message\": \"Open Nicks Blinds at 8am weekdays\" }",
-        "mergecontext": "",
-        "x": 998,
-        "y": 940,
         "wires": [
             []
         ]
@@ -1808,7 +1516,6 @@
         "service_domain": "notify",
         "service": "telegram",
         "data": "{\"message\":\"It's hot today, so I am giving the herbs some extra water\"}",
-        "render_data": false,
         "mergecontext": "",
         "output_location": "payload",
         "output_location_type": "msg",
@@ -1919,7 +1626,6 @@
         "service_domain": "alarm_control_panel",
         "service": "alarm_arm_away",
         "data": "{\"entity_id\":\"alarm_control_panel.alarm_panel\"}",
-        "render_data": true,
         "mergecontext": "",
         "output_location": "payload",
         "output_location_type": "msg",
@@ -1938,7 +1644,6 @@
         "service_domain": "alarm_control_panel",
         "service": "alarm_disarm",
         "data": "{\"entity_id\":\"alarm_control_panel.alarm_panel\"}",
-        "render_data": false,
         "mergecontext": "",
         "output_location": "payload",
         "output_location_type": "msg",
@@ -1954,15 +1659,15 @@
         "z": "2ecd8f9e.7058d",
         "name": "Get family state",
         "server": "a5b319a.98d53e8",
+        "outputs": 1,
         "halt_if": "",
         "halt_if_type": "str",
         "halt_if_compare": "is",
         "override_topic": true,
-        "override_payload": true,
-        "override_data": true,
         "entity_id": "group.family",
         "state_type": "str",
-        "outputs": 1,
+        "override_payload": true,
+        "override_data": true,
         "x": 314.5,
         "y": 536,
         "wires": [
@@ -1980,7 +1685,6 @@
         "service_domain": "notify",
         "service": "telegram",
         "data": "{\"message\":\"Someone has arrived home, so I will disarm the alarm.\"}",
-        "render_data": false,
         "mergecontext": "",
         "output_location": "payload",
         "output_location_type": "msg",
@@ -2069,15 +1773,15 @@
         "z": "2ecd8f9e.7058d",
         "name": "Get alarm_auto_arm state",
         "server": "a5b319a.98d53e8",
+        "outputs": 1,
         "halt_if": "",
         "halt_if_type": "str",
         "halt_if_compare": "is",
         "override_topic": true,
-        "override_payload": true,
-        "override_data": true,
         "entity_id": "input_boolean.alarm_auto_arm",
         "state_type": "str",
-        "outputs": 1,
+        "override_payload": true,
+        "override_data": true,
         "x": 345.5,
         "y": 584,
         "wires": [
@@ -2092,15 +1796,15 @@
         "z": "2ecd8f9e.7058d",
         "name": "Get alarm state",
         "server": "a5b319a.98d53e8",
+        "outputs": 1,
         "halt_if": "",
         "halt_if_type": "str",
         "halt_if_compare": "is",
         "override_topic": true,
-        "override_payload": true,
-        "override_data": true,
         "entity_id": "alarm_control_panel.alarm_panel",
         "state_type": "str",
-        "outputs": 1,
+        "override_payload": true,
+        "override_data": true,
         "x": 315,
         "y": 489,
         "wires": [
@@ -2221,7 +1925,6 @@
         "service_domain": "notify",
         "service": "telegram",
         "data": "",
-        "render_data": false,
         "mergecontext": "",
         "output_location": "payload",
         "output_location_type": "msg",
@@ -2237,15 +1940,15 @@
         "z": "2ecd8f9e.7058d",
         "name": "armed?",
         "server": "a5b319a.98d53e8",
+        "outputs": 2,
         "halt_if": "disarmed",
         "halt_if_type": "str",
         "halt_if_compare": "is",
         "override_topic": true,
-        "override_payload": true,
-        "override_data": true,
         "entity_id": "alarm_control_panel.alarm_panel",
         "state_type": "str",
-        "outputs": 2,
+        "override_payload": true,
+        "override_data": true,
         "x": 446,
         "y": 124,
         "wires": [
@@ -2417,7 +2120,6 @@
         "service_domain": "notify",
         "service": "telegram",
         "data": "{\"message\":\"The sprinklers are unavailable and probably requires a reboot. No plants will be watered until this occurs.\"}",
-        "render_data": false,
         "mergecontext": "",
         "output_location": "payload",
         "output_location_type": "msg",
@@ -2481,7 +2183,6 @@
         "service_domain": "notify",
         "service": "telegram",
         "data": "{\"message\":\"The sprinklers are back online\"}",
-        "render_data": false,
         "mergecontext": "",
         "output_location": "payload",
         "output_location_type": "msg",
@@ -2510,12 +2211,11 @@
         "service_domain": "cover",
         "service": "open_cover",
         "data": "{\"entity_id\":\"cover.blindkit_master_front_left\"}",
-        "render_data": false,
         "mergecontext": "",
         "output_location": "payload",
         "output_location_type": "msg",
-        "x": 652,
-        "y": 1344,
+        "x": 637,
+        "y": 891,
         "wires": [
             []
         ]
@@ -2532,8 +2232,8 @@
         "crontab": "00 08 * * *",
         "once": false,
         "onceDelay": 0.1,
-        "x": 144,
-        "y": 1343,
+        "x": 129,
+        "y": 890,
         "wires": [
             [
                 "d863dd1e.07bba",
@@ -2551,12 +2251,11 @@
         "service_domain": "logbook",
         "service": "log",
         "data": "{\"name\":\"Automation Started\",\"message\":\"Master Bedroom Blinds Up 8am\"}",
-        "render_data": false,
         "mergecontext": "",
         "output_location": "payload",
         "output_location_type": "msg",
-        "x": 365,
-        "y": 1379,
+        "x": 350,
+        "y": 926,
         "wires": [
             []
         ]
@@ -2567,8 +2266,8 @@
         "z": "25f1e9b0.2f2f06",
         "name": "Open Master Bedroom blinds at 8am",
         "info": "",
-        "x": 192,
-        "y": 1291,
+        "x": 177,
+        "y": 838,
         "wires": []
     },
     {
@@ -2580,12 +2279,11 @@
         "service_domain": "cover",
         "service": "open_cover",
         "data": "{\"entity_id\":\"cover.blindkit_master_front_right\"}",
-        "render_data": false,
         "mergecontext": "",
         "output_location": "payload",
         "output_location_type": "msg",
-        "x": 650,
-        "y": 1388,
+        "x": 635,
+        "y": 935,
         "wires": [
             []
         ]
@@ -2599,12 +2297,11 @@
         "service_domain": "cover",
         "service": "close_cover",
         "data": "{\"entity_id\":\"cover.blindkit_master_front_left\"}",
-        "render_data": false,
         "mergecontext": "",
         "output_location": "payload",
         "output_location_type": "msg",
-        "x": 657,
-        "y": 1499,
+        "x": 642,
+        "y": 1046,
         "wires": [
             []
         ]
@@ -2621,8 +2318,8 @@
         "crontab": "00 21 * * *",
         "once": false,
         "onceDelay": 0.1,
-        "x": 149,
-        "y": 1498,
+        "x": 134,
+        "y": 1045,
         "wires": [
             [
                 "775faab.a11c954",
@@ -2640,12 +2337,11 @@
         "service_domain": "logbook",
         "service": "log",
         "data": "{\"name\":\"Automation Started\",\"message\":\"Master Bedroom Blinds Down 9pm\"}",
-        "render_data": false,
         "mergecontext": "",
         "output_location": "payload",
         "output_location_type": "msg",
-        "x": 370,
-        "y": 1534,
+        "x": 355,
+        "y": 1081,
         "wires": [
             []
         ]
@@ -2656,8 +2352,8 @@
         "z": "25f1e9b0.2f2f06",
         "name": "Close Master Bedroom blinds at 9pm",
         "info": "",
-        "x": 197,
-        "y": 1446,
+        "x": 182,
+        "y": 993,
         "wires": []
     },
     {
@@ -2669,12 +2365,11 @@
         "service_domain": "cover",
         "service": "close_cover",
         "data": "{\"entity_id\":\"cover.blindkit_master_front_right\"}",
-        "render_data": false,
         "mergecontext": "",
         "output_location": "payload",
         "output_location_type": "msg",
-        "x": 655,
-        "y": 1543,
+        "x": 640,
+        "y": 1090,
         "wires": [
             []
         ]
@@ -2708,15 +2403,15 @@
         "z": "562c7339.e576bc",
         "name": "",
         "server": "a5b319a.98d53e8",
+        "outputs": 2,
         "halt_if": "unavailable",
         "halt_if_type": "str",
         "halt_if_compare": "is_not",
         "override_topic": true,
-        "override_payload": true,
-        "override_data": true,
         "entity_id": "switch.sprinkle_herbs_trigger",
         "state_type": "str",
-        "outputs": 2,
+        "override_payload": true,
+        "override_data": true,
         "x": 644.5,
         "y": 947,
         "wires": [
@@ -2969,97 +2664,6 @@
         ]
     },
     {
-        "id": "3a26b07.6beea5",
-        "type": "api-get-history",
-        "z": "25f1e9b0.2f2f06",
-        "name": "Nick's Room Blinds",
-        "server": "a5b319a.98d53e8",
-        "startdate": "",
-        "enddate": "",
-        "entityid": "cover.blindkit_nicks_",
-        "entityidtype": "includes",
-        "x": 494,
-        "y": 860,
-        "wires": [
-            [
-                "ce9afdd8.be7b9"
-            ]
-        ]
-    },
-    {
-        "id": "ce9afdd8.be7b9",
-        "type": "function",
-        "z": "25f1e9b0.2f2f06",
-        "name": "Has opened/closed today?",
-        "func": "const today = new Date();\n\nconst payload = msg.payload\n    .reduce((acc, el) => {\n        return acc.concat(el)\n    }, [])\n    .filter(s => {\n        const d = new Date(s.last_updated)\n        return sameDay(d, today) && \n            d.getHours() > 4 &&\n            (s.state == 'open' || s.state == 'closed')\n    })\n    \nconst newMsg = Object.assign({}, msg, { payload });\n\nif (payload.length > 0) {\n    node.status({fill:\"green\",shape:\"dot\",text:\"has opened\"});\n    return [newMsg, null];\n} else {\n    node.status({fill:\"red\",shape:\"dot\",text:\"not opened\"});\n    return [null, newMsg];\n}\n    \n\nfunction sameDay(d1, d2) {\n  return d1.getFullYear() === d2.getFullYear() &&\n    d1.getMonth() === d2.getMonth() &&\n    d1.getDate() === d2.getDate();\n}",
-        "outputs": 2,
-        "noerr": 0,
-        "x": 725,
-        "y": 861,
-        "wires": [
-            [],
-            [
-                "245249de.f27826",
-                "945f03d3.c35cf",
-                "c1a7b568.e03628",
-                "809ae4c0.85c858",
-                "18c86f24.205f71"
-            ]
-        ],
-        "outputLabels": [
-            "allowed",
-            "blocked"
-        ]
-    },
-    {
-        "id": "fd6c023a.c76b5",
-        "type": "comment",
-        "z": "25f1e9b0.2f2f06",
-        "name": "Open Nicks Blinds when the lights turn on",
-        "info": "",
-        "x": 182,
-        "y": 937,
-        "wires": []
-    },
-    {
-        "id": "809ae4c0.85c858",
-        "type": "api-call-service",
-        "z": "25f1e9b0.2f2f06",
-        "name": "switch.nicks_downlights_bed: off",
-        "server": "a5b319a.98d53e8",
-        "service_domain": "switch",
-        "service": "turn_off",
-        "data": "{\"entity_id\":\"switch.nicks_downlights_bed\"}",
-        "render_data": false,
-        "mergecontext": "",
-        "output_location": "payload",
-        "output_location_type": "msg",
-        "x": 1055.5,
-        "y": 997,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "18c86f24.205f71",
-        "type": "api-call-service",
-        "z": "25f1e9b0.2f2f06",
-        "name": "switch.nicks_downlights_desk: off",
-        "server": "a5b319a.98d53e8",
-        "service_domain": "switch",
-        "service": "turn_off",
-        "data": "{\"entity_id\":\"switch.nicks_downlights_desk\"}",
-        "render_data": false,
-        "mergecontext": "",
-        "output_location": "payload",
-        "output_location_type": "msg",
-        "x": 1056,
-        "y": 1035,
-        "wires": [
-            []
-        ]
-    },
-    {
         "id": "119ce8d.3cf4e97",
         "type": "trigger-state",
         "z": "2ecd8f9e.7058d",
@@ -3113,7 +2717,6 @@
         "service_domain": "notify",
         "service": "telegram",
         "data": "{\"message\":\"The alarm was disarmed.\"}",
-        "render_data": false,
         "mergecontext": "",
         "output_location": "payload",
         "output_location_type": "msg",
@@ -3132,7 +2735,6 @@
         "service_domain": "notify",
         "service": "telegram",
         "data": "",
-        "render_data": false,
         "mergecontext": "",
         "output_location": "payload",
         "output_location_type": "msg",
@@ -3195,7 +2797,6 @@
         "service_domain": "camera",
         "service": "snapshot",
         "data": "{\"entity_id\":\"camera.front_door\"}",
-        "render_data": false,
         "mergecontext": "",
         "output_location": "payload",
         "output_location_type": "msg",
@@ -3336,7 +2937,6 @@
         "service_domain": "notify",
         "service": "telegram",
         "data": "{\"message\":\"The alarm was triggered!\"}",
-        "render_data": false,
         "mergecontext": "",
         "output_location": "payload",
         "output_location_type": "msg",
@@ -3355,7 +2955,6 @@
         "service_domain": "notify",
         "service": "telegram_nick",
         "data": "",
-        "render_data": false,
         "mergecontext": "",
         "output_location": "payload",
         "output_location_type": "msg",
@@ -3393,7 +2992,6 @@
         "service_domain": "logbook",
         "service": "log",
         "data": "{\"name\":\"Automation Started\",\"message\":\"Auto arm alarm\"}",
-        "render_data": false,
         "mergecontext": "",
         "output_location": "payload",
         "output_location_type": "msg",
@@ -3412,7 +3010,6 @@
         "service_domain": "logbook",
         "service": "log",
         "data": "{\"name\":\"Automation Started\",\"message\":\"Auto disarm alarm\"}",
-        "render_data": false,
         "mergecontext": "",
         "output_location": "payload",
         "output_location_type": "msg",
@@ -3555,7 +3152,6 @@
         "service_domain": "notify",
         "service": "telegram",
         "data": "",
-        "render_data": false,
         "mergecontext": "",
         "output_location": "payload",
         "output_location_type": "msg",
@@ -3594,237 +3190,6 @@
         "broker": "9fa26dd7.88bcd",
         "x": 711.5,
         "y": 760,
-        "wires": []
-    },
-    {
-        "id": "5464d2f9.1844d4",
-        "type": "api-call-service",
-        "z": "50bf183e.dccfb8",
-        "name": "Nicks Bedside (On)",
-        "server": "a5b319a.98d53e8",
-        "service_domain": "light",
-        "service": "turn_on",
-        "data": "{   \"entity_id\": \"light.bedside\" }",
-        "mergecontext": "",
-        "x": 465,
-        "y": 545,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "2aea6435.36ff0c",
-        "type": "delay",
-        "z": "50bf183e.dccfb8",
-        "name": "",
-        "pauseType": "delay",
-        "timeout": "10",
-        "timeoutUnits": "seconds",
-        "rate": "1",
-        "nbRateUnits": "1",
-        "rateUnits": "second",
-        "randomFirst": "1",
-        "randomLast": "5",
-        "randomUnits": "seconds",
-        "drop": false,
-        "x": 436.5,
-        "y": 597,
-        "wires": [
-            [
-                "484e2bad.6b6464",
-                "c8bb2ff6.eb931",
-                "45b326fe.419c68",
-                "800904f.ceb76f8"
-            ]
-        ]
-    },
-    {
-        "id": "484e2bad.6b6464",
-        "type": "api-call-service",
-        "z": "50bf183e.dccfb8",
-        "name": "Nicks Fairy Lights (Off)",
-        "server": "a5b319a.98d53e8",
-        "service_domain": "switch",
-        "service": "turn_off",
-        "data": "{\"entity_id\":\"switch.nicks_fairy_lights\"}",
-        "render_data": false,
-        "mergecontext": "",
-        "output_location": "payload",
-        "output_location_type": "msg",
-        "x": 659,
-        "y": 589,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "c8bb2ff6.eb931",
-        "type": "api-call-service",
-        "z": "50bf183e.dccfb8",
-        "name": "Nicks Downlights Bed (Off)",
-        "server": "a5b319a.98d53e8",
-        "service_domain": "switch",
-        "service": "turn_off",
-        "data": "{\"entity_id\":\"switch.nicks_downlights_bed\"}",
-        "render_data": false,
-        "mergecontext": "",
-        "output_location": "payload",
-        "output_location_type": "msg",
-        "x": 680.5,
-        "y": 628,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "45b326fe.419c68",
-        "type": "api-call-service",
-        "z": "50bf183e.dccfb8",
-        "name": "Nicks Downlights Desk (Off)",
-        "server": "a5b319a.98d53e8",
-        "service_domain": "switch",
-        "service": "turn_off",
-        "data": "{\"entity_id\":\"switch.nicks_downlights_desk\"}",
-        "render_data": false,
-        "mergecontext": "",
-        "output_location": "payload",
-        "output_location_type": "msg",
-        "x": 681,
-        "y": 672,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "800904f.ceb76f8",
-        "type": "api-call-service",
-        "z": "50bf183e.dccfb8",
-        "name": "Nicks Bedside Fade Out",
-        "server": "a5b319a.98d53e8",
-        "service_domain": "light",
-        "service": "lifx_set_state",
-        "data": "{\"entity_id\":\"light.bedside\",\"transition\":300,\"power\":false}",
-        "render_data": false,
-        "mergecontext": "",
-        "output_location": "payload",
-        "output_location_type": "msg",
-        "x": 668,
-        "y": 719,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "269c30c1.5b9298",
-        "type": "delay",
-        "z": "50bf183e.dccfb8",
-        "name": "",
-        "pauseType": "delay",
-        "timeout": "10",
-        "timeoutUnits": "minutes",
-        "rate": "1",
-        "nbRateUnits": "1",
-        "rateUnits": "second",
-        "randomFirst": "1",
-        "randomLast": "5",
-        "randomUnits": "seconds",
-        "drop": false,
-        "x": 448.5,
-        "y": 787,
-        "wires": [
-            [
-                "89262d68.487d98"
-            ]
-        ]
-    },
-    {
-        "id": "89262d68.487d98",
-        "type": "api-call-service",
-        "z": "50bf183e.dccfb8",
-        "name": "Electric Blanket (Off)",
-        "server": "a5b319a.98d53e8",
-        "service_domain": "switch",
-        "service": "turn_off",
-        "data": "{\"entity_id\":\"switch.my_smart_plug\"}",
-        "render_data": false,
-        "mergecontext": "",
-        "output_location": "payload",
-        "output_location_type": "msg",
-        "x": 657,
-        "y": 787,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "ff867183.85d938",
-        "type": "api-call-service",
-        "z": "50bf183e.dccfb8",
-        "name": "Smart Plug (On)",
-        "server": "a5b319a.98d53e8",
-        "service_domain": "switch",
-        "service": "turn_on",
-        "data": "{\"entity_id\":\"switch.my_smart_plug\"}",
-        "render_data": false,
-        "mergecontext": "",
-        "output_location": "payload",
-        "output_location_type": "msg",
-        "x": 456,
-        "y": 493,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "b0290b79.e4ff58",
-        "type": "inject",
-        "z": "50bf183e.dccfb8",
-        "name": "at 6am",
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "repeat": "",
-        "crontab": "00 06 * * *",
-        "once": false,
-        "onceDelay": 0.1,
-        "x": 256.5,
-        "y": 492,
-        "wires": [
-            [
-                "ff867183.85d938"
-            ]
-        ]
-    },
-    {
-        "id": "93b2be30.8d3ae",
-        "type": "server-events",
-        "z": "50bf183e.dccfb8",
-        "name": "",
-        "server": "a5b319a.98d53e8",
-        "event_type": "bedtime_start",
-        "x": 217,
-        "y": 543,
-        "wires": [
-            [
-                "5464d2f9.1844d4",
-                "2aea6435.36ff0c",
-                "269c30c1.5b9298",
-                "626c1d54.b2bf74"
-            ]
-        ]
-    },
-    {
-        "id": "626c1d54.b2bf74",
-        "type": "debug",
-        "z": "50bf183e.dccfb8",
-        "name": "",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "x": 269.5,
-        "y": 668,
         "wires": []
     }
 ]
