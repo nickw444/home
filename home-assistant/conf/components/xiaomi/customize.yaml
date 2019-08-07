@@ -1,6 +1,2 @@
-switch.nicks_fairy_lights:
-  icon: mdi:lightbulb
-  friendly_name: Nick's Fairy Lights
-
 light.joes_bedside:
   friendly_name: Joe's Bedside

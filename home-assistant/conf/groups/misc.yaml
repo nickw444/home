@@ -2,11 +2,9 @@ misc:
   name: Misc
   view: yes
   entities:
-    - group.nicks_printer
     - group.internet
     - group.fuel
     - group.all_automations
-    - group.smart_plug_1
 
 internet:
   name: Internet
@@ -15,26 +13,8 @@ internet:
     - sensor.speedtest_download
     - sensor.speedtest_upload
 
-nicks_printer:
-  name: Nick's Printer
-  entities:
-    - sensor.nicks_printer_toner_black
-    - sensor.nicks_printer_drum_black
-    - sensor.nicks_printer_output_tray_0
-    - sensor.nicks_printer_tray_1
-
 fuel:
   name: Fuel
   entities:
     - sensor.caltex_woolworths_blakehurst_e10
     - sensor.caltex_woolworths_blakehurst_p95
-
-smart_plug_1:
-  name: Smart Plug
-  entities:
-    - switch.my_smart_plug
-    - sensor.smart_plug_1_power
-    - sensor.smart_plug_1_voltage
-    - sensor.smart_plug_1_current
-    - sensor.smart_plug_1_energy_today
-    - sensor.smart_plug_1_total_energy

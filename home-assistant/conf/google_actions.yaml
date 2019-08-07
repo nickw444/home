@@ -5,11 +5,8 @@ filter:
     - cover.blindkit_group_kitchen_front
     - cover.blindkit_group_kitchen_rear
     - cover.blindkit_group_upstairs
-    - light.bedside
     - switch.nicks_downlights_bed
     - switch.nicks_downlights_desk
-    - switch.nicks_fairy_lights
-    - script.nick_bedtime
     - cover.blindkit_group_quiet_room
     - switch.quiet_center_downlights
     - switch.quiet_mid_downlights
@@ -41,12 +38,6 @@ entity_config:
   cover.blindkit_group_upstairs:
     name: Upstairs Blinds
     room: Upstairs
-  light.bedside:
-    name: Nicks Bedside
-    room: Nick's Bedroom
-    aliases:
-      - Bedside
-      - Bedside Lamp
   switch.nicks_downlights_bed:
     name: Nick's Bed Downlights
     room: Nick's Bedroom
@@ -61,11 +52,6 @@ entity_config:
       - Desk Downlights
       - Desk Lights
       - Desk Ceiling Lights
-  switch.nicks_fairy_lights:
-    name: Nicks Fairy Lights
-    room: Nick's Bedroom
-    aliases:
-      - Fairy Lights
   cover.blindkit_group_quiet_room:
     name: Quiet Room Blinds
     room: Quiet Room
@@ -89,8 +75,3 @@ entity_config:
     aliases:
       - Outer Downlights
       - Outer Lights
-  script.nick_bedtime:
-    name: Nick Bedtime
-    room: Nick's Bedroom
-    aliases:
-      - Bedtime
