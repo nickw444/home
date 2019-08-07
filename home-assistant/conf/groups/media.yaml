@@ -6,7 +6,6 @@ media:
     - media_player.garage
     - media_player.pool
     - media_player.chromecast_audio
-    - media_player.nicks_room_speaker
     - media_player.kitchen_speaker
 
 plex:

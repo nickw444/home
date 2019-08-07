@@ -4,11 +4,11 @@ transmitters:
   upstairs:
     mac: 18fe3499d274
     blinds:
-      - name: Nick's Front
+      - name: Oliver's Front
         remote: 100
         channel: 0
 
-      - name: Nick's Side
+      - name: Oliver's Side
         remote: 100
         channel: 1
 

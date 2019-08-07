@@ -72,7 +72,6 @@ tts:
 
 group: !include_dir_merge_named groups/
 automation: !include automations.yaml
-script: !include scripts.yaml
 
 telegram_bot: !include_dir_merge_list config/telegram_bot/
 notify: !include_dir_merge_list config/notify/

@@ -1,5 +1,5 @@
 - platform: mqtt
-  name: blindkit_nicks_front
+  name: blindkit_olivers_front
   command_topic: /things/blindkit/18fe3499d274/send_code
   availability_topic: /things/blindkit/18fe3499d274/status
   qos: 1
@@ -7,7 +7,7 @@
   payload_close: 100,0,CLOSE
   payload_stop: 100,0,STOP
 - platform: mqtt
-  name: blindkit_nicks_side
+  name: blindkit_olivers_side
   command_topic: /things/blindkit/18fe3499d274/send_code
   availability_topic: /things/blindkit/18fe3499d274/status
   qos: 1
