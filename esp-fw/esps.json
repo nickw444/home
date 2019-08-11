@@ -12,13 +12,13 @@
     "espurna_model_slug": "itead-sonoff-th"
   },
   {
-    "name": "Nicks Bedroom Wall",
+    "name": "Bedroom 2 Wall",
     "model": "Itead Sonoff T1 3CH",
     "mac": "60:01:94:83:CD:F6",
-    "hostname": "nicks-bedroom-wall.home",
+    "hostname": "bedroom2-wall.home",
     "ip": "192.168.8.138",
     "static": false,
-    "mqtt_prefix": "nicks_bedroom_wall",
+    "mqtt_prefix": "bedroom2_wall",
     "ota_method": "ESPURNA",
     "admin_page": "http://192.168.8.138/",
     "espurna_model_slug": "itead-sonoff-t1-3ch"

@@ -18,7 +18,6 @@ filter:
     - switch.sprinkle_recycled_pump_trigger
     - switch.sprinkle_upper_lawn_power
     - switch.sprinkle_upper_lawn_trigger
-    - switch.nicks_downlights_3
     - cover.blindkit_group_upstairs
     - cover.blindkit_group_quiet_room
     - cover.blindkit_group_nicks_blinds
