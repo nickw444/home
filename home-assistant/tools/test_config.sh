@@ -10,8 +10,8 @@ main() {
 
     HA_VERSION=$(<.HA_VERSION)
     mv secrets.example.yaml secrets.yaml
+    pip3 install homeassistant==${HA_VERSION}
 
-    # pip3 install homeassistant==${HA_VERSION}
     hass --script check_config -c . -f
 }
 
