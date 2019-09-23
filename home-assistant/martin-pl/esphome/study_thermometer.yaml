@@ -1,0 +1,35 @@
+esphome:
+  name: study_thermometer
+  platform: ESP8266
+  board: esp01_1m
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+
+ota:
+
+sensor:
+  - platform: dht
+    pin: GPIO2
+    model: DHT11
+    temperature:
+      name: "Bedroom Temperature"
+      accuracy_decimals: 1
+      filters:
+        - sliding_window_moving_average:
+            window_size: 10
+            send_every: 10
+    humidity:
+      name: "Bedroom Humidity"
+      filters:
+        - sliding_window_moving_average:
+            window_size: 10
+            send_every: 10
+    update_interval: 30s

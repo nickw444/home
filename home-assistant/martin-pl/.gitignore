@@ -1,0 +1,15 @@
+*.db
+*.db-shm
+*.db-wal
+*.log
+.cloud
+.homekit.state
+.ios.conf
+.samsung_token.txt
+.spotify-token-cache
+.storage
+deps
+entity_registry.yaml
+known_devices.yaml
+secrets.yaml
+tts

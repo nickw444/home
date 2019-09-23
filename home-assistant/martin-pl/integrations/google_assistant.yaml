@@ -1,0 +1,9 @@
+google_assistant:
+  project_id: !secret google_assistant_project_id
+  api_key: !secret google_assistant_api_key
+  exposed_domains:
+    - light
+  entity_config:
+    switch.the_ads:
+      name: The Ads
+      expose: true

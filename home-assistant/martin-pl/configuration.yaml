@@ -1,0 +1,16 @@
+# Configure a default setup of Home Assistant (frontend, api, etc)
+default_config:
+homeassistant:
+  auth_providers:
+    - type: homeassistant
+    - type: trusted_networks
+      trusted_networks:
+        - 192.168.2.0/24
+        - fd00::/8
+  packages: !include_dir_named integrations
+
+logger:
+  default: info
+  logs:
+    samsungwsctl: debug
+    custom_components.samsungwsctl: debug

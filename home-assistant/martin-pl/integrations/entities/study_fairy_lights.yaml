@@ -1,0 +1,4 @@
+light:
+  - platform: switch
+    name: Study Fairy Lights
+    entity_id: switch.study_fairy_lights

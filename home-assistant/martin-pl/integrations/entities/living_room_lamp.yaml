@@ -1,0 +1,11 @@
+light:
+  - platform: switch
+    name: Living Room Lamp
+    entity_id: switch.living_room_lamp
+
+switch:
+  - platform: xiaomi_miio
+    host: 192.168.2.21
+    token: !secret living_room_lamp_token
+    model: chuangmi.plug.m1
+    name: Living Room Lamp

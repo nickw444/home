@@ -1,0 +1,4 @@
+light:
+  - platform: switch
+    name: Bedroom Kates Bedside
+    entity_id: switch.bedroom_kates_bedside

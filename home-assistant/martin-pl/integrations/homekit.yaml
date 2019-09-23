@@ -1,0 +1,10 @@
+homekit:
+  filter:
+    exclude_domains:
+      - device_tracker
+      - person
+      - switch
+    exclude_entities:
+      - binary_sensor.updater
+    include_entities:
+      - switch.the_ads
