@@ -2,5 +2,5 @@
   "domain": "samsungwsctl",
   "name": "samsungwsctl",
   "dependencies": [],
-  "requirements": ["samsungwsctl==1.0.2"]
+  "requirements": ["samsungwsctl==1.0.3"]
 }
