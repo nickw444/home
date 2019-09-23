@@ -4,7 +4,6 @@ secrets.yaml
 *.db-wal
 *.log
 .uuid
-.HA_VERSION
 .cloud
 tts
 .homekit.state

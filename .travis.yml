@@ -1,0 +1,16 @@
+language: python
+
+python:
+  - "3.7"
+
+install:
+jobs:
+  include:
+  - stage: test
+    name: '[ha] check config: 313a'
+    script:
+      ./home-assistant/tools/test_config.sh 313a
+  - stage: test
+    name: '[ha] check config: martin-pl'
+    script:
+      ./home-assistant/tools/test_config.sh martin-pl
