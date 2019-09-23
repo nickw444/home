@@ -1,17 +1,5 @@
 [
   {
-    "name": "Upstairs Cabinet",
-    "model": "Itead Sonoff TH",
-    "mac": "60:01:94:17:31:77",
-    "hostname": "upstairs-cabinet.home",
-    "ip": "192.168.8.167",
-    "static": false,
-    "mqtt_prefix": "upstairs_cabinet",
-    "ota_method": "ESPURNA",
-    "admin_page": "http://192.168.8.167/",
-    "espurna_model_slug": "itead-sonoff-th"
-  },
-  {
     "name": "Bedroom 2 Wall",
     "model": "Itead Sonoff T1 3CH",
     "mac": "60:01:94:83:CD:F6",
@@ -55,29 +43,5 @@
     "mqtt_prefix": "/things/garage/5ccf7f84b87f",
     "ota_method": "ArduinoOTA",
     "admin_page": null
-  },
-  {
-    "name": "Nicks Bedroom Themometer",
-    "model": "Itead Sonoff TH",
-    "mac": "60:01:94:17:2B:50",
-    "hostname": "nicks-bedroom-thermometer.home",
-    "ip": "192.168.8.208",
-    "static": false,
-    "mqtt_prefix": "nicks_bedroom_thermometer",
-    "ota_method": "ESPURNA",
-    "admin_page": "http://192.168.8.208/",
-    "espurna_model_slug": "itead-sonoff-th"
-  },
-  {
-    "name": "Outdoor Themometer",
-    "model": "Itead Sonoff TH",
-    "mac": "DC:4F:22:0D:D8:71",
-    "hostname": "outdoor-thermometer.home",
-    "ip": "192.168.8.220",
-    "static": false,
-    "mqtt_prefix": "outdoor_thermometer",
-    "ota_method": "ESPURNA",
-    "admin_page": "http://outdoor-thermometer.home/",
-    "espurna_model_slug": "itead-sonoff-th"
   }
 ]
