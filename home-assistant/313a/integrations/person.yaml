@@ -1,0 +1,35 @@
+person:
+  - name: Nick
+    id: nick
+    user_id: f99b7587098b4c1cbc653780b8dd8ef3
+    device_trackers:
+      - device_tracker.nicksiphone
+  - name: Peter
+    id: peter
+    user_id: 870ea426aabc476d8a05547677d8cb51
+    device_trackers:
+      - device_tracker.peter_phone
+  - name: Louise
+    id: louise
+    user_id: 048c9fdd739c4021996baace83455bb7
+    device_trackers:
+      - device_tracker.louises7iphone
+  - name: Oliver
+    id: oliver
+    user_id: cfba2435d53e48baa55b78d885f2a1cb
+    device_trackers:
+      - device_tracker.oliversiphone
+  - name: Joe
+    id: joe
+    user_id: 91827e95c4554deab8bf04ac85df3593
+    device_trackers:
+      - device_tracker.joesiphone
+  - name: Charlotte
+    id: charlotte
+    user_id: 44f36b642fa642feb2e3f4608810a76c
+    device_trackers:
+      - device_tracker.charlotte_phone
+  - name: Kate
+    id: kate
+    device_trackers:
+      - device_tracker.katesiphone_2

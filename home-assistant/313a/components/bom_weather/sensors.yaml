@@ -1,8 +1,0 @@
-- platform: bom
-  station: IDN60901.94767
-  name: Sydney Airport
-  monitored_conditions:
-    - rain_trace
-    - weather
-    - apparent_t
-    - air_temp

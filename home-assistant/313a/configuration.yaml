@@ -1,107 +1,14 @@
+default_config:
 homeassistant:
-  # Name of the location where Home Assistant is running
   name: 313A
-  # Location required to calculate the time the sun rises and sets
   latitude: -33.990236
   longitude: 151.090537
-  # Impacts weather/sunrise data (altitude above sea level in meters)
   elevation: 20
-  # metric for Metric, imperial for Imperial
   unit_system: metric
-  # Pick yours from here: http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
   time_zone: Australia/Sydney
-  # Customization file
-  customize: !include_dir_merge_named ./config/customize
   whitelist_external_dirs:
     - "/tmp/homekit"
-
-cloud:
-  google_actions: !include google_actions.yaml
-
-mqtt:
-  broker: localhost
-  discovery: true
-  discovery_prefix: homeassistant
-
-# Enables the frontend
-frontend:
-
-# Enables configuration UI
-config:
-
-http:
-  use_x_forwarded_for: true
-  trusted_proxies:
-    - 127.0.0.1
-    - ::1
-  trusted_networks:
-    - 192.168.8.0/24
-    - 192.168.24.0/24
-
-# Checks for available updates
-# Note: This component will send some information about your system to
-# the developers to assist with development of Home Assistant.
-# For more information, please see:
-# https://home-assistant.io/blog/2016/10/25/explaining-the-updater/
-updater:
-  # Optional, allows Home Assistant developers to focus on popular components.
-  # include_used_components: true
-
-# Allows you to issue voice commands from the frontend in enabled browsers
-conversation:
-
-recorder:
-  purge_keep_days: 10
-  purge_interval: 1
-
-# Enables support for tracking state changes over time
-history:
-
-# View all events in a logbook
-logbook:
-
-# Track the sun
-sun:
-
-homekit: !include homekit.yaml
-
-# Text to speech
-tts:
-  - platform: google_translate
-    service_name: google_say
+  packages: !include_dir_named integrations
 
 group: !include_dir_merge_named groups/
 automation: !include automations.yaml
-
-telegram_bot: !include_dir_merge_list config/telegram_bot/
-notify: !include_dir_merge_list config/notify/
-switch: !include_dir_merge_list config/switches/
-cover: !include_dir_merge_list config/covers/
-weather: !include_dir_merge_list config/weather/
-light: !include_dir_merge_list config/lights/
-device_tracker: !include_dir_merge_list config/device_trackers/
-sensor: !include_dir_merge_list config/sensors/
-media_player: !include_dir_merge_list config/media_player/
-camera: !include_dir_merge_list config/cameras/
-input_boolean: !include_dir_merge_named config/input_booleans/
-
-influxdb:
-ffmpeg:
-
-panel_iframe:
-  grafana:
-    title: Grafana
-    icon: mdi:chart-line
-    url: 'https://grafana.store.home'
-  nodered:
-    title: Node Red
-    icon: mdi:robot
-    url: 'https://node-red.store.home'
-
-# Enable Lifx component
-lifx:
-
-ness_alarm: !include components/alarm/ness_alarm.yaml
-speedtestdotnet: !include speedtestdotnet.yaml
-person: !include people.yaml
-system_health:

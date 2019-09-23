@@ -1,0 +1,4 @@
+mqtt:
+  broker: localhost
+  discovery: true
+  discovery_prefix: homeassistant

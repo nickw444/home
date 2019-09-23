@@ -1,3 +1,0 @@
-- platform: nsw_fuel_station
-  station_id: 530
-  fuel_types: ['E10', 'P95']

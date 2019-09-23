@@ -1,0 +1,12 @@
+homeassistant:
+  customize:
+    sensor.plex:
+    friendly_name: 'Active Plex Users'
+
+media_player:
+  - platform: plex
+    entity_namespace: plex
+
+sensor:
+  - platform: plex
+    host: 192.168.8.10

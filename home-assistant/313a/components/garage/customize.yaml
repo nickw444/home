@@ -1,3 +1,0 @@
-cover.garage:
-  device_class: garage
-  friendly_name: Garage Door

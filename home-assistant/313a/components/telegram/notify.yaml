@@ -1,7 +1,0 @@
-- name: telegram
-  platform: telegram
-  chat_id: !secret telegram_chat_id
-
-- name: telegram_nick
-  platform: telegram
-  chat_id: 418759991

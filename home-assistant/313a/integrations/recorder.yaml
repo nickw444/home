@@ -1,0 +1,3 @@
+recorder:
+  purge_keep_days: 10
+  purge_interval: 1
