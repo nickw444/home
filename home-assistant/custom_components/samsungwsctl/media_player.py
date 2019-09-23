@@ -84,7 +84,7 @@ SUPPORT_SAMSUNGTV = (
 def setup_platform(hass, config, add_entities, discovery_info=None):
     from samsungwsctl import Remote
 
-    token_file = hass.config.path('samsung_token.txt')
+    token_file = hass.config.path('.samsung_token')
 
     host = config[CONF_HOST]
     port = config[CONF_PORT]
