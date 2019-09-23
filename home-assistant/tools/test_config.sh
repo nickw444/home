@@ -8,9 +8,9 @@ main() {
 
     cd "${config_dir}";
 
-    HA_VERSION=$(<.HA_VERSION)
-    mv secrets.example.yaml secrets.yaml
-    echo "Install homeassistant==${HA_VERSION}";
+    HA_VERSION=$(cat .HA_VERSION)
+    cp secrets.example.yaml secrets.yaml
+    echo "Installing homeassistant==${HA_VERSION}";
     pip3 install "homeassistant==${HA_VERSION}"
 
     hass --script check_config -c . -f
