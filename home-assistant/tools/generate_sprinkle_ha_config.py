@@ -97,7 +97,11 @@ def main():
         'switches': tmpl_switches,
     })
 
-    yaml.dump(switches, sys.stdout)
-    yaml.dump(customize, sys.stdout)
+    yaml.dump({
+        'homeassistant': {
+            'customize': customize
+        },
+        'switch': switches
+    }, sys.stdout)
 
 main()

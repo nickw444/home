@@ -48,8 +48,12 @@ def main():
                 'assumed_state': True,
             }
 
-    yaml.dump(blinds, sys.stdout)
-    yaml.dump(customize, sys.stdout)
+    yaml.dump({
+        'homeassistant': {
+            'customize': customize
+        },
+        'cover': blinds
+    }, sys.stdout)
 
 
 def camelize(s):
