@@ -1,0 +1,223 @@
+homeassistant:
+  customize:
+    cover.blindkit_olivers_front:
+      friendly_name: Oliver's Front
+      assumed_state: true
+    cover.blindkit_olivers_side:
+      friendly_name: Oliver's Side
+      assumed_state: true
+    cover.blindkit_upstairs_hall_blockout:
+      friendly_name: Upstairs Hall Blockout
+      assumed_state: true
+    cover.blindkit_upstairs_hall_translucent:
+      friendly_name: Upstairs Hall Translucent
+      assumed_state: true
+    cover.blindkit_charlotte_side:
+      friendly_name: Charlotte Side
+      assumed_state: true
+    cover.blindkit_oly_side:
+      friendly_name: Oly Side
+      assumed_state: true
+    cover.blindkit_oly_back:
+      friendly_name: Oly Back
+      assumed_state: true
+    cover.blindkit_joe_back:
+      friendly_name: Joe Back
+      assumed_state: true
+    cover.blindkit_master_front_left:
+      friendly_name: Master Front Left
+      assumed_state: true
+    cover.blindkit_master_front_right:
+      friendly_name: Master Front Right
+      assumed_state: true
+    cover.blindkit_back_left:
+      friendly_name: Back Left
+      assumed_state: true
+    cover.blindkit_back_right:
+      friendly_name: Back Right
+      assumed_state: true
+    cover.blindkit_front_1_left:
+      friendly_name: Front 1 (Left)
+      assumed_state: true
+    cover.blindkit_front_2_door_left:
+      friendly_name: Front 2 (Door Left)
+      assumed_state: true
+    cover.blindkit_front_3_door_right:
+      friendly_name: Front 3 (Door Right)
+      assumed_state: true
+    cover.blindkit_front_4_right:
+      friendly_name: Front 4 (Right)
+      assumed_state: true
+    cover.blindkit_quiet_room_left_wall_1:
+      friendly_name: Left Wall 1
+      assumed_state: true
+    cover.blindkit_quiet_room_left_wall_2:
+      friendly_name: Left Wall 2
+      assumed_state: true
+    cover.blindkit_quiet_room_main_blockout:
+      friendly_name: Main Blockout
+      assumed_state: true
+    cover.blindkit_quiet_room_main_translucent:
+      friendly_name: Main Translucent
+      assumed_state: true
+cover:
+- platform: mqtt
+  name: blindkit_olivers_front
+  command_topic: /things/blindkit/18fe3499d274/send_code
+  availability_topic: /things/blindkit/18fe3499d274/status
+  qos: 1
+  payload_open: 100,0,OPEN
+  payload_close: 100,0,CLOSE
+  payload_stop: 100,0,STOP
+- platform: mqtt
+  name: blindkit_olivers_side
+  command_topic: /things/blindkit/18fe3499d274/send_code
+  availability_topic: /things/blindkit/18fe3499d274/status
+  qos: 1
+  payload_open: 100,1,OPEN
+  payload_close: 100,1,CLOSE
+  payload_stop: 100,1,STOP
+- platform: mqtt
+  name: blindkit_upstairs_hall_blockout
+  command_topic: /things/blindkit/18fe3499d274/send_code
+  availability_topic: /things/blindkit/18fe3499d274/status
+  qos: 1
+  payload_open: 100,2,OPEN
+  payload_close: 100,2,CLOSE
+  payload_stop: 100,2,STOP
+- platform: mqtt
+  name: blindkit_upstairs_hall_translucent
+  command_topic: /things/blindkit/18fe3499d274/send_code
+  availability_topic: /things/blindkit/18fe3499d274/status
+  qos: 1
+  payload_open: 100,9,OPEN
+  payload_close: 100,9,CLOSE
+  payload_stop: 100,9,STOP
+- platform: mqtt
+  name: blindkit_charlotte_side
+  command_topic: /things/blindkit/18fe3499d274/send_code
+  availability_topic: /things/blindkit/18fe3499d274/status
+  qos: 1
+  payload_open: 100,3,OPEN
+  payload_close: 100,3,CLOSE
+  payload_stop: 100,3,STOP
+- platform: mqtt
+  name: blindkit_oly_side
+  command_topic: /things/blindkit/18fe3499d274/send_code
+  availability_topic: /things/blindkit/18fe3499d274/status
+  qos: 1
+  payload_open: 100,4,OPEN
+  payload_close: 100,4,CLOSE
+  payload_stop: 100,4,STOP
+- platform: mqtt
+  name: blindkit_oly_back
+  command_topic: /things/blindkit/18fe3499d274/send_code
+  availability_topic: /things/blindkit/18fe3499d274/status
+  qos: 1
+  payload_open: 100,5,OPEN
+  payload_close: 100,5,CLOSE
+  payload_stop: 100,5,STOP
+- platform: mqtt
+  name: blindkit_joe_back
+  command_topic: /things/blindkit/18fe3499d274/send_code
+  availability_topic: /things/blindkit/18fe3499d274/status
+  qos: 1
+  payload_open: 100,6,OPEN
+  payload_close: 100,6,CLOSE
+  payload_stop: 100,6,STOP
+- platform: mqtt
+  name: blindkit_master_front_left
+  command_topic: /things/blindkit/18fe3499d274/send_code
+  availability_topic: /things/blindkit/18fe3499d274/status
+  qos: 1
+  payload_open: 100,7,OPEN
+  payload_close: 100,7,CLOSE
+  payload_stop: 100,7,STOP
+- platform: mqtt
+  name: blindkit_master_front_right
+  command_topic: /things/blindkit/18fe3499d274/send_code
+  availability_topic: /things/blindkit/18fe3499d274/status
+  qos: 1
+  payload_open: 100,8,OPEN
+  payload_close: 100,8,CLOSE
+  payload_stop: 100,8,STOP
+- platform: mqtt
+  name: blindkit_back_left
+  command_topic: /things/blindkit/18fe3499d258/send_code
+  availability_topic: /things/blindkit/18fe3499d258/status
+  qos: 1
+  payload_open: 101,0,OPEN
+  payload_close: 101,0,CLOSE
+  payload_stop: 101,0,STOP
+- platform: mqtt
+  name: blindkit_back_right
+  command_topic: /things/blindkit/18fe3499d258/send_code
+  availability_topic: /things/blindkit/18fe3499d258/status
+  qos: 1
+  payload_open: 101,1,OPEN
+  payload_close: 101,1,CLOSE
+  payload_stop: 101,1,STOP
+- platform: mqtt
+  name: blindkit_front_1_left
+  command_topic: /things/blindkit/18fe3499d258/send_code
+  availability_topic: /things/blindkit/18fe3499d258/status
+  qos: 1
+  payload_open: 101,2,OPEN
+  payload_close: 101,2,CLOSE
+  payload_stop: 101,2,STOP
+- platform: mqtt
+  name: blindkit_front_2_door_left
+  command_topic: /things/blindkit/18fe3499d258/send_code
+  availability_topic: /things/blindkit/18fe3499d258/status
+  qos: 1
+  payload_open: 101,3,OPEN
+  payload_close: 101,3,CLOSE
+  payload_stop: 101,3,STOP
+- platform: mqtt
+  name: blindkit_front_3_door_right
+  command_topic: /things/blindkit/18fe3499d258/send_code
+  availability_topic: /things/blindkit/18fe3499d258/status
+  qos: 1
+  payload_open: 101,4,OPEN
+  payload_close: 101,4,CLOSE
+  payload_stop: 101,4,STOP
+- platform: mqtt
+  name: blindkit_front_4_right
+  command_topic: /things/blindkit/18fe3499d258/send_code
+  availability_topic: /things/blindkit/18fe3499d258/status
+  qos: 1
+  payload_open: 101,5,OPEN
+  payload_close: 101,5,CLOSE
+  payload_stop: 101,5,STOP
+- platform: mqtt
+  name: blindkit_quiet_room_left_wall_1
+  command_topic: /things/blindkit/18fe3499d258/send_code
+  availability_topic: /things/blindkit/18fe3499d258/status
+  qos: 1
+  payload_open: 101,6,OPEN
+  payload_close: 101,6,CLOSE
+  payload_stop: 101,6,STOP
+- platform: mqtt
+  name: blindkit_quiet_room_left_wall_2
+  command_topic: /things/blindkit/18fe3499d258/send_code
+  availability_topic: /things/blindkit/18fe3499d258/status
+  qos: 1
+  payload_open: 101,7,OPEN
+  payload_close: 101,7,CLOSE
+  payload_stop: 101,7,STOP
+- platform: mqtt
+  name: blindkit_quiet_room_main_blockout
+  command_topic: /things/blindkit/18fe3499d258/send_code
+  availability_topic: /things/blindkit/18fe3499d258/status
+  qos: 1
+  payload_open: 101,8,OPEN
+  payload_close: 101,8,CLOSE
+  payload_stop: 101,8,STOP
+- platform: mqtt
+  name: blindkit_quiet_room_main_translucent
+  command_topic: /things/blindkit/18fe3499d258/send_code
+  availability_topic: /things/blindkit/18fe3499d258/status
+  qos: 1
+  payload_open: 101,9,OPEN
+  payload_close: 101,9,CLOSE
+  payload_stop: 101,9,STOP
