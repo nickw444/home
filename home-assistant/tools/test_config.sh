@@ -1,6 +1,5 @@
 #!/bin/sh
-set -euo pipefail
-set -x
+set -eu
 
 CONFIG_PATH=$(dirname "$0")/../
 

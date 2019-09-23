@@ -6,10 +6,10 @@ python:
 jobs:
   include:
     - stage: test
-      name: '[ha/313a] check config'
+      name: '[ha] check config: 313a'
       script:
         ./home-assistant/tools/test_config.sh 313a
     - stage: test
-      name: '[ha/martin-pl] check config'
+      name: '[ha] check config: martin-pl'
       script:
         ./home-assistant/tools/test_config.sh martin-pl
