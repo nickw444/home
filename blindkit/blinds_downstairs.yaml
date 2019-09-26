@@ -1,3 +1,7 @@
+# Seed configuration for the downstairs RAEX roller blinds
+# To be fed into generate_broadlink_blinds_ha_config to generate a
+# Home Assistant compatible package for sending codes via Broadlink RM Pro devices
+---
 host_device_ip: 192.168.8.33
 blinds:
   - name: Kitchen Back Left

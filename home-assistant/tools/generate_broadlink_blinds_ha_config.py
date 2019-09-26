@@ -83,8 +83,9 @@ def main(input, output, support_pairing):
 
         pairing_switch = {
             'friendly_name': blind['name'] + ' Blind Pairing',
+            'value_template': 'off',
             'turn_on': action(pair_packet),
-            'turn_off': None,
+            'turn_off': [],
         }
         switches[camelize(pairing_switch['friendly_name'])] = pairing_switch
 
@@ -99,7 +100,7 @@ def main(input, output, support_pairing):
 
     if support_pairing:
         package['switch'] = {
-            'platforms': 'template',
+            'platform': 'template',
             'switches': switches,
         }
 
