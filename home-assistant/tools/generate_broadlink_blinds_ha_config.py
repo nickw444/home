@@ -6,20 +6,13 @@ from pulses import (
     BroadlinkEncoder, RemoteCode, BlindAction, build_preamble,
     PhaseDuration)
 from ruamel.yaml import YAML
-from ruamel.yaml.scalarstring import FoldedScalarString, LiteralScalarString
 
 yaml = YAML()
-yaml.width = 80
-yaml.default_flow_style = False
 
 # Number of time for the broadlink to repeat the transmission
 BROADLINK_REPEATS = 7
 # Number of repetitions of the remote payload within the broadlink payload
 PAYLOAD_REPEATS = 4
-
-SWITCH_BASE = {
-
-}
 
 
 def get_broadlink_send_action(host: str, packet: str):
@@ -51,7 +44,7 @@ def encode_packet(encoder: BroadlinkEncoder, remote_code: RemoteCode):
               help='Path to the input config file')
 @click.option('--output', required=True, type=click.File('w'),
               help='Destination path for the generated Home Assistant package')
-@click.option('--support-pairing', type=bool,
+@click.option('--support-pairing/--no-support-pairing', default=False,
               help='Whether switches should be generated to support pairing '
                    'of blinds')
 def main(input, output, support_pairing):
@@ -61,7 +54,7 @@ def main(input, output, support_pairing):
 
     action = lambda packet: get_broadlink_send_action(host, packet)
 
-    switches = []
+    switches = {}
     covers = {}
 
     for blind in seed_config['blinds']:
@@ -72,9 +65,12 @@ def main(input, output, support_pairing):
                                 action=BlindAction.DOWN)
         stop_code = RemoteCode(channel=blind['channel'],
                                remote=blind['remote'], action=BlindAction.STOP)
+        pair_code = RemoteCode(channel=blind['channel'],
+                               remote=blind['remote'], action=BlindAction.PAIR)
         open_packet = encode_packet(encoder, open_code)
         close_packet = encode_packet(encoder, close_code)
         stop_packet = encode_packet(encoder, stop_code)
+        pair_packet = encode_packet(encoder, pair_code)
 
         cover = {
             'friendly_name': blind['name'],
@@ -85,15 +81,27 @@ def main(input, output, support_pairing):
         }
         covers[camelize(blind['name'])] = cover
 
+        pairing_switch = {
+            'friendly_name': blind['name'] + ' Blind Pairing',
+            'turn_on': action(pair_packet),
+            'turn_off': None,
+        }
+        switches[camelize(pairing_switch['friendly_name'])] = pairing_switch
+
     package = {
         'cover': [
             {
                 'platform': 'template',
                 'covers': covers,
             }
-        ],
-        'switch': switches,
+        ]
     }
+
+    if support_pairing:
+        package['switch'] = {
+            'platforms': 'template',
+            'switches': switches,
+        }
 
     yaml.dump(package, output)
 
