@@ -1,0 +1,54 @@
+esphome:
+  name: garage
+  platform: ESP8266
+  board: esp01_1m
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+
+ota:
+
+switch:
+  - platform: gpio
+    pin: GPIO2
+    id: relay
+  - platform: template
+    id: relay_toggle
+    turn_on_action:
+    - switch.turn_on: relay
+    - delay: 500ms
+    - switch.turn_off: relay
+
+binary_sensor:
+  - platform: gpio
+    pin: 
+     number: GPIO3
+     inverted: true
+    id: bottom_end_stop
+    filters:
+      - delayed_on: 10ms
+
+cover:
+  - platform: template
+    name: "Garage Door"
+    lambda: |-
+      if (id(bottom_end_stop).state) {
+        return COVER_CLOSED;
+      } else {
+        return COVER_OPEN;
+      }
+    open_action:
+      - switch.turn_on: relay_toggle
+    close_action:
+      - switch.turn_on: relay_toggle
+    stop_action:
+      - switch.turn_on: relay_toggle
+    optimistic: true
+
