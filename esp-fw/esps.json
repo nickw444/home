@@ -32,16 +32,5 @@
     "mqtt_prefix": "/things/blindkit/18fe3499d274",
     "ota_method": "ArduinoOTA",
     "admin_page": null
-  },
-  {
-    "name": "Garage Ceiling",
-    "model": "Garage",
-    "mac": "5c:cf:7f:84:b8:7f",
-    "hostname": "esp_84b87f",
-    "ip": "192.168.8.108",
-    "static": false,
-    "mqtt_prefix": "/things/garage/5ccf7f84b87f",
-    "ota_method": "ArduinoOTA",
-    "admin_page": null
   }
 ]
