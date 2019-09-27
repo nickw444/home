@@ -1,7 +1,7 @@
 homeassistant:
   customize:
     cover.kitchen_back_left: &id001
-      assume_state: true
+      assumed_state: true
     cover.kitchen_back_right: *id001
     cover.kitchen_front_1_left: *id001
     cover.kitchen_front_2_door_left: *id001
