@@ -19,10 +19,10 @@ blinds:
   - name: Charlotte Side
     remote: 100
     channel: 3
-  - name: Study Side
+  - name: Upstairs Study Side
     remote: 100
     channel: 4
-  - name: Study Back
+  - name: Upstairs Study Back
     remote: 100
     channel: 5
   - name: Joe Back

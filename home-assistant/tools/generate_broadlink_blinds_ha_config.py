@@ -17,6 +17,9 @@ delay_action = {
     'delay': '00:00:02',
 }
 
+CUSTOMIZE_BASE = {
+    'assumed_state': True,
+}
 
 def get_broadlink_send_action(host: str, packet: str):
     send_action = {
@@ -28,8 +31,6 @@ def get_broadlink_send_action(host: str, packet: str):
     }
 
     return [
-        send_action,
-        delay_action,
         send_action,
         delay_action,
         send_action,
@@ -62,6 +63,7 @@ def main(input, output, support_pairing):
 
     switches = {}
     covers = {}
+    customize = {}
 
     for blind in seed_config['blinds']:
         open_code = RemoteCode(channel=blind['channel'],
@@ -86,6 +88,7 @@ def main(input, output, support_pairing):
             'stop_cover': action(stop_packet),
         }
         covers[camelize(blind['name'])] = cover
+        customize[camelize(blind['name'])] = CUSTOMIZE_BASE
 
         pairing_switch = {
             'friendly_name': blind['name'] + ' Blind Pairing',
@@ -96,6 +99,9 @@ def main(input, output, support_pairing):
         switches[camelize(pairing_switch['friendly_name'])] = pairing_switch
 
     package = {
+        'homeassistant': {
+            'customize': customize,
+        },
         'cover': [
             {
                 'platform': 'template',
