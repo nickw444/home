@@ -15,7 +15,7 @@ PAYLOAD_REPEATS = 3
 
 
 CUSTOMIZE_BASE = {
-    'assumed_state': True,
+    'assume_state': True,
 }
 
 

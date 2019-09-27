@@ -1,7 +1,7 @@
 homeassistant:
   customize:
     cover.olivers_front: &id001
-      assumed_state: true
+      assume_state: true
     cover.olivers_side: *id001
     cover.upstairs_hall_blockout: *id001
     cover.upstairs_hall_translucent: *id001
