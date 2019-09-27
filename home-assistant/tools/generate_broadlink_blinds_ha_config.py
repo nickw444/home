@@ -3,8 +3,7 @@ import re
 
 import click
 from pulses import (
-    BroadlinkEncoder, RemoteCode, BlindAction, build_preamble,
-    PhaseDuration)
+    BroadlinkEncoder, RemoteCode, BlindAction, build_preamble)
 from ruamel.yaml import YAML
 
 yaml = YAML()
@@ -14,9 +13,12 @@ BROADLINK_REPEATS = 7
 # Number of repetitions of the remote payload within the broadlink payload
 PAYLOAD_REPEATS = 4
 
+delay_action = {
+    'delay': '00:00:02',
+}
 
 def get_broadlink_send_action(host: str, packet: str):
-    return {
+    send_action = {
         'service': 'broadlink.send',
         'data': {
             'host': host,
@@ -24,16 +26,19 @@ def get_broadlink_send_action(host: str, packet: str):
         }
     }
 
+    return [
+        send_action,
+        delay_action,
+        send_action,
+        delay_action,
+        send_action,
+    ]
+
 
 def encode_packet(encoder: BroadlinkEncoder, remote_code: RemoteCode):
     data = []
     data += build_preamble()
-
-    for _ in range(PAYLOAD_REPEATS):
-        data += remote_code.get_phase_durations()
-        # Drop a little bit of padding between payloads within a transmission
-        data += [PhaseDuration(not data[-1].phase, 5000)]
-
+    data += remote_code.get_phase_durations()
     packet = encoder.encode(data)
     return base64.b64encode(packet).decode('utf-8')
 
