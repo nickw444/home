@@ -17,6 +17,7 @@ delay_action = {
     'delay': '00:00:02',
 }
 
+
 def get_broadlink_send_action(host: str, packet: str):
     send_action = {
         'service': 'broadlink.send',
