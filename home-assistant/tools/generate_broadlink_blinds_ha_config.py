@@ -9,18 +9,15 @@ from ruamel.yaml import YAML
 yaml = YAML()
 
 # Number of time for the broadlink to repeat the transmission
-BROADLINK_REPEATS = 4
+BROADLINK_REPEATS = 3
 # Number of repetitions of the remote payload within the broadlink payload
 PAYLOAD_REPEATS = 3
 
-delay_action = {
-    'delay': '00:00:02',
-}
 
 CUSTOMIZE_BASE = {
     'assumed_state': True,
-    'device_class': 'blind',
 }
+
 
 def get_broadlink_send_action(host: str, packet: str):
     send_action = {
@@ -31,11 +28,7 @@ def get_broadlink_send_action(host: str, packet: str):
         }
     }
 
-    return [
-        send_action,
-        delay_action,
-        send_action,
-    ]
+    return send_action
 
 
 def encode_packet(encoder: BroadlinkEncoder, remote_code: RemoteCode):
@@ -45,6 +38,12 @@ def encode_packet(encoder: BroadlinkEncoder, remote_code: RemoteCode):
         data += remote_code.get_phase_durations()
         # Drop a little bit of padding between payloads within a transmission
         data += [PhaseDuration(not data[-1].phase, 5000)]
+
+    # Pause for 0.5 second
+    for x in range(100):
+        data += [PhaseDuration(not data[-1].phase, 5000)]
+
+
     packet = encoder.encode(data)
     return base64.b64encode(packet).decode('utf-8')
 
@@ -92,7 +91,7 @@ def main(input, output, support_pairing):
             'stop_cover': action(stop_packet),
         }
         covers[camelize(blind['name'])] = cover
-        customize[camelize(blind['name'])] = CUSTOMIZE_BASE
+        customize['cover.' + camelize(blind['name'])] = CUSTOMIZE_BASE
 
         pairing_switch = {
             'friendly_name': blind['name'] + ' Blind Pairing',
