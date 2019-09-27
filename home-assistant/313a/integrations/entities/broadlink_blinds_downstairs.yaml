@@ -2,6 +2,7 @@ homeassistant:
   customize:
     kitchen_back_left: &id001
       assumed_state: true
+      device_class: blind
     kitchen_back_right: *id001
     kitchen_front_1_left: *id001
     kitchen_front_2_door_left: *id001

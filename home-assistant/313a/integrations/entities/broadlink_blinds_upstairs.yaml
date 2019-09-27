@@ -2,6 +2,7 @@ homeassistant:
   customize:
     olivers_front: &id001
       assumed_state: true
+      device_class: blind
     olivers_side: *id001
     upstairs_hall_blockout: *id001
     upstairs_hall_translucent: *id001

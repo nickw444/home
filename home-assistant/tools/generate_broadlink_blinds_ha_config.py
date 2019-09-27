@@ -19,6 +19,7 @@ delay_action = {
 
 CUSTOMIZE_BASE = {
     'assumed_state': True,
+    'device_class': 'blind',
 }
 
 def get_broadlink_send_action(host: str, packet: str):
