@@ -9,7 +9,7 @@ from ruamel.yaml import YAML
 yaml = YAML()
 
 # Number of time for the broadlink to repeat the transmission
-BROADLINK_REPEATS = 3
+BROADLINK_REPEATS = 6
 # Number of repetitions of the remote payload within the broadlink payload
 PAYLOAD_REPEATS = 3
 
@@ -40,7 +40,7 @@ def encode_packet(encoder: BroadlinkEncoder, remote_code: RemoteCode):
         data += [PhaseDuration(not data[-1].phase, 5000)]
 
     # Pause for 0.5 second
-    for x in range(100):
+    for x in range(200):
         data += [PhaseDuration(not data[-1].phase, 5000)]
 
 
