@@ -24,17 +24,6 @@ blinds:
     - cover.quiet_room
     - cover.upstairs
 
-family:
-  name: Family
-  entities:
-    - device_tracker.charlotte_phone
-    - device_tracker.joesiphone
-    - device_tracker.louises7iphone
-    - device_tracker.nicksiphone
-    - device_tracker.oliversiphone
-    - device_tracker.peter_phone
-    - device_tracker.katesiphone_2
-
 energy:
   name: Energy
   entities:
