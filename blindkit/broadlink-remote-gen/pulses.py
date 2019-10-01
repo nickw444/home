@@ -50,7 +50,6 @@ def main():
             print('{}: {}'.format(action_name, base64.b64encode(payload)))
         print("")
 
-
 def build_preamble():
     data = []
     for x in range(200):
