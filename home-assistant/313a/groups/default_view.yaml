@@ -19,10 +19,10 @@ doors:
 blinds:
   name: Blinds
   entities:
-    - cover.blindkit_group_kitchen_front
-    - cover.blindkit_group_kitchen_rear
-    - cover.blindkit_group_quiet_room
-    - cover.blindkit_group_upstairs
+    - cover.kitchen_front
+    - cover.kitchen_rear
+    - cover.quiet_room
+    - cover.upstairs
 
 family:
   name: Family

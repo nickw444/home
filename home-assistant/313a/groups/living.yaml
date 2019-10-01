@@ -10,16 +10,16 @@ living:
 front_blinds:
   name: Front Blinds
   entities:
-    - cover.blindkit_front_1_left
-    - cover.blindkit_front_2_door_left
-    - cover.blindkit_front_3_door_right
-    - cover.blindkit_front_4_right
+    - cover.kitchen_front_1_left
+    - cover.kitchen_front_2_door_left
+    - cover.kitchen_front_3_door_right
+    - cover.kitchen_front_4_right
 
 back_blinds:
   name: Back Blinds
   entities:
-    - cover.blindkit_back_left
-    - cover.blindkit_back_right
+    - cover.kitchen_back_left
+    - cover.kitchen_back_right
 
 quiet_room:
   name: Quiet Room
@@ -27,10 +27,10 @@ quiet_room:
     - switch.quiet_center_downlights
     - switch.quiet_mid_downlights
     - switch.quiet_outer_downlights
-    - cover.blindkit_quiet_room_left_wall_1
-    - cover.blindkit_quiet_room_left_wall_2
-    - cover.blindkit_quiet_room_main_blockout
-    - cover.blindkit_quiet_room_main_translucent
+    - cover.quiet_room_left_wall_1
+    - cover.quiet_room_left_wall_2
+    - cover.quiet_room_main_blockout
+    - cover.quiet_room_main_translucent
 
 living_climate:
   name: Climate

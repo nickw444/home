@@ -1,0 +1,44 @@
+homeassistant:
+  customize:
+    cover.kitchen_front: &id001
+      assumed_state: true
+    cover.kitchen_back: *id001
+    cover.upstairs: *id001
+    cover.quiet_room: *id001
+
+cover:
+- platform: group
+  name: Kitchen Front
+  entities:
+    - cover.kitchen_front_1_left
+    - cover.kitchen_front_2_door_left
+    - cover.kitchen_front_3_door_right
+    - cover.kitchen_front_4_right
+
+- platform: group
+  name: Kitchen Back
+  entities:
+    - cover.kitchen_back_left
+    - cover.kitchen_back_right
+
+- platform: group
+  name: Upstairs
+  entities:
+    - cover.olivers_front
+    - cover.olivers_side
+    - cover.upstairs_hall_blockout
+    - cover.upstairs_hall_translucent
+    - cover.charlotte_side
+    - cover.upstairs_study_side
+    - cover.upstairs_study_back
+    - cover.joe_back
+    - cover.master_front_left
+    - cover.master_front_right
+
+- platform: group
+  name: Quiet Room
+  entities:
+    - cover.quiet_room_left_wall_1
+    - cover.quiet_room_left_wall_2
+    - cover.quiet_room_main_blockout
+    - cover.quiet_room_main_translucent
