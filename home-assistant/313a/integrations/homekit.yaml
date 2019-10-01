@@ -19,11 +19,10 @@ homekit:
       - switch.sprinkle_recycled_pump_trigger
       - switch.sprinkle_upper_lawn_power
       - switch.sprinkle_upper_lawn_trigger
-      - cover.blindkit_group_upstairs
-      - cover.blindkit_group_quiet_room
-      - cover.blindkit_group_nicks_blinds
-      - cover.blindkit_group_kitchen_rear
-      - cover.blindkit_group_kitchen_front
+      - cover.upstairs
+      - cover.quiet_room
+      - cover.kitchen_rear
+      - cover.kitchen_front
       - binary_sensor.remote_ui
     exclude_domains:
       - device_tracker

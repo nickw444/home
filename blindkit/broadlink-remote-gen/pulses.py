@@ -21,9 +21,7 @@ def main():
     parser.add_argument('--payload-repeats', type=int, default=4, help='Number of repetitions of the remote payload within the broadlink payload')
     args = parser.parse_args()
 
-    encoder = BroadlinkEncoder(
-        repeats=args.broadlink_repeats
-    )
+    encoder = BroadlinkEncoder(repeats=args.broadlink_repeats)
 
     for x in range(args.ncodes):
         channel = args.channel + x

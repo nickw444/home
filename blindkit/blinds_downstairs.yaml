@@ -1,0 +1,36 @@
+# Seed configuration for the downstairs RAEX roller blinds
+# To be fed into generate_broadlink_blinds_ha_config to generate a
+# Home Assistant compatible package for sending codes via Broadlink RM Pro devices
+---
+host_device_ip: 192.168.8.33
+blinds:
+  - name: Kitchen Back Left
+    remote: 101
+    channel: 0
+  - name: Kitchen Back Right
+    remote: 101
+    channel: 1
+  - name: Kitchen Front 1 (Left)
+    remote: 101
+    channel: 2
+  - name: Kitchen Front 2 (Door Left)
+    remote: 101
+    channel: 3
+  - name: Kitchen Front 3 (Door Right)
+    remote: 101
+    channel: 4
+  - name: Kitchen Front 4 (Right)
+    remote: 101
+    channel: 5
+  - name: Quiet Room Left Wall 1
+    remote: 101
+    channel: 6
+  - name: Quiet Room Left Wall 2
+    remote: 101
+    channel: 7
+  - name: Quiet Room Main Blockout
+    remote: 101
+    channel: 8
+  - name: Quiet Room Main Translucent
+    remote: 101
+    channel: 9
