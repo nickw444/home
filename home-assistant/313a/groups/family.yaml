@@ -1,0 +1,10 @@
+family:
+  name: Family
+  entities:
+    - person.peter
+    - person.louise
+    - person.nick
+    - person.oliver
+    - person.joe
+    - person.charlotte
+    - person.kate
