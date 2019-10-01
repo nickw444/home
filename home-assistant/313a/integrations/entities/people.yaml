@@ -1,0 +1,16 @@
+homeassistant:
+  customize:
+    person.peter:
+      entity_picture: /local/peter.jpg
+    person.joe:
+      entity_picture: /local/joe.jpg
+    person.oliver:
+      entity_picture: /local/oliver.jpg
+    person.charlotte:
+      entity_picture: /local/charlotte.jpg
+    person.kate:
+      entity_picture: /local/kate.jpg
+    person.nick:
+      entity_picture: /local/nick.jpg
+    person.louise:
+      entity_picture: /local/louise.jpg
