@@ -2,6 +2,7 @@ homeassistant:
   customize:
     cover.kitchen_front: &id001
       assumed_state: true
+      device_class: 'blind'
     cover.kitchen_back: *id001
     cover.upstairs: *id001
     cover.quiet_room: *id001
