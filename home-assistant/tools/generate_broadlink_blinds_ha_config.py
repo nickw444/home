@@ -34,17 +34,17 @@ def get_broadlink_send_action(host: str, packet: str):
 def encode_packet(encoder: BroadlinkEncoder, remote_code: RemoteCode):
     data = []
     data += build_preamble()
+    data += remote_code.get_phase_durations()
+
     for _ in range(PAYLOAD_REPEATS):
         data += remote_code.get_phase_durations()
         # Drop a little bit of padding between payloads within a transmission
         data += [PhaseDuration(not data[-1].phase, 5000)]
 
-    # Pause for 0.25 second
-    for x in range(50):
-        data += [PhaseDuration(not data[-1].phase, 5000)]
-
-
+    print('Before optimized', len(data))
+    print('Optimized', len(encoder.optimize_phases(data)))
     packet = encoder.encode(data)
+    # print(len(packet))
     return base64.b64encode(packet).decode('utf-8')
 
 
