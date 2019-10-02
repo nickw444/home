@@ -42,15 +42,3 @@ services:
             - '0.0.0.0:3000:3000'
         environment:
             GF_AUTH_ANONYMOUS_ENABLED: 'true'
-
-    nodered:
-        restart: always
-        container_name: nodered
-        image: nodered/node-red-docker:0.20.7-v8
-        volumes:
-            - "/etc/homekit/node-red:/data"
-            - "/etc/localtime:/etc/localtime:ro"
-            - "/tmp/homekit:/tmp/homekit"
-        network_mode: host
-        ports:
-            - '0.0.0.0:1880:1880'

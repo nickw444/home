@@ -14,18 +14,35 @@
  * limitations under the License.
  **/
 
-// The `https` setting requires the `fs` module. Uncomment the following
-// to make it available:
-//var fs = require("fs");
+/**
+ * PLEASE NOTE! IMPORTANT! READ!
+ *
+ * This is a modified version of the settings file. Some parts of the
+ * settings are actually controlled by the Hass.io add-on.
+ *
+ * Parts that are handled by it, are removed from this settings template.
+ * The following configuration keys are controlled by the add-on and removed.
+ *
+ * - uiPort (port setting in the add-on log)
+ * - uiHost (no need to manually configure this in the add-on)
+ * - debugUseColors (disabled, won't work in the add-on)
+ * - flowFile (fixed to flows.json)
+ * - credentialSecret (credentials_secret in the add-on configuration)
+ * - userDir (is set fixed to `/config/node-red`)
+ * - nodesDir (is set fixed to `/config/node-red/nodes`)
+ * - adminAuth (known as users in the add-on configuration)
+ * - https (ssl settings in the add-on configuration)
+ * - logging.console.level (log_level in the add-on configuration)
+ * - httpNodeAuth (http_node settings in the add-on configuration)
+ * - httpStaticAuth (http_static settings in the add-on configuration)
+ * - requireHttps (require_ssl setting in the add-on configuration)
+ * - httpNodeRoot (set fixed to `/endpoint` )
+ *
+ * If you like to change those settings, some are available via the add-on
+ * settings/option in the Hass.io panel in Home Assistant.
+ */
 
 module.exports = {
-    // the tcp port that the Node-RED web server is listening on
-    uiPort: process.env.PORT || 1880,
-
-    // By default, the Node-RED UI accepts connections on all IPv4 interfaces.
-    // The following property can be used to listen on a specific interface. For
-    // example, the following would only allow connections from the local machine.
-    //uiHost: "127.0.0.1",
 
     // Retry time in milliseconds for MQTT connections
     mqttReconnectTime: 15000,
@@ -56,42 +73,10 @@ module.exports = {
     //  node, set this to true
     //tlsConfigDisableLocalFiles: true,
 
-    // Colourise the console output of the debug node
-    //debugUseColors: true,
-
-    // The file containing the flows. If not set, it defaults to flows_<hostname>.json
-    //flowFile: 'flows.json',
-
-    // To enabled pretty-printing of the flow within the flow file, set the following
-    //  property to true:
-    flowFilePretty: true,
-
-    // By default, credentials are encrypted in storage using a generated key. To
-    // specify your own secret, set the following property.
-    // If you want to disable encryption of credentials, set this property to false.
-    // Note: once you set this property, do not change it - doing so will prevent
-    // node-red from being able to decrypt your existing credentials and they will be
-    // lost.
-    //credentialSecret: "a-secret-key",
-
-    // By default, all user data is stored in the Node-RED install directory. To
-    // use a different location, the following property can be used
-    //userDir: '/home/nol/.node-red/',
-
-    // Node-RED scans the `nodes` directory in the install directory to find nodes.
-    // The following property can be used to specify an additional directory to scan.
-    //nodesDir: '/home/nol/.node-red/nodes',
-
     // By default, the Node-RED UI is available at http://localhost:1880/
     // The following property can be used to specify a different root path.
     // If set to false, this is disabled.
     //httpAdminRoot: '/admin',
-
-    // Some nodes, such as HTTP In, can be used to listen for incoming http requests.
-    // By default, these are served relative to '/'. The following property
-    // can be used to specifiy a different root path. If set to false, this is
-    // disabled.
-    //httpNodeRoot: '/red-nodes',
 
     // The following property can be used in place of 'httpAdminRoot' and 'httpNodeRoot',
     // to apply the same root to both parts.
@@ -109,41 +94,6 @@ module.exports = {
     // If you installed the optional node-red-dashboard you can set it's path
     // relative to httpRoot
     //ui: { path: "ui" },
-
-    // Securing Node-RED
-    // -----------------
-    // To password protect the Node-RED editor and admin API, the following
-    // property can be used. See http://nodered.org/docs/security.html for details.
-    //adminAuth: {
-    //    type: "credentials",
-    //    users: [{
-    //        username: "admin",
-    //        password: "$2a$08$zZWtXTja0fB1pzD4sHCMyOCMYz2Z6dNbM6tl8sJogENOMcxWV9DN.",
-    //        permissions: "*"
-    //    }]
-    //},
-
-    // To password protect the node-defined HTTP endpoints (httpNodeRoot), or
-    // the static content (httpStatic), the following properties can be used.
-    // The pass field is a bcrypt hash of the password.
-    // See http://nodered.org/docs/security.html#generating-the-password-hash
-    //httpNodeAuth: {user:"user",pass:"$2a$08$zZWtXTja0fB1pzD4sHCMyOCMYz2Z6dNbM6tl8sJogENOMcxWV9DN."},
-    //httpStaticAuth: {user:"user",pass:"$2a$08$zZWtXTja0fB1pzD4sHCMyOCMYz2Z6dNbM6tl8sJogENOMcxWV9DN."},
-
-    // The following property can be used to enable HTTPS
-    // See http://nodejs.org/api/https.html#https_https_createserver_options_requestlistener
-    // for details on its contents.
-    // See the comment at the top of this file on how to load the `fs` module used by
-    // this setting.
-    //
-    //https: {
-    //    key: fs.readFileSync('privatekey.pem'),
-    //    cert: fs.readFileSync('certificate.pem')
-    //},
-
-    // The following property can be used to cause insecure HTTP connections to
-    // be redirected to HTTPS.
-    //requireHttps: true
 
     // The following property can be used to disable the editor. The admin API
     // is not affected by this option. To disable both the editor and the admin
@@ -204,7 +154,6 @@ module.exports = {
 
     functionGlobalContext: {
         // os:require('os'),
-        // octalbonescript:require('octalbonescript'),
         // jfive:require("johnny-five"),
         // j5board:require("johnny-five").Board({repl:false})
     },
@@ -213,30 +162,36 @@ module.exports = {
     // palette. If a node's category is not in the list, the category will get
     // added to the end of the palette.
     // If not set, the following default order is used:
-    //paletteCategories: ['subflows', 'input', 'output', 'function', 'social', 'mobile', 'storage', 'analysis', 'advanced'],
+    paletteCategories: [
+        'home_assistant',
+        'subflows',
+        'input',
+        'output',
+        'function',
+        'social',
+        'mobile',
+        'storage',
+        'analysis',
+        'advanced'
+    ],
 
     // Configure the logging output
     logging: {
         // Only console logging is currently supported
         console: {
-            // Level of logging to be recorded. Options are:
-            // fatal - only those errors which make the application unusable should be recorded
-            // error - record errors which are deemed fatal for a particular request + fatal errors
-            // warn - record problems which are non fatal + errors + fatal errors
-            // info - record information about the general running of the application + warn + error + fatal errors
-            // debug - record information which is more verbose than info + info + warn + error + fatal errors
-            // trace - record very detailed logging + debug + info + warn + error + fatal errors
-            // off - turn off all logging (doesn't affect metrics or audit)
-            level: "info",
             // Whether or not to include metric events in the log output
             metrics: false,
             // Whether or not to include audit events in the log output
             audit: false
         }
     },
-    contextStorage: {
-        default: {
-            module: "localfilesystem"
+
+    // Customising the editor
+    editorTheme: {
+        projects: {
+            // To enable the Projects feature, set this value to true
+            enabled: false
         }
-    }
+    },
+    flowFilePretty: true
 }

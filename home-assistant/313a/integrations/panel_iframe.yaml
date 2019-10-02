@@ -3,7 +3,3 @@ panel_iframe:
     title: Grafana
     icon: mdi:chart-line
     url: 'https://grafana.store.home'
-  nodered:
-    title: Node Red
-    icon: mdi:robot
-    url: 'https://node-red.store.home'
