@@ -53,4 +53,3 @@ cover:
     stop_action:
       - switch.turn_on: relay_toggle
     optimistic: true
-
