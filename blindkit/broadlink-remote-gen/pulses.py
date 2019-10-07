@@ -43,18 +43,22 @@ def main():
             for _ in range(args.payload_repeats):
                 data += remote_code.get_phase_durations()
                 # Drop a little bit of padding between payloads within a transmission
-                data += [PhaseDuration(not data[-1].phase, 5000)]
+                # 13832us should do
+                data += [PhaseDuration(not data[-1].phase, 13832 / 4)]
+                data += [PhaseDuration(not data[-1].phase, 13832 / 4)]
+                data += [PhaseDuration(not data[-1].phase, 13832 / 4)]
+                data += [PhaseDuration(not data[-1].phase, 13832 / 4)]
 
             payload = encoder.encode(data)
-            # print("".join("{:02x}".format(c) for c in payload))
-            print('{}: {}'.format(action_name, base64.b64encode(payload)))
+            print('{}:\n{}'.format(action_name, base64.b64encode(payload).decode('utf-8')))
         print("")
+
 
 def build_preamble():
     data = []
     for x in range(200):
-        data.append(PhaseDuration(1, 330))
-        data.append(PhaseDuration(0, 330))
+        data.append(PhaseDuration(1, RemoteCode.CLOCK_WIDTH / 2))
+        data.append(PhaseDuration(0, RemoteCode.CLOCK_WIDTH / 2))
     return data
 
 
@@ -64,7 +68,7 @@ class PhaseDuration(NamedTuple):
 
 
 class RemoteCode(object):
-    CLOCK_WIDTH = 660
+    CLOCK_WIDTH = 670
 
     def __init__(self, channel: int, remote: int, action: BlindAction):
         self.channel = channel
@@ -76,12 +80,9 @@ class RemoteCode(object):
 
     def _build_header(self):
         data = []
-        for x in range(20):
-            data.append(PhaseDuration(0, RemoteCode.CLOCK_WIDTH))
+        for x in range(11):
             data.append(PhaseDuration(1, RemoteCode.CLOCK_WIDTH))
-
-        # Last transmission to LOW
-        data.append(PhaseDuration(0, RemoteCode.CLOCK_WIDTH))
+            data.append(PhaseDuration(0, RemoteCode.CLOCK_WIDTH))
 
         # Transmit long part
         data.append(PhaseDuration(1, RemoteCode.CLOCK_WIDTH * 4))
