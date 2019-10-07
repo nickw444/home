@@ -1,7 +1,7 @@
 esphome:
   name: garage
   platform: ESP8266
-  board: esp01_1m
+  board: nodemcuv2
 
 wifi:
   ssid: !secret wifi_ssid
@@ -17,7 +17,7 @@ ota:
 
 switch:
   - platform: gpio
-    pin: GPIO2
+    pin: D6
     id: relay
   - platform: template
     id: relay_toggle
@@ -29,14 +29,16 @@ switch:
 binary_sensor:
   - platform: gpio
     pin: 
-     number: GPIO3
-     inverted: true
+      number: D7
+      mode: INPUT_PULLUP
+      inverted: true
     id: bottom_end_stop
     filters:
       - delayed_on: 10ms
 
 cover:
   - platform: template
+    device_class: garage
     name: "Garage Door"
     lambda: |-
       if (id(bottom_end_stop).state) {
@@ -51,4 +53,3 @@ cover:
     stop_action:
       - switch.turn_on: relay_toggle
     optimistic: true
-
