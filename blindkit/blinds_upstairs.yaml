@@ -5,8 +5,8 @@
 host_device_ip: 192.168.8.35
 blinds:
   - name: Oliver's Front
-    remote: 100
-    channel: 0
+    remote: 102
+    channel: 2
   - name: Oliver's Side
     remote: 100
     channel: 1
@@ -20,8 +20,8 @@ blinds:
     remote: 100
     channel: 3
   - name: Upstairs Study Side
-    remote: 100
-    channel: 4
+    remote: 102
+    channel: 1
   - name: Upstairs Study Back
     remote: 100
     channel: 5

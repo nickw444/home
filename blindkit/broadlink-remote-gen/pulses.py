@@ -44,10 +44,10 @@ def main():
                 data += remote_code.get_phase_durations()
                 # Drop a little bit of padding between payloads within a transmission
                 # 13832us should do
-                data += [PhaseDuration(not data[-1].phase, 13832/4)]
-                data += [PhaseDuration(not data[-1].phase, 13832/4)]
-                data += [PhaseDuration(not data[-1].phase, 13832/4)]
-                data += [PhaseDuration(not data[-1].phase, 13832/4)]
+                data += [PhaseDuration(not data[-1].phase, 13832 / 4)]
+                data += [PhaseDuration(not data[-1].phase, 13832 / 4)]
+                data += [PhaseDuration(not data[-1].phase, 13832 / 4)]
+                data += [PhaseDuration(not data[-1].phase, 13832 / 4)]
 
             payload = encoder.encode(data)
             print('{}:\n{}'.format(action_name, base64.b64encode(payload).decode('utf-8')))
@@ -56,9 +56,9 @@ def main():
 
 def build_preamble():
     data = []
-    for x in range(300):
-        data.append(PhaseDuration(1, 335))
-        data.append(PhaseDuration(0, 335))
+    for x in range(200):
+        data.append(PhaseDuration(1, RemoteCode.CLOCK_WIDTH / 2))
+        data.append(PhaseDuration(0, RemoteCode.CLOCK_WIDTH / 2))
     return data
 
 
