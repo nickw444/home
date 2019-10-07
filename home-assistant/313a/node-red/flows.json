@@ -2028,9 +2028,9 @@
         "z": "5bea69ff.ab3198",
         "name": "armed?",
         "server": "449256ad.414748",
-        "version": "1",
+        "version": 1,
         "outputs": 2,
-        "halt_if": "disarmed",
+        "halt_if": "armed",
         "halt_if_type": "str",
         "halt_if_compare": "is",
         "override_topic": true,
@@ -2044,12 +2044,12 @@
         "x": 446,
         "y": 124,
         "wires": [
-            [],
             [
+                "8c8b0608.732158",
                 "536d8208.fe0be4",
-                "e6bd931f.a20508",
-                "8c8b0608.732158"
-            ]
+                "e6bd931f.a20508"
+            ],
+            []
         ]
     },
     {
