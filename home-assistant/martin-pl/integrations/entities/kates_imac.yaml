@@ -1,0 +1,4 @@
+binary_sensor:
+  - platform: ping
+    name: "Kate's iMac"
+    host: 192.168.2.7
