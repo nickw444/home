@@ -4,16 +4,16 @@ homeassistant:
       icon: mdi:earth
 
 pi_hole:
-  host: 192.168.2.10:4865
+  host: localhost:4865
 
 switch:
   - platform: command_line
     switches:
       pi_hole:
         friendly_name: Pi-hole
-        command_on: "curl -s -X GET 'http://192.168.2.10:4865/admin/api.php?enable&auth='"
-        command_off: "curl -s -X GET 'http://192.168.2.10:4865/admin/api.php?disable=3600&auth='"
-        command_state: "curl -s -X GET 'http://192.168.2.10:4865/admin/api.php?status'"
+        command_on: "curl -s -X GET 'http://localhost:4865/admin/api.php?enable&auth='"
+        command_off: "curl -s -X GET 'http://localhost:4865/admin/api.php?disable=3600&auth='"
+        command_state: "curl -s -X GET 'http://localhost:4865/admin/api.php?status'"
         value_template: "{{ value_json.status == 'enabled' }}"
   - platform: template
     switches:
