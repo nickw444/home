@@ -7,6 +7,7 @@ wifi:
   ssid: !secret wifi_ssid
   password: !secret wifi_password
 
+logger:
 api:
 ota:
 
@@ -21,7 +22,6 @@ output:
     pin:
       number: GPIO13
       inverted: True
-
   # Depends on https://github.com/esphome/esphome/pull/894
   - platform: duty_cycle
     id: element_output
