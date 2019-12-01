@@ -8,6 +8,12 @@ homeassistant:
   time_zone: Australia/Sydney
   whitelist_external_dirs:
     - "/tmp/homekit"
+  auth_providers:
+    - type: homeassistant
+    - type: trusted_networks
+      trusted_networks:
+        - 192.168.8.0/24
+        - 192.168.24.0/24
   packages: !include_dir_named integrations
 
 group: !include_dir_merge_named groups/
