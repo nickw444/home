@@ -1,0 +1,44 @@
+esphome:
+  name: outdoor_station
+  platform: ESP32
+  board: esp32dev
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+
+ota:
+
+i2c:
+  sda: 21
+  scl: 19
+  scan: True
+  id: bus_a
+
+sensor:
+  - platform: bmp280
+    temperature:
+      name: "BME280 Temperature"
+      oversampling: 16x
+    pressure:
+      name: "BME280 Pressure"
+    address: 0x76
+    update_interval: 60s
+    
+font:
+  - file: "Roboto-Regular.ttf"
+    id: font_roboto
+    size: 20
+    
+display:
+  - platform: ssd1306_i2c
+    model: "SH1106 128x32"
+    address: 0x3C
+    lambda: |-
+      it.print(0, 0, id(font_roboto), "Hello World!");
