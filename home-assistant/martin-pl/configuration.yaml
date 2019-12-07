@@ -14,3 +14,4 @@ logger:
   logs:
     samsungwsctl: debug
     custom_components.samsungwsctl: debug
+    homeassistant.components.http.ban: warning
