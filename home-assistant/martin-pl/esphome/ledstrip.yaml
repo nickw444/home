@@ -18,9 +18,11 @@ output:
   - platform: esp8266_pwm
     pin: 12
     id: 'color_green'
+    max_power: 60%
   - platform: esp8266_pwm
     pin: 13
     id: 'color_blue'
+    max_power: 30%
 
 light:
   - platform: rgb
