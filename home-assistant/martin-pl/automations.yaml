@@ -1,0 +1,14 @@
+- id: '1575769249296'
+  alias: Sous Vide Presets
+  description: ''
+  trigger:
+  - entity_id: input_select.sous_vide_preset
+    platform: state
+    to: Steak (Medium Rare)
+  condition: []
+  action:
+  - data:
+      entity_id: climate.sous_vide
+      hvac_mode: heat_cool
+      temperature: 54.2
+    service: climate.set_temperature
