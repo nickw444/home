@@ -1,10 +1,11 @@
 timer:
   sous_vide:
+    name: "Cooking time remaining"
 
 input_select:
   sous_vide_preset:
+    name: "Preset"
     options:
-      - Test
       - Steak (Medium Rare)
       - Slow Poached Eggs
 
@@ -17,8 +18,7 @@ script:
           hvac_mode: 'heat_cool'
           temperature: >
            {% set preset_temperatures={
-             'Test': '30.0',
-             'Steak (Medium Rare)': '54.2',
+             'Steak (Medium Rare)': '54.4',
              'Slow Poached Eggs': '62.8',
             } %}
            {{ preset_temperatures[states('input_select.sous_vide_preset')] }}
@@ -45,7 +45,6 @@ script:
           entity_id: timer.sous_vide
           duration: >
             {% set preset_times={
-              'Test': '00:01:00',
               'Steak (Medium Rare)': '02:00:00',
               'Slow Poached Eggs': '00:45:00',
             } %}
