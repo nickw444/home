@@ -4,9 +4,9 @@ timer:
 input_select:
   sous_vide_preset:
     options:
+      - Test
       - Steak (Medium Rare)
       - Slow Poached Eggs
-      - Salmon
 
 script:
   sous_vide_preheat:
@@ -17,24 +17,53 @@ script:
           hvac_mode: 'heat_cool'
           temperature: >
            {% set preset_temperatures={
+             'Test': '30.0',
              'Steak (Medium Rare)': '54.2',
              'Slow Poached Eggs': '62.8',
             } %}
            {{ preset_temperatures[states('input_select.sous_vide_preset')] }}
       - wait_template: "{{ state_attr('climate.sous_vide', 'current_temperature') >= state_attr('climate.sous_vide', 'temperature')}}"
-      # notify that it is ready for food. Wait until temperature falls below preset
-      # continue to cook sequence...
+      - service: notify.notify
+        data:
+          title: "Sous vide"
+          message: "Target temperature has been reached, time to put in the food"
+      - wait_template: "{{ state_attr('climate.sous_vide', 'current_temperature') < state_attr('climate.sous_vide', 'temperature')}}"
+      - service: script.turn_on
+        data:
+          entity_id: script.sous_vide_cook
 
   sous_vide_cook:
     sequence:
-      # - wait_template: "{{ state_attr('climate.sous_vide', 'current_temperature') >= state_attr('climate.sous_vide', 'temperature')}}"
-      # Notify that the cook process has started
+      - wait_template: "{{ state_attr('climate.sous_vide', 'current_temperature') >= state_attr('climate.sous_vide', 'temperature')}}"
+      - service: notify.notify
+        data:
+          title: "Sous vide"
+          message: "Target temperature has been reached. The timer has started."
+
       - service: timer.start
         data_template:
           entity_id: timer.sous_vide
           duration: >
             {% set preset_times={
+              'Test': '00:01:00',
               'Steak (Medium Rare)': '02:00:00',
               'Slow Poached Eggs': '00:45:00',
             } %}
             {{ preset_times[states('input_select.sous_vide_preset')] }}
+
+automation:
+  - id: sous_vide_completed
+    alias: Sous Vide Completed
+    trigger:
+      platform: event
+      event_type: timer.finished
+      event_data:
+        entity_id: timer.sous_vide
+    action:
+      - service: notify.notify
+        data:
+          title: "Sous vide"
+          message: "Cooking completed."
+      - service: climate.turn_off
+        data:
+          entity_id: climate.sous_vide
