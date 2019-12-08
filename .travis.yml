@@ -8,7 +8,7 @@ jobs:
   - stage: test
     name: '[ha] check config: 313a'
     before_install:
-      sudo apt-get install -y python-dev pkg-config libavformat-dev libavcodec-dev libavdevice-dev libavutil-dev libswscale-dev libavresample-dev libavfilter-dev
+      sudo apt-get install -y python-dev pkg-config libavformat-dev libavcodec-dev libavdevice-dev libavutil-dev libswscale-dev libavresample-dev libavfilter-dev libsm-dev
     script:
       ./home-assistant/tools/test_config.sh 313a
   - stage: test
