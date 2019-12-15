@@ -19,7 +19,7 @@ outputs:
     icon: mdi:water
   - id: 5
     name: front_terrace_recycled
-    duration: 900
+    duration: 1200
     icon: mdi:water
   - id: 6
     name: lower_lawn
@@ -31,11 +31,11 @@ outputs:
     icon: mdi:water
   - id: 8
     name: back_yard_recycled
-    duration: 900
+    duration: 1200
     icon: mdi:water
   - id: 9
     name: recycled_pump
-    duration: 900
+    duration: 1200
     icon: mdi:water
   - id: 10
     name: tree_lights

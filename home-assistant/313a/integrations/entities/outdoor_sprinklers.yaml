@@ -56,7 +56,6 @@ homeassistant:
       friendly_name: Recycled Pump
     switch.sprinkle_tree_lights:
       friendly_name: Tree Lights
-
 switch:
 - platform: mqtt
   availability_topic: sprinkle/status
@@ -126,7 +125,7 @@ switch:
   availability_topic: sprinkle/status
   name: sprinkle_front_terrace_recycled_trigger
   command_topic: sprinkle/5/set
-  payload_on: ON:900
+  payload_on: ON:1200
   qos: 1
 - platform: mqtt
   availability_topic: sprinkle/status
@@ -168,7 +167,7 @@ switch:
   availability_topic: sprinkle/status
   name: sprinkle_back_yard_recycled_trigger
   command_topic: sprinkle/8/set
-  payload_on: ON:900
+  payload_on: ON:1200
   qos: 1
 - platform: mqtt
   availability_topic: sprinkle/status
@@ -182,7 +181,7 @@ switch:
   availability_topic: sprinkle/status
   name: sprinkle_recycled_pump_trigger
   command_topic: sprinkle/9/set
-  payload_on: ON:900
+  payload_on: ON:1200
   qos: 1
 - platform: mqtt
   availability_topic: sprinkle/status
