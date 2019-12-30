@@ -375,12 +375,12 @@
         "id": "755a7866.b294a",
         "type": "inject",
         "z": "10eab06d.5f8d9",
-        "name": "Daily at 22:30",
+        "name": "Daily at 23:00",
         "topic": "",
         "payload": "",
         "payloadType": "date",
         "repeat": "",
-        "crontab": "30 22 * * *",
+        "crontab": "00 23 * * *",
         "once": false,
         "onceDelay": 0.1,
         "x": 146.5,
@@ -1336,7 +1336,7 @@
         "id": "89d0f802.6624",
         "type": "comment",
         "z": "10eab06d.5f8d9",
-        "name": "Turn tree lights off at 22:30",
+        "name": "Turn tree lights off at 23:00",
         "info": "",
         "x": 156,
         "y": 177,
@@ -3321,5 +3321,207 @@
         "x": 711.5,
         "y": 760,
         "wires": []
+    },
+    {
+        "id": "bc5116da.3d1988",
+        "type": "inject",
+        "z": "10eab06d.5f8d9",
+        "name": "Mon, Wed, Thu, Sat 12 noon",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "00 12 * * 1,3,4,6",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 179,
+        "y": 1242,
+        "wires": [
+            [
+                "8564e087.ddb4d",
+                "1a3cf08e.da69ef",
+                "7df3cd26.91dc44"
+            ]
+        ]
+    },
+    {
+        "id": "8564e087.ddb4d",
+        "type": "api-call-service",
+        "z": "10eab06d.5f8d9",
+        "name": "front terrace recycle (on)",
+        "server": "449256ad.414748",
+        "version": 1,
+        "debugenabled": false,
+        "service_domain": "switch",
+        "service": "turn_on",
+        "entityId": "switch.sprinkle_front_terrace_recycled",
+        "data": "",
+        "dataType": "json",
+        "mergecontext": "",
+        "output_location": "payload",
+        "output_location_type": "msg",
+        "mustacheAltTags": false,
+        "x": 459.5,
+        "y": 1242,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "1a3cf08e.da69ef",
+        "type": "api-call-service",
+        "z": "10eab06d.5f8d9",
+        "name": "Log Automation",
+        "server": "449256ad.414748",
+        "version": 1,
+        "debugenabled": false,
+        "service_domain": "logbook",
+        "service": "log",
+        "entityId": "",
+        "data": "{\"name\":\"Automation Started\",\"message\":\"front terrace recycle on 12noon\"}",
+        "dataType": "json",
+        "mergecontext": "",
+        "output_location": "payload",
+        "output_location_type": "msg",
+        "mustacheAltTags": false,
+        "x": 430,
+        "y": 1306,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "c50ee940.fb92a8",
+        "type": "comment",
+        "z": "10eab06d.5f8d9",
+        "name": "Recycled Front terrace12 noon",
+        "info": "",
+        "x": 172.5,
+        "y": 1192,
+        "wires": []
+    },
+    {
+        "id": "7df3cd26.91dc44",
+        "type": "api-call-service",
+        "z": "10eab06d.5f8d9",
+        "name": "Recycled PUMP (on)",
+        "server": "449256ad.414748",
+        "version": 1,
+        "debugenabled": false,
+        "service_domain": "switch",
+        "service": "turn_on",
+        "entityId": "switch.sprinkle_recycled_pump",
+        "data": "",
+        "dataType": "json",
+        "mergecontext": "",
+        "output_location": "payload",
+        "output_location_type": "msg",
+        "mustacheAltTags": false,
+        "x": 447,
+        "y": 1195,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "538c2b2c.90d344",
+        "type": "inject",
+        "z": "10eab06d.5f8d9",
+        "name": "Tue, Wed, Fri, Sun 1pm",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "00 13 * * 2,3,5,0",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 154,
+        "y": 1489,
+        "wires": [
+            [
+                "6c4a9c7.7ad1264",
+                "54a4ca04.841fc4",
+                "a8fa244c.56dda8"
+            ]
+        ]
+    },
+    {
+        "id": "6c4a9c7.7ad1264",
+        "type": "api-call-service",
+        "z": "10eab06d.5f8d9",
+        "name": "Back Yard Garden recycle (on)",
+        "server": "449256ad.414748",
+        "version": 1,
+        "debugenabled": false,
+        "service_domain": "switch",
+        "service": "turn_on",
+        "entityId": "switch.sprinkle_back_yard_recycled",
+        "data": "",
+        "dataType": "json",
+        "mergecontext": "",
+        "output_location": "payload",
+        "output_location_type": "msg",
+        "mustacheAltTags": false,
+        "x": 474.5,
+        "y": 1489,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "54a4ca04.841fc4",
+        "type": "api-call-service",
+        "z": "10eab06d.5f8d9",
+        "name": "Log Automation",
+        "server": "449256ad.414748",
+        "version": 1,
+        "debugenabled": false,
+        "service_domain": "logbook",
+        "service": "log",
+        "entityId": "",
+        "data": "{\"name\":\"Automation Started\",\"message\":\"back yard garden recycle on 1pm\"}",
+        "dataType": "json",
+        "mergecontext": "",
+        "output_location": "payload",
+        "output_location_type": "msg",
+        "mustacheAltTags": false,
+        "x": 425,
+        "y": 1553,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "d9a14317.a872a",
+        "type": "comment",
+        "z": "10eab06d.5f8d9",
+        "name": "Recycled Back Garden 1pm",
+        "info": "",
+        "x": 157.5,
+        "y": 1439,
+        "wires": []
+    },
+    {
+        "id": "a8fa244c.56dda8",
+        "type": "api-call-service",
+        "z": "10eab06d.5f8d9",
+        "name": "Recycled PUMP (on)",
+        "server": "449256ad.414748",
+        "version": 1,
+        "debugenabled": false,
+        "service_domain": "switch",
+        "service": "turn_on",
+        "entityId": "switch.sprinkle_recycled_pump",
+        "data": "",
+        "dataType": "json",
+        "mergecontext": "",
+        "output_location": "payload",
+        "output_location_type": "msg",
+        "mustacheAltTags": false,
+        "x": 442,
+        "y": 1442,
+        "wires": [
+            []
+        ]
     }
 ]
