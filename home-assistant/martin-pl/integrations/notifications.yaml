@@ -1,0 +1,6 @@
+notify:
+  - name: everyone
+    platform: group
+    services:
+      - service: mobile_app_kate_s_iphone
+      - service: mobile_app_nicks_iphone
