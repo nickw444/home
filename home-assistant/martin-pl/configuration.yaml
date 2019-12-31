@@ -9,6 +9,7 @@ homeassistant:
         - fd00::/8
   packages: !include_dir_named integrations
 
+automation: !include automations.yaml
 logger:
   default: info
   logs:
