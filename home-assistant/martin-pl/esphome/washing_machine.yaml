@@ -24,34 +24,46 @@ i2c:
 sensor:
   - platform: mpu6050
     address: 0x68
-    accel_x:
-      name: "MPU6050 Accel X"
-    accel_y:
-      name: "MPU6050 Accel Y"
-    accel_z:
-      name: "MPU6050 Accel z"
     gyro_x:
-      name: "MPU6050 Gyro X"
+      name: "Washing Machine Gyro X"
       id: gyro_x
       filters:
         - offset: -18.8
+        - lambda: return abs(x);
+        - sliding_window_moving_average:
+            window_size: 15
+            send_every: 5
     gyro_y:
-      name: "MPU6050 Gyro Y"
+      name: "Washing Machine Gyro Y"
       id: gyro_y
       filters:
         - offset: -0.9
-    gyro_z:
-      name: "MPU6050 Gyro z"
+        - lambda: return abs(x);
+        - sliding_window_moving_average:
+            window_size: 15
+            send_every: 5
     temperature:
-      name: "MPU6050 Temperature"
+      name: "Laundry Temperature"
     update_interval: 5s
 
 binary_sensor:
   - platform: template
-    device_class: vibration
-    name: "Washing Machine Running"
+    device_class: power
+    name: "Washing Machine"
     lambda: |-
-      if (abs(id(gyro_y).state) +  abs(id(gyro_x).state) > 5) {
+      if (id(gyro_y).state +  id(gyro_x).state > 1) {
+        return true;
+      } else {
+        return false;
+      }
+    filters:
+      - delayed_off: 15min
+      - delayed_on: 2min
+  - platform: template
+    device_class: vibration
+    name: "Washing Machine Vibration Detected"
+    lambda: |-
+      if (id(gyro_y).state +  id(gyro_x).state > 1) {
         return true;
       } else {
         return false;
