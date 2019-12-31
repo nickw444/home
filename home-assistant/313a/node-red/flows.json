@@ -3523,5 +3523,71 @@
         "wires": [
             []
         ]
+    },
+    {
+        "id": "45d66def.3e6994",
+        "type": "server-state-changed",
+        "z": "accad31f.a1bfa",
+        "name": "UPS State Change",
+        "server": "449256ad.414748",
+        "version": 1,
+        "entityidfilter": "sensor.ups_status",
+        "entityidfiltertype": "exact",
+        "outputinitially": false,
+        "state_type": "str",
+        "haltifstate": "",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "outputs": 1,
+        "output_only_on_state_change": true,
+        "x": 133,
+        "y": 437,
+        "wires": [
+            [
+                "6250e88c.33eb3"
+            ]
+        ]
+    },
+    {
+        "id": "df43e043.e7d57",
+        "type": "api-call-service",
+        "z": "accad31f.a1bfa",
+        "name": "Notify",
+        "server": "449256ad.414748",
+        "version": 1,
+        "debugenabled": false,
+        "service_domain": "notify",
+        "service": "telegram",
+        "entityId": "",
+        "data": "",
+        "dataType": "json",
+        "mergecontext": "",
+        "output_location": "payload",
+        "output_location_type": "msg",
+        "mustacheAltTags": false,
+        "x": 499,
+        "y": 428,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "6250e88c.33eb3",
+        "type": "template",
+        "z": "accad31f.a1bfa",
+        "name": "",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "yaml",
+        "syntax": "mustache",
+        "template": "data:\n    message: \"The UPS status changed to {{ payload }}\"",
+        "output": "yaml",
+        "x": 334,
+        "y": 434,
+        "wires": [
+            [
+                "df43e043.e7d57"
+            ]
+        ]
     }
 ]
