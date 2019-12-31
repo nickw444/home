@@ -1,0 +1,58 @@
+esphome:
+  name: washing_machine
+  platform: ESP8266
+  board: esp01_1m
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+
+ota:
+
+i2c:
+  sda: GPIO1
+  scl: GPIO3
+  scan: True
+  id: bus_a
+
+sensor:
+  - platform: mpu6050
+    address: 0x68
+    accel_x:
+      name: "MPU6050 Accel X"
+    accel_y:
+      name: "MPU6050 Accel Y"
+    accel_z:
+      name: "MPU6050 Accel z"
+    gyro_x:
+      name: "MPU6050 Gyro X"
+      id: gyro_x
+      filters:
+        - offset: -18.8
+    gyro_y:
+      name: "MPU6050 Gyro Y"
+      id: gyro_y
+      filters:
+        - offset: -0.9
+    gyro_z:
+      name: "MPU6050 Gyro z"
+    temperature:
+      name: "MPU6050 Temperature"
+    update_interval: 5s
+
+binary_sensor:
+  - platform: template
+    device_class: vibration
+    name: "Washing Machine Running"
+    lambda: |-
+      if (abs(id(gyro_y).state) +  abs(id(gyro_x).state) > 5) {
+        return true;
+      } else {
+        return false;
+      }
