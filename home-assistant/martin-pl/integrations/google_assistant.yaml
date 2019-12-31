@@ -4,6 +4,3 @@ google_assistant:
   exposed_domains:
     - light
   entity_config:
-    switch.the_ads:
-      name: The Ads
-      expose: true
