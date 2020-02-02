@@ -6,4 +6,3 @@ homekit:
       - switch
     exclude_entities:
       - binary_sensor.updater
-    include_entities:
