@@ -3,7 +3,3 @@ google_assistant:
   api_key: !secret google_assistant_api_key
   exposed_domains:
     - light
-  entity_config:
-    switch.the_ads:
-      name: The Ads
-      expose: true
