@@ -1,19 +1,19 @@
 sensor:
   platform: template
   sensors:
-    kitchen_fridge_power:
-      friendly_name: Kitchen Fridge Power
+    washing_machine_power:
+      friendly_name: Washing Machine Power
       unit_of_measurement: Watts
-      value_template: "{{ state_attr('switch.kitchen_fridge', 'current_power_w') }}"
-    kitchen_fridge_current:
-      friendly_name: Kitchen Fridge Current
+      value_template: "{{ state_attr('switch.washing_machine', 'current_power_w') }}"
+    washing_machine_current:
+      friendly_name: Washing Machine Current
       unit_of_measurement: Amps
-      value_template: "{{ state_attr('switch.kitchen_fridge', 'current_a') }}"
-    kitchen_fridge_voltage:
-      friendly_name: Kitchen Fridge Voltage
+      value_template: "{{ state_attr('switch.washing_machine', 'current_a') }}"
+    washing_machine_voltage:
+      friendly_name: Washing Machine Voltage
       unit_of_measurement: Volts
-      value_template: "{{ state_attr('switch.kitchen_fridge', 'voltage') }}"
-    kitchen_fridge_today_energy:
-      friendly_name: Kitchen Fridge Today Energy
+      value_template: "{{ state_attr('switch.washing_machine', 'voltage') }}"
+    washing_machine_today_energy:
+      friendly_name: Washing Machine Today Energy
       unit_of_measurement: kWh
-      value_template: "{{ state_attr('switch.kitchen_fridge', 'today_energy_kwh') }}"
+      value_template: "{{ state_attr('switch.washing_machine', 'today_energy_kwh') }}"
