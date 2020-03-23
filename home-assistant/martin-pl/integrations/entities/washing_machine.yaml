@@ -17,3 +17,14 @@ sensor:
       friendly_name: Washing Machine Today Energy
       unit_of_measurement: kWh
       value_template: "{{ state_attr('switch.washing_machine', 'today_energy_kwh') }}"
+
+binary_sensor:
+  platform: template
+  sensors:
+    washing_machine:
+      friendly_name: "Washing Machine"
+      value_template: >-
+        {{ states('sensor.washing_machine_power')|float > 5 }}
+      icon_template: "mdi:washing-machine"
+      delay_on: 2
+      delay_off: 5
