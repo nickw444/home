@@ -10,6 +10,7 @@ homeassistant:
   packages: !include_dir_named integrations
 
 automation: !include automations.yaml
+script: !include scripts.yaml
 logger:
   default: info
   logs:

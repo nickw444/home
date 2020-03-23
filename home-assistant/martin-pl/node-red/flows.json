@@ -115,7 +115,18 @@
         "name": "spotify state",
         "server": "e57d2000.0ef9",
         "version": 1,
-        "entityidfilter": "media_player.spotify",
+        "exposeToHomeAssistant": false,
+        "haConfig": [
+            {
+                "property": "name",
+                "value": ""
+            },
+            {
+                "property": "icon",
+                "value": ""
+            }
+        ],
+        "entityidfilter": "media_player.spotify_nick",
         "entityidfiltertype": "exact",
         "outputinitially": true,
         "state_type": "str",
@@ -138,7 +149,7 @@
         "type": "function",
         "z": "9c0f4850.252b38",
         "name": "Get dominent color",
-        "func": "const Vibrant = context.global.Vibrant;\n\nconst entityPicturePath = msg.data.new_state.attributes.entity_picture\nconst source = msg.data.new_state.attributes.source\nconst domain = 'http://pi.lan:8123'\n\nif (msg.payload != \"playing\") {\n    return;\n}\n\nif (source != \"Samsung TV UA55RU8000WXXY\") {\n    return;\n}\n\nVibrant.from(domain + entityPicturePath)\n    .getPalette()\n    .then((result) => node.send({ \n        payload: {\n            data: {\n                rgb_color:  result.Vibrant.rgb,\n            },\n        },\n    }))\n",
+        "func": "const Vibrant = context.global.Vibrant;\n\nconst entityPicturePath = msg.data.new_state.attributes.entity_picture\nconst source = msg.data.new_state.attributes.source\nconst domain = 'http://pi.lan:8123'\n\n\nif (source != \"Samsung TV UA55RU8000WXXY\") {\n    return;\n}\n\nif (msg.payload != \"playing\") {\n    return;\n}\n\nVibrant.from(domain + entityPicturePath)\n    .getPalette()\n    .then((result) => node.send({ \n        payload: {\n            data: {\n                rgb_color:  result.Vibrant.rgb,\n            },\n        },\n    }))\n",
         "outputs": 1,
         "noerr": 0,
         "x": 370,
