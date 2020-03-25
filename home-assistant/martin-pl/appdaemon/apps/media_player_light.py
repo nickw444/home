@@ -68,4 +68,5 @@ def extract_dominant_color(image_url):
     fd = urlopen(image_url)
     f = io.BytesIO(fd.read())
     color_thief = ColorThief(f)
-    return color_thief.get_color(quality=1)
+    colors = color_thief.get_palette(3, quality=10)
+    return colors[1]
