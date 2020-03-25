@@ -205,9 +205,9 @@
   alias: when the TV source changes from Spotify, reset the LED strip color
   description: ''
   trigger:
-  - platform: template
-    value_template: '{{ state_attr(''media_player.samsung_smart_tv'',''source'') !=
-      "Spotify" }}'
+  - entity_id: sensor.samsung_smart_tv_source
+    from: Spotify
+    platform: state
   condition: []
   action:
   - data:
