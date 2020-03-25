@@ -10,3 +10,11 @@ media_player:
     secure: true
     mac: !secret samsung_smart_tv_mac
     name: "Samsung Smart TV"
+
+sensor:
+  - platform: template
+    sensors:
+      samsung_smart_tv_source:
+        friendly_name: "Samsung Smart TV Source"
+        value_template: >-
+          {{ state_attr('media_player.samsung_smart_tv','source') }}
