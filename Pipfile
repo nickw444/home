@@ -9,6 +9,8 @@ verify_ssl = true
 broadlink-remote-gen = {editable = true,path = "./blindkit/broadlink-remote-gen"}
 ruamel-yaml = "*"
 click = "*"
+appdaemon = "*"
+colorthief = "*"
 
 [requires]
 python_version = "3.7"
