@@ -5,3 +5,4 @@ google_assistant:
     client_email: !secret google_assistant_client_email
   exposed_domains:
     - light
+    - fan

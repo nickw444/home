@@ -1,0 +1,12 @@
+dyson:
+  username: !secret dyson_username
+  password: !secret dyson_password
+  language: AU
+  devices:
+    - device_id: NN8-AU-JAA0276A
+      device_ip: 192.168.2.247
+
+homeassistant:
+  customize:
+    fan.lounge:
+      friendly_name: 'Living Room Fan'
