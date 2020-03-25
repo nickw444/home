@@ -4,5 +4,6 @@ homekit:
       - device_tracker
       - person
       - switch
+      - automation
     exclude_entities:
       - binary_sensor.updater
