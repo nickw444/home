@@ -24,7 +24,7 @@ binary_sensor:
     washing_machine:
       friendly_name: "Washing Machine"
       value_template: >-
-        {{ states('sensor.washing_machine_power')|float > 5 }}
+        {{ states('sensor.washing_machine_power')|float > 2 }}
       icon_template: "mdi:washing-machine"
       delay_on: 2
       delay_off: 5
