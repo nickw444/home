@@ -184,12 +184,15 @@ def test_when_someone_home_but_disabled_then_disarm(hass_driver, auto_arm):
     )
 
 
-@automation_fixture(AlarmAutoArm, args={
-    CONF_ALARM_ENTITY: ALARM_ENTITY,
-    CONF_ARMING_CODE: ARMING_CODE,
-    CONF_ENABLE_ENTITY: ENABLE_ENTITY,
-    CONF_ENABLE_OVERRIDE_ENTITY: ENABLE_OVERRIDE_ENTITY,
-    CONF_PRESENCE_ENTITY: PRESENCE_ENTITY,
-})
+@automation_fixture(
+    AlarmAutoArm,
+    args={
+        CONF_ALARM_ENTITY: ALARM_ENTITY,
+        CONF_ARMING_CODE: ARMING_CODE,
+        CONF_ENABLE_ENTITY: ENABLE_ENTITY,
+        CONF_ENABLE_OVERRIDE_ENTITY: ENABLE_OVERRIDE_ENTITY,
+        CONF_PRESENCE_ENTITY: PRESENCE_ENTITY,
+    },
+)
 def auto_arm():
     pass
