@@ -1,5 +1,5 @@
 import mock
-import pytest
+from appdaemon_testing.pytest import automation_fixture
 
 from apps.alarm_auto_arm import (
     AlarmAutoArm,
@@ -184,24 +184,12 @@ def test_when_someone_home_but_disabled_then_disarm(hass_driver, auto_arm):
     )
 
 
-@pytest.fixture
+@automation_fixture(AlarmAutoArm, args={
+    CONF_ALARM_ENTITY: ALARM_ENTITY,
+    CONF_ARMING_CODE: ARMING_CODE,
+    CONF_ENABLE_ENTITY: ENABLE_ENTITY,
+    CONF_ENABLE_OVERRIDE_ENTITY: ENABLE_OVERRIDE_ENTITY,
+    CONF_PRESENCE_ENTITY: PRESENCE_ENTITY,
+})
 def auto_arm():
-    ad = mock.Mock()
-    logging = mock.Mock()
-    auto_arm = AlarmAutoArm(
-        ad,
-        "name",
-        logging,
-        {
-            CONF_ALARM_ENTITY: ALARM_ENTITY,
-            CONF_ARMING_CODE: ARMING_CODE,
-            CONF_ENABLE_ENTITY: ENABLE_ENTITY,
-            CONF_ENABLE_OVERRIDE_ENTITY: ENABLE_OVERRIDE_ENTITY,
-            CONF_PRESENCE_ENTITY: PRESENCE_ENTITY,
-        },
-        {},
-        {},
-        {},
-    )
-    auto_arm.initialize()
-    return auto_arm
+    pass
