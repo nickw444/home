@@ -1,0 +1,11 @@
+alarm_auto_arm:
+  module: alarm_auto_arm
+  class: AlarmAutoArm
+  alarm_entity: alarm_control_panel.alarm_panel
+  arming_code: !secret arming_code 
+  # Whether the automation should be enabled
+  enable_entity: input_boolean.alarm_auto_arm
+  # Overrides enable_entity. Useful if enable_entity is controlled via other automations
+  # but want to maintain disabled/enabled state through those transitions
+  enable_override_entity: input_boolean.alarm_auto_arm_override
+  presence_entity: group.family

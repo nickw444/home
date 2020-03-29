@@ -4,6 +4,10 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
+pytest = "*"
+appdaemon-testing = "*"
+flake8 = "*"
+black = "*"
 
 [packages]
 broadlink-remote-gen = {editable = true,path = "./blindkit/broadlink-remote-gen"}
@@ -13,4 +17,7 @@ appdaemon = "*"
 colorthief = "*"
 
 [requires]
-python_version = "3.7"
+python_version = "3.8"
+
+[pipenv]
+allow_prereleases = true
