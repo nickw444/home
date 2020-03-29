@@ -22,3 +22,4 @@ Not all the fun gets to happen inside this repo. Here is a collection of other p
 - [miio-go](https://github.com/nickw444/miio-go): An implementation of the miIO home protocol by Xiaomi written in Golang.
 - [samsungwsctl](https://github.com/nickw444/samsungwsctl):  A minimal alternative to samsungctl for controlling newer (>2019) Samsung Smart TVs
 - [cf-ddns](https://github.com/nickw444/cf-ddns): Extendable Cloudflare DDNS Updater written in Golang
+- [appdaemon-testing](https://github.com/nickw444/appdaemon-testing/): Ergonomic and pythonic unit testing for AppDaemon apps. Utilities to allow you to test your AppDaemon home automation apps using all the pythonic testing patterns you are already familiar with.
