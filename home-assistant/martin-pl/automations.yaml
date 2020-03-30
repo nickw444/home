@@ -37,7 +37,7 @@
       title: Fiddle Leaf Fig
     service: notify.everyone
 - id: '1584944183272'
-  alias: when apartment door opens or presence detected, at night, turn on lights
+  alias: when apartment door opens, and no one is home at night, turn on lights
   description: ''
   trigger:
   - device_id: e824e2b2a4ff4dea9b16fd7f6234dfc1
@@ -45,14 +45,13 @@
     entity_id: binary_sensor.front_door
     platform: device
     type: opened
-  - entity_id: group.all_people
-    from: not_home
-    platform: state
-    to: home
   condition:
   - after: sunset
     after_offset: '-60'
     condition: sun
+  - condition: state
+    entity_id: group.all_people
+    state: not_home
   action:
   - device_id: 8c28feb17fb74368ac8b2a30f2a66355
     domain: switch
@@ -63,6 +62,28 @@
     domain: light
     entity_id: light.entry_hall
     type: turn_on
+- id: '1584944187934'
+  alias: when presence detected, at night, turn on lights
+  description: ''
+  trigger:
+    - entity_id: group.all_people
+      from: not_home
+      platform: state
+      to: home
+  condition:
+    - after: sunset
+      after_offset: '-60'
+      condition: sun
+  action:
+    - device_id: 8c28feb17fb74368ac8b2a30f2a66355
+      domain: switch
+      entity_id: switch.living_room_lamp
+      type: turn_on
+    - brightness_pct: 30
+      device_id: b8094b16b3454f8c8304d375cb9c4b09
+      domain: light
+      entity_id: light.entry_hall
+      type: turn_on
 - id: '1584944287383'
   alias: when everyone leaves, turn off lights
   description: ''
