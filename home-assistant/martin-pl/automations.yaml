@@ -217,3 +217,49 @@
       - 108
     entity_id: light.living_room_led_strip
     service: light.turn_on
+- id: '1585257052751'
+  alias: when the living room door opens, and the fan is on auto, turn off the fan
+  description: ''
+  trigger:
+  - device_id: 9ae0e5e12ca74203a75203b1c9fbd57b
+    domain: binary_sensor
+    entity_id: binary_sensor.living_room_door
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 10
+    platform: device
+    type: opened
+  condition:
+  - condition: template
+    value_template: '{{ state_attr("fan.lounge", "speed") == "AUTO" }}'
+  action:
+  - data:
+      speed: 1
+    entity_id: fan.lounge
+    service: fan.set_speed
+  - data: {}
+    entity_id: fan.lounge
+    service: fan.turn_off
+- id: '1585257150059'
+  alias: when the living room door closes, and the fan is on speed 1, turn the fan
+    to auto
+  description: ''
+  trigger:
+  - device_id: 9ae0e5e12ca74203a75203b1c9fbd57b
+    domain: binary_sensor
+    entity_id: binary_sensor.living_room_door
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 10
+    platform: device
+    type: not_opened
+  condition:
+  - condition: template
+    value_template: '{{ state_attr("fan.lounge", "speed") == 1 }}'
+  action:
+  - data:
+      speed: AUTO
+    entity_id: fan.lounge
+    service: fan.set_speed
