@@ -22,6 +22,9 @@ ness_alarm:
       id: 9
 
 input_boolean:
-  alarm_auto_arm:
+  alarm_auto_arm_override:
     name: Auto Arm
+    icon: mdi:alarm-light
+  alarm_auto_arm_schedule:
+    name: Auto Arm Schedule
     icon: mdi:alarm-light
