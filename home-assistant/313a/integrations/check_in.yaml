@@ -1,0 +1,17 @@
+rest_command:
+  check_in:
+    url: !secret check_in_url
+
+automation:
+  - id: '1585648623740'
+    alias: 'every hour, call the check-in URL '
+    description: ''
+    trigger:
+      - hours: '*'
+        minutes: '0'
+        platform: time_pattern
+        seconds: '0'
+    condition: []
+    action:
+      - data: {}
+        service: rest_command.check_in
