@@ -1,2 +1,13 @@
 frontend:
   themes: !include ../themes/google-home.yaml
+
+automation:
+  - id: 'frontend_set_default_theme'
+    alias: 'at startup, set the default theme'
+    trigger:
+      platform: homeassistant
+      event: start
+    action:
+      service: frontend.set_theme
+      data:
+        name: 'Google - Light'
