@@ -47,7 +47,7 @@
     type: opened
   condition:
   - after: sunset
-    after_offset: -00:60:00
+    after_offset: '-00:60:00'
     condition: sun
   - condition: state
     entity_id: group.all_people
@@ -66,24 +66,24 @@
   alias: when presence detected, at night, turn on lights
   description: ''
   trigger:
-  - entity_id: group.all_people
-    from: not_home
-    platform: state
-    to: home
+    - entity_id: group.all_people
+      from: not_home
+      platform: state
+      to: home
   condition:
-  - after: sunset
-    after_offset: -00:60:00
-    condition: sun
+    - after: sunset
+      after_offset: '-00:60:00'
+      condition: sun
   action:
-  - device_id: 8c28feb17fb74368ac8b2a30f2a66355
-    domain: switch
-    entity_id: switch.living_room_lamp
-    type: turn_on
-  - brightness_pct: 30
-    device_id: b8094b16b3454f8c8304d375cb9c4b09
-    domain: light
-    entity_id: light.entry_hall
-    type: turn_on
+    - device_id: 8c28feb17fb74368ac8b2a30f2a66355
+      domain: switch
+      entity_id: switch.living_room_lamp
+      type: turn_on
+    - brightness_pct: 30
+      device_id: b8094b16b3454f8c8304d375cb9c4b09
+      domain: light
+      entity_id: light.entry_hall
+      type: turn_on
 - id: '1584944287383'
   alias: when everyone leaves, turn off lights
   description: ''
@@ -144,7 +144,7 @@
   description: ''
   trigger:
   - event: sunset
-    offset: -00:30:00
+    offset: '-00:30:00'
     platform: sun
   condition:
   - condition: state
@@ -165,7 +165,7 @@
     to: 'on'
   condition:
   - after: sunset
-    after_offset: -00:30:00
+    after_offset: '-00:30:00'
     condition: sun
   action:
   - device_id: 8c28feb17fb74368ac8b2a30f2a66355
@@ -284,15 +284,3 @@
       speed: AUTO
     entity_id: fan.lounge
     service: fan.set_speed
-- id: '1585648623740'
-  alias: ' every hour, call the check-in URL '
-  description: ''
-  trigger:
-  - hours: '*'
-    minutes: '0'
-    platform: time_pattern
-    seconds: '0'
-  condition: []
-  action:
-  - data: {}
-    service: rest_command.check_in

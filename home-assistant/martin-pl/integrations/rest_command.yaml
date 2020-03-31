@@ -1,3 +1,0 @@
-rest_command:
-  check_in:
-    url: !secret check_in_url
