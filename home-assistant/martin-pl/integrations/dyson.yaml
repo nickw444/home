@@ -8,5 +8,5 @@ dyson:
 
 homeassistant:
   customize:
-    fan.lounge:
+    fan.living_room:
       friendly_name: 'Living Room Fan'

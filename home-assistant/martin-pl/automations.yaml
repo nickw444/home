@@ -253,14 +253,14 @@
     type: opened
   condition:
   - condition: template
-    value_template: '{{ state_attr("fan.lounge", "speed") == "AUTO" }}'
+    value_template: '{{ state_attr("fan.living_room", "speed") == "AUTO" }}'
   action:
   - data:
       speed: 1
-    entity_id: fan.lounge
+    entity_id: fan.living_room
     service: fan.set_speed
   - data: {}
-    entity_id: fan.lounge
+    entity_id: fan.living_room
     service: fan.turn_off
 - id: '1585257150059'
   alias: when the living room door closes, and the fan is on speed 1, turn the fan
@@ -278,9 +278,9 @@
     type: not_opened
   condition:
   - condition: template
-    value_template: '{{ state_attr("fan.lounge", "speed") == 1 }}'
+    value_template: '{{ state_attr("fan.living_room", "speed") == 1 }}'
   action:
   - data:
       speed: AUTO
-    entity_id: fan.lounge
+    entity_id: fan.living_room
     service: fan.set_speed
