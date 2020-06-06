@@ -21,7 +21,7 @@
   alias: when fiddle leaf moisture is low, send a notification
   description: ''
   trigger:
-  - below: '20'
+  - below: '25'
     entity_id: sensor.soil_moisture_level
     for: '3:00:00'
     platform: numeric_state
@@ -75,10 +75,10 @@
     domain: switch
     entity_id: switch.living_room_lamp
     type: turn_on
-  - brightness_pct: 30
+  - brightness_pct: 100
     device_id: b8094b16b3454f8c8304d375cb9c4b09
     domain: light
-    entity_id: light.entry_hall
+    entity_id: light.entry_hallway
     type: turn_on
 - id: '1584944287383'
   alias: when everyone leaves, turn off lights
@@ -337,19 +337,19 @@
   - condition: device
     device_id: b8094b16b3454f8c8304d375cb9c4b09
     domain: light
-    entity_id: light.entry_hall
+    entity_id: light.entry_hallway
     type: is_off
   - after: sunset
     after_offset: -00:60:00
     condition: sun
   action:
-  - brightness_pct: 50
+  - brightness_pct: 100
     device_id: b8094b16b3454f8c8304d375cb9c4b09
     domain: light
-    entity_id: light.entry_hall
+    entity_id: light.entry_hallway
     type: turn_on
   - delay: 00:05:00
   - device_id: b8094b16b3454f8c8304d375cb9c4b09
     domain: light
-    entity_id: light.entry_hall
+    entity_id: light.entry_hallway
     type: turn_off
