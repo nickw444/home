@@ -13,3 +13,32 @@ media_player_light_kate:
   hass_base_url: https://hass.mpl.nickwhyte.com
   media_player_entity: media_player.spotify_kate
   light_entity: light.living_room_led_strip
+
+bedroom_lights_bedtime:
+  module: light_fade_in_out
+  class: LightFadeInOut
+  enable_entity: input_boolean.bedroom_bed_time
+  presence_entity: group.all_people
+  start_time_entity: ''
+  fade_in_duration: 00:30:00
+  fade_out_duration: null
+  lights:
+    - entity_id: light.bedside
+      color_temp_kelvin: 2500
+
+bedroom_lights_wakeup_weekday:
+  module: light_fade_in_out
+  class: LightFadeInOut
+  enable_entity: input_boolean.bedroom_wake_up
+  start_time_entity: ''
+  fade_in_duration: 00:30:00
+  fade_out_duration: 00:15:00
+  enable_days:
+    - Mon
+    - Tue
+    - Wed
+    - Thur
+    - Fri
+  lights:
+    - entity_id: light.bedside
+      color_temp_kelvin: 4500
