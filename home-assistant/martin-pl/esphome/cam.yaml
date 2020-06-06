@@ -28,5 +28,6 @@ esp32_camera:
   href_pin: GPIO23
   pixel_clock_pin: GPIO22
   power_down_pin: GPIO32
-  resolution: 1280x1024
+  resolution: 640x480
   jpeg_quality: 10
+  
