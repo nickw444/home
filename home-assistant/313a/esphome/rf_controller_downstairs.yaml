@@ -1,0 +1,30 @@
+esphome:
+  name: rf_controller_downstairs
+  platform: ESP8266
+  board: esp01_1m
+  includes:
+    - raex_blind_tx.h
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "rf_controller_downstairs"
+    password: !secret wifi_fallback_password
+
+captive_portal:
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+
+ota:
+
+custom_component:
+  - lambda: |-
+      auto raex_blind_transmit = new RaexBlindTransmitComponent();
+      return {raex_blind_transmit};
