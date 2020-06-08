@@ -31,7 +31,7 @@
         "id": "5bea69ff.ab3198",
         "type": "tab",
         "label": "Alarm",
-        "disabled": false,
+        "disabled": true,
         "info": ""
     },
     {
@@ -1361,106 +1361,6 @@
         "x": 177.5,
         "y": 493,
         "wires": []
-    },
-    {
-        "id": "c3fb9b45.fc6898",
-        "type": "inject",
-        "z": "accad31f.a1bfa",
-        "name": "Every hour",
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "repeat": "3600",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "x": 126.5,
-        "y": 211,
-        "wires": [
-            [
-                "fe16bc42.6e6d2"
-            ]
-        ]
-    },
-    {
-        "id": "fe16bc42.6e6d2",
-        "type": "http request",
-        "z": "accad31f.a1bfa",
-        "name": "",
-        "method": "POST",
-        "ret": "txt",
-        "url": "https://hc-ping.com/fba5380e-fc82-4a16-b4d4-95470d269a2c",
-        "tls": "",
-        "x": 367.5,
-        "y": 211,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "957c8b4b.2d8688",
-        "type": "inject",
-        "z": "accad31f.a1bfa",
-        "name": "3am Every Day",
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "repeat": "",
-        "crontab": "00 03 * * *",
-        "once": false,
-        "onceDelay": 0.1,
-        "x": 136.5,
-        "y": 275,
-        "wires": [
-            [
-                "40ed6d23.efcfb4",
-                "8091130e.b76b18"
-            ]
-        ]
-    },
-    {
-        "id": "40ed6d23.efcfb4",
-        "type": "api-call-service",
-        "z": "accad31f.a1bfa",
-        "name": "Purge History (Keep 10 Days)",
-        "server": "449256ad.414748",
-        "version": "1",
-        "service_domain": "recorder",
-        "service": "purge",
-        "entityId": "",
-        "data": "{\"keep_days\": 10, \"repack\": true}",
-        "dataType": "json",
-        "mergecontext": "",
-        "output_location": "payload",
-        "output_location_type": "msg",
-        "mustacheAltTags": false,
-        "x": 419.5,
-        "y": 275,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "8091130e.b76b18",
-        "type": "api-call-service",
-        "z": "accad31f.a1bfa",
-        "name": "Log Automation",
-        "server": "449256ad.414748",
-        "version": "1",
-        "service_domain": "logbook",
-        "service": "log",
-        "entityId": "",
-        "data": "{ \"name\": \"Automation Started\", \"message\": \"History purge requested\" }",
-        "dataType": "json",
-        "mergecontext": "",
-        "output_location": "payload",
-        "output_location_type": "msg",
-        "mustacheAltTags": false,
-        "x": 380,
-        "y": 318,
-        "wires": [
-            []
-        ]
     },
     {
         "id": "b0518fb0.543558",
