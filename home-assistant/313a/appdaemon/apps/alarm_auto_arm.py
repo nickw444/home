@@ -47,7 +47,7 @@ class AlarmAutoArm(hass.Hass):
         if new == "on":
             self._maybe_arm()
         else:
-            self._maybe_disarm()
+            self._maybe_disarm(force=True)
 
     def _maybe_arm(self):
         if not self._can_arm():
@@ -58,8 +58,8 @@ class AlarmAutoArm(hass.Hass):
         )
         self.fire_event("auto_arm_armed")
 
-    def _maybe_disarm(self):
-        if not self._can_disarm():
+    def _maybe_disarm(self, force=False):
+        if not self._can_disarm(force=force):
             return
 
         self.call_service(
@@ -80,10 +80,10 @@ class AlarmAutoArm(hass.Hass):
             and self._is_enabled()
         )
 
-    def _can_disarm(self):
+    def _can_disarm(self, force):
         alarm_state = self.get_state(self.args[CONF_ALARM_ENTITY])
 
-        return alarm_state == "armed_away" and self._is_enabled()
+        return alarm_state == "armed_away" and (force or self._is_enabled())
 
     def _is_enabled(self):
         return self.get_state(self.args[CONF_ENABLE_OVERRIDE_ENTITY]) == "on"
