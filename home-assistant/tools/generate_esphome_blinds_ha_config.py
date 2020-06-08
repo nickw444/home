@@ -61,7 +61,7 @@ def main(input, output, support_pairing):
             'open_cover': svc_call("OPEN"),
             'close_cover': svc_call("CLOSE"),
             'stop_cover': svc_call("STOP"),
-            'availability_template':  availability_template,
+            'availability_template': availability_template,
         }
         covers[camelize(blind['name'])] = cover
         customize['cover.' + camelize(blind['name'])] = CUSTOMIZE_BASE
@@ -71,7 +71,7 @@ def main(input, output, support_pairing):
             'value_template': 'off',
             'turn_on': svc_call("PAIR"),
             'turn_off': [],
-            'availability_template':  availability_template,
+            'availability_template': availability_template,
         }
         switches[camelize(pairing_switch['friendly_name'])] = pairing_switch
 
