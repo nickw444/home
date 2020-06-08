@@ -28,3 +28,57 @@ input_boolean:
   alarm_auto_arm_schedule:
     name: Auto Arm Schedule
     icon: mdi:alarm-light
+
+automation:
+  - id: '1591598639314'
+    alias: when the alarm auto arms, notify
+    description: ''
+    trigger:
+    - event_data: {}
+      event_type: auto_arm_armed
+      platform: event
+    condition: []
+    action:
+    - data:
+        message: The alarm was automatically armed
+      service: notify.telegram
+  - id: '1591598795007'
+    alias: when the alarm auto disarms, notify
+    description: ''
+    trigger:
+    - event_data: {}
+      event_type: auto_arm_disarmed
+      platform: event
+    condition: []
+    action:
+    - data:
+        message: The alarm was automatically disarmed
+      service: notify.telegram
+  - id: '1591583687656'
+    alias: every thursday at 7:30am, turn off alarm auto arm
+    description: ''
+    trigger:
+    - at: 07:30
+      platform: time
+    condition:
+    - condition: time
+      weekday:
+      - thu
+    action:
+    - data: {}
+      entity_id: input_boolean.alarm_auto_arm_schedule
+      service: input_boolean.turn_off
+  - id: '1591583801235'
+    alias: every thursday at 12pm, turn on alarm auto arm
+    description: ''
+    trigger:
+    - at: '12:00'
+      platform: time
+    condition:
+    - condition: time
+      weekday:
+      - thu
+    action:
+    - data: {}
+      entity_id: input_boolean.alarm_auto_arm_schedule
+      service: input_boolean.turn_on

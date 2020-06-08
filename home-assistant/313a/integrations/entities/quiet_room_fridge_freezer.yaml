@@ -1,0 +1,28 @@
+automation:
+  - id: '1588501846352'
+    alias: when quiet room fridge or freezer door open for more than 5 minutes, send notification
+    description: ''
+    trigger:
+    - device_id: a5ea6ad6759345c698658afb9c644309
+      domain: binary_sensor
+      entity_id: binary_sensor.0x00158d000451d897_contact
+      for:
+        hours: 0
+        minutes: 5
+        seconds: 0
+      platform: device
+      type: opened
+    - device_id: 70146a3c3a6247d59063afbfeea3eb7f
+      domain: binary_sensor
+      entity_id: binary_sensor.0x00158d00049fb09a_contact
+      for:
+        hours: 0
+        minutes: 5
+        seconds: 0
+      platform: device
+      type: opened
+    condition: []
+    action:
+    - data:
+        message: The quiet room fridge or freezer has been left open
+      service: notify.telegram
