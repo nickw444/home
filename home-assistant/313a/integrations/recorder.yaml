@@ -1,6 +1,5 @@
 recorder:
   purge_keep_days: 14
-  purge_interval: 1
 
 automation:
   - id: '1585649979000'
