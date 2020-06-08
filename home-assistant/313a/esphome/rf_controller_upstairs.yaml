@@ -28,3 +28,7 @@ custom_component:
   - lambda: |-
       auto raex_blind_transmit = new RaexBlindTransmitComponent();
       return {raex_blind_transmit};
+
+binary_sensor:
+  - platform: status
+    name: "RF Controller Upstairs Status"
