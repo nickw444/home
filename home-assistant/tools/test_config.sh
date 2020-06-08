@@ -13,8 +13,6 @@ main() {
     echo "Installing homeassistant==${HA_VERSION}";
     pip3 install "homeassistant==${HA_VERSION}"
 
-    # Workaround for whitelist_external_dirs in 313a config.
-    mkdir -p /tmp/homekit
     hass --script check_config -c . -f
 }
 

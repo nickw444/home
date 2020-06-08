@@ -6,8 +6,6 @@ homeassistant:
   elevation: 20
   unit_system: metric
   time_zone: Australia/Sydney
-  whitelist_external_dirs:
-    - "/tmp/homekit"
   auth_providers:
     - type: homeassistant
     - type: trusted_networks
