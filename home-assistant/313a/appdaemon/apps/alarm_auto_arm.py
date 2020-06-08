@@ -83,7 +83,7 @@ class AlarmAutoArm(hass.Hass):
     def _can_disarm(self, force):
         alarm_state = self.get_state(self.args[CONF_ALARM_ENTITY])
 
-        return alarm_state == "armed_away" and (force or self._is_enabled())
+        return alarm_state != "disarmed" and (force or self._is_enabled())
 
     def _is_enabled(self):
         return self.get_state(self.args[CONF_ENABLE_OVERRIDE_ENTITY]) == "on"
