@@ -35,7 +35,9 @@ class AlarmAutoArm(hass.Hass):
             self.on_presence_state_change, self.args[CONF_PRESENCE_ENTITY]
         )
         self.listen_state(self.on_enable_change, self.args[CONF_ENABLE_ENTITY])
-        self.listen_state(self.on_enable_override_change, self.args[CONF_ENABLE_OVERRIDE_ENTITY])
+        self.listen_state(
+            self.on_enable_override_change, self.args[CONF_ENABLE_OVERRIDE_ENTITY]
+        )
 
     def on_presence_state_change(self, entity, attribute, old, new, kwargs):
         if new == "not_home":
@@ -43,7 +45,7 @@ class AlarmAutoArm(hass.Hass):
         else:
             self._maybe_disarm()
 
-    def on_enable_override_change(self,entity, attribute, old, new, kwargs):
+    def on_enable_override_change(self, entity, attribute, old, new, kwargs):
         if new == "on":
             self._maybe_arm()
         else:
