@@ -1,0 +1,369 @@
+homeassistant:
+  customize:
+    cover.kitchen_back_left: &id001
+      assumed_state: true
+    cover.kitchen_back_right: *id001
+    cover.kitchen_front_1_left: *id001
+    cover.kitchen_front_2_door_left: *id001
+    cover.kitchen_front_3_door_right: *id001
+    cover.kitchen_front_4_right: *id001
+    cover.quiet_room_left_wall_1: *id001
+    cover.quiet_room_left_wall_2: *id001
+    cover.quiet_room_main_blockout: *id001
+    cover.quiet_room_main_translucent: *id001
+cover:
+- platform: template
+  covers:
+    kitchen_back_left:
+      friendly_name: Kitchen Back Left
+      device_class: blind
+      open_cover:
+        service: esphome.rf_controller_downstairs_transmit
+        data:
+          remote_id: 101
+          channel_id: 0
+          action: OPEN
+      close_cover:
+        service: esphome.rf_controller_downstairs_transmit
+        data:
+          remote_id: 101
+          channel_id: 0
+          action: CLOSE
+      stop_cover:
+        service: esphome.rf_controller_downstairs_transmit
+        data:
+          remote_id: 101
+          channel_id: 0
+          action: STOP
+      availability_template: |-
+        {{ is_state('binary_sensor.rf_controller_downstairs_status', 'on') }}
+    kitchen_back_right:
+      friendly_name: Kitchen Back Right
+      device_class: blind
+      open_cover:
+        service: esphome.rf_controller_downstairs_transmit
+        data:
+          remote_id: 101
+          channel_id: 1
+          action: OPEN
+      close_cover:
+        service: esphome.rf_controller_downstairs_transmit
+        data:
+          remote_id: 101
+          channel_id: 1
+          action: CLOSE
+      stop_cover:
+        service: esphome.rf_controller_downstairs_transmit
+        data:
+          remote_id: 101
+          channel_id: 1
+          action: STOP
+      availability_template: |-
+        {{ is_state('binary_sensor.rf_controller_downstairs_status', 'on') }}
+    kitchen_front_1_left:
+      friendly_name: Kitchen Front 1 (Left)
+      device_class: blind
+      open_cover:
+        service: esphome.rf_controller_downstairs_transmit
+        data:
+          remote_id: 101
+          channel_id: 2
+          action: OPEN
+      close_cover:
+        service: esphome.rf_controller_downstairs_transmit
+        data:
+          remote_id: 101
+          channel_id: 2
+          action: CLOSE
+      stop_cover:
+        service: esphome.rf_controller_downstairs_transmit
+        data:
+          remote_id: 101
+          channel_id: 2
+          action: STOP
+      availability_template: |-
+        {{ is_state('binary_sensor.rf_controller_downstairs_status', 'on') }}
+    kitchen_front_2_door_left:
+      friendly_name: Kitchen Front 2 (Door Left)
+      device_class: blind
+      open_cover:
+        service: esphome.rf_controller_downstairs_transmit
+        data:
+          remote_id: 101
+          channel_id: 3
+          action: OPEN
+      close_cover:
+        service: esphome.rf_controller_downstairs_transmit
+        data:
+          remote_id: 101
+          channel_id: 3
+          action: CLOSE
+      stop_cover:
+        service: esphome.rf_controller_downstairs_transmit
+        data:
+          remote_id: 101
+          channel_id: 3
+          action: STOP
+      availability_template: |-
+        {{ is_state('binary_sensor.rf_controller_downstairs_status', 'on') }}
+    kitchen_front_3_door_right:
+      friendly_name: Kitchen Front 3 (Door Right)
+      device_class: blind
+      open_cover:
+        service: esphome.rf_controller_downstairs_transmit
+        data:
+          remote_id: 101
+          channel_id: 4
+          action: OPEN
+      close_cover:
+        service: esphome.rf_controller_downstairs_transmit
+        data:
+          remote_id: 101
+          channel_id: 4
+          action: CLOSE
+      stop_cover:
+        service: esphome.rf_controller_downstairs_transmit
+        data:
+          remote_id: 101
+          channel_id: 4
+          action: STOP
+      availability_template: |-
+        {{ is_state('binary_sensor.rf_controller_downstairs_status', 'on') }}
+    kitchen_front_4_right:
+      friendly_name: Kitchen Front 4 (Right)
+      device_class: blind
+      open_cover:
+        service: esphome.rf_controller_downstairs_transmit
+        data:
+          remote_id: 101
+          channel_id: 5
+          action: OPEN
+      close_cover:
+        service: esphome.rf_controller_downstairs_transmit
+        data:
+          remote_id: 101
+          channel_id: 5
+          action: CLOSE
+      stop_cover:
+        service: esphome.rf_controller_downstairs_transmit
+        data:
+          remote_id: 101
+          channel_id: 5
+          action: STOP
+      availability_template: |-
+        {{ is_state('binary_sensor.rf_controller_downstairs_status', 'on') }}
+    quiet_room_left_wall_1:
+      friendly_name: Quiet Room Left Wall 1
+      device_class: blind
+      open_cover:
+        service: esphome.rf_controller_downstairs_transmit
+        data:
+          remote_id: 101
+          channel_id: 6
+          action: OPEN
+      close_cover:
+        service: esphome.rf_controller_downstairs_transmit
+        data:
+          remote_id: 101
+          channel_id: 6
+          action: CLOSE
+      stop_cover:
+        service: esphome.rf_controller_downstairs_transmit
+        data:
+          remote_id: 101
+          channel_id: 6
+          action: STOP
+      availability_template: |-
+        {{ is_state('binary_sensor.rf_controller_downstairs_status', 'on') }}
+    quiet_room_left_wall_2:
+      friendly_name: Quiet Room Left Wall 2
+      device_class: blind
+      open_cover:
+        service: esphome.rf_controller_downstairs_transmit
+        data:
+          remote_id: 101
+          channel_id: 7
+          action: OPEN
+      close_cover:
+        service: esphome.rf_controller_downstairs_transmit
+        data:
+          remote_id: 101
+          channel_id: 7
+          action: CLOSE
+      stop_cover:
+        service: esphome.rf_controller_downstairs_transmit
+        data:
+          remote_id: 101
+          channel_id: 7
+          action: STOP
+      availability_template: |-
+        {{ is_state('binary_sensor.rf_controller_downstairs_status', 'on') }}
+    quiet_room_main_blockout:
+      friendly_name: Quiet Room Main Blockout
+      device_class: blind
+      open_cover:
+        service: esphome.rf_controller_downstairs_transmit
+        data:
+          remote_id: 101
+          channel_id: 8
+          action: OPEN
+      close_cover:
+        service: esphome.rf_controller_downstairs_transmit
+        data:
+          remote_id: 101
+          channel_id: 8
+          action: CLOSE
+      stop_cover:
+        service: esphome.rf_controller_downstairs_transmit
+        data:
+          remote_id: 101
+          channel_id: 8
+          action: STOP
+      availability_template: |-
+        {{ is_state('binary_sensor.rf_controller_downstairs_status', 'on') }}
+    quiet_room_main_translucent:
+      friendly_name: Quiet Room Main Translucent
+      device_class: blind
+      open_cover:
+        service: esphome.rf_controller_downstairs_transmit
+        data:
+          remote_id: 101
+          channel_id: 9
+          action: OPEN
+      close_cover:
+        service: esphome.rf_controller_downstairs_transmit
+        data:
+          remote_id: 101
+          channel_id: 9
+          action: CLOSE
+      stop_cover:
+        service: esphome.rf_controller_downstairs_transmit
+        data:
+          remote_id: 101
+          channel_id: 9
+          action: STOP
+      availability_template: |-
+        {{ is_state('binary_sensor.rf_controller_downstairs_status', 'on') }}
+switch:
+  platform: template
+  switches:
+    kitchen_back_left_blind_pairing:
+      friendly_name: Kitchen Back Left Blind Pairing
+      value_template: off
+      turn_on:
+        service: esphome.rf_controller_downstairs_transmit
+        data:
+          remote_id: 101
+          channel_id: 0
+          action: PAIR
+      turn_off: []
+      availability_template: |-
+        {{ is_state('binary_sensor.rf_controller_downstairs_status', 'on') }}
+    kitchen_back_right_blind_pairing:
+      friendly_name: Kitchen Back Right Blind Pairing
+      value_template: off
+      turn_on:
+        service: esphome.rf_controller_downstairs_transmit
+        data:
+          remote_id: 101
+          channel_id: 1
+          action: PAIR
+      turn_off: []
+      availability_template: |-
+        {{ is_state('binary_sensor.rf_controller_downstairs_status', 'on') }}
+    kitchen_front_1_left_blind_pairing:
+      friendly_name: Kitchen Front 1 (Left) Blind Pairing
+      value_template: off
+      turn_on:
+        service: esphome.rf_controller_downstairs_transmit
+        data:
+          remote_id: 101
+          channel_id: 2
+          action: PAIR
+      turn_off: []
+      availability_template: |-
+        {{ is_state('binary_sensor.rf_controller_downstairs_status', 'on') }}
+    kitchen_front_2_door_left_blind_pairing:
+      friendly_name: Kitchen Front 2 (Door Left) Blind Pairing
+      value_template: off
+      turn_on:
+        service: esphome.rf_controller_downstairs_transmit
+        data:
+          remote_id: 101
+          channel_id: 3
+          action: PAIR
+      turn_off: []
+      availability_template: |-
+        {{ is_state('binary_sensor.rf_controller_downstairs_status', 'on') }}
+    kitchen_front_3_door_right_blind_pairing:
+      friendly_name: Kitchen Front 3 (Door Right) Blind Pairing
+      value_template: off
+      turn_on:
+        service: esphome.rf_controller_downstairs_transmit
+        data:
+          remote_id: 101
+          channel_id: 4
+          action: PAIR
+      turn_off: []
+      availability_template: |-
+        {{ is_state('binary_sensor.rf_controller_downstairs_status', 'on') }}
+    kitchen_front_4_right_blind_pairing:
+      friendly_name: Kitchen Front 4 (Right) Blind Pairing
+      value_template: off
+      turn_on:
+        service: esphome.rf_controller_downstairs_transmit
+        data:
+          remote_id: 101
+          channel_id: 5
+          action: PAIR
+      turn_off: []
+      availability_template: |-
+        {{ is_state('binary_sensor.rf_controller_downstairs_status', 'on') }}
+    quiet_room_left_wall_1_blind_pairing:
+      friendly_name: Quiet Room Left Wall 1 Blind Pairing
+      value_template: off
+      turn_on:
+        service: esphome.rf_controller_downstairs_transmit
+        data:
+          remote_id: 101
+          channel_id: 6
+          action: PAIR
+      turn_off: []
+      availability_template: |-
+        {{ is_state('binary_sensor.rf_controller_downstairs_status', 'on') }}
+    quiet_room_left_wall_2_blind_pairing:
+      friendly_name: Quiet Room Left Wall 2 Blind Pairing
+      value_template: off
+      turn_on:
+        service: esphome.rf_controller_downstairs_transmit
+        data:
+          remote_id: 101
+          channel_id: 7
+          action: PAIR
+      turn_off: []
+      availability_template: |-
+        {{ is_state('binary_sensor.rf_controller_downstairs_status', 'on') }}
+    quiet_room_main_blockout_blind_pairing:
+      friendly_name: Quiet Room Main Blockout Blind Pairing
+      value_template: off
+      turn_on:
+        service: esphome.rf_controller_downstairs_transmit
+        data:
+          remote_id: 101
+          channel_id: 8
+          action: PAIR
+      turn_off: []
+      availability_template: |-
+        {{ is_state('binary_sensor.rf_controller_downstairs_status', 'on') }}
+    quiet_room_main_translucent_blind_pairing:
+      friendly_name: Quiet Room Main Translucent Blind Pairing
+      value_template: off
+      turn_on:
+        service: esphome.rf_controller_downstairs_transmit
+        data:
+          remote_id: 101
+          channel_id: 9
+          action: PAIR
+      turn_off: []
+      availability_template: |-
+        {{ is_state('binary_sensor.rf_controller_downstairs_status', 'on') }}

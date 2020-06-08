@@ -1,0 +1,369 @@
+homeassistant:
+  customize:
+    cover.olivers_front: &id001
+      assumed_state: true
+    cover.olivers_side: *id001
+    cover.upstairs_hall_blockout: *id001
+    cover.upstairs_hall_translucent: *id001
+    cover.charlotte_side: *id001
+    cover.upstairs_study_side: *id001
+    cover.upstairs_study_back: *id001
+    cover.joe_back: *id001
+    cover.master_front_left: *id001
+    cover.master_front_right: *id001
+cover:
+- platform: template
+  covers:
+    olivers_front:
+      friendly_name: Oliver's Front
+      device_class: blind
+      open_cover:
+        service: esphome.rf_controller_upstairs_transmit
+        data:
+          remote_id: 100
+          channel_id: 0
+          action: OPEN
+      close_cover:
+        service: esphome.rf_controller_upstairs_transmit
+        data:
+          remote_id: 100
+          channel_id: 0
+          action: CLOSE
+      stop_cover:
+        service: esphome.rf_controller_upstairs_transmit
+        data:
+          remote_id: 100
+          channel_id: 0
+          action: STOP
+      availability_template: |-
+        {{ is_state('binary_sensor.rf_controller_upstairs_status', 'on') }}
+    olivers_side:
+      friendly_name: Oliver's Side
+      device_class: blind
+      open_cover:
+        service: esphome.rf_controller_upstairs_transmit
+        data:
+          remote_id: 100
+          channel_id: 1
+          action: OPEN
+      close_cover:
+        service: esphome.rf_controller_upstairs_transmit
+        data:
+          remote_id: 100
+          channel_id: 1
+          action: CLOSE
+      stop_cover:
+        service: esphome.rf_controller_upstairs_transmit
+        data:
+          remote_id: 100
+          channel_id: 1
+          action: STOP
+      availability_template: |-
+        {{ is_state('binary_sensor.rf_controller_upstairs_status', 'on') }}
+    upstairs_hall_blockout:
+      friendly_name: Upstairs Hall Blockout
+      device_class: blind
+      open_cover:
+        service: esphome.rf_controller_upstairs_transmit
+        data:
+          remote_id: 100
+          channel_id: 2
+          action: OPEN
+      close_cover:
+        service: esphome.rf_controller_upstairs_transmit
+        data:
+          remote_id: 100
+          channel_id: 2
+          action: CLOSE
+      stop_cover:
+        service: esphome.rf_controller_upstairs_transmit
+        data:
+          remote_id: 100
+          channel_id: 2
+          action: STOP
+      availability_template: |-
+        {{ is_state('binary_sensor.rf_controller_upstairs_status', 'on') }}
+    upstairs_hall_translucent:
+      friendly_name: Upstairs Hall Translucent
+      device_class: blind
+      open_cover:
+        service: esphome.rf_controller_upstairs_transmit
+        data:
+          remote_id: 100
+          channel_id: 9
+          action: OPEN
+      close_cover:
+        service: esphome.rf_controller_upstairs_transmit
+        data:
+          remote_id: 100
+          channel_id: 9
+          action: CLOSE
+      stop_cover:
+        service: esphome.rf_controller_upstairs_transmit
+        data:
+          remote_id: 100
+          channel_id: 9
+          action: STOP
+      availability_template: |-
+        {{ is_state('binary_sensor.rf_controller_upstairs_status', 'on') }}
+    charlotte_side:
+      friendly_name: Charlotte Side
+      device_class: blind
+      open_cover:
+        service: esphome.rf_controller_upstairs_transmit
+        data:
+          remote_id: 100
+          channel_id: 3
+          action: OPEN
+      close_cover:
+        service: esphome.rf_controller_upstairs_transmit
+        data:
+          remote_id: 100
+          channel_id: 3
+          action: CLOSE
+      stop_cover:
+        service: esphome.rf_controller_upstairs_transmit
+        data:
+          remote_id: 100
+          channel_id: 3
+          action: STOP
+      availability_template: |-
+        {{ is_state('binary_sensor.rf_controller_upstairs_status', 'on') }}
+    upstairs_study_side:
+      friendly_name: Upstairs Study Side
+      device_class: blind
+      open_cover:
+        service: esphome.rf_controller_upstairs_transmit
+        data:
+          remote_id: 100
+          channel_id: 4
+          action: OPEN
+      close_cover:
+        service: esphome.rf_controller_upstairs_transmit
+        data:
+          remote_id: 100
+          channel_id: 4
+          action: CLOSE
+      stop_cover:
+        service: esphome.rf_controller_upstairs_transmit
+        data:
+          remote_id: 100
+          channel_id: 4
+          action: STOP
+      availability_template: |-
+        {{ is_state('binary_sensor.rf_controller_upstairs_status', 'on') }}
+    upstairs_study_back:
+      friendly_name: Upstairs Study Back
+      device_class: blind
+      open_cover:
+        service: esphome.rf_controller_upstairs_transmit
+        data:
+          remote_id: 100
+          channel_id: 5
+          action: OPEN
+      close_cover:
+        service: esphome.rf_controller_upstairs_transmit
+        data:
+          remote_id: 100
+          channel_id: 5
+          action: CLOSE
+      stop_cover:
+        service: esphome.rf_controller_upstairs_transmit
+        data:
+          remote_id: 100
+          channel_id: 5
+          action: STOP
+      availability_template: |-
+        {{ is_state('binary_sensor.rf_controller_upstairs_status', 'on') }}
+    joe_back:
+      friendly_name: Joe Back
+      device_class: blind
+      open_cover:
+        service: esphome.rf_controller_upstairs_transmit
+        data:
+          remote_id: 100
+          channel_id: 6
+          action: OPEN
+      close_cover:
+        service: esphome.rf_controller_upstairs_transmit
+        data:
+          remote_id: 100
+          channel_id: 6
+          action: CLOSE
+      stop_cover:
+        service: esphome.rf_controller_upstairs_transmit
+        data:
+          remote_id: 100
+          channel_id: 6
+          action: STOP
+      availability_template: |-
+        {{ is_state('binary_sensor.rf_controller_upstairs_status', 'on') }}
+    master_front_left:
+      friendly_name: Master Front Left
+      device_class: blind
+      open_cover:
+        service: esphome.rf_controller_upstairs_transmit
+        data:
+          remote_id: 100
+          channel_id: 7
+          action: OPEN
+      close_cover:
+        service: esphome.rf_controller_upstairs_transmit
+        data:
+          remote_id: 100
+          channel_id: 7
+          action: CLOSE
+      stop_cover:
+        service: esphome.rf_controller_upstairs_transmit
+        data:
+          remote_id: 100
+          channel_id: 7
+          action: STOP
+      availability_template: |-
+        {{ is_state('binary_sensor.rf_controller_upstairs_status', 'on') }}
+    master_front_right:
+      friendly_name: Master Front Right
+      device_class: blind
+      open_cover:
+        service: esphome.rf_controller_upstairs_transmit
+        data:
+          remote_id: 100
+          channel_id: 8
+          action: OPEN
+      close_cover:
+        service: esphome.rf_controller_upstairs_transmit
+        data:
+          remote_id: 100
+          channel_id: 8
+          action: CLOSE
+      stop_cover:
+        service: esphome.rf_controller_upstairs_transmit
+        data:
+          remote_id: 100
+          channel_id: 8
+          action: STOP
+      availability_template: |-
+        {{ is_state('binary_sensor.rf_controller_upstairs_status', 'on') }}
+switch:
+  platform: template
+  switches:
+    olivers_front_blind_pairing:
+      friendly_name: Oliver's Front Blind Pairing
+      value_template: off
+      turn_on:
+        service: esphome.rf_controller_upstairs_transmit
+        data:
+          remote_id: 100
+          channel_id: 0
+          action: PAIR
+      turn_off: []
+      availability_template: |-
+        {{ is_state('binary_sensor.rf_controller_upstairs_status', 'on') }}
+    olivers_side_blind_pairing:
+      friendly_name: Oliver's Side Blind Pairing
+      value_template: off
+      turn_on:
+        service: esphome.rf_controller_upstairs_transmit
+        data:
+          remote_id: 100
+          channel_id: 1
+          action: PAIR
+      turn_off: []
+      availability_template: |-
+        {{ is_state('binary_sensor.rf_controller_upstairs_status', 'on') }}
+    upstairs_hall_blockout_blind_pairing:
+      friendly_name: Upstairs Hall Blockout Blind Pairing
+      value_template: off
+      turn_on:
+        service: esphome.rf_controller_upstairs_transmit
+        data:
+          remote_id: 100
+          channel_id: 2
+          action: PAIR
+      turn_off: []
+      availability_template: |-
+        {{ is_state('binary_sensor.rf_controller_upstairs_status', 'on') }}
+    upstairs_hall_translucent_blind_pairing:
+      friendly_name: Upstairs Hall Translucent Blind Pairing
+      value_template: off
+      turn_on:
+        service: esphome.rf_controller_upstairs_transmit
+        data:
+          remote_id: 100
+          channel_id: 9
+          action: PAIR
+      turn_off: []
+      availability_template: |-
+        {{ is_state('binary_sensor.rf_controller_upstairs_status', 'on') }}
+    charlotte_side_blind_pairing:
+      friendly_name: Charlotte Side Blind Pairing
+      value_template: off
+      turn_on:
+        service: esphome.rf_controller_upstairs_transmit
+        data:
+          remote_id: 100
+          channel_id: 3
+          action: PAIR
+      turn_off: []
+      availability_template: |-
+        {{ is_state('binary_sensor.rf_controller_upstairs_status', 'on') }}
+    upstairs_study_side_blind_pairing:
+      friendly_name: Upstairs Study Side Blind Pairing
+      value_template: off
+      turn_on:
+        service: esphome.rf_controller_upstairs_transmit
+        data:
+          remote_id: 100
+          channel_id: 4
+          action: PAIR
+      turn_off: []
+      availability_template: |-
+        {{ is_state('binary_sensor.rf_controller_upstairs_status', 'on') }}
+    upstairs_study_back_blind_pairing:
+      friendly_name: Upstairs Study Back Blind Pairing
+      value_template: off
+      turn_on:
+        service: esphome.rf_controller_upstairs_transmit
+        data:
+          remote_id: 100
+          channel_id: 5
+          action: PAIR
+      turn_off: []
+      availability_template: |-
+        {{ is_state('binary_sensor.rf_controller_upstairs_status', 'on') }}
+    joe_back_blind_pairing:
+      friendly_name: Joe Back Blind Pairing
+      value_template: off
+      turn_on:
+        service: esphome.rf_controller_upstairs_transmit
+        data:
+          remote_id: 100
+          channel_id: 6
+          action: PAIR
+      turn_off: []
+      availability_template: |-
+        {{ is_state('binary_sensor.rf_controller_upstairs_status', 'on') }}
+    master_front_left_blind_pairing:
+      friendly_name: Master Front Left Blind Pairing
+      value_template: off
+      turn_on:
+        service: esphome.rf_controller_upstairs_transmit
+        data:
+          remote_id: 100
+          channel_id: 7
+          action: PAIR
+      turn_off: []
+      availability_template: |-
+        {{ is_state('binary_sensor.rf_controller_upstairs_status', 'on') }}
+    master_front_right_blind_pairing:
+      friendly_name: Master Front Right Blind Pairing
+      value_template: off
+      turn_on:
+        service: esphome.rf_controller_upstairs_transmit
+        data:
+          remote_id: 100
+          channel_id: 8
+          action: PAIR
+      turn_off: []
+      availability_template: |-
+        {{ is_state('binary_sensor.rf_controller_upstairs_status', 'on') }}
