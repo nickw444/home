@@ -24,7 +24,7 @@ def test_callbacks_are_registered(hass_driver, auto_arm):
         [
             mock.call(auto_arm.on_presence_state_change, PRESENCE_ENTITY),
             mock.call(auto_arm.on_enable_change, ENABLE_ENTITY),
-            mock.call(auto_arm.on_enable_change, ENABLE_OVERRIDE_ENTITY),
+            mock.call(auto_arm.on_enable_override_change, ENABLE_OVERRIDE_ENTITY),
         ]
     )
 
