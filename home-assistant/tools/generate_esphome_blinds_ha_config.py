@@ -6,6 +6,7 @@ import re
 
 import click
 from ruamel.yaml import YAML
+from ruamel.yaml.scalarstring import PreservedScalarString
 
 yaml = YAML()
 
@@ -42,6 +43,10 @@ def main(input, output, support_pairing):
     covers = {}
     customize = {}
 
+    availability_template = PreservedScalarString(
+        f"{{{{ is_state('binary_sensor.{tx_device}_status', 'on') }}}}"
+    )
+
     for blind in seed_config['blinds']:
         svc_call = lambda action: get_service_call(
             tx_device=tx_device,
@@ -56,6 +61,7 @@ def main(input, output, support_pairing):
             'open_cover': svc_call("OPEN"),
             'close_cover': svc_call("CLOSE"),
             'stop_cover': svc_call("STOP"),
+            'availability_template':  availability_template,
         }
         covers[camelize(blind['name'])] = cover
         customize['cover.' + camelize(blind['name'])] = CUSTOMIZE_BASE
@@ -65,6 +71,7 @@ def main(input, output, support_pairing):
             'value_template': 'off',
             'turn_on': svc_call("PAIR"),
             'turn_off': [],
+            'availability_template':  availability_template,
         }
         switches[camelize(pairing_switch['friendly_name'])] = pairing_switch
 
