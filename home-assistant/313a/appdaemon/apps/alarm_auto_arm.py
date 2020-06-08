@@ -65,6 +65,9 @@ class AlarmAutoArm(hass.Hass):
             "alarm_control_panel/alarm_arm_away", entity_id=self.args[CONF_ALARM_ENTITY]
         )
         self.fire_event("auto_arm_armed")
+        self.call_service(
+            "logbook/log", name="Alarm Auto Arm", message="Automatic arm",
+        )
 
     def _maybe_disarm(self, force=False):
         if not self._can_disarm(force=force):
@@ -76,6 +79,9 @@ class AlarmAutoArm(hass.Hass):
             code=self.args[CONF_ARMING_CODE],
         )
         self.fire_event("auto_arm_disarmed")
+        self.call_service(
+            "logbook/log", name="Alarm Auto Arm", message="Automatic disarm",
+        )
 
     def _can_arm(self):
         alarm_state = self.get_state(self.args[CONF_ALARM_ENTITY])
