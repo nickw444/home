@@ -23,6 +23,9 @@ blinds:
   - name: Kitchen Front 4 (Right)
     remote: 101
     channel: 5
+  - name: Kitchen Front 4 Translucent (Right)
+    remote: 101
+    channel: 10
   - name: Quiet Room Left Wall 1
     remote: 101
     channel: 6
