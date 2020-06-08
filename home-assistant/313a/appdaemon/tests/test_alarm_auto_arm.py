@@ -40,7 +40,7 @@ def test_when_everyone_leaves_then_arm(hass_driver, auto_arm):
 
     call_service = hass_driver.get_mock("call_service")
     call_service.assert_called_once_with(
-        "alarm_control_panel.alarm_arm_away", entity_id=ALARM_ENTITY
+        "alarm_control_panel/alarm_arm_away", entity_id=ALARM_ENTITY
     )
 
 
@@ -96,7 +96,7 @@ def test_when_re_enabled_then_arm(hass_driver, auto_arm):
 
     call_service = hass_driver.get_mock("call_service")
     call_service.assert_called_once_with(
-        "alarm_control_panel.alarm_arm_away", entity_id=ALARM_ENTITY
+        "alarm_control_panel/alarm_arm_away", entity_id=ALARM_ENTITY
     )
 
 
@@ -111,7 +111,7 @@ def test_when_override_re_enabled_then_arm(hass_driver, auto_arm):
 
     call_service = hass_driver.get_mock("call_service")
     call_service.assert_called_once_with(
-        "alarm_control_panel.alarm_arm_away", entity_id=ALARM_ENTITY
+        "alarm_control_panel/alarm_arm_away", entity_id=ALARM_ENTITY
     )
 
 
@@ -139,7 +139,7 @@ def test_when_someone_home_disarm(hass_driver, auto_arm):
 
     call_service = hass_driver.get_mock("call_service")
     call_service.assert_called_once_with(
-        "alarm_control_panel.alarm_disarm", entity_id=ALARM_ENTITY, code=ARMING_CODE
+        "alarm_control_panel/alarm_disarm", entity_id=ALARM_ENTITY, code=ARMING_CODE
     )
 
 
@@ -180,7 +180,7 @@ def test_when_someone_home_but_disabled_then_disarm(hass_driver, auto_arm):
 
     call_service = hass_driver.get_mock("call_service")
     call_service.assert_called_once_with(
-        "alarm_control_panel.alarm_disarm", entity_id=ALARM_ENTITY, code=ARMING_CODE
+        "alarm_control_panel/alarm_disarm", entity_id=ALARM_ENTITY, code=ARMING_CODE
     )
 
 

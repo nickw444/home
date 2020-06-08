@@ -54,7 +54,7 @@ class AlarmAutoArm(hass.Hass):
             return
 
         self.call_service(
-            "alarm_control_panel.alarm_arm_away", entity_id=self.args[CONF_ALARM_ENTITY]
+            "alarm_control_panel/alarm_arm_away", entity_id=self.args[CONF_ALARM_ENTITY]
         )
         self.fire_event("auto_arm_armed")
 
@@ -63,7 +63,7 @@ class AlarmAutoArm(hass.Hass):
             return
 
         self.call_service(
-            "alarm_control_panel.alarm_disarm",
+            "alarm_control_panel/alarm_disarm",
             entity_id=self.args[CONF_ALARM_ENTITY],
             code=self.args[CONF_ARMING_CODE],
         )
