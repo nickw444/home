@@ -108,7 +108,7 @@
     service: media_player.turn_off
 - id: '1584944494369'
   alias: when apartment door opens, and nobody is home, send notification
-  description: When the door opens, delay for 30 seconds before sending notification,
+  description: When the door opens, delay for 60 seconds before sending notification,
     in case the WiFi connection for presence reporting is delayed
   trigger:
   - device_id: e824e2b2a4ff4dea9b16fd7f6234dfc1
@@ -126,7 +126,7 @@
     entity_id: group.all_people
     state: not_home
   action:
-  - delay: 00:00:30
+  - delay: 00:01:00
   - condition: state
     entity_id: group.all_people
     state: not_home
