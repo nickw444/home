@@ -88,7 +88,7 @@ automation:
     action:
       - service: media_player.send_key
         data:
-          key: KEY_BACK
+          key: KEY_RETURN
   - id: '25B3FEE288AD'
     alias: 'homekit remote: media key select'
     description: ''
