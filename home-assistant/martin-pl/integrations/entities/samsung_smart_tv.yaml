@@ -18,3 +18,102 @@ sensor:
         friendly_name: "Samsung Smart TV Source"
         value_template: >-
           {{ state_attr('media_player.samsung_smart_tv','source') }}
+automation:
+  - id: '682B367539FB'
+    alias: 'homekit remote: media key arrow_up'
+    description: ''
+    trigger:
+      - event_type: homekit_tv_remote_key_pressed
+        platform: event
+        event_data:
+          entity_id: media_player.samsung_smart_tv
+          key_name: arrow_up
+    condition: []
+    action:
+      - service: media_player.send_key
+        data:
+          key: KEY_UP
+  - id: 'B07D24A1E86E'
+    alias: 'homekit remote: media key arrow_down'
+    description: ''
+    trigger:
+      - event_type: homekit_tv_remote_key_pressed
+        platform: event
+        event_data:
+          entity_id: media_player.samsung_smart_tv
+          key_name: arrow_down
+    condition: []
+    action:
+      - service: media_player.send_key
+        data:
+          key: KEY_DOWN
+  - id: 'C89C74C0D202'
+    alias: 'homekit remote: media key arrow_left'
+    description: ''
+    trigger:
+      - event_type: homekit_tv_remote_key_pressed
+        platform: event
+        event_data:
+          entity_id: media_player.samsung_smart_tv
+          key_name: arrow_left
+    condition: []
+    action:
+      - service: media_player.send_key
+        data:
+          key: KEY_LEFT
+  - id: '940199676C17'
+    alias: 'homekit remote: media key arrow_right'
+    description: ''
+    trigger:
+      - event_type: homekit_tv_remote_key_pressed
+        platform: event
+        event_data:
+          entity_id: media_player.samsung_smart_tv
+          key_name: arrow_right
+    condition: []
+    action:
+      - service: media_player.send_key
+        data:
+          key: KEY_RIGHT
+  - id: '8E9E5B27D4BE'
+    alias: 'homekit remote: media key back'
+    description: ''
+    trigger:
+      - event_type: homekit_tv_remote_key_pressed
+        platform: event
+        event_data:
+          entity_id: media_player.samsung_smart_tv
+          key_name: back
+    condition: []
+    action:
+      - service: media_player.send_key
+        data:
+          key: KEY_RETURN
+  - id: '25B3FEE288AD'
+    alias: 'homekit remote: media key select'
+    description: ''
+    trigger:
+      - event_type: homekit_tv_remote_key_pressed
+        platform: event
+        event_data:
+          entity_id: media_player.samsung_smart_tv
+          key_name: select
+    condition: []
+    action:
+      - service: media_player.send_key
+        data:
+          key: KEY_ENTER
+  - id: '4AD260B62D6D'
+    alias: 'homekit remote: media key information'
+    description: ''
+    trigger:
+      - event_type: homekit_tv_remote_key_pressed
+        platform: event
+        event_data:
+          entity_id: media_player.samsung_smart_tv
+          key_name: information
+    condition: []
+    action:
+      - service: media_player.send_key
+        data:
+          key: KEY_HOME
