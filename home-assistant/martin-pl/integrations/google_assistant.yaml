@@ -6,3 +6,5 @@ google_assistant:
   exposed_domains:
     - light
     - fan
+  entity_config:
+    script.open_spotify_on_tv

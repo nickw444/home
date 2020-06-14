@@ -117,3 +117,21 @@ automation:
       - service: media_player.send_key
         data:
           key: KEY_HOME
+
+script:
+  open_spotify_on_tv:
+    alias: Play Spotify on the TV
+    sequence:
+      - data: {}
+        entity_id: media_player.samsung_smart_tv
+        service: media_player.turn_on
+      - delay: 00:00:02
+      - data: {}
+        entity_id: media_player.samsung_smart_tv
+        service: media_player.turn_on
+      - timeout: 00:00:30
+        wait_template: "{{ is_state('media_player.samsung_smart_tv', 'on') }}"
+      - data:
+          source: Spotify
+        entity_id: media_player.samsung_smart_tv
+        service: media_player.select_source
