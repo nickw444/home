@@ -66,10 +66,11 @@ automation:
         entity_id:
           - media_player.kitchen_speaker
           - media_player.living_room_speaker
-        volume_level: 0.5
-      - service: tts.google_translate_say
         data:
-          entity_id:
-            - media_player.kitchen_speaker
-            - media_player.bedroom_speaker
+          volume_level: 0.5
+      - service: tts.google_translate_say
+        entity_id:
+          - media_player.kitchen_speaker
+          - media_player.bedroom_speaker
+        data:
           message: The washing machine has finished!
