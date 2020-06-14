@@ -6,9 +6,11 @@ google_assistant:
   exposed_domains:
     - light
     - fan
-    - script
+    - scene
   entity_config:
     script.open_spotify_on_tv:
+      expose: true
+    script.play_spotify_on_tv:
       expose: true
     script.open_netflix_on_tv:
       expose: true
