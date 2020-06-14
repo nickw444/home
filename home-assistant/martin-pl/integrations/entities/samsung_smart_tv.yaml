@@ -119,8 +119,8 @@ automation:
           key: KEY_HOME
 
 script:
-  open_spotify_on_tv:
-    alias: Play Spotify on the TV
+  turn_on_tv:
+    alias: Turn on the TV
     sequence:
       - data: {}
         entity_id: media_player.samsung_smart_tv
@@ -131,7 +131,30 @@ script:
         service: media_player.turn_on
       - timeout: 00:00:30
         wait_template: "{{ is_state('media_player.samsung_smart_tv', 'on') }}"
+  open_spotify_on_tv:
+    alias: Play Spotify on the TV
+    sequence:
+      - service: script.turn_on
+        entity_id: script.turn_on_tv
       - data:
           source: Spotify
+        entity_id: media_player.samsung_smart_tv
+        service: media_player.select_source
+  open_netflix_on_tv:
+    alias: Play Netflix on the TV
+    sequence:
+      - service: script.turn_on
+        entity_id: script.turn_on_tv
+      - data:
+          source: Netflix
+        entity_id: media_player.samsung_smart_tv
+        service: media_player.select_source
+  open_youtube_on_tv:
+    alias: Play YouTube on the TV
+    sequence:
+      - service: script.turn_on
+        entity_id: script.turn_on_tv
+      - data:
+          source: YouTube
         entity_id: media_player.samsung_smart_tv
         service: media_player.select_source

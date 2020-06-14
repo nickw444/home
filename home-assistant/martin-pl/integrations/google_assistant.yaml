@@ -8,3 +8,8 @@ google_assistant:
     - fan
   entity_config:
     script.open_spotify_on_tv:
+      expose: true
+    script.open_netflix_on_tv:
+      expose: true
+    script.open_youtube_on_tv:
+      expose: true
