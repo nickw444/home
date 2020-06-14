@@ -1,0 +1,36 @@
+- id: '1587029617318'
+  alias: when bathroom door opens, turn on hallway light for 1 minute
+  description: ''
+  trigger:
+    - device_id: cc63398d13f54cb0b8a0dfb8b0c2da51
+      domain: binary_sensor
+      entity_id: binary_sensor.bathroom_door
+      for:
+        hours: 0
+        minutes: 0
+        seconds: 1
+      platform: device
+      type: opened
+  condition:
+    - condition: device
+      device_id: 26b88157a13343188d65a57beb679506
+      domain: light
+      entity_id: light.hallway
+      type: is_off
+    - condition: or
+      conditions:
+        - before: sunrise
+          condition: sun
+        - after: '22:30:00'
+          condition: time
+  action:
+    - brightness_pct: 20
+      device_id: 26b88157a13343188d65a57beb679506
+      domain: light
+      entity_id: light.hallway
+      type: turn_on
+    - delay: 00:00:30
+    - device_id: 26b88157a13343188d65a57beb679506
+      domain: light
+      entity_id: light.hallway
+      type: turn_off

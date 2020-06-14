@@ -1,0 +1,67 @@
+- id: '1584944372303'
+  alias: when everyone leaves, after 45 minutes, turn off TV
+  description: ''
+  trigger:
+    - entity_id: group.all_people
+      for: 00:45:00
+      platform: state
+      to: not_home
+  condition: []
+  action:
+    - data: {}
+      entity_id: media_player.samsung_smart_tv
+      service: media_player.turn_off
+- id: '1584944287383'
+  alias: when everyone leaves, turn off lights
+  description: ''
+  trigger:
+    - entity_id: group.all_people
+      for: 00:05:00
+      platform: state
+      to: not_home
+  condition: []
+  action:
+    - data: {}
+      entity_id: all
+      service: light.turn_off
+- id: '1584944187934'
+  alias: when presence detected, at night, turn on lights
+  description: ''
+  trigger:
+    - entity_id: group.all_people
+      from: not_home
+      platform: state
+      to: home
+  condition:
+    - after: sunset
+      after_offset: -00:60:00
+      condition: sun
+  action:
+    - device_id: 8c28feb17fb74368ac8b2a30f2a66355
+      domain: switch
+      entity_id: switch.living_room_lamp
+      type: turn_on
+    - brightness_pct: 100
+      device_id: b8094b16b3454f8c8304d375cb9c4b09
+      domain: light
+      entity_id: light.entry_hallway
+      type: turn_on
+- id: '1584954836148'
+  alias: when Nick arrives home, clear door open notifications on Nicks iPhone
+  description: Disabled since this is not yet possible for iOS companion app
+  trigger:
+    - entity_id: person.nick_whyte
+      from: not_home
+      platform: state
+      to: home
+  condition: []
+  action:
+    - data:
+        data:
+          apns_headers:
+            apns-collapse-id: presence-door-opened
+          push:
+            thread-id: presence-door-opened
+          tag: presence-door-opened
+        message: clear_notification
+      service: notify.mobile_app_nicks_iphone

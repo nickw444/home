@@ -1,0 +1,56 @@
+- id: '1584944494369'
+  alias: when apartment door opens, and nobody is home, send notification
+  description: When the door opens, delay for 60 seconds before sending notification,
+    in case the WiFi connection for presence reporting is delayed
+  trigger:
+    - device_id: e824e2b2a4ff4dea9b16fd7f6234dfc1
+      domain: binary_sensor
+      entity_id: binary_sensor.front_door
+      platform: device
+      type: opened
+    - device_id: 9ae0e5e12ca74203a75203b1c9fbd57b
+      domain: binary_sensor
+      entity_id: binary_sensor.living_room_door
+      platform: device
+      type: opened
+  condition:
+    - condition: state
+      entity_id: group.all_people
+      state: not_home
+  action:
+    - delay: 00:01:00
+    - condition: state
+      entity_id: group.all_people
+      state: not_home
+    - data:
+        data:
+          apns_headers:
+            apns-collapse-id: presence-door-opened
+          push:
+            thread-id: presence-door-opened
+          tag: presence-door-opened
+        message: A door was opened, but no one is home
+        title: Door Opened
+      service: notify.everyone
+- id: '1584944183272'
+  alias: when apartment door opens, and no one is home at night, turn on living room
+    lamp
+  description: ''
+  trigger:
+    - device_id: e824e2b2a4ff4dea9b16fd7f6234dfc1
+      domain: binary_sensor
+      entity_id: binary_sensor.front_door
+      platform: device
+      type: opened
+  condition:
+    - after: sunset
+      after_offset: -00:60:00
+      condition: sun
+    - condition: state
+      entity_id: group.all_people
+      state: not_home
+  action:
+    - device_id: 8c28feb17fb74368ac8b2a30f2a66355
+      domain: switch
+      entity_id: switch.living_room_lamp
+      type: turn_on
