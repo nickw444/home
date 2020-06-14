@@ -7,4 +7,4 @@ google_assistant:
     - light
     - fan
   entity_config:
-    script.open_spotify_on_tv
+    script.open_spotify_on_tv:
