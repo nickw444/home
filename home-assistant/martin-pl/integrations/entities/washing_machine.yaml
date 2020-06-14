@@ -29,6 +29,10 @@ binary_sensor:
       delay_on: 2
       delay_off: 5
 
+input_boolean:
+  washing_completed_whilst_away:
+  washing_completed_unacknowledged:
+
 automation:
   - id: '1577766070397'
     alias: when washing machine completed, send notification
