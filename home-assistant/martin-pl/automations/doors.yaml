@@ -18,7 +18,7 @@
       entity_id: group.all_people
       state: not_home
   action:
-    - delay: 00:01:00
+    - delay: 00:02:00
     - condition: state
       entity_id: group.all_people
       state: not_home
