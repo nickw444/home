@@ -86,10 +86,6 @@ sensor:
         friendly_name: '/dev/sda Last Test Status'
         icon_template: mdi:harddisk-plus
         value_template: "{{ state_attr('sensor.smartctl_sda_json', 'ata_smart_self_test_log').standard.table[0].status.string }}"
-      smartctl_sda_last_test_passed:
-        friendly_name: '/dev/sda Last Test Passed'
-        icon_template: mdi:harddisk-plus
-        value_template: "{{ state_attr('sensor.smartctl_sda_json', 'ata_smart_self_test_log').standard.table[0].status.passed }}"
 
       smartctl_sdb:
         friendly_name: '/dev/sdb smartctl exit status'
@@ -125,10 +121,6 @@ sensor:
         friendly_name: '/dev/sdb Last Test Status'
         icon_template: mdi:harddisk-plus
         value_template: "{{ state_attr('sensor.smartctl_sdb_json', 'ata_smart_self_test_log').standard.table[0].status.string }}"
-      smartctl_sdb_last_test_passed:
-        friendly_name: '/dev/sdb Last Test Passed'
-        icon_template: mdi:harddisk-plus
-        value_template: "{{ state_attr('sensor.smartctl_sdb_json', 'ata_smart_self_test_log').standard.table[0].status.passed }}"
 
       smartctl_sdc:
         friendly_name: '/dev/sdb smartctl exit status'
@@ -164,7 +156,19 @@ sensor:
         friendly_name: '/dev/sdc Last Test Status'
         icon_template: mdi:harddisk-plus
         value_template: "{{ state_attr('sensor.smartctl_sdc_json', 'ata_smart_self_test_log').standard.table[0].status.string }}"
+
+binary_sensor:
+  - platform: template
+    sensors:
+      smartctl_sda_last_test_passed:
+        friendly_name: '/dev/sda Last Test Passed'
+        icon_template: mdi:harddisk-plus
+        value_template: "{{ state_attr('sensor.smartctl_sda_json', 'ata_smart_self_test_log').standard.table[0].status.passed }}"
       smartctl_sdc_last_test_passed:
         friendly_name: '/dev/sdc Last Test Passed'
         icon_template: mdi:harddisk-plus
         value_template: "{{ state_attr('sensor.smartctl_sdc_json', 'ata_smart_self_test_log').standard.table[0].status.passed }}"
+      smartctl_sdb_last_test_passed:
+        friendly_name: '/dev/sdb Last Test Passed'
+        icon_template: mdi:harddisk-plus
+        value_template: "{{ state_attr('sensor.smartctl_sdb_json', 'ata_smart_self_test_log').standard.table[0].status.passed }}"
