@@ -187,3 +187,23 @@ binary_sensor:
           {%- else -%}
             True
           {%- endif -%}
+
+automation:
+  - id: '1595157734038'
+    alias: when hard disk SMART test fails, notify Nick
+    description: ''
+    trigger:
+    - entity_id: binary_sensor.smartctl_sda_last_test_passed
+      platform: state
+      to: 'off'
+    - entity_id: binary_sensor.smartctl_sdb_last_test_passed
+      platform: state
+      to: 'off'
+    - entity_id: binary_sensor.smartctl_sdc_last_test_passed
+      platform: state
+      to: 'off'
+    condition: []
+    action:
+    - data:
+        message: A hard disk is failing in store.313a.nickwhyte.com
+      service: notify.telegram_nick
