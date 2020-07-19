@@ -13,6 +13,9 @@ homeassistant:
         - 192.168.8.0/24
         - 192.168.24.0/24
   packages: !include_dir_named integrations
+  whitelist_external_dirs:
+    - /config
+
 
 group: !include_dir_merge_named groups/
 automation: !include automations.yaml
