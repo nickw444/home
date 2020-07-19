@@ -169,8 +169,8 @@ binary_sensor:
           {%- else -%}
             True
           {%- endif -%}
-      smartctl_sdc_last_test_passed:
-        friendly_name: '/dev/sdc Last Test Passed'
+      smartctl_sdb_last_test_passed:
+        friendly_name: '/dev/sdb Last Test Passed'
         icon_template: mdi:harddisk-plus
         value_template: >-
           {%- if 'passed' in state_attr('sensor.smartctl_sdb_json', 'ata_smart_self_test_log').standard.table[0].status -%}
@@ -178,8 +178,8 @@ binary_sensor:
           {%- else -%}
             True
           {%- endif -%}
-      smartctl_sdb_last_test_passed:
-        friendly_name: '/dev/sdb Last Test Passed'
+      smartctl_sdc_last_test_passed:
+        friendly_name: '/dev/sdc Last Test Passed'
         icon_template: mdi:harddisk-plus
         value_template: >-
           {%- if 'passed' in state_attr('sensor.smartctl_sdc_json', 'ata_smart_self_test_log').standard.table[0].status -%}
