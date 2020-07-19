@@ -53,7 +53,7 @@ sensor:
   - platform: template
     sensors:
       smartctl_sda:
-        friendly_name: 'Hard Disk: sda'
+        friendly_name: '/dev/sda smartctl exit status'
         icon_template: mdi:harddisk
         value_template: "{{ states('sensor.smartctl_sda_json') }}"
         attribute_templates:
@@ -77,19 +77,19 @@ sensor:
         value_template: "{{ state_attr('sensor.smartctl_sda_json', 'power_cycle_count') }}"
       smartctl_sda_last_test_type:
         friendly_name: '/dev/sda Last Test Type'
-        icon_template: mdi:mdi-harddisk-plus
+        icon_template: mdi:harddisk-plus
         value_template: "{{ state_attr('sensor.smartctl_sda_json', 'ata_smart_self_test_log').standard.table[0].type.string }}"
       smartctl_sda_last_test_status:
         friendly_name: '/dev/sda Last Test Status'
-        icon_template: mdi:mdi-harddisk-plus
+        icon_template: mdi:harddisk-plus
         value_template: "{{ state_attr('sensor.smartctl_sda_json', 'ata_smart_self_test_log').standard.table[0].status.string }}"
       smartctl_sda_last_test_passed:
         friendly_name: '/dev/sda Last Test Passed'
-        icon_template: mdi:mdi-harddisk-plus
+        icon_template: mdi:harddisk-plus
         value_template: "{{ state_attr('sensor.smartctl_sda_json', 'ata_smart_self_test_log').standard.table[0].status.passed }}"
 
       smartctl_sdb:
-        friendly_name: 'Hard Disk: sdb'
+        friendly_name: '/dev/sdb smartctl exit status'
         icon_template: mdi:harddisk
         value_template: "{{ states('sensor.smartctl_sdb_json') }}"
         attribute_templates:
@@ -113,19 +113,19 @@ sensor:
         value_template: "{{ state_attr('sensor.smartctl_sdb_json', 'power_cycle_count') }}"
       smartctl_sdb_last_test_type:
         friendly_name: '/dev/sdb Last Test Type'
-        icon_template: mdi:mdi-harddisk-plus
+        icon_template: mdi:harddisk-plus
         value_template: "{{ state_attr('sensor.smartctl_sdb_json', 'ata_smart_self_test_log').standard.table[0].type.string }}"
       smartctl_sdb_last_test_status:
         friendly_name: '/dev/sdb Last Test Status'
-        icon_template: mdi:mdi-harddisk-plus
+        icon_template: mdi:harddisk-plus
         value_template: "{{ state_attr('sensor.smartctl_sdb_json', 'ata_smart_self_test_log').standard.table[0].status.string }}"
       smartctl_sdb_last_test_passed:
         friendly_name: '/dev/sdb Last Test Passed'
-        icon_template: mdi:mdi-harddisk-plus
+        icon_template: mdi:harddisk-plus
         value_template: "{{ state_attr('sensor.smartctl_sdb_json', 'ata_smart_self_test_log').standard.table[0].status.passed }}"
 
       smartctl_sdc:
-        friendly_name: 'Hard Disk: sdc'
+        friendly_name: '/dev/sdb smartctl exit status'
         icon_template: mdi:harddisk
         value_template: "{{ states('sensor.smartctl_sdc_json') }}"
         attribute_templates:
@@ -149,13 +149,13 @@ sensor:
         value_template: "{{ state_attr('sensor.smartctl_sdc_json', 'power_cycle_count') }}"
       smartctl_sdc_last_test_type:
         friendly_name: '/dev/sdc Last Test Type'
-        icon_template: mdi:mdi-harddisk-plus
+        icon_template: mdi:harddisk-plus
         value_template: "{{ state_attr('sensor.smartctl_sdc_json', 'ata_smart_self_test_log').standard.table[0].type.string }}"
       smartctl_sdc_last_test_status:
         friendly_name: '/dev/sdc Last Test Status'
-        icon_template: mdi:mdi-harddisk-plus
+        icon_template: mdi:harddisk-plus
         value_template: "{{ state_attr('sensor.smartctl_sdc_json', 'ata_smart_self_test_log').standard.table[0].status.string }}"
       smartctl_sdc_last_test_passed:
         friendly_name: '/dev/sdc Last Test Passed'
-        icon_template: mdi:mdi-harddisk-plus
+        icon_template: mdi:harddisk-plus
         value_template: "{{ state_attr('sensor.smartctl_sdc_json', 'ata_smart_self_test_log').standard.table[0].status.passed }}"
