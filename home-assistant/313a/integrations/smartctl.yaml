@@ -67,14 +67,17 @@ sensor:
         friendly_name: '/dev/sda Temperature'
         icon_template: mdi:thermometer
         value_template: "{{ state_attr('sensor.smartctl_sda_json', 'temperature').current }}"
+        unit_of_measurement: '°C'
       smartctl_sda_power_on_time:
         friendly_name: '/dev/sda Power On Time'
         icon_template: mdi:clock
         value_template: "{{ state_attr('sensor.smartctl_sda_json', 'power_on_time').hours }}"
+        unit_of_measurement: 'Days'
       smartctl_sda_power_cycle_count:
         friendly_name: '/dev/sda Power Cycle Count'
         icon_template: mdi:counter
         value_template: "{{ state_attr('sensor.smartctl_sda_json', 'power_cycle_count') }}"
+        unit_of_measurement: 'Cycles'
       smartctl_sda_last_test_type:
         friendly_name: '/dev/sda Last Test Type'
         icon_template: mdi:harddisk-plus
@@ -103,14 +106,17 @@ sensor:
         friendly_name: '/dev/sdb Temperature'
         icon_template: mdi:thermometer
         value_template: "{{ state_attr('sensor.smartctl_sdb_json', 'temperature').current }}"
+        unit_of_measurement: '°C'
       smartctl_sdb_power_on_time:
         friendly_name: '/dev/sdb Power On Time'
         icon_template: mdi:clock
         value_template: "{{ state_attr('sensor.smartctl_sdb_json', 'power_on_time').hours }}"
+        unit_of_measurement: 'Days'
       smartctl_sdb_power_cycle_count:
         friendly_name: '/dev/sdb Power Cycle Count'
         icon_template: mdi:counter
         value_template: "{{ state_attr('sensor.smartctl_sdb_json', 'power_cycle_count') }}"
+        unit_of_measurement: 'Cycles'
       smartctl_sdb_last_test_type:
         friendly_name: '/dev/sdb Last Test Type'
         icon_template: mdi:harddisk-plus
@@ -139,14 +145,17 @@ sensor:
         friendly_name: '/dev/sdc Temperature'
         icon_template: mdi:thermometer
         value_template: "{{ state_attr('sensor.smartctl_sdc_json', 'temperature').current }}"
+        unit_of_measurement: '°C'
       smartctl_sdc_power_on_time:
         friendly_name: '/dev/sdc Power On Time'
         icon_template: mdi:clock
         value_template: "{{ state_attr('sensor.smartctl_sdc_json', 'power_on_time').hours }}"
+        unit_of_measurement: 'Days'
       smartctl_sdc_power_cycle_count:
         friendly_name: '/dev/sdc Power Cycle Count'
         icon_template: mdi:counter
         value_template: "{{ state_attr('sensor.smartctl_sdc_json', 'power_cycle_count') }}"
+        unit_of_measurement: 'Cycles'
       smartctl_sdc_last_test_type:
         friendly_name: '/dev/sdc Last Test Type'
         icon_template: mdi:harddisk-plus
