@@ -8,18 +8,6 @@ sensor:
         arg: /
       - type: disk_free
         arg: /
-      - type: disk_use_percent
-        arg: /mnt/md0
-      - type: disk_use
-        arg: /mnt/md0
-      - type: disk_free
-        arg: /mnt/md0
-      - type: disk_use_percent
-        arg: /mnt/ext
-      - type: disk_use
-        arg: /mnt/ext
-      - type: disk_free
-        arg: /mnt/ext
       - type: memory_use_percent
       - type: memory_use
       - type: memory_free
