@@ -8,9 +8,12 @@ secrets.yaml
 tts
 .homekit.state
 
+ip_bans.yaml
 known_devices.yaml
 entity_registry.yaml
 plex.conf
 deps
 .ios.conf
 .storage
+
+smartctl
