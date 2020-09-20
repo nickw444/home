@@ -1,0 +1,16 @@
+# Seed configuration for the upstairs RAEX roller blinds
+# To be fed into generate_esphome_blinds_ha_config.py to generate a
+# Home Assistant compatible package for sending codes via ESPHome custom component
+# See: home-assistant/313a/esphome/raex_blind_tx.h
+---
+tx_device: rf_controller
+blinds:
+  - name: Study
+    remote: 40
+    channel: 0
+  - name: Living Room
+    remote: 40
+    channel: 1
+  - name: Kitchen
+    remote: 40
+    channel: 2

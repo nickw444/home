@@ -1,0 +1,117 @@
+homeassistant:
+  customize:
+    cover.study: &id001
+      assumed_state: true
+    cover.living_room: *id001
+    cover.kitchen: *id001
+cover:
+- platform: template
+  covers:
+    study:
+      friendly_name: Study
+      device_class: blind
+      open_cover:
+        service: esphome.rf_controller_transmit
+        data:
+          remote_id: 40
+          channel_id: 0
+          action: OPEN
+      close_cover:
+        service: esphome.rf_controller_transmit
+        data:
+          remote_id: 40
+          channel_id: 0
+          action: CLOSE
+      stop_cover:
+        service: esphome.rf_controller_transmit
+        data:
+          remote_id: 40
+          channel_id: 0
+          action: STOP
+      availability_template: |-
+        {{ is_state('binary_sensor.rf_controller_status', 'on') }}
+    living_room:
+      friendly_name: Living Room
+      device_class: blind
+      open_cover:
+        service: esphome.rf_controller_transmit
+        data:
+          remote_id: 40
+          channel_id: 1
+          action: OPEN
+      close_cover:
+        service: esphome.rf_controller_transmit
+        data:
+          remote_id: 40
+          channel_id: 1
+          action: CLOSE
+      stop_cover:
+        service: esphome.rf_controller_transmit
+        data:
+          remote_id: 40
+          channel_id: 1
+          action: STOP
+      availability_template: |-
+        {{ is_state('binary_sensor.rf_controller_status', 'on') }}
+    kitchen:
+      friendly_name: Kitchen
+      device_class: blind
+      open_cover:
+        service: esphome.rf_controller_transmit
+        data:
+          remote_id: 40
+          channel_id: 2
+          action: OPEN
+      close_cover:
+        service: esphome.rf_controller_transmit
+        data:
+          remote_id: 40
+          channel_id: 2
+          action: CLOSE
+      stop_cover:
+        service: esphome.rf_controller_transmit
+        data:
+          remote_id: 40
+          channel_id: 2
+          action: STOP
+      availability_template: |-
+        {{ is_state('binary_sensor.rf_controller_status', 'on') }}
+switch:
+  platform: template
+  switches:
+    study_blind_pairing:
+      friendly_name: Study Blind Pairing
+      value_template: off
+      turn_on:
+        service: esphome.rf_controller_transmit
+        data:
+          remote_id: 40
+          channel_id: 0
+          action: PAIR
+      turn_off: []
+      availability_template: |-
+        {{ is_state('binary_sensor.rf_controller_status', 'on') }}
+    living_room_blind_pairing:
+      friendly_name: Living Room Blind Pairing
+      value_template: off
+      turn_on:
+        service: esphome.rf_controller_transmit
+        data:
+          remote_id: 40
+          channel_id: 1
+          action: PAIR
+      turn_off: []
+      availability_template: |-
+        {{ is_state('binary_sensor.rf_controller_status', 'on') }}
+    kitchen_blind_pairing:
+      friendly_name: Kitchen Blind Pairing
+      value_template: off
+      turn_on:
+        service: esphome.rf_controller_transmit
+        data:
+          remote_id: 40
+          channel_id: 2
+          action: PAIR
+      turn_off: []
+      availability_template: |-
+        {{ is_state('binary_sensor.rf_controller_status', 'on') }}
