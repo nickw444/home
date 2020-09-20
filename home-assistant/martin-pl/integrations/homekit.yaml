@@ -5,5 +5,18 @@ homekit:
       - person
       - switch
       - automation
+      - script
+      - input_boolean
+      - media_player
     exclude_entities:
       - binary_sensor.updater
+      - media_player.spotify_kate
+      - media_player.spotify_nicholas_whyte
+      - sensor.cpu_temperature
+      - sensor.water_temperature
+      - sensor.living_room_humidity
+      - sensor.living_room_temperature
+      - sensor.living_room_window_illuminance
+      - climate.sous_vide
+    exclude_entity_globs:
+      - sensor.comms_cabinet_climate_*
