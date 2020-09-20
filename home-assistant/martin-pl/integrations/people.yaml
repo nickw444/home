@@ -1,0 +1,5 @@
+group:
+  all_people:
+    entities:
+      - person.nick_whyte
+      - person.kate_scott
