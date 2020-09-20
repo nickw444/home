@@ -5,10 +5,10 @@
 ---
 tx_device: rf_controller
 blinds:
-  - name: Study
+  - name: Living Room
     remote: 40
     channel: 0
-  - name: Living Room
+  - name: Study
     remote: 40
     channel: 1
   - name: Kitchen

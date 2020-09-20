@@ -1,14 +1,14 @@
 homeassistant:
   customize:
-    cover.study: &id001
+    cover.living_room: &id001
       assumed_state: true
-    cover.living_room: *id001
+    cover.study: *id001
     cover.kitchen: *id001
 cover:
 - platform: template
   covers:
-    study:
-      friendly_name: Study
+    living_room:
+      friendly_name: Living Room
       device_class: blind
       open_cover:
         service: esphome.rf_controller_transmit
@@ -30,8 +30,8 @@ cover:
           action: STOP
       availability_template: |-
         {{ is_state('binary_sensor.rf_controller_status', 'on') }}
-    living_room:
-      friendly_name: Living Room
+    study:
+      friendly_name: Study
       device_class: blind
       open_cover:
         service: esphome.rf_controller_transmit
@@ -79,8 +79,8 @@ cover:
 switch:
   platform: template
   switches:
-    study_blind_pairing:
-      friendly_name: Study Blind Pairing
+    living_room_blind_pairing:
+      friendly_name: Living Room Blind Pairing
       value_template: off
       turn_on:
         service: esphome.rf_controller_transmit
@@ -91,8 +91,8 @@ switch:
       turn_off: []
       availability_template: |-
         {{ is_state('binary_sensor.rf_controller_status', 'on') }}
-    living_room_blind_pairing:
-      friendly_name: Living Room Blind Pairing
+    study_blind_pairing:
+      friendly_name: Study Blind Pairing
       value_template: off
       turn_on:
         service: esphome.rf_controller_transmit
