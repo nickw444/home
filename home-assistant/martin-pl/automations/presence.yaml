@@ -1,9 +1,9 @@
 - id: '1584944372303'
-  alias: when everyone leaves, after 45 minutes, turn off TV
+  alias: when everyone leaves, after 15 minutes, turn off TV
   description: ''
   trigger:
     - entity_id: group.all_people
-      for: 00:45:00
+      for: 00:15:00
       platform: state
       to: not_home
   condition: []
@@ -40,11 +40,6 @@
     - device_id: 8c28feb17fb74368ac8b2a30f2a66355
       domain: switch
       entity_id: switch.living_room_lamp
-      type: turn_on
-    - brightness_pct: 100
-      device_id: b8094b16b3454f8c8304d375cb9c4b09
-      domain: light
-      entity_id: light.entry_hallway
       type: turn_on
 - id: '1584954836148'
   alias: when Nick arrives home, clear door open notifications on Nicks iPhone
