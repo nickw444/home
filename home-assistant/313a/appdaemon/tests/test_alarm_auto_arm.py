@@ -55,7 +55,9 @@ def test_logs_to_logbook_when_armed(hass_driver, auto_arm):
 
     call_service = hass_driver.get_mock("call_service")
     call_service.assert_any_call(
-        "logbook/log", name="Alarm Auto Arm", message="Automatic arm",
+        "logbook/log",
+        name="Alarm Auto Arm",
+        message="Automatic arm",
     )
 
 
@@ -182,7 +184,9 @@ def test_logs_to_logbook_when_disarmed(hass_driver, auto_arm):
 
     call_service = hass_driver.get_mock("call_service")
     call_service.assert_any_call(
-        "logbook/log", name="Alarm Auto Arm", message="Automatic disarm",
+        "logbook/log",
+        name="Alarm Auto Arm",
+        message="Automatic disarm",
     )
 
 

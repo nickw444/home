@@ -66,7 +66,9 @@ class AlarmAutoArm(hass.Hass):
         )
         self.fire_event("auto_arm_armed")
         self.call_service(
-            "logbook/log", name="Alarm Auto Arm", message="Automatic arm",
+            "logbook/log",
+            name="Alarm Auto Arm",
+            message="Automatic arm",
         )
 
     def _maybe_disarm(self, force=False):
@@ -80,7 +82,9 @@ class AlarmAutoArm(hass.Hass):
         )
         self.fire_event("auto_arm_disarmed")
         self.call_service(
-            "logbook/log", name="Alarm Auto Arm", message="Automatic disarm",
+            "logbook/log",
+            name="Alarm Auto Arm",
+            message="Automatic disarm",
         )
 
     def _can_arm(self):
