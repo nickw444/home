@@ -10,7 +10,7 @@
   action:
     - device_id: c577e58c8aee45af9b1f7ebf1c0e091e
       domain: light
-      entity_id: light.living_room_led_strip
+      entity_id: light.tv_led_strip
       type: turn_off
 - id: '1584944974594'
   alias: when the TV turns on, turn on the LED strip
@@ -27,7 +27,7 @@
           - 255
           - 181
           - 108
-      entity_id: light.living_room_led_strip
+      entity_id: light.tv_led_strip
       service: light.turn_on
 - id: '1584944904008'
   alias: when the TV turns on, after sunset, turn on the living room lamp
@@ -63,7 +63,7 @@
           - 255
           - 181
           - 108
-      entity_id: light.living_room_led_strip
+      entity_id: light.tv_led_strip
       service: light.turn_on
 - id: '1584944760804'
   alias: when the sun sets and someone is home, turn on the living room lamp
