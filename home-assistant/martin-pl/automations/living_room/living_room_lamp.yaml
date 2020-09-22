@@ -1,0 +1,36 @@
+- id: '1584944904008'
+  alias: when the TV turns on, after sunset, turn on the living room lamp
+  description: ''
+  trigger:
+    - entity_id: media_player.samsung_smart_tv
+      from: 'off'
+      platform: state
+      to: 'on'
+  condition:
+    - after: sunset
+      after_offset: -00:30:00
+      condition: sun
+  action:
+    - device_id: 8c28feb17fb74368ac8b2a30f2a66355
+      domain: switch
+      entity_id: switch.living_room_lamp
+      type: turn_on
+
+- id: '1584944760804'
+  alias: when the sun sets and someone is home, turn on the living room lamp
+  description: ''
+  trigger:
+    - event: sunset
+      offset: -00:30:00
+      platform: sun
+  condition:
+    - condition: state
+      entity_id: group.all_people
+      state: home
+  action:
+    - device_id: 8c28feb17fb74368ac8b2a30f2a66355
+      domain: switch
+      entity_id: switch.living_room_lamp
+      type: turn_on
+
+# When motion is detected after 10:30pm, turn on the living room lamp
