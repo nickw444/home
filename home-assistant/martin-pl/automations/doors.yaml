@@ -10,7 +10,7 @@
       type: opened
     - device_id: 9ae0e5e12ca74203a75203b1c9fbd57b
       domain: binary_sensor
-      entity_id: binary_sensor.living_room_door
+      entity_id: binary_sensor.balcony_door
       platform: device
       type: opened
   condition:
