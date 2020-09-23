@@ -153,14 +153,14 @@ script:
       - service: media_player.send_key
         data:
           key: "KEY_ENTER"
-      - wait_template: "{{ 'Samsung TV UA55RU8000WXXY' in state_attr('media_player.spotify_nick', 'source_list') }}"
+      - wait_template: "{{ 'Samsung TV UA55RU8000WXXY' in state_attr('media_player.spotify_nicholas_whyte', 'source_list') }}"
         timeout: 00:00:30
       - service: media_player.select_source
-        entity_id: media_player.spotify_nick
+        entity_id: media_player.spotify_nicholas_whyte
         data:
           source: 'Samsung TV UA55RU8000WXXY'
       - service: media_player.media_play
-        entity_id: media_player.spotify_nick
+        entity_id: media_player.spotify_nicholas_whyte
   open_netflix_on_tv:
     alias: Play Netflix on the TV
     sequence:
