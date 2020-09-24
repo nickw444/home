@@ -23,6 +23,35 @@ sensor:
       {{ now().strftime('%Y-%m-%d %H:%M:%S') }}
     # again, if you change base_topic of Zigbee2mqtt, change json_attributes_topic accordingly
     json_attributes_topic: zigbee2mqtt/bridge/networkmap/raw
+  - platform: template
+    sensors:
+      zigbee_offline_devices_count:
+        friendly_name: Zigbee Offline Devices Count
+        value_template: >-
+          {%- set ns = namespace(counter=0) %}
+          {% for state in states -%}
+            {%- if state.attributes.last_seen -%}
+              {%- set last_seen_dt = strptime(state.attributes.last_seen, '%Y-%m-%dT%H:%M:%S.%f%z') %}
+              {%- if (now() - last_seen_dt).total_seconds() > 60 * 60 -%}
+                {%- set ns.counter = ns.counter + 1 %}
+              {%- endif -%}
+            {%- endif -%}
+          {%- endfor -%}
+          {{ ns.counter }}
+      zigbee_offline_devices:
+        friendly_name: Zigbee Offline Devices
+        availability_template:
+        value_template: >-
+          {%- set ns = namespace(devices=[]) %}
+          {% for state in states -%}
+            {%- if state.attributes.last_seen -%}
+              {%- set last_seen_dt = strptime(state.attributes.last_seen, '%Y-%m-%dT%H:%M:%S.%f%z') %}
+              {%- if (now() - last_seen_dt).total_seconds() > 60 * 60 -%}
+                {%- set ns.devices = ns.devices + [state.entity_id] %}
+              {%- endif -%}
+            {%- endif -%}
+          {%- endfor -%}
+          {{ ', '.join(ns.devices) }}
 
 input_text:
   old_friendly_name:
