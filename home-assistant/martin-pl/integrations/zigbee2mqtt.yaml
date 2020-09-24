@@ -40,7 +40,6 @@ sensor:
           {{ ns.counter }}
       zigbee_offline_devices:
         friendly_name: Zigbee Offline Devices
-        availability_template:
         value_template: >-
           {%- set ns = namespace(devices=[]) %}
           {% for state in states -%}
