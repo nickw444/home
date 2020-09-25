@@ -9,7 +9,7 @@ import voluptuous as vol
 
 import homeassistant.helpers.config_validation as cv
 from homeassistant.components.media_player import (
-    MediaPlayerDevice,
+    MediaPlayerEntity,
     PLATFORM_SCHEMA, SUPPORT_PAUSE, SUPPORT_VOLUME_STEP, SUPPORT_VOLUME_MUTE,
     SUPPORT_PREVIOUS_TRACK, SUPPORT_NEXT_TRACK, SUPPORT_PLAY,
     SUPPORT_PLAY_MEDIA)
@@ -106,7 +106,7 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
     add_entities([tv])
 
 
-class SamsungTVDevice(MediaPlayerDevice):
+class SamsungTVDevice(MediaPlayerEntity):
     def __init__(self, name: Optional[str], mac: Optional[str], remote):
         from samsungwsctl import GetInfoResponse
 
