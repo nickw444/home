@@ -13,6 +13,11 @@
       entity_id: binary_sensor.balcony_door
       platform: device
       type: opened
+    - device_id: 9ae0e5e12ca74203a75203b1c9fbd57b
+      domain: binary_sensor
+      entity_id: binary_sensor.laundry_door
+      platform: device
+      type: opened
   condition:
     - condition: state
       entity_id: group.all_people
@@ -29,8 +34,8 @@
           push:
             thread-id: presence-door-opened
           tag: presence-door-opened
-        message: A door was opened, but no one is home
-        title: Door Opened
+        message: '{{ trigger.from_state.name }} was opened, but no one is home'
+        title: '{{ trigger.from_state.name }} Opened }}'
       service: notify.everyone
 - id: '1584944183272'
   alias: when apartment door opens, and no one is home at night, turn on living room
