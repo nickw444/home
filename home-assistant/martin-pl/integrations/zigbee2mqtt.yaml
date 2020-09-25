@@ -27,6 +27,7 @@ sensor:
     sensors:
       zigbee_offline_devices_count:
         friendly_name: Zigbee Offline Devices Count
+        unit_of_measurement: 'Devices'
         value_template: >-
           {%- set ns = namespace(counter=0) -%}
           {%- for state in states -%}
@@ -104,6 +105,36 @@ automation:
     - service: input_boolean.turn_off
       data:
         entity_id: input_boolean.zigbee_permit_join
+  - id: '1601039238534'
+    alias: 'zigbee: notify when offline devices > 0 for more than 24 hours'
+    description: ''
+    trigger:
+    - platform: numeric_state
+      entity_id: sensor.zigbee_offline_devices_count
+      above: '0'
+      for: '24:00:00'
+    condition: []
+    action:
+    - service: persistent_notification.create
+      data:
+        title: Zigbee Devices Unavailable
+        message: '{{ trigger.to_state.state }} Zigbee devices have been unavailable
+          for more than 24 hours'
+        notification_id: zigbee-unavailable-devices-warning
+    mode: single
+  - id: '1601039713403'
+    alias: 'zigbee: remove notification when no offline devices'
+    description: ''
+    trigger:
+    - platform: state
+      entity_id: sensor.zigbee_offline_devices_count
+      to: '0'
+    condition: []
+    action:
+    - service: persistent_notification.dismiss
+      data:
+        notification_id: zigbee-unavailable-devices-warning
+    mode: single
 
 script:
   reconfigure_zigbee_device:
