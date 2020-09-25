@@ -18,5 +18,6 @@ homekit:
       - sensor.living_room_temperature
       - sensor.living_room_window_illuminance
       - climate.sous_vide
+      - alarm_control_panel.ha_alarm
     exclude_entity_globs:
       - sensor.comms_cabinet_climate_*

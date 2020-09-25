@@ -50,7 +50,7 @@ automation:
       entity_id: alarm_control_panel.ha_alarm
     mode: single
 
-  - id: '1601034054491'
+  - id: '1601034054492'
     alias: 'alarm: trigger when motion detected whilst armed_away'
     description: ''
     trigger:
@@ -78,7 +78,7 @@ automation:
       to: triggered
     condition: []
     action:
-    - service: notify.mobile_app_nicks_iphone
+    - service: notify.everyone
       data:
         title: Alarm Triggered
         message: The alarm was triggered at {{ now().strftime('%I:%M %p') }}
@@ -108,7 +108,7 @@ automation:
         entity_id: alarm_control_panel.ha_alarm
         state: triggered
     action:
-    - service: notify.mobile_app_nicks_iphone
+    - service: notify.everyone
       data:
         title: Alarm Disarmed
         message: The alarm was disarmed at {{ now().strftime('%I:%M %p') }}
@@ -128,7 +128,7 @@ automation:
       to: pending
     condition: []
     action:
-    - service: notify.mobile_app_nicks_iphone
+    - service: notify.everyone
       data:
         title: Alarm Pending
         message: The alarm was pending at {{ now().strftime('%I:%M %p') }}
@@ -152,7 +152,7 @@ automation:
       to: armed_night
     condition: []
     action:
-    - service: notify.mobile_app_nicks_iphone
+    - service: notify.everyone
       data:
         title: Alarm Armed
         message: The alarm was armed at {{ now().strftime('%I:%M %p') }}
