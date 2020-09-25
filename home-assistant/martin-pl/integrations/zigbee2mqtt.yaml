@@ -62,7 +62,7 @@ input_text:
 
 automation:
   - id: enable_zigbee_join
-    alias: Enable Zigbee joining
+    alias: 'zigbee: Enable Zigbee joining'
     trigger:
       platform: state
       entity_id: input_boolean.zigbee_permit_join
@@ -76,7 +76,7 @@ automation:
       data:
         entity_id: timer.zigbee_permit_join
   - id: disable_zigbee_join
-    alias: Disable Zigbee joining
+    alias: 'zigbee: Disable Zigbee joining'
     trigger:
     - entity_id: input_boolean.zigbee_permit_join
       platform: state
@@ -90,7 +90,7 @@ automation:
         entity_id: timer.zigbee_permit_join
       service: timer.cancel
   - id: disable_zigbee_join_timer
-    alias: Disable Zigbee joining by timer
+    alias: 'zigbee: Disable Zigbee joining by timer'
     trigger:
     - platform: event
       event_type: timer.finished
