@@ -10,6 +10,10 @@ homeassistant:
   packages: !include_dir_named integrations
   internal_url: !secret http_base_url
   external_url: !secret http_base_url
+  latitude: !secret latitude
+  longitude: !secret longitude
+  elevation: !secret elevation
+  time_zone: Australia/Sydney
 
 automation: !include automations.yaml
 script: !include scripts.yaml
