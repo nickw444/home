@@ -1,6 +1,8 @@
 alarm_control_panel:
   - platform: manual
-    delay_time: 120
+    delay_time: 60
+    arming_time: 60
+    trigger_time: 120
 
 ios:
   push:
@@ -17,24 +19,15 @@ ios:
 
 automation:
   - id: '1601034054491'
-    alias: 'alarm: trigger when door opened whilst armed'
+    alias: 'alarm: trigger when external door opened whilst armed'
     description: ''
     trigger:
-    - type: opened
-      platform: device
-      device_id: e824e2b2a4ff4dea9b16fd7f6234dfc1
-      entity_id: binary_sensor.balcony_door
-      domain: binary_sensor
-    - type: opened
-      platform: device
-      device_id: 9ae0e5e12ca74203a75203b1c9fbd57b
-      entity_id: binary_sensor.front_door
-      domain: binary_sensor
-    - type: opened
-      platform: device
-      device_id: 6ebac700fde711eabf1a89a94693ffa5
-      entity_id: binary_sensor.laundry_door
-      domain: binary_sensor
+    - platform: state
+      entity_id:
+        - binary_sensor.balcony_door
+        - binary_sensor.front_door
+        - binary_sensor.laundry_door
+      to: 'on'
     condition:
     - condition: or
       conditions:
@@ -46,7 +39,6 @@ automation:
         state: armed_night
     action:
     - service: alarm_control_panel.alarm_trigger
-      data: {}
       entity_id: alarm_control_panel.ha_alarm
     mode: single
 
@@ -54,18 +46,16 @@ automation:
     alias: 'alarm: trigger when motion detected whilst armed_away'
     description: ''
     trigger:
-    - type: motion
-      platform: device
-      device_id: 42d8cbc5f64e490c996b0dd2d70c8681
-      entity_id: binary_sensor.living_room_motion_occupancy
-      domain: binary_sensor
+    - platform: state
+      entity_id:
+        - binary_sensor.living_room_motion_occupancy
+      to: 'on'
     condition:
     - condition: state
       entity_id: alarm_control_panel.ha_alarm
       state: armed_away
     action:
     - service: alarm_control_panel.alarm_trigger
-      data: {}
       entity_id: alarm_control_panel.ha_alarm
     mode: single
 
@@ -146,16 +136,15 @@ automation:
     trigger:
     - platform: state
       entity_id: alarm_control_panel.ha_alarm
-      to: armed_away
-    - platform: state
-      entity_id: alarm_control_panel.ha_alarm
-      to: armed_night
+      to:
+        - armed_away
+        - armed_night
     condition: []
     action:
     - service: notify.everyone
       data:
         title: Alarm Armed
-        message: The alarm was armed at {{ now().strftime('%I:%M %p') }}
+        message: The alarm was {{ trigger.to_state.state }} at {{ now().strftime('%I:%M %p') }}
         data:
           apns_headers:
             apns-collapse-id: alarm-status
@@ -214,3 +203,114 @@ automation:
       data: {}
       entity_id: alarm_control_panel.ha_alarm
     mode: single
+
+  - id: '1601103558889'
+    alias: 'alarm: arm_night when no motion/activity detected'
+    description: ''
+    trigger:
+    - platform: state
+      entity_id:
+      - binary_sensor.living_room_motion_occupancy
+      - binary_sensor.front_door
+      - binary_sensor.balcony_door
+      - binary_sensor.laundry_door
+      - binary_sensor.bathroom_door
+      - input_boolean.demo_arm_night
+      to:
+        - 'on'
+        - 'off'
+    condition:
+    - condition: time
+      after: '22:30:00'
+      before: '06:00:00'
+    action:
+    - delay: 00:30:00
+    - condition: state
+      entity_id: binary_sensor.living_room_motion_occupancy
+      state: 'off'
+    - condition: time
+      after: '22:30:00'
+      before: '06:00:00'
+    - condition: state
+      entity_id: alarm_control_panel.ha_alarm
+      state: disarmed
+    - service: alarm_control_panel.alarm_arm_night
+      entity_id: alarm_control_panel.ha_alarm
+    mode: restart
+
+  - id: '1601101160650'
+    alias: 'alarm: disarm night at 7am or when internal motion detected'
+    description: ''
+    trigger:
+    - platform: state
+      entity_id: binary_sensor.living_room_motion_occupancy
+      to: 'on'
+    # Trigger on any (open/close) change to internal doors.
+    - platform: state
+      entity_id: binary_sensor.bathroom_door
+    - platform: time
+      at: 07:00:00
+    condition:
+    - condition: state
+      entity_id: alarm_control_panel.ha_alarm
+      state: armed_night
+    action:
+    - service: alarm_control_panel.alarm_disarm
+      data: {}
+      entity_id: alarm_control_panel.ha_alarm
+    mode: single
+
+  - id: '1601104910978'
+    alias: 'alarm: play sound on pending/triggered'
+    description: ''
+    trigger:
+    - platform: state
+      entity_id: alarm_control_panel.ha_alarm
+      to: pending
+    - platform: state
+      entity_id: alarm_control_panel.ha_alarm
+      to: triggered
+    condition: []
+    action:
+    - choose:
+      - conditions:
+        - condition: state
+          entity_id: alarm_control_panel.ha_alarm
+          state: pending
+        sequence:
+        - service: media_player.volume_set
+          data:
+            volume_level: 0.2
+          entity_id: media_player.study_speaker
+        - service: media_player.play_media
+          data:
+            media_content_id: https://hass.mpl.nickwhyte.com/local/audio/alarm_pending_beep.mp3
+            media_content_type: music
+          entity_id: media_player.study_speaker
+      - conditions:
+        - condition: state
+          entity_id: alarm_control_panel.ha_alarm
+          state: triggered
+        sequence:
+        - service: media_player.volume_set
+          data:
+            volume_level: 0.1
+          entity_id: media_player.study_speaker
+        - service: media_player.play_media
+          data:
+            media_content_id: https://hass.mpl.nickwhyte.com/local/audio/alarm_triggered_siren.mp3
+            media_content_type: music
+          entity_id: media_player.study_speaker
+      default: []
+    - delay: 00:00:02
+    - wait_template: >-
+        {{ states('alarm_control_panel.ha_alarm') not in ('pending', 'triggered') }}
+      continue_on_timeout: false
+    - service: media_player.media_stop
+      data: {}
+      entity_id: media_player.study_speaker
+    mode: restart
+
+  # Other Ideas:
+  # Baesean sensor for in-bed?
+  # Air lock - notify on laundry door open without main door / recent at_home.
