@@ -4,7 +4,7 @@ dyson:
   language: AU
   devices:
     - device_id: NN8-AU-JAA0276A
-      device_ip: 192.168.2.247
+      device_ip: 192.168.2.95
 
 homeassistant:
   customize:
