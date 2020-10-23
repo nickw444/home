@@ -215,7 +215,6 @@ automation:
       - binary_sensor.balcony_door
       - binary_sensor.laundry_door
       - binary_sensor.bathroom_door
-      - input_boolean.demo_arm_night
       to:
         - 'on'
         - 'off'
@@ -247,7 +246,11 @@ automation:
       to: 'on'
     # Trigger on any (open/close) change to internal doors.
     - platform: state
-      entity_id: binary_sensor.bathroom_door
+      entity_id:
+        - binary_sensor.bathroom_door
+      to:
+        - 'on'
+        - 'off'
     - platform: time
       at: 07:00:00
     condition:
