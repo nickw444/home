@@ -1,0 +1,7 @@
+sensor:
+  - platform: opensky
+    radius: 2
+  - platform: eventsensor
+    name: OpenSky Flights
+    event: opensky_entry
+    state: callsign
