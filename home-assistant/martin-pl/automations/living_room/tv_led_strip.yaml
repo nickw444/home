@@ -1,5 +1,5 @@
 - id: '1584945101124'
-  alias: when the TV turns off, turn off the LED strip
+  alias: 'living_room: when the TV turns off, turn off the LED strip'
   description: ''
   trigger:
     - entity_id: media_player.samsung_smart_tv
@@ -14,7 +14,7 @@
       type: turn_off
 
 - id: '1584944974594'
-  alias: when the TV turns on, turn on the LED strip
+  alias: 'living_room: when the TV turns on, turn on the LED strip'
   description: ''
   trigger:
     - entity_id: media_player.samsung_smart_tv
@@ -32,7 +32,7 @@
       service: light.turn_on
 
 - id: '1584956852148'
-  alias: when the TV source changes from Spotify, reset the LED strip color
+  alias: 'living_room: when the TV source changes from Spotify, reset the LED strip color'
   description: ''
   trigger:
     - entity_id: sensor.samsung_smart_tv_source

@@ -1,18 +1,29 @@
-- id: '1600953878712'
-  alias: when bedroom button pressed, turn on lights
+- id: '1603065400361'
+  alias: 'bedroom lights: when dimmer ch2 change, toggle bedsides'
   description: ''
   trigger:
   - platform: state
-    entity_id: sensor.bedroom_button_click
-    to: single
+    entity_id: binary_sensor.bedroom_dimmer_switch_2
+    to: 'on'
+    from: 'off'
+  - platform: state
+    entity_id: binary_sensor.bedroom_dimmer_switch_2
+    to: 'off'
+    from: 'on'
   condition: []
   action:
-  - type: turn_on
-    device_id: 4e5b2bf15a3c477d8481ce60a6bc4eaf
-    entity_id: switch.bedroom_kates_bedside
-    domain: switch
-  - type: turn_on
-    device_id: 559a804940fc4f9ea2eb1d21e78877d4
-    entity_id: light.bedroom_nicks_bedside
-    domain: light
-  mode: single
+  - choose:
+    - conditions:
+      - condition: state
+        entity_id: light.bedroom_lamps
+        state: 'on'
+      sequence:
+      - service: light.turn_off
+        data: {}
+        entity_id: light.bedroom_lamps
+    default:
+    - service: light.turn_on
+      data: {}
+      entity_id: light.bedroom_lamps
+  mode: queued
+  max: 10

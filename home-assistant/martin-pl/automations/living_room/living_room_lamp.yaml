@@ -1,5 +1,5 @@
 - id: '1584944904008'
-  alias: when the TV turns on, after sunset, turn on the living room lamp
+  alias: 'living_room: when the TV turns on, after sunset, turn on the living room lamp'
   description: ''
   trigger:
     - entity_id: media_player.samsung_smart_tv
@@ -17,7 +17,7 @@
       type: turn_on
 
 - id: '1584944760804'
-  alias: when the sun sets and someone is home, turn on the living room lamp
+  alias: 'living_room: when the sun sets and someone is home, turn on the living room lamp'
   description: ''
   trigger:
     - event: sunset
@@ -33,4 +33,51 @@
       entity_id: switch.living_room_lamp
       type: turn_on
 
-# When motion is detected after 10:30pm, turn on the living room lamp
+- id: '1601162060665'
+  alias: 'living_room: Turn on living room lamp for 2 minutes when motion detected at night'
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.living_room_motion_occupancy
+    to: 'on'
+  condition:
+  - condition: state
+    entity_id: light.living_room_lamp
+    state: 'off'
+  - condition: sun
+    before: sunrise
+    after: sunset
+  action:
+  - service: light.turn_on
+    data: {}
+    entity_id: light.living_room_lamp
+  - wait_template: >-
+      {{ is_state('binary_sensor.living_room_motion_occupancy', 'off') }}
+  - delay: 00:02:00
+  - service: light.turn_off
+    data: {}
+    entity_id: light.living_room_lamp
+  mode: restart
+
+- id: '1584944183272'
+  alias: 'living_room: when apartment door opens, and no one is home at night, turn on living room
+    lamp'
+  description: ''
+  trigger:
+    - device_id: e824e2b2a4ff4dea9b16fd7f6234dfc1
+      domain: binary_sensor
+      entity_id: binary_sensor.front_door
+      platform: device
+      type: opened
+  condition:
+    - after: sunset
+      after_offset: -00:60:00
+      condition: sun
+    - condition: state
+      entity_id: group.all_people
+      state: not_home
+  action:
+    - device_id: 8c28feb17fb74368ac8b2a30f2a66355
+      domain: switch
+      entity_id: switch.living_room_lamp
+      type: turn_on
