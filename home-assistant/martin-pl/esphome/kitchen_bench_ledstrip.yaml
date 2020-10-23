@@ -25,18 +25,19 @@ ota:
 output:
   - platform: esp8266_pwm
     pin: 5
-    id: 'color_red'
+    id: 'color_green'
+    max_power: 40%
   - platform: esp8266_pwm
     pin: 12
-    id: 'color_green'
-    max_power: 60%
+    id: 'color_red'
   - platform: esp8266_pwm
     pin: 13
     id: 'color_blue'
-    max_power: 30%
+    max_power: 20%
   - platform: esp8266_pwm
     pin: 15
     id: 'color_white'
+
 
 light:
   - platform: rgbw
