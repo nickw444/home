@@ -19,5 +19,10 @@ homekit:
       - sensor.living_room_window_illuminance
       - climate.sous_vide
       - alarm_control_panel.ha_alarm
+      - binary_sensor.rf_controller_status
     exclude_entity_globs:
       - sensor.comms_cabinet_climate_*
+      - sensor.*_device_temperature
+      - binary_sensor.*_overheating
+      - binary_sensor.*_overpowering
+      - binary_sensor.*_update_available
