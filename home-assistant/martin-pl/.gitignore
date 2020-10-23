@@ -14,3 +14,6 @@ known_devices.yaml
 secrets.yaml
 tts
 ip_bans.yaml
+image
+www/community
+custom_components/hacs
