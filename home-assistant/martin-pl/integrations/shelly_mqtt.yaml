@@ -1,0 +1,6 @@
+binary_sensor:
+  - platform: mqtt
+    name: "Bedroom Dimmer Switch 2"
+    state_topic: "shellies/shellydimmer2-D8BFC019D08E/input/1"
+    payload_on: '1'
+    payload_off: '0'
