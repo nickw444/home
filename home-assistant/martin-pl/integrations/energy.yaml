@@ -1,0 +1,103 @@
+homeassistant:
+  customize:
+    sensor.mains_energy_consumed_quarterly:
+      friendly_name: Mains Energy Consumed This Quarter
+    sensor.mains_energy_consumed_weekly:
+      friendly_name: Mains Energy Consumed This Week
+    sensor.mains_energy_consumed_daily:
+      friendly_name: Mains Energy Consumed Today
+    sensor.air_conditioning_energy_consumed_quarterly:
+      friendly_name: Air Conditioning Energy Consumed This Quarter
+    sensor.air_conditioning_energy_consumed_weekly:
+      friendly_name: Air Conditioning Energy Consumed This Week
+    sensor.air_conditioning_energy_consumed_daily:
+      friendly_name: Air Conditioning Energy Consumed Today
+    sensor.washing_machine_energy_consumed_quarterly:
+      friendly_name: Washing Machine Energy Consumed This Quarter
+    sensor.washing_machine_energy_consumed_weekly:
+      friendly_name: Washing Machine Energy Consumed This Week
+    sensor.washing_machine_energy_consumed_daily:
+      friendly_name: Washing Machine Energy Consumed Today
+
+utility_meter:
+  mains_energy_consumed_quarterly:
+    source: sensor.mains_total_energy
+    cycle: quarterly
+  mains_energy_consumed_weekly:
+    source: sensor.mains_total_energy
+    cycle: weekly
+  mains_energy_consumed_daily:
+    source: sensor.mains_total_energy
+    cycle: daily
+  air_conditioning_energy_consumed_quarterly:
+    source: sensor.air_conditioning_total_energy
+    cycle: quarterly
+  air_conditioning_energy_consumed_weekly:
+    source: sensor.air_conditioning_total_energy
+    cycle: weekly
+  air_conditioning_energy_consumed_daily:
+    source: sensor.air_conditioning_total_energy
+    cycle: daily
+  washing_machine_energy_consumed_quarterly:
+    source: sensor.washing_machine_today_energy
+    cycle: quarterly
+  washing_machine_energy_consumed_weekly:
+    source: sensor.washing_machine_today_energy
+    cycle: weekly
+  washing_machine_energy_consumed_daily:
+    source: sensor.washing_machine_today_energy
+    cycle: daily
+
+input_number:
+  energy_meter_offset_adjustment:
+    name: Energy Meter Offset Adjustment
+    min: 0
+    max: 100000
+    mode: box
+    unit_of_measurement: kWh
+
+sensor:
+  - platform: template
+    sensors:
+      energy_meter_estimated_reading:
+        # Estimated Meter Reading
+        # Meter Read as at 16:00, 10/10/2020: 54603
+        friendly_name: "Energy Meter Estimated Reading"
+        unit_of_measurement: kWh
+        value_template: "{{ states('sensor.mains_total_energy')|float + states('input_number.energy_meter_offset_adjustment')|float + 54603  }}"
+      mains_power_instantaneous_cost:
+        friendly_name: "Mains Power Instantaneous Cost"
+        unit_of_measurement: c/h
+        value_template: "{{ (20.60 * states('sensor.mains_power')|float / 1000) | round(2) }}"
+      air_conditioning_power_instantaneous_cost:
+        friendly_name: "Air Conditioning Power Instantaneous Cost"
+        unit_of_measurement: c/h
+        value_template: "{{ (20.59 * states('sensor.air_conditioning_power')|float / 1000) | round(2) }}"
+      mains_energy_consumed_daily_cost:
+        friendly_name: "Mains Energy Cost Today"
+        unit_of_measurement: $
+        value_template: "{{ (1.0209 + states('sensor.mains_energy_consumed_daily')|float * 0.2059) | round(2) }}"
+      mains_energy_consumed_weekly_cost:
+        friendly_name: "Mains Energy Cost This Week"
+        unit_of_measurement: $
+        value_template: >-
+          {{ (((now() - strptime(state_attr('sensor.mains_energy_consumed_weekly', 'last_reset'), '%Y-%m-%dT%H:%M:%S.%f%z')).days + 1) * 1.0209
+          + states('sensor.mains_energy_consumed_weekly')|float * 0.2059) | round(2) }}
+      mains_energy_consumed_quarterly_cost:
+        friendly_name: "Mains Energy Cost This Quarter"
+        unit_of_measurement: $
+        value_template: >-
+          {{ (((now() - strptime(state_attr('sensor.mains_energy_consumed_quarterly', 'last_reset'), '%Y-%m-%dT%H:%M:%S.%f%z')).days + 1) * 1.0209
+          + states('sensor.mains_energy_consumed_quarterly')|float * 0.2059) | round(2) }}
+      air_conditioning_energy_consumed_daily_cost:
+        friendly_name: "Air Conditioning Energy Cost Today"
+        unit_of_measurement: $
+        value_template: "{{ (states('sensor.air_conditioning_energy_consumed_daily')|float * 0.2059) | round(2) }}"
+      air_conditioning_energy_consumed_weekly_cost:
+        friendly_name: "Air Conditioning Energy Cost This Week"
+        unit_of_measurement: $
+        value_template: "{{ (states('sensor.air_conditioning_energy_consumed_weekly')|float * 0.2059) | round(2) }}"
+      air_conditioning_energy_consumed_quarterly_cost:
+        friendly_name: "Air Conditioning Energy Cost This Quarter"
+        unit_of_measurement: $
+        value_template: "{{ (states('sensor.air_conditioning_energy_consumed_quarterly')|float * 0.2059) | round(2) }}"
