@@ -1,0 +1,59 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "EventSensor - new",
+        "description": "Create a **sensor entity** to show state and attributes for the last fired event of some kind.\n\n* Set a name for the new sensor\n* Select a specific Integration source for the events to listen for, or select 'Any other' to define a generic event listener.",
+        "data": {
+          "name": "Name for the new sensor tracking events",
+          "integration_source": "Integration firing events to listen for"
+        }
+      },
+      "preset": {
+        "title": "EventSensor - listener for FoH remote",
+        "description": "* Add a unique identifier to filter events related to a specific remote.\n* Select a preconfigured mapping for custom states, or define a new one",
+        "data": {
+          "type_identifier": "Select the identifier field used to filter events for a specific remote",
+          "identifier": "Unique identifier for device firing events (leave empty for all devices)",
+          "preset_config": "Select one of the pre-configured state mappings, or define a generic one"
+        }
+      },
+      "state_mapping": {
+        "title": "EventSensor - custom state mapping",
+        "description": "* Review or modify the state mapping for this sensor, or leave it empty for no special state mapping.\n\nTo define a custom mapping, introduce it as pairs between commas, like:\n**`code: state1, code2: state2, code3: state3`**",
+        "data": {
+          "state_map": "Desired mapping for the sensor states as `raw_data: pretty_state,` pairs."
+        }
+      },
+      "generic": {
+        "title": "EventSensor - generic definition",
+        "description": "Define a custom event listener by setting:\n\n* Event name\n* Event field `key` or `key.sub_key` to use as the sensor state\n* Optional `key: value` pairs inside the event data to filter specific events\n* Optional custom mapping for sensor states\n\nTo define a custom mapping, introduce it as pairs between commas, like:\n**`code: state1, code2: state2, code3: state3`**\nDo the same for the event data filter, **using curly braces for nested dicts if necessary**",
+        "data": {
+          "event": "Event name to listen to",
+          "state": "Event field to use as sensor `state`",
+          "event_data": "Filter with `key: value` pairs inside the event data",
+          "state_map": "Desired mapping for the sensor states"
+        }
+      }
+    },
+    "abort": {
+      "already_configured": "A sensor for that specific event data is already configured",
+      "forbidden_event": "This sensor for events can't listen to `state_changed`"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "EventSensor - Edit sensor",
+        "description": "Edit the sensor event listener by changing:\n\n* Sensor name\n* Event name\n* Event field `key` or `key.sub_key` to use as the sensor state\n* Optional `key: value` pairs inside the event data to filter specific events\n* Optional custom mapping for sensor states\n\nTo define a custom mapping, introduce it as pairs between commas, like:\n**`code: state1, code2: state2, code3: state3`**\nDo the same for the event data filter, **using curly braces for nested dicts if necessary**",
+        "data": {
+          "name": "Name of the sensor",
+          "event": "Event name to listen to",
+          "state": "Event field to use as sensor `state`",
+          "event_data": "Optional event filter with `key: value` pairs inside the event data",
+          "state_map": "Optional custom state mapping"
+        }
+      }
+    }
+  }
+}
