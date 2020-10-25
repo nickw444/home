@@ -4,3 +4,69 @@ binary_sensor:
     state_topic: "shellies/shellydimmer2-D8BFC019D08E/input/1"
     payload_on: '1'
     payload_off: '0'
+
+script:
+  reset_dimmer_brightness:
+    alias: 'shelly: reset dimmer brightness'
+    icon: mdi:lightbulb
+    mode: parallel
+    max: 20
+    fields:
+      dimmer_topic:
+        description: The MQTT base topic of the dimmer
+        example: shellydimmer2-D8BFC019E343
+    sequence:
+    - service: mqtt.publish
+      data:
+        topic: shellies/{{ dimmer_topic }}/light/0/set
+        payload: '{ "brightness": 100 }'
+
+automation:
+  - id: '1603605456947'
+    alias: 'shelly: When dimmer turns off for 30 minutes, reset brightness'
+    description: ''
+    trigger:
+    - platform: state
+      entity_id:
+        - light.kitchen
+        - light.living_room
+        - light.bedroom
+        - light.dining_table
+      to: 'off'
+      for: 00:30:00
+    condition: []
+    action:
+    - service: script.reset_dimmer_brightness
+      data:
+        dimmer_topic: '{{ trigger.to_state.object_id }}'
+      entity_id: script.reset_dimmer_brightness
+    mode: single
+  - id: '1603065400361'
+    alias: 'bedroom lights: when dimmer ch2 change, toggle bedsides'
+    description: ''
+    trigger:
+    - platform: state
+      entity_id: binary_sensor.bedroom_dimmer_switch_2
+      to: 'on'
+      from: 'off'
+    - platform: state
+      entity_id: binary_sensor.bedroom_dimmer_switch_2
+      to: 'off'
+      from: 'on'
+    condition: []
+    action:
+    - choose:
+      - conditions:
+        - condition: state
+          entity_id: light.bedroom_lamps
+          state: 'on'
+        sequence:
+        - service: light.turn_off
+          data: {}
+          entity_id: light.bedroom_lamps
+      default:
+      - service: light.turn_on
+        data: {}
+        entity_id: light.bedroom_lamps
+    mode: queued
+    max: 10
