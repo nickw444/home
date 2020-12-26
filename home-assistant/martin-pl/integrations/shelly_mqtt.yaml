@@ -1,25 +1,28 @@
 binary_sensor:
   - platform: mqtt
     name: "Bedroom Dimmer Switch 2"
-    state_topic: "shellies/shellydimmer2-D8BFC019D08E/input/1"
+    state_topic: "shellies/bedroom/input/1"
     payload_on: '1'
     payload_off: '0'
 
 script:
-  reset_dimmer_brightness:
-    alias: 'shelly: reset dimmer brightness'
+  shelly_set_dimmer_brightness:
+    alias: 'shelly: set dimmer brightness'
     icon: mdi:lightbulb
     mode: parallel
     max: 20
     fields:
       dimmer_topic:
         description: The MQTT base topic of the dimmer
-        example: shellydimmer2-D8BFC019E343
+        example: bedroom
+      brightness_pct:
+        description: The brightness level from 0 to 100
+        example: 100
     sequence:
     - service: mqtt.publish
       data:
-        topic: shellies/{{ dimmer_topic }}/light/0/set
-        payload: '{ "brightness": 100 }'
+        topic: 'shellies/{{ dimmer_topic }}/light/0/set'
+        payload: '{ "brightness": {{ brightness_pct }} }'
 
 automation:
   - id: '1603605456947'
@@ -28,19 +31,58 @@ automation:
     trigger:
     - platform: state
       entity_id:
-        - light.kitchen
         - light.living_room
         - light.bedroom
-        - light.dining_table
+        - light.hallway
+        - light.study
       to: 'off'
-      for: 00:30:00
+      for: 00:01:00
     condition: []
     action:
-    - service: script.reset_dimmer_brightness
+    - service: script.shelly_set_dimmer_brightness
       data:
         dimmer_topic: '{{ trigger.to_state.object_id }}'
-      entity_id: script.reset_dimmer_brightness
+        brightness_pct: 100
     mode: single
+
+  # # -- HACK --
+  # # Living Room Dimmer "Slow Start" to avoid crashing when turning on
+  # # Set the dimmer to 80% brightness when it is turned off, and back to
+  # # 100% once it has turned on and HA has been notified
+  # #
+  # - id: '1603605456948'
+  #   alias: 'shelly: When living room dimmer turns off set brightness to 80%'
+  #   description: ''
+  #   trigger:
+  #   - platform: state
+  #     entity_id:
+  #       - light.living_room
+  #     to: 'off'
+  #     for: 00:00:00
+  #   condition: []
+  #   action:
+  #   - service: script.shelly_set_dimmer_brightness
+  #     data:
+  #       dimmer_topic: living_room
+  #       brightness_pct: 80
+  #   mode: single
+  # - id: '1603605456949'
+  #   alias: 'shelly: When living room dimmer turns on set brightness to 100%'
+  #   description: ''
+  #   trigger:
+  #   - platform: state
+  #     entity_id:
+  #       - light.living_room
+  #     to: 'on'
+  #     for: 00:00:01
+  #   condition: []
+  #   action:
+  #   - service: script.shelly_set_dimmer_brightness
+  #     data:
+  #       dimmer_topic: living_room
+  #       brightness_pct: 60
+  #   mode: single
+
   - id: '1603065400361'
     alias: 'bedroom lights: when dimmer ch2 change, toggle bedsides'
     description: ''
@@ -55,18 +97,7 @@ automation:
       from: 'on'
     condition: []
     action:
-    - choose:
-      - conditions:
-        - condition: state
-          entity_id: light.bedroom_lamps
-          state: 'on'
-        sequence:
-        - service: light.turn_off
-          data: {}
-          entity_id: light.bedroom_lamps
-      default:
-      - service: light.turn_on
-        data: {}
+      - service: light.toggle
         entity_id: light.bedroom_lamps
     mode: queued
     max: 10

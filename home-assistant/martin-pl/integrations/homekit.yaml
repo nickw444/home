@@ -20,9 +20,15 @@ homekit:
       - climate.sous_vide
       - alarm_control_panel.ha_alarm
       - binary_sensor.rf_controller_status
+      - camera.my_camera
+      - cover.living_room_blinds
     exclude_entity_globs:
       - sensor.comms_cabinet_climate_*
       - sensor.*_device_temperature
       - binary_sensor.*_overheating
       - binary_sensor.*_overpowering
       - binary_sensor.*_update_available
+      - binary_sensor.doorbell
+  entity_config:
+    camera.dog_cam:
+      support_audio: True

@@ -1,0 +1,11 @@
+binary_sensor:
+  - platform: trend
+    sensors:
+      outdoor_temperature_increasing:
+        entity_id: sensor.outdoor_climate_temperature
+        sample_duration: 1200
+        max_samples: 10
+      indoor_temperature_increasing:
+        entity_id: sensor.kitchen_climate_temperature
+        sample_duration: 1200
+        max_samples: 10

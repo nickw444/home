@@ -1,0 +1,26 @@
+ios:
+  push:
+    categories:
+      - name: Alarm
+        identifier: doorbell
+        actions:
+          - identifier: 'UNLOCK_DOOR'
+            title: 'Unlock Door'
+            activationMode: 'background'
+            authenticationRequired: true
+            destructive: false
+            behavior: 'default'
+
+lock:
+  - platform: template
+    name: Complex Door
+    value_template: "{{ is_state('switch.door_key', 'off') }}"
+    availability_template: "{{ not is_state('switch.door_key', 'unavailable') }}"
+    lock:
+      service: switch.turn_off
+      data:
+        entity_id: switch.door_key
+    unlock:
+      service: switch.turn_on
+      data:
+        entity_id: switch.door_key

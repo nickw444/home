@@ -49,6 +49,7 @@ automation:
     - platform: state
       entity_id:
         - binary_sensor.living_room_motion_occupancy
+        - binary_sensor.hallway_motion_occupancy
       to: 'on'
     condition:
     - condition: state
@@ -211,6 +212,7 @@ automation:
     - platform: state
       entity_id:
       - binary_sensor.living_room_motion_occupancy
+      - binary_sensor.hallway_motion_occupancy
       - binary_sensor.front_door
       - binary_sensor.balcony_door
       - binary_sensor.laundry_door
@@ -224,9 +226,14 @@ automation:
       before: '06:00:00'
     action:
     - delay: 00:30:00
-    - condition: state
-      entity_id: binary_sensor.living_room_motion_occupancy
-      state: 'off'
+    - condition: and
+      conditions:
+      - condition: state
+        entity_id: binary_sensor.living_room_motion_occupancy
+        state: 'off'
+      - condition: state
+        entity_id: binary_sensor.hallway_motion_occupancy
+        state: 'off'
     - condition: time
       after: '22:30:00'
       before: '06:00:00'
@@ -242,7 +249,9 @@ automation:
     description: ''
     trigger:
     - platform: state
-      entity_id: binary_sensor.living_room_motion_occupancy
+      entity_id: 
+        - binary_sensor.living_room_motion_occupancy
+        - binary_sensor.hallway_motion_occupancy
       to: 'on'
     # Trigger on any (open/close) change to internal doors.
     - platform: state

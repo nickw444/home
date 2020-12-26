@@ -1,0 +1,6 @@
+cover:
+  - platform: group
+    name: 'Living Room Blinds'
+    entities:
+      - cover.living_room
+      - cover.kitchen
