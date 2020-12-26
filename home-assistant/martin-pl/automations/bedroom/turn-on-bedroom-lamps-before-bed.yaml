@@ -1,0 +1,12 @@
+- id: '1603018075175'
+  alias: 'bedroom lights: turn on the bedroom lamps before bed'
+  description: ''
+  trigger:
+  - platform: time
+    at: '22:15:00'
+  condition: []
+  action:
+  - service: light.turn_on
+    data: {}
+    entity_id: light.bedroom_lamps
+  mode: single

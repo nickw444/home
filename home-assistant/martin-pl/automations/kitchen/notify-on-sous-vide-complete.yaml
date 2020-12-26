@@ -1,0 +1,15 @@
+- id: sous_vide_completed
+  alias: Sous Vide Completed
+  trigger:
+    platform: event
+    event_type: timer.finished
+    event_data:
+      entity_id: timer.sous_vide
+  action:
+    - service: notify.notify
+      data:
+        title: "Sous vide"
+        message: "Cooking completed."
+    - service: climate.turn_off
+      data:
+        entity_id: climate.sous_vide

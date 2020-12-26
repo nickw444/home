@@ -1,0 +1,31 @@
+- id: '1605957734652'
+  # TODO: Make this all internal motion detected
+  alias: 'living room: turn on lamp on hallway motion detected at night'
+  description: ''
+  trigger:
+  - type: motion
+    platform: device
+    device_id: a2f90f45128311eb895559396066fbec
+    entity_id: binary_sensor.hallway_motion_occupancy
+    domain: binary_sensor
+  condition:
+  - condition: or
+    conditions:
+    - condition: time
+      after: '23:00:00'
+    - condition: sun
+      before: sunrise
+  - condition: state
+    entity_id: light.hallway
+    state: 'off'
+  action:
+  - service: light.turn_on
+    entity_id: light.living_room_lamp
+  - wait_template: '{{ is_state("binary_sensor.hallway_motion_occupancy", "off") and
+      is_state("binary_sensor.living_room_motion_occupancy", "off") }}'
+    continue_on_timeout: false
+  - delay: 00:01:00
+  - service: light.turn_off
+    data: {}
+    entity_id: light.hallway
+  mode: restart

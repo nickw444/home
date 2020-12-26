@@ -1,0 +1,18 @@
+- id: '1603065400361'
+  alias: 'bedroom lights: when dimmer ch2 change, toggle bedsides'
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.bedroom_dimmer_switch_2
+    to: 'on'
+    from: 'off'
+  - platform: state
+    entity_id: binary_sensor.bedroom_dimmer_switch_2
+    to: 'off'
+    from: 'on'
+  condition: []
+  action:
+    - service: light.toggle
+      entity_id: light.bedroom_lamps
+  mode: queued
+  max: 10

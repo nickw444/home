@@ -1,0 +1,17 @@
+- id: '1584944187934'
+  alias: 'presence: when presence detected, at night, turn on lamp'
+  description: ''
+  trigger:
+    - entity_id: group.all_people
+      from: not_home
+      platform: state
+      to: home
+  condition:
+    - after: sunset
+      after_offset: -00:60:00
+      condition: sun
+  action:
+    - device_id: 8c28feb17fb74368ac8b2a30f2a66355
+      domain: switch
+      entity_id: switch.living_room_lamp
+      type: turn_on

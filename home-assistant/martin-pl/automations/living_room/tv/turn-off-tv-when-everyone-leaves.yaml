@@ -1,0 +1,13 @@
+- id: '1584944372303'
+  alias: 'presence: when everyone leaves, after 15 minutes, turn off TV'
+  description: ''
+  trigger:
+    - entity_id: group.all_people
+      for: 00:15:00
+      platform: state
+      to: not_home
+  condition: []
+  action:
+    - data: {}
+      entity_id: media_player.samsung_smart_tv
+      service: media_player.turn_off

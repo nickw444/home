@@ -1,0 +1,12 @@
+- id: '1600933873712'
+  alias: 'bedroom button: turn off all house lights on hold'
+  description: ''
+  trigger:
+    - platform: state
+      entity_id: sensor.bedroom_button_action
+      to: hold
+  condition: []
+  action:
+    - service: light.turn_off
+      entity_id: all
+  mode: single

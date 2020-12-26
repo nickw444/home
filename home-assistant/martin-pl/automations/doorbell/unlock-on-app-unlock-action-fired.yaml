@@ -1,0 +1,15 @@
+- id: '1606546290269'
+  alias: 'doorbell: unlock the door when mobile app unlock action fired'
+  description: ''
+  trigger:
+  - platform: event
+    event_type: ios.notification_action_fired
+    event_data:
+      actionName: UNLOCK_DOOR
+    context: {}
+  condition: []
+  action:
+  - service: lock.unlock
+    data: {}
+    entity_id: lock.complex_door
+  mode: single
