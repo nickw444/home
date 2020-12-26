@@ -1,0 +1,57 @@
+esphome:
+  name: doorbell
+  platform: ESP32
+  board: esp32dev
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "doorbell"
+    password: !secret wifi_fallback_password
+
+captive_portal:
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+
+ota:
+
+binary_sensor:
+  - platform: gpio
+    pin: GPIO34
+    name: "Doorbell"
+    filters:
+      - delayed_on: 100ms
+    
+sensor:
+  - platform: adc
+    pin: GPIO35
+    name: "adc"
+    attenuation: 11db
+    update_interval: 1s
+    
+switch:
+  - platform: gpio
+    pin: GPIO32
+    id: relay
+  - platform: template
+    name: "Door Key"
+    icon: "mdi:key"
+    lambda: |-
+      if (id(relay).state) {
+        return true;
+      } else {
+        return false;
+      }
+    turn_on_action:
+    - switch.turn_on: relay
+    - delay: 3000ms
+    - switch.turn_off: relay
+    turn_off_action:
+    - switch.turn_off: relay
