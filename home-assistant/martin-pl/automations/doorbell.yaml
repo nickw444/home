@@ -1,0 +1,66 @@
+- id: '1606546134312'
+  alias: 'doorbell: Send notification when the doorbell rings'
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.doorbell
+    from: 'off'
+    to: 'on'
+  condition: []
+  action:
+  - service: notify.everyone
+    data:
+      title: Doorbell
+      message: Someone is at the entry door
+      data:
+        push:
+          thread-id: doorbell
+          category: doorbell
+  mode: single
+
+- id: '1606546290269'
+  alias: 'doorbell: unlock the door when mobile app unlock action fired'
+  description: ''
+  trigger:
+  - platform: event
+    event_type: ios.notification_action_fired
+    event_data:
+      actionName: UNLOCK_DOOR
+    context: {}
+  condition: []
+  action:
+  - service: lock.unlock
+    data: {}
+    entity_id: lock.complex_door
+  mode: single
+
+- id: '1606546810796'
+  alias: 'doorbell: Unlock the door on webhook call'
+  description: ''
+  trigger:
+  - platform: webhook
+    webhook_id: zS6gE1kX3zM5xW5rM9jY3aF4gS4rB3nWsP1qT4pT5zT3cM1kV6zM7sT7vC2kL0hJ
+  condition: []
+  action:
+  - service: lock.unlock
+    data: {}
+    entity_id: lock.complex_door
+  mode: single
+- id: '1606596112141'
+  alias: 'cooling: notify when outdoor temperature is increasing'
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.outdoor_temperature_increasing
+    to: 'on'
+    from: 'off'
+  condition: []
+  action:
+  - service: notify.mobile_app_nicks_iphone
+    data:
+      title: Close the windows
+      message: The outdoor temperature is increasing
+      data:
+        push:
+          thread-id: cooling
+  mode: single
