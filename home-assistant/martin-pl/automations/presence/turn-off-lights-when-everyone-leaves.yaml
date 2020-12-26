@@ -1,13 +1,13 @@
-- id: '1584944287383'
-  alias: 'presence: when everyone leaves, turn off lights'
-  description: ''
-  trigger:
-    - entity_id: group.all_people
-      for: 00:05:00
-      platform: state
-      to: not_home
-  condition: []
-  action:
-    - data: {}
-      entity_id: all
-      service: light.turn_off
+id: '1584944287383'
+alias: 'presence: when everyone leaves, turn off lights'
+description: ''
+trigger:
+  - entity_id: group.all_people
+    for: 00:05:00
+    platform: state
+    to: not_home
+condition: []
+action:
+  - data: {}
+    entity_id: all
+    service: light.turn_off

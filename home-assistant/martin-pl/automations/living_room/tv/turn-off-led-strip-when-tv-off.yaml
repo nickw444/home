@@ -1,14 +1,14 @@
-- id: '1584945101124'
-  alias: 'living_room: when the TV turns off, turn off the LED strip'
-  description: ''
-  trigger:
-    - entity_id: media_player.samsung_smart_tv
-      from: 'on'
-      platform: state
-      to: 'off'
-  condition: []
-  action:
-    - device_id: c577e58c8aee45af9b1f7ebf1c0e091e
-      domain: light
-      entity_id: light.tv_led_strip
-      type: turn_off
+id: '1584945101124'
+alias: 'living_room: when the TV turns off, turn off the LED strip'
+description: ''
+trigger:
+  - entity_id: media_player.samsung_smart_tv
+    from: 'on'
+    platform: state
+    to: 'off'
+condition: []
+action:
+  - device_id: c577e58c8aee45af9b1f7ebf1c0e091e
+    domain: light
+    entity_id: light.tv_led_strip
+    type: turn_off

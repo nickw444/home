@@ -1,18 +1,18 @@
-- id: '1606596112141'
-  alias: 'cooling: notify when outdoor temperature is increasing'
-  description: ''
-  trigger:
-  - platform: state
-    entity_id: binary_sensor.outdoor_temperature_increasing
-    to: 'on'
-    from: 'off'
-  condition: []
-  action:
-  - service: notify.mobile_app_nicks_iphone
+id: '1606596112141'
+alias: 'cooling: notify when outdoor temperature is increasing'
+description: ''
+trigger:
+- platform: state
+  entity_id: binary_sensor.outdoor_temperature_increasing
+  to: 'on'
+  from: 'off'
+condition: []
+action:
+- service: notify.mobile_app_nicks_iphone
+  data:
+    title: Close the windows
+    message: The outdoor temperature is increasing
     data:
-      title: Close the windows
-      message: The outdoor temperature is increasing
-      data:
-        push:
-          thread-id: cooling
-  mode: single
+      push:
+        thread-id: cooling
+mode: single

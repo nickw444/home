@@ -1,19 +1,19 @@
-# - id: '1584954836148'
-#   alias: 'presence: when Nick arrives home, clear door open notifications on Nicks iPhone'
-#   description: Disabled since this is not yet possible for iOS companion app
-#   trigger:
-#     - entity_id: person.nick_whyte
-#       from: not_home
-#       platform: state
-#       to: home
-#   condition: []
-#   action:
-#     - data:
-#         data:
-#           apns_headers:
-#             apns-collapse-id: presence-door-opened
-#           push:
-#             thread-id: presence-door-opened
-#           tag: presence-door-opened
-#         message: clear_notification
-#       service: notify.mobile_app_nicks_iphone
+# id: '1584954836148'
+# alias: 'presence: when Nick arrives home, clear door open notifications on Nicks iPhone'
+# description: Disabled since this is not yet possible for iOS companion app
+# trigger:
+#   - entity_id: person.nick_whyte
+#     from: not_home
+#     platform: state
+#     to: home
+# condition: []
+# action:
+#   - data:
+#       data:
+#         apns_headers:
+#           apns-collapse-id: presence-door-opened
+#         push:
+#           thread-id: presence-door-opened
+#         tag: presence-door-opened
+#       message: clear_notification
+#     service: notify.mobile_app_nicks_iphone

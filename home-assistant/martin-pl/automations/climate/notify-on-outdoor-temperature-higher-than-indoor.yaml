@@ -1,17 +1,16 @@
-- id: '1606596250942'
-  alias: 'cooling: notify when outdoor temperature is higher than indoor temperature'
-  description: ''
-  trigger:
-  - platform: template
-    value_template: '{{ states("sensor.outdoor_climate_temperature") > states("sensor.kitchen_climate_temperature")
-      }}'
-  condition: []
-  action:
-  - service: notify.mobile_app_nicks_iphone
+id: '1606596250942'
+alias: 'cooling: notify when outdoor temperature is higher than indoor temperature'
+description: ''
+trigger:
+- platform: template
+  value_template: '{{ states("sensor.outdoor_climate_temperature") > states("sensor.kitchen_climate_temperature") }}'
+condition: []
+action:
+- service: notify.mobile_app_nicks_iphone
+  data:
+    title: Close the windows
+    message: The temperature outside is greater than the indoor temperature
     data:
-      title: Close the windows
-      message: The temperature outside is greater than the indoor temperature
-      data:
-        push:
-          thread-id: cooling
-  mode: single
+      push:
+        thread-id: cooling
+mode: single

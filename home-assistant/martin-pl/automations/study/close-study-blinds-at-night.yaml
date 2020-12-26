@@ -1,12 +1,12 @@
-- id: '1606304284099'
-  alias: 'blinds: close the study blind at night'
-  description: ''
-  trigger:
-  - platform: time
-    at: '20:00:00'
-  condition: []
-  action:
-  - service: cover.close_cover
-    data: {}
-    entity_id: cover.study
-  mode: single
+id: '1606304284099'
+alias: 'blinds: close the study blind at night'
+description: ''
+trigger:
+- platform: time
+  at: '20:00:00'
+condition: []
+action:
+- service: cover.close_cover
+  data: {}
+  entity_id: cover.study
+mode: single

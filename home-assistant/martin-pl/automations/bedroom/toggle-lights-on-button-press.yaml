@@ -1,13 +1,13 @@
-- id: '1600953878712'
-  alias: 'bedroom lights: when bedroom button pressed, turn on lights'
-  description: ''
-  trigger:
-  - platform: state
-    entity_id: sensor.bedroom_button_click
-    to: single
-  condition: []
-  action:
-  - service: light.toggle
-    data: {}
-    entity_id: light.bedroom_lamps
-  mode: single
+id: '1600953878712'
+alias: 'bedroom lights: when bedroom button pressed, turn on lights'
+description: ''
+trigger:
+- platform: state
+  entity_id: sensor.bedroom_button_click
+  to: single
+condition: []
+action:
+- service: light.toggle
+  data: {}
+  entity_id: light.bedroom_lamps
+mode: single

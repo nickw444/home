@@ -1,13 +1,13 @@
-- id: '1603016539910'
-  alias: 'blinds: close blinds on button hold'
-  description: ''
-  trigger:
-  - platform: state
-    entity_id: sensor.living_room_button_action
-    to: hold
-  condition: []
-  action:
-  - service: cover.toggle
-    entity_id: cover.living_room_blinds
-  mode: single
+id: '1603016539910'
+alias: 'blinds: close blinds on button hold'
+description: ''
+trigger:
+- platform: state
+  entity_id: sensor.living_room_button_action
+  to: hold
+condition: []
+action:
+- service: cover.toggle
+  entity_id: cover.living_room_blinds
+mode: single
 

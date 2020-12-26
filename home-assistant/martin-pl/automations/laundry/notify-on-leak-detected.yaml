@@ -1,21 +1,21 @@
-- id: '1601038594810'
-  alias: 'laundry: send critical notification on leak detected'
-  description: ''
-  trigger:
-  - type: moist
-    platform: device
-    device_id: a6104643fd6c11ea9adc5fd191831e65
-    entity_id: binary_sensor.laundry_leak_water_leak
-    domain: binary_sensor
-  condition: []
-  action:
-  - service: notify.everyone
+id: '1601038594810'
+alias: 'laundry: send critical notification on leak detected'
+description: ''
+trigger:
+- type: moist
+  platform: device
+  device_id: a6104643fd6c11ea9adc5fd191831e65
+  entity_id: binary_sensor.laundry_leak_water_leak
+  domain: binary_sensor
+condition: []
+action:
+- service: notify.everyone
+  data:
+    title: Leak Detected
+    message: A leak was detected in the laundry
     data:
-      title: Leak Detected
-      message: A leak was detected in the laundry
-      data:
-        push:
-          sound:
-            name: default
-            critical: 1
-  mode: single
+      push:
+        sound:
+          name: default
+          critical: 1
+mode: single

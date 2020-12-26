@@ -1,19 +1,19 @@
-- id: '1584956852148'
-  alias: 'living_room: when the TV source changes from Spotify, reset the LED strip color'
-  description: ''
-  trigger:
-    - entity_id: sensor.samsung_smart_tv_source
-      from: Spotify
-      platform: state
-  condition:
-    - condition: state
-      entity_id: media_player.samsung_smart_tv
-      state: 'on'
-  action:
-    - data:
-        rgb_color:
-          - 255
-          - 181
-          - 108
-      entity_id: light.tv_led_strip
-      service: light.turn_on
+id: '1584956852148'
+alias: 'living_room: when the TV source changes from Spotify, reset the LED strip color'
+description: ''
+trigger:
+  - entity_id: sensor.samsung_smart_tv_source
+    from: Spotify
+    platform: state
+condition:
+  - condition: state
+    entity_id: media_player.samsung_smart_tv
+    state: 'on'
+action:
+  - data:
+      rgb_color:
+        - 255
+        - 181
+        - 108
+    entity_id: light.tv_led_strip
+    service: light.turn_on
