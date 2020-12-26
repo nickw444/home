@@ -7,12 +7,23 @@
     to: single
   condition: []
   action:
-  - service: light.turn_on
+  - service: light.toggle
     data: {}
-    entity_id:
-      - light.nicks_bedside
-      - light.bedroom_kates_bedside
+    entity_id: light.bedroom_lamps
   mode: single
+- id: '1600933873712'
+  alias: 'bedroom button: turn off all lights on long press'
+  description: ''
+  trigger:
+    - platform: state
+      entity_id: sensor.bedroom_button_action
+      to: hold
+  condition: []
+  action:
+    - service: light.turn_off
+      entity_id: all
+  mode: single
+
 - id: '1603018075175'
   alias: 'bedroom lights: turn on the bedroom lamps at 10:15pm'
   description: ''
@@ -23,7 +34,24 @@
   action:
   - service: light.turn_on
     data: {}
-    entity_id:
-    - light.bedroom_kates_bedside
-    - light.nicks_bedside
+    entity_id: light.bedroom_lamps
   mode: single
+
+- id: '1603065400361'
+  alias: 'bedroom lights: when dimmer ch2 change, toggle bedsides'
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.bedroom_dimmer_switch_2
+    to: 'on'
+    from: 'off'
+  - platform: state
+    entity_id: binary_sensor.bedroom_dimmer_switch_2
+    to: 'off'
+    from: 'on'
+  condition: []
+  action:
+    - service: light.toggle
+      entity_id: light.bedroom_lamps
+  mode: queued
+  max: 10
