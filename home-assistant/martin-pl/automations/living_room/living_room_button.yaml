@@ -20,10 +20,7 @@
     to: hold
   condition: []
   action:
-  - service: cover.close_cover
-    entity_id:
-    - cover.living_room
-    - cover.kitchen
-    - cover.study
+  - service: cover.toggle
+    entity_id: cover.living_room_blinds
   mode: single
 
