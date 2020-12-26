@@ -1,7 +1,7 @@
 #include "esphome.h"
 
 #define TX_PIN 3
-#define TRANSMIT_RETRIES 7
+#define TRANSMIT_RETRIES 15
 #define TRANSMIT_RETRY_DELAY_MS 1000
 #define CLOCK_WIDTH 330
 
