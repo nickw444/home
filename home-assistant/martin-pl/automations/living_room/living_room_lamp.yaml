@@ -33,32 +33,6 @@
       entity_id: switch.living_room_lamp
       type: turn_on
 
-- id: '1601162060665'
-  alias: 'living_room: Turn on living room lamp for 2 minutes when motion detected at night'
-  description: ''
-  trigger:
-  - platform: state
-    entity_id: binary_sensor.living_room_motion_occupancy
-    to: 'on'
-  condition:
-  - condition: state
-    entity_id: light.living_room_lamp
-    state: 'off'
-  - condition: sun
-    before: sunrise
-    after: sunset
-  action:
-  - service: light.turn_on
-    data: {}
-    entity_id: light.living_room_lamp
-  - wait_template: >-
-      {{ is_state('binary_sensor.living_room_motion_occupancy', 'off') }}
-  - delay: 00:02:00
-  - service: light.turn_off
-    data: {}
-    entity_id: light.living_room_lamp
-  mode: restart
-
 - id: '1584944183272'
   alias: 'living_room: when apartment door opens, and no one is home at night, turn on living room
     lamp'
@@ -81,3 +55,34 @@
       domain: switch
       entity_id: switch.living_room_lamp
       type: turn_on
+
+- id: '1605957734652'
+  alias: 'living room: turn on lamp on hallway motion detected at night'
+  description: ''
+  trigger:
+  - type: motion
+    platform: device
+    device_id: a2f90f45128311eb895559396066fbec
+    entity_id: binary_sensor.hallway_motion_occupancy
+    domain: binary_sensor
+  condition:
+  - condition: or
+    conditions:
+    - condition: time
+      after: '23:00:00'
+    - condition: sun
+      before: sunrise
+  - condition: state
+    entity_id: light.hallway
+    state: 'off'
+  action:
+  - service: light.turn_on
+    entity_id: light.living_room_lamp
+  - wait_template: '{{ is_state("binary_sensor.hallway_motion_occupancy", "off") and
+      is_state("binary_sensor.living_room_motion_occupancy", "off") }}'
+    continue_on_timeout: false
+  - delay: 00:01:00
+  - service: light.turn_off
+    data: {}
+    entity_id: light.hallway
+  mode: restart
