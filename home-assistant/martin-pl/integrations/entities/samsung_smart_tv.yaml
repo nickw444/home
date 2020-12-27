@@ -18,6 +18,7 @@ sensor:
         friendly_name: "Samsung Smart TV Source"
         value_template: >-
           {{ state_attr('media_player.samsung_smart_tv','source') }}
+
 automation:
   - id: '682B367539FB'
     alias: 'homekit remote: media key arrow_up'
@@ -117,65 +118,3 @@ automation:
       - service: media_player.send_key
         data:
           key: KEY_HOME
-
-script:
-  turn_on_tv:
-    alias: Turn on the TV
-    sequence:
-      - service: media_player.turn_on
-        entity_id: media_player.samsung_smart_tv
-        data: {}
-      - delay: 00:00:02
-      - service: media_player.turn_on
-        entity_id: media_player.samsung_smart_tv
-        data: {}
-      - wait_template: "{{ is_state('media_player.samsung_smart_tv', 'on') }}"
-        timeout: 00:00:30
-  open_spotify_on_tv:
-    alias: Open Spotify on the TV
-    sequence:
-      - service: script.turn_on
-        entity_id: script.turn_on_tv
-      - entity_id: media_player.samsung_smart_tv
-        service: media_player.select_source
-        data:
-          source: Spotify
-  play_spotify_on_tv:
-    alias: Play Spotify on the TV
-    sequence:
-      - service: script.turn_on
-        entity_id: script.turn_on_tv
-      - service: media_player.select_source
-        entity_id: media_player.samsung_smart_tv
-        data:
-          source: Spotify
-      - delay: 00:00:02
-      - service: media_player.send_key
-        data:
-          key: "KEY_ENTER"
-      - wait_template: "{{ 'Samsung TV UA55RU8000WXXY' in state_attr('media_player.spotify_nicholas_whyte', 'source_list') }}"
-        timeout: 00:00:30
-      - service: media_player.select_source
-        entity_id: media_player.spotify_nicholas_whyte
-        data:
-          source: 'Samsung TV UA55RU8000WXXY'
-      - service: media_player.media_play
-        entity_id: media_player.spotify_nicholas_whyte
-  open_netflix_on_tv:
-    alias: Play Netflix on the TV
-    sequence:
-      - service: script.turn_on
-        entity_id: script.turn_on_tv
-      - service: media_player.select_source
-        entity_id: media_player.samsung_smart_tv
-        data:
-          source: Netflix
-  open_youtube_on_tv:
-    alias: Play YouTube on the TV
-    sequence:
-      - service: script.turn_on
-        entity_id: script.turn_on_tv
-      - service: media_player.select_source
-        entity_id: media_player.samsung_smart_tv
-        data:
-          source: YouTube
