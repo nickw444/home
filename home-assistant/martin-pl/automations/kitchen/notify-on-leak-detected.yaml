@@ -1,5 +1,5 @@
 id: '1601038594810'
-alias: 'kitchen: send critical notification on hot water leak detected'
+alias: 'kitchen: notify (critical) on hot water leak detected'
 description: ''
 trigger:
 - type: moist

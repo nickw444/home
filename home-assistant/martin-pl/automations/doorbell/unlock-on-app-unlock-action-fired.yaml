@@ -1,5 +1,5 @@
 id: '1606546290269'
-alias: 'doorbell: unlock the door when mobile app unlock action fired'
+alias: 'doorbell: unlock the door on mobile app unlock action fired'
 description: ''
 trigger:
 - platform: event

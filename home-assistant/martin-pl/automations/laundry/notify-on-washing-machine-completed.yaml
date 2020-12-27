@@ -1,5 +1,5 @@
 id: '1577766070397'
-alias: when washing machine completed, send notification
+alias: 'laundry: notify on washing machine completed'
 description: ''
 trigger:
   - entity_id: binary_sensor.washing_machine

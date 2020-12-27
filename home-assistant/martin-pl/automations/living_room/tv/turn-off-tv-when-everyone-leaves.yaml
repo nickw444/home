@@ -1,6 +1,6 @@
 id: '1584944372303'
-alias: 'presence: when everyone leaves, after 15 minutes, turn off TV'
-description: ''
+alias: 'living_room: turn off tv when everyone leaves'
+description: 'Turn off the TV 15 minutes after everyone leaves'
 trigger:
   - entity_id: group.all_people
     for: 00:15:00

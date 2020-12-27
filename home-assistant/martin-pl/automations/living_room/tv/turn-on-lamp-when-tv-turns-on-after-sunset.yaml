@@ -1,6 +1,6 @@
 id: '1584944904008'
-alias: 'living_room: when the TV turns on, after sunset, turn on the living room lamp'
-description: ''
+alias: 'living_room: turn on lamp when the TV turns on'
+description: 'Turn on the lamp when the TV turns on and it is after sunset'
 trigger:
   - entity_id: media_player.samsung_smart_tv
     from: 'off'

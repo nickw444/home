@@ -1,5 +1,5 @@
 id: '1584944187934'
-alias: 'presence: when presence detected, at night, turn on lamp'
+alias: 'living_room: turn on lamp on presence detected'
 description: ''
 trigger:
   - entity_id: group.all_people

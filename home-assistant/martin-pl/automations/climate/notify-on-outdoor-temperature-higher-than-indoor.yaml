@@ -1,5 +1,5 @@
 id: '1606596250942'
-alias: 'cooling: notify when outdoor temperature is higher than indoor temperature'
+alias: 'climate: notify when outdoor temperature is higher than indoor temperature'
 description: ''
 trigger:
 - platform: template

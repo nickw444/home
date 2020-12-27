@@ -1,5 +1,5 @@
 id: '1606546810796'
-alias: 'doorbell: Unlock the door on webhook call'
+alias: 'doorbell: unlock the door on webhook call'
 description: ''
 trigger:
 - platform: webhook

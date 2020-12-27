@@ -1,5 +1,5 @@
 id: '1601038594810'
-alias: 'laundry: send critical notification on leak detected'
+alias: 'laundry: notify (critical) on leak detected'
 description: ''
 trigger:
 - type: moist

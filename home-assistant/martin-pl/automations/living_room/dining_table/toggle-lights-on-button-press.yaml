@@ -1,5 +1,5 @@
 id: '1603016384862'
-alias: 'living room lights: toggle dining table light on button press'
+alias: 'living_room: toggle dining table light on button press'
 description: ''
 trigger:
 - platform: state

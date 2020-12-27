@@ -1,5 +1,5 @@
 id: '1584944760804'
-alias: 'living_room: when the sun sets and someone is home, turn on the living room lamp'
+alias: 'living_room: turn on lamp at sunset when people home'
 description: ''
 trigger:
   - event: sunset

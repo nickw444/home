@@ -1,5 +1,5 @@
 id: '1606596112141'
-alias: 'cooling: notify when outdoor temperature is increasing'
+alias: 'climate: notify when outdoor temperature is increasing'
 description: ''
 trigger:
 - platform: state

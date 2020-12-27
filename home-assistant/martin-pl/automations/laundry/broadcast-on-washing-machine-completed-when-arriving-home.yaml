@@ -1,5 +1,5 @@
 id: '1592102651795'
-alias: when washing completed, whilst away, notify when arriving home
+alias: 'laundry: broadcast on washing machine completed whilst away when arriving home'
 description: ''
 trigger:
   - entity_id: binary_sensor.washing_machine

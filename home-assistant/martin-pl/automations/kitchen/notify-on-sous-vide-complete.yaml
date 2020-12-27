@@ -1,5 +1,5 @@
 id: sous_vide_completed
-alias: Sous Vide Completed
+alias: 'kitchen: notify on sous vide cooking complete'
 trigger:
   platform: event
   event_type: timer.finished

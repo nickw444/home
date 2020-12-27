@@ -1,5 +1,5 @@
 id: '1600953878712'
-alias: 'bedroom lights: when bedroom button pressed, turn on lights'
+alias: 'bedroom: toggle bedsides on button press'
 description: ''
 trigger:
 - platform: state

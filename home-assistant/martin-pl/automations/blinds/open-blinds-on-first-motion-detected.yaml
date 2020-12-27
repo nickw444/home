@@ -1,5 +1,5 @@
 id: '1600774623357'
-alias: 'blinds: open the blinds when first motion detected, once per day, after sunrise'
+alias: 'blinds: open the blinds on first motion detected, once per day, after sunrise'
 description: ''
 trigger:
 - platform: time

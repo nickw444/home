@@ -1,5 +1,5 @@
 id: '1584956852148'
-alias: 'living_room: when the TV source changes from Spotify, reset the LED strip color'
+alias: 'living_room: reset the LED strip color on TV source change from Spotify'
 description: ''
 trigger:
   - entity_id: sensor.samsung_smart_tv_source

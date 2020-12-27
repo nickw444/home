@@ -1,5 +1,5 @@
 id: '1603018075175'
-alias: 'bedroom lights: turn on the bedroom lamps before bed'
+alias: 'bedroom: turn on the bedroom lamps before bed'
 description: ''
 trigger:
 - platform: time

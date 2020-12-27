@@ -1,5 +1,5 @@
 id: '1603065400361'
-alias: 'bedroom lights: when dimmer ch2 change, toggle bedsides'
+alias: 'bedroom: toggle bedsides on wall switch 2 change'
 description: ''
 trigger:
 - platform: state

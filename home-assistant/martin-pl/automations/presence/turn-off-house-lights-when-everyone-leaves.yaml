@@ -1,5 +1,5 @@
 id: '1584944287383'
-alias: 'presence: when everyone leaves, turn off lights'
+alias: 'presence: turn off house lights when everyone leaves'
 description: ''
 trigger:
   - entity_id: group.all_people

@@ -1,5 +1,5 @@
 id: '1606546134312'
-alias: 'doorbell: Send notification when the doorbell rings'
+alias: 'doorbell: notify when the doorbell rings'
 description: ''
 trigger:
 - platform: state

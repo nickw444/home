@@ -1,6 +1,9 @@
 id: '1584944183272'
-alias: 'living_room: when apartment door opens, and no one is home at night, turn on living room lamp'
-description: ''
+alias: 'living_room: turn on lamp on apartment door open'
+description: >-
+  Turn on the living room lamp when the apartment door opens when;
+    * at night
+    * no presence detected (if presence is detected, the lamp will already be on)
 trigger:
   - device_id: e824e2b2a4ff4dea9b16fd7f6234dfc1
     domain: binary_sensor

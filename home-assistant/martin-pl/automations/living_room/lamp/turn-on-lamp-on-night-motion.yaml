@@ -1,6 +1,6 @@
 id: '1605957734652'
 # TODO: Make this all internal motion detected
-alias: 'living room: turn on lamp on hallway motion detected at night'
+alias: 'living_room: turn on lamp on hallway motion detected at night'
 description: ''
 trigger:
 - type: motion

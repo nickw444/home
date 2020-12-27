@@ -1,5 +1,5 @@
 id: '1584945101124'
-alias: 'living_room: when the TV turns off, turn off the LED strip'
+alias: 'living_room: turn off LED strip when the TV turns off'
 description: ''
 trigger:
   - entity_id: media_player.samsung_smart_tv
