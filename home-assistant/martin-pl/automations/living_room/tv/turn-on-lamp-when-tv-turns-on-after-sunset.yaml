@@ -1,0 +1,17 @@
+id: '1584944904008'
+alias: 'living_room: turn on lamp when the TV turns on'
+description: 'Turn on the lamp when the TV turns on and it is after sunset'
+trigger:
+  - entity_id: media_player.samsung_smart_tv
+    from: 'off'
+    platform: state
+    to: 'on'
+condition:
+  - after: sunset
+    after_offset: -00:30:00
+    condition: sun
+action:
+  - device_id: 8c28feb17fb74368ac8b2a30f2a66355
+    domain: switch
+    entity_id: switch.living_room_lamp
+    type: turn_on

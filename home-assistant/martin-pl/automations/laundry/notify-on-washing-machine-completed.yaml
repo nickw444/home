@@ -1,0 +1,19 @@
+id: '1577766070397'
+alias: 'laundry: notify on washing machine completed'
+description: ''
+trigger:
+  - entity_id: binary_sensor.washing_machine
+    from: 'on'
+    platform: state
+    to: 'off'
+condition: []
+action:
+  - data:
+      data:
+        apns_headers:
+          apns-collapse-id: washing-complete
+        push:
+          thread-id: washing-complete
+      message: The washing machine has completed. Time to hang out the clothes.
+      title: Washing Complete!
+    service: notify.everyone

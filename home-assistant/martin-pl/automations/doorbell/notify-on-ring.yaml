@@ -1,0 +1,19 @@
+id: '1606546134312'
+alias: 'doorbell: notify when the doorbell rings'
+description: ''
+trigger:
+- platform: state
+  entity_id: binary_sensor.doorbell
+  from: 'off'
+  to: 'on'
+condition: []
+action:
+- service: notify.everyone
+  data:
+    title: Doorbell
+    message: Someone is at the entry door
+    data:
+      push:
+        thread-id: doorbell
+        category: doorbell
+mode: single

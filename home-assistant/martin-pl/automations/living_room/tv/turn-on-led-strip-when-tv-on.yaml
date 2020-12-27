@@ -1,0 +1,17 @@
+id: '1584944974594'
+alias: 'living_room: turn on the LED strip when the TV turns on'
+description: ''
+trigger:
+  - entity_id: media_player.samsung_smart_tv
+    from: 'off'
+    platform: state
+    to: 'on'
+condition: []
+action:
+  - data:
+      rgb_color:
+        - 255
+        - 181
+        - 108
+    entity_id: light.tv_led_strip
+    service: light.turn_on

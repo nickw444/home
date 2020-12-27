@@ -1,0 +1,24 @@
+id: '1584944183272'
+alias: 'living_room: turn on lamp on apartment door open'
+description: >-
+  Turn on the living room lamp when the apartment door opens when;
+    * at night
+    * no presence detected (if presence is detected, the lamp will already be on)
+trigger:
+  - device_id: e824e2b2a4ff4dea9b16fd7f6234dfc1
+    domain: binary_sensor
+    entity_id: binary_sensor.front_door
+    platform: device
+    type: opened
+condition:
+  - after: sunset
+    after_offset: -00:60:00
+    condition: sun
+  - condition: state
+    entity_id: group.all_people
+    state: not_home
+action:
+  - device_id: 8c28feb17fb74368ac8b2a30f2a66355
+    domain: switch
+    entity_id: switch.living_room_lamp
+    type: turn_on
