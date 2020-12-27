@@ -22,6 +22,8 @@ homekit:
       - binary_sensor.rf_controller_status
       - camera.my_camera
       - cover.living_room_blinds
+    include_entities:
+      - media_player.samsung_smart_tv
     exclude_entity_globs:
       - sensor.comms_cabinet_climate_*
       - sensor.*_device_temperature
