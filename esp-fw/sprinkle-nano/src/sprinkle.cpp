@@ -1,6 +1,6 @@
 #include <Arduino.h>
 #include <PubSubClient.h>
-#include <Ethernet.h>
+#include <UIPEthernet.h>
 #include <avr/wdt.h>
 
 
@@ -212,7 +212,7 @@ void setup() {
 
 void loop() {
   wdt_reset();
-  
+
   unsigned long now = millis();
 
   if (!mqttClient.loop() && now - lastConnectionAttempt > MQTT_CONNECT_RETRY_MS) {
