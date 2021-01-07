@@ -1,0 +1,18 @@
+id: '1609317853468'
+alias: 'living_room: toggle dining table lights when switch change'
+description: ''
+trigger:
+- platform: state
+  entity_id: binary_sensor.dining_table_switch_contact
+  from: 'on'
+  to: 'off'
+- platform: state
+  entity_id: binary_sensor.dining_table_switch_contact
+  from: 'off'
+  to: 'on'
+condition: []
+action:
+- service: light.toggle
+  data: {}
+  entity_id: light.dining_table
+mode: single
