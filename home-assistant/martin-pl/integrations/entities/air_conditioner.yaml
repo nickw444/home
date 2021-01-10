@@ -1,0 +1,79 @@
+# IRHVAC Output
+# Operating Modes
+#  - Power Off: {"Mode": "Off", "Power": "Off"}
+#  - AUTO:      { "Mode": "Auto", "Power": "On" }
+#  - COOL:      { "Mode": "Cool", "Power": "On" }
+#  - DRY:       { "Mode": "Dry", "Power": "On" }
+#  - FAN:       { "Mode": "fan_only", "Power": "On" }
+#  - HEAT:      { "Mode": "Heat", "Power": "On" }
+# Fan Modes
+#  - AUTO:  { "FanSpeed": "Auto" }
+#  - HIGH:  { "FanSpeed": "Max" }
+#  - MED:   { "FanSpeed": "Medium" }
+#  - LOW:   { "FanSpeed": "Low" }
+#  - QUIET: { "FanSpeed": "Min", "Quiet": "On" }
+# Other Modes
+#  - 10C Heat:  { "Mode": "fan_only", "Model": 5 }
+#  - Economy:   { "Econo": "On" }
+#  - Swing:     { "SwingV": "Auto" }
+
+# 04:41:22 MQT: tele/ac_controller/RESULT = {"IrReceived":{"Protocol":"FUJITSU_AC","Bits":128,"Data":"0x1463001010FE0930700400000000203C","Repeat":0,"IRHVAC":{"Vendor":"FUJITSU_AC","Model":1,"Mode":"Heat","Power":"On","Celsius":"On","Temp":23,"FanSpeed":"Auto","SwingV":"Off","SwingH":"Off","Quiet":"Off","Turbo":"Off","Econo":"Off","Light":"Off","Filter":"Off","Clean":"Off","Beep":"Off","Sleep":-1}}}
+
+climate:
+  - platform: tasmota_irhvac
+    name: "Air Conditioner"
+    command_topic: "cmnd/ac_controller/irhvac"
+    state_topic: "tele/ac_controller/RESULT"
+    temperature_sensor: sensor.kitchen_climate_temperature
+    protocol: "FUJITSU_AC"
+    hvac_model: 1
+    min_temp: 18 #optional - default 16 int value
+    max_temp: 30 #optional - default 32 int value
+    target_temp: 25 #optional - default 26 int value
+    initial_operation_mode: "off" # optional - default "off" string value (one of the "supported_modes")
+    # away_temp: 24 #optional - default 24 int value
+    precision: 1 #optional - default 1 int or float value. Can be set to 1, 0.5 or 0.1
+    supported_modes:
+      - "heat"
+      - "cool"
+      - "dry"
+      - "fan_only"
+      - "auto"
+      - "off" #Turns the AC off - Should be quoted
+      # Some devices have "auto" and "fan_only" chaned
+      # If following two lines are uncommented, "auto" and "fan" shoud be commented
+      #- auto_fan_only #if remote shows fan but tasmota says auto
+      #- fan_only_auto #if remote shows auto but tasmota says fan
+    supported_fan_speeds:
+      - "min"
+      - "low"
+      - "medium"
+      - "max"
+      - "auto"
+    supported_swing_list:
+      - "off"
+      - "vertical"
+    default_quiet_mode: "Off" #optional - default "Off" string value
+    default_turbo_mode: "Off" #optional - default "Off" string value
+    default_econo_mode: "Off" #optional - default "Off" string value
+    celsius_mode: "On" #optional - default "On" string value
+    default_light_mode: "Off" #optional - default "Off" string value
+    default_filter_mode: "Off" #optional - default "Off" string value
+    default_clean_mode: "Off" #optional - default "Off" string value
+    default_beep_mode: "Off" #optional - default "Off" string value
+    default_sleep_mode: "-1" #optional - default "-1" string value
+
+
+script:
+  ir_code:
+    sequence:
+    - data_template:
+        payload: '{"Protocol":"{{ protocol }}","Bits": {{ bits }},"Data": 0x{{ data }}}'
+        topic: 'cmnd/{{ room }}Multisensor/irsend'
+      service: mqtt.publish
+  ir_raw:
+    sequence:
+    - data_template:
+        payload: '0, {{ data }}'
+        topic: 'cmnd/{{ room }}Multisensor/irsend'
+      service: mqtt.publish
