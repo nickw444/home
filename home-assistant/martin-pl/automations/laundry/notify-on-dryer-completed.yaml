@@ -1,0 +1,19 @@
+id: 'laundry_notify_on_dryer_completed'
+alias: 'laundry: notify on dryer completed'
+description: ''
+trigger:
+  - entity_id: binary_sensor.dryer
+    from: 'on'
+    platform: state
+    to: 'off'
+condition: []
+action:
+  - data:
+      data:
+        apns_headers:
+          apns-collapse-id: dryer-complete
+        push:
+          thread-id: laundry-appliance
+      message: The dryer has completed.
+      title: Dryer Complete!
+    service: notify.everyone
