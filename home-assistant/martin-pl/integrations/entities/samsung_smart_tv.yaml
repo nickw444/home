@@ -1,15 +1,28 @@
-homeassistant:
-  customize:
-    media_player.samsung_smart_tv:
-      device_class: tv
-
 media_player:
-  - platform: samsungwsctl
-    host: 192.168.2.20
-    port: 8002
-    secure: true
-    mac: !secret samsung_smart_tv_mac
+  - platform: samsungtv_tizen
     name: "Samsung Smart TV"
+    host: '192.168.2.20'
+    mac: !secret samsung_smart_tv_mac
+    api_key: 113a43f1-2c8b-49e4-a334-bd59fd0ee478
+    device_id: 0c289186-443c-4b3c-8d2b-e51422bfbdac
+    app_list: >-
+      {
+        "7 Plus": "icp4AvUPiA.7plus",
+        "Netflix": "11101200001",
+        "Plex": "3201512006963",
+        "Spotify": "3201606009684",
+        "Stan": "73iTZRTc34.Stan",
+        "Steam Link": "vIutycUzou.SteamLink",
+        "YouTube": "111299001912"
+      }
+    channel_list: >-
+      {
+        "ABCTV HD": "20",
+        "SBS HD": "30",
+        "Seven HD": "70",
+        "Nine HD": "90",
+        "10 HD": "13"
+      }
 
 sensor:
   - platform: template
@@ -31,9 +44,11 @@ automation:
           key_name: arrow_up
     condition: []
     action:
-      - service: media_player.send_key
+      - service: media_player.play_media
         data:
-          key: KEY_UP
+          entity_id: media_player.samsung_smart_tv
+          media_content_type: send_key
+          media_content_id: KEY_UP
   - id: 'B07D24A1E86E'
     alias: 'homekit remote: media key arrow_down'
     description: ''
@@ -45,9 +60,11 @@ automation:
           key_name: arrow_down
     condition: []
     action:
-      - service: media_player.send_key
+      - service: media_player.play_media
         data:
-          key: KEY_DOWN
+          entity_id: media_player.samsung_smart_tv
+          media_content_type: send_key
+          media_content_id: KEY_DOWN
   - id: 'C89C74C0D202'
     alias: 'homekit remote: media key arrow_left'
     description: ''
@@ -59,9 +76,11 @@ automation:
           key_name: arrow_left
     condition: []
     action:
-      - service: media_player.send_key
+      - service: media_player.play_media
         data:
-          key: KEY_LEFT
+          entity_id: media_player.samsung_smart_tv
+          media_content_type: send_key
+          media_content_id: KEY_LEFT
   - id: '940199676C17'
     alias: 'homekit remote: media key arrow_right'
     description: ''
@@ -73,9 +92,11 @@ automation:
           key_name: arrow_right
     condition: []
     action:
-      - service: media_player.send_key
+      - service: media_player.play_media
         data:
-          key: KEY_RIGHT
+          entity_id: media_player.samsung_smart_tv
+          media_content_type: send_key
+          media_content_id: KEY_RIGHT
   - id: '8E9E5B27D4BE'
     alias: 'homekit remote: media key back'
     description: ''
@@ -87,9 +108,11 @@ automation:
           key_name: back
     condition: []
     action:
-      - service: media_player.send_key
+      - service: media_player.play_media
         data:
-          key: KEY_RETURN
+          entity_id: media_player.samsung_smart_tv
+          media_content_type: send_key
+          media_content_id: KEY_RETURN
   - id: '25B3FEE288AD'
     alias: 'homekit remote: media key select'
     description: ''
@@ -101,9 +124,11 @@ automation:
           key_name: select
     condition: []
     action:
-      - service: media_player.send_key
+      - service: media_player.play_media
         data:
-          key: KEY_ENTER
+          entity_id: media_player.samsung_smart_tv
+          media_content_type: send_key
+          media_content_id: KEY_ENTER
   - id: '4AD260B62D6D'
     alias: 'homekit remote: media key information'
     description: ''
@@ -115,6 +140,8 @@ automation:
           key_name: information
     condition: []
     action:
-      - service: media_player.send_key
+      - service: media_player.play_media
         data:
-          key: KEY_HOME
+          entity_id: media_player.samsung_smart_tv
+          media_content_type: send_key
+          media_content_id: KEY_HOME
