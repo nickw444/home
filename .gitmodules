@@ -4,7 +4,7 @@
         ignore = dirty
 [submodule "home-assistant/martin-pl/custom_components/.src/Tasmota-IRHVAC"]
 	path = home-assistant/martin-pl/custom_components/.src/Tasmota-IRHVAC
-	url = git@github.com:nickw444/Tasmota-IRHVAC.git
+	url = https://github.com/nickw444/Tasmota-IRHVAC.git
         ignore = dirty
 [submodule "home-assistant/martin-pl/custom_components/.src/eventsensor"]
 	path = home-assistant/martin-pl/custom_components/.src/eventsensor
