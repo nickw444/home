@@ -1,0 +1,12 @@
+[submodule "home-assistant/martin-pl/custom_components/.src/ha-samsungtv-tizen"]
+	path = home-assistant/martin-pl/custom_components/.src/ha-samsungtv-tizen
+	url = https://github.com/jaruba/ha-samsungtv-tizen.git
+        ignore = dirty
+[submodule "home-assistant/martin-pl/custom_components/.src/Tasmota-IRHVAC"]
+	path = home-assistant/martin-pl/custom_components/.src/Tasmota-IRHVAC
+	url = git@github.com:nickw444/Tasmota-IRHVAC.git
+        ignore = dirty
+[submodule "home-assistant/martin-pl/custom_components/.src/eventsensor"]
+	path = home-assistant/martin-pl/custom_components/.src/eventsensor
+	url = https://github.com/azogue/eventsensor.git
+        ignore = dirty
