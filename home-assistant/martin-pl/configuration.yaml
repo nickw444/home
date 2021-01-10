@@ -20,6 +20,5 @@ script: !include scripts.yaml
 logger:
   default: info
   logs:
-    samsungwsctl: debug
-    custom_components.samsungwsctl: debug
+    custom_components.tasmota_irhvac: debug
     homeassistant.components.http.ban: warning
