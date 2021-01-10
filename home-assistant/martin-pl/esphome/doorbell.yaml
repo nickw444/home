@@ -6,6 +6,7 @@ esphome:
 wifi:
   ssid: !secret wifi_ssid
   password: !secret wifi_password
+  power_save_mode: none
 
   # Enable fallback hotspot (captive portal) in case wifi connection fails
   ap:
@@ -28,14 +29,16 @@ binary_sensor:
     name: "Doorbell"
     filters:
       - delayed_on: 100ms
-    
+  - platform: status
+    name: "RF Controller Status"
+
 sensor:
-  - platform: adc
-    pin: GPIO35
-    name: "adc"
-    attenuation: 11db
-    update_interval: 1s
-    
+  - platform: uptime
+    name: Doorbell Uptime
+  - platform: wifi_signal
+    name: "Doorbell Wifi Signal"
+    update_interval: 60s
+
 switch:
   - platform: gpio
     pin: GPIO32
