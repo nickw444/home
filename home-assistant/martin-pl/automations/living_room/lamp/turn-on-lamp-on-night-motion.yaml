@@ -16,7 +16,7 @@ condition:
   - condition: sun
     before: sunrise
 - condition: state
-  entity_id: light.hallway
+  entity_id: light.living_room_lamp
   state: 'off'
 action:
 - service: light.turn_on
@@ -27,5 +27,5 @@ action:
 - delay: 00:01:00
 - service: light.turn_off
   data: {}
-  entity_id: light.hallway
+  entity_id: light.living_room_lamp
 mode: restart
