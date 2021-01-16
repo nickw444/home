@@ -5,6 +5,23 @@ binary_sensor:
     payload_on: '1'
     payload_off: '0'
 
+input_select:
+  shelly_selected_device:
+    name: Selected Device
+    options:
+      - +
+      - bathroom
+      - bathroom_fan
+      - bedroom
+      - dining_table
+      - hallway
+      - kitchen
+      - living_room
+      - shellyem-C7ED25
+      - study
+    initial: +
+    icon: mdi:power-plug
+
 script:
   shelly_set_dimmer_brightness:
     alias: 'shelly: set dimmer brightness'
@@ -23,6 +40,24 @@ script:
       data:
         topic: 'shellies/{{ dimmer_topic }}/light/0/set'
         payload: '{ "brightness": {{ brightness_pct }} }'
+  shelly_update_firmware:
+    alias: 'shelly: update firmware'
+    icon: mdi:code-json
+    fields:
+      device_topic:
+        description: Topic/name of the device to update
+    sequence:
+      - service: mqtt.publish
+        data:
+          topic: 'shellies/{{ device_topic }}/command'
+          payload: 'update_fw'
+  shelly_update_selected_device_firmware:
+    alias: 'shelly: update selected device firmware'
+    icon: mdi:code-json
+    sequence:
+      - service: script.shelly_update_firmware
+        data:
+          device_topic: "{{ states('input_select.shelly_selected_device') }}"
 
 automation:
   - id: '1603605456947'
