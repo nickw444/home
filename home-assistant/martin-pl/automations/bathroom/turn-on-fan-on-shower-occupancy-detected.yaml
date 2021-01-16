@@ -1,0 +1,23 @@
+id: '1610793739127'
+alias: 'bathroom: turn on fan when shower occupancy detected'
+description: ''
+trigger:
+- platform: state
+  entity_id: binary_sensor.bathroom_shower_occupancy
+  to: 'on'
+  from: 'off'
+condition: []
+action:
+- service: notify.mobile_app_nicks_iphone
+  data:
+    title: Would have turned on bathroom fan
+    message: >
+      bathroom_shower_occupancy: {{ states(''binary_sensor.bathroom_shower_occupancy'') }}
+      bathroom_climate_humidity_elevated: {{ states(''binary_sensor.bathroom_climate_humidity_elevated'') }}
+      bathroom_climate_humidity_increasing: {{ states(''binary_sensor.bathroom_climate_humidity_increasing'') }}
+      bathroom_climate_humidity: {{ states(''sensor.bathroom_climate_humidity'') }}
+      bedroom_climate_humidity: {{ states(''sensor.bedroom_climate_humidity'') }}
+# - service: fan.turn_on
+#   data: {}
+#   entity_id: fan.bathroom
+mode: single
