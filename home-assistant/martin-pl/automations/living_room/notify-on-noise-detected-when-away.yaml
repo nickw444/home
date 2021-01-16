@@ -1,0 +1,22 @@
+id: '1610537918964'
+alias: 'living_room: notify on noise detected when away'
+description: ''
+trigger:
+- platform: state
+  entity_id: binary_sensor.dog_cam_noise_detected
+  from: 'off'
+  to: 'on'
+condition:
+- condition: state
+  entity_id: group.all_people
+  state: not_home
+# Debounce for 5 minutes
+- condition: template
+  value_template: >-
+    {{ (now() - state_attr('automation.living_room_notify_on_noise_detected_when_away','last_triggered')).total_seconds() > 60 * 5 }}
+action:
+- service: notify.everyone
+  data:
+    title: Noise Detected
+    message: Noise was detected in the living room
+mode: single

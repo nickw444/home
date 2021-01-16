@@ -3,3 +3,8 @@ camera:
   - platform: ffmpeg
     name: Dog Cam
     input: rtsp://192.168.2.82:8554/unicast
+
+binary_sensor:
+  - platform: ffmpeg_noise
+    name: Dog Cam Noise Detected
+    input: rtsp://192.168.2.82:8554/unicast
