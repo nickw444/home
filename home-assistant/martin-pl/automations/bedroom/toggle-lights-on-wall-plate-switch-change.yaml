@@ -3,11 +3,11 @@ alias: 'bedroom: toggle bedsides on wall switch 2 change'
 description: ''
 trigger:
 - platform: state
-  entity_id: binary_sensor.bedroom_dimmer_switch_2
+  entity_id: binary_sensor.bedroom_channel_2_input
   to: 'on'
   from: 'off'
 - platform: state
-  entity_id: binary_sensor.bedroom_dimmer_switch_2
+  entity_id: binary_sensor.bedroom_channel_2_input
   to: 'off'
   from: 'on'
 condition: []
