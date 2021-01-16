@@ -1,36 +1,23 @@
 homekit:
   filter:
-    exclude_domains:
-      - device_tracker
-      - person
-      - switch
-      - automation
-      - script
-      - input_boolean
-      - media_player
-    exclude_entities:
-      - binary_sensor.updater
-      - media_player.spotify_kate
-      - media_player.spotify_nicholas_whyte
-      - sensor.cpu_temperature
-      - sensor.water_temperature
-      - sensor.living_room_humidity
-      - sensor.living_room_temperature
-      - sensor.living_room_window_illuminance
-      - climate.sous_vide
-      - alarm_control_panel.ha_alarm
-      - binary_sensor.rf_controller_status
-      - camera.my_camera
-      - cover.living_room_blinds
+    include_domains:
+      - light
+      - fan
+      - cover
+      - lock
+    include_entity_globs:
+      - binary_sensor.*_door
+      - binary_sensor.*_occupancy
+      - binary_sensor.*_water_leak
+      - sensor.*_illuminance_lux
+      - sensor.*_climate_temperature
+      - sensor.*_climate_humidity
+      - sensor.*_climate_pressure
     include_entities:
       - media_player.samsung_smart_tv
+      - sensor.living_room_temperature
+    exclude_entities:
+      - cover.living_room_blinds
+      - light.bedroom_lamps
     exclude_entity_globs:
       - sensor.comms_cabinet_climate_*
-      - sensor.*_device_temperature
-      - binary_sensor.*_overheating
-      - binary_sensor.*_overpowering
-      - binary_sensor.*_update_available
-      - binary_sensor.doorbell
-  entity_config:
-    camera.dog_cam:
-      support_audio: True
