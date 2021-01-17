@@ -1,0 +1,6 @@
+cover:
+  - platform: timed_cover
+    friendly_name: Living Room (Timed)
+    cover_entity_id: cover.living_room
+    travel_time_down: 17
+    travel_time_up: 20
