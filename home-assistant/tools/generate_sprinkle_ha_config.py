@@ -70,6 +70,7 @@ def main():
             power_entity_id = 'switch.' + base_name + '_power'
             tmpl_switches[base_name] = {
                 'value_template': "{{ is_state('" + power_entity_id + "', 'on') }}",
+                'availability_template': "{{ not is_state('" + power_entity_id + "', 'unavailable') }}",
                 'icon_template': icon,
                 'turn_on': {
                     'service': 'switch.turn_on',

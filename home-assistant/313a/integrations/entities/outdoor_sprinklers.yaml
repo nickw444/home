@@ -196,6 +196,8 @@ switch:
   switches:
     sprinkle_herbs:
       value_template: "{{ is_state('switch.sprinkle_herbs_power', 'on') }}"
+      availability_template: "{{ not is_state('switch.sprinkle_herbs_power', 'unavailable')\
+        \ }}"
       icon_template: mdi:water
       turn_on:
         service: switch.turn_on
@@ -207,6 +209,8 @@ switch:
           entity_id: switch.sprinkle_herbs_power
     sprinkle_lavender:
       value_template: "{{ is_state('switch.sprinkle_lavender_power', 'on') }}"
+      availability_template: "{{ not is_state('switch.sprinkle_lavender_power', 'unavailable')\
+        \ }}"
       icon_template: mdi:water
       turn_on:
         service: switch.turn_on
@@ -218,6 +222,8 @@ switch:
           entity_id: switch.sprinkle_lavender_power
     sprinkle_upper_lawn:
       value_template: "{{ is_state('switch.sprinkle_upper_lawn_power', 'on') }}"
+      availability_template: "{{ not is_state('switch.sprinkle_upper_lawn_power',\
+        \ 'unavailable') }}"
       icon_template: mdi:water
       turn_on:
         service: switch.turn_on
@@ -229,6 +235,8 @@ switch:
           entity_id: switch.sprinkle_upper_lawn_power
     sprinkle_front_terrace:
       value_template: "{{ is_state('switch.sprinkle_front_terrace_power', 'on') }}"
+      availability_template: "{{ not is_state('switch.sprinkle_front_terrace_power',\
+        \ 'unavailable') }}"
       icon_template: mdi:water
       turn_on:
         service: switch.turn_on
@@ -241,6 +249,8 @@ switch:
     sprinkle_front_terrace_recycled:
       value_template: "{{ is_state('switch.sprinkle_front_terrace_recycled_power',\
         \ 'on') }}"
+      availability_template: "{{ not is_state('switch.sprinkle_front_terrace_recycled_power',\
+        \ 'unavailable') }}"
       icon_template: mdi:water
       turn_on:
         service: switch.turn_on
@@ -252,6 +262,8 @@ switch:
           entity_id: switch.sprinkle_front_terrace_recycled_power
     sprinkle_lower_lawn:
       value_template: "{{ is_state('switch.sprinkle_lower_lawn_power', 'on') }}"
+      availability_template: "{{ not is_state('switch.sprinkle_lower_lawn_power',\
+        \ 'unavailable') }}"
       icon_template: mdi:water
       turn_on:
         service: switch.turn_on
@@ -263,6 +275,8 @@ switch:
           entity_id: switch.sprinkle_lower_lawn_power
     sprinkle_back_yard:
       value_template: "{{ is_state('switch.sprinkle_back_yard_power', 'on') }}"
+      availability_template: "{{ not is_state('switch.sprinkle_back_yard_power', 'unavailable')\
+        \ }}"
       icon_template: mdi:water
       turn_on:
         service: switch.turn_on
@@ -275,6 +289,8 @@ switch:
     sprinkle_back_yard_recycled:
       value_template: "{{ is_state('switch.sprinkle_back_yard_recycled_power', 'on')\
         \ }}"
+      availability_template: "{{ not is_state('switch.sprinkle_back_yard_recycled_power',\
+        \ 'unavailable') }}"
       icon_template: mdi:water
       turn_on:
         service: switch.turn_on
@@ -286,6 +302,8 @@ switch:
           entity_id: switch.sprinkle_back_yard_recycled_power
     sprinkle_recycled_pump:
       value_template: "{{ is_state('switch.sprinkle_recycled_pump_power', 'on') }}"
+      availability_template: "{{ not is_state('switch.sprinkle_recycled_pump_power',\
+        \ 'unavailable') }}"
       icon_template: mdi:water
       turn_on:
         service: switch.turn_on
