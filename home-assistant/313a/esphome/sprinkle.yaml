@@ -5,8 +5,8 @@ esphome:
 
 wifi:
   networks:
-    - ssid: sprinkle-fi
-      password: 'UAwc6!x-U4jzfAHb'
+    - ssid: !secret sprinkle_fi_wifi_ssid
+      password: !secret sprinkle_fi_wifi_password
       priority: 1
       hidden: true
     - ssid: !secret wifi_ssid
