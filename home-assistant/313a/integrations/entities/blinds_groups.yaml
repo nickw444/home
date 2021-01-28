@@ -5,6 +5,10 @@ homeassistant:
       device_class: 'blind'
     cover.kitchen_back: *id001
     cover.upstairs: *id001
+    cover.olivers_room: *id001
+    cover.upstairs_study: *id001
+    cover.master_bedroom: *id001
+    cover.upstairs_hall: *id001
     cover.quiet_room: *id001
 
 cover:
@@ -35,6 +39,27 @@ cover:
     - cover.joe_back
     - cover.master_front_left
     - cover.master_front_right
+
+- platform: group
+  name: Olivers Room
+  entities:
+    - cover.olivers_front
+    - cover.olivers_side
+- platform: group
+  name: Upstairs Study
+  entities:
+    - cover.upstairs_study_side
+    - cover.upstairs_study_back
+- platform: group
+  name: Master Bedroom
+  entities:
+    - cover.master_front_left
+    - cover.master_front_right
+- platform: group
+  name: Upstairs Hall
+  entities:
+    - cover.upstairs_hall_blockout
+    - cover.upstairs_hall_translucent
 
 - platform: group
   name: Quiet Room
