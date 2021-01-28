@@ -1,16 +1,6 @@
-homeassistant:
-  customize:
-    switch.quiet_room_center_downlights:
-      icon: mdi:lightbulb
-    switch.quiet_room_outer_downlights:
-      icon: mdi:lightbulb
-    switch.quiet_room_mid_downlights:
-      icon: mdi:lightbulb
-
 switch:
-  # Downstairs
   - platform: broadlink
-    host: 192.168.8.33
+    # Downstairs
     mac: b4:43:0d:e6:35:8f
     switches:
       # Codes can be generated at https://dimagoltsman.github.io/Random-Broadlink-RM-Code-Generator/
@@ -23,3 +13,20 @@ switch:
       - name: Quiet Room Outer Downlights
         command_on:  sgw0AA0kDSQNJCQNJA0NJCQNJA0kDQ0kJA0NJA0kDSQNJA0kJA0kDQ0kJA0NJCQNDSQkDQwAAW8AAAAA
         command_off: sgw0ACQNDSQNJA0kDSQNJCQNJA0kDSQNJA0kDQ0kJA0kDQ0kJA0kDQ0kDSQkDSQNDSQNJAwAAW8AAAAA
+
+light:
+  - platform: switch
+    name: Quiet Room Center
+    entity_id: switch.quiet_room_center_downlights
+  - platform: switch
+    name: Quiet Room Mid
+    entity_id: switch.quiet_room_mid_downlights
+  - platform: switch
+    name: Quiet Room Outer
+    entity_id: switch.quiet_room_outer_downlights
+  - platform: group
+    name: Quiet Room
+    entities:
+      - light.quiet_room_outer
+      - light.quiet_room_mid
+      - light.quiet_room_center
