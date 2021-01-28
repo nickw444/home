@@ -7,18 +7,19 @@ wifi:
   networks:
     - ssid: !secret sprinkle_fi_wifi_ssid
       password: !secret sprinkle_fi_wifi_password
-      priority: 1
+      priority: 5
       hidden: true
     - ssid: !secret wifi_ssid
       password: !secret wifi_password
 
   power_save_mode: none
+  reboot_timeout: 5min
 
   # Enable fallback hotspot (captive portal) in case wifi connection fails
   ap:
     ssid: "sprinkle"
     password: !secret wifi_fallback_password
-
+    ap_timeout: 2min
 
 captive_portal:
 
@@ -40,10 +41,12 @@ sensor:
     id: watering_duration
     name: "Watering duration"
     entity_id: input_number.sprinkle_watering_duration
+    unit_of_measurement: minutes
   - platform: homeassistant
     id: watering_duration_recycled
     name: "Watering duration (recycled)"
     entity_id: input_number.sprinkle_watering_duration_recycled
+    unit_of_measurement: minutes
 
   - platform: template
     name: "Herbs time remaining"
