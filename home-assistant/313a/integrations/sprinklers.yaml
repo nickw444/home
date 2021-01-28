@@ -1,0 +1,84 @@
+input_number:
+  sprinkle_watering_duration:
+    name: Watering Duration
+    initial: 10
+    min: 2
+    max: 30
+    step: 1
+    unit_of_measurement: minutes
+    icon: mdi:timer
+  sprinkle_watering_duration_recycled:
+    name: Watering Duration (Recycled)
+    initial: 20
+    min: 2
+    max: 30
+    step: 1
+    unit_of_measurement: minutes
+    icon: mdi:timer
+
+sensor:
+  - platform: template
+    sensors:
+      herbs_time_remaining_friendly:
+        friendly_name: "Herbs time remaining friendly"
+        value_template: |
+          {% if states('sensor.herbs_time_remaining')|float > 0 %}
+          {{- '%02d' % (states('sensor.herbs_time_remaining')|float / 60)|int -}}:
+          {{- '%02d' % (states('sensor.herbs_time_remaining')|float % 60)|int }} remaining
+          {% endif %}
+      lavender_time_remaining_friendly:
+        friendly_name: "Lavender time remaining friendly"
+        value_template: |
+          {% if states('sensor.lavender_time_remaining')|float > 0 %}
+          {{- '%02d' % (states('sensor.lavender_time_remaining')|float / 60)|int -}}:
+          {{- '%02d' % (states('sensor.lavender_time_remaining')|float % 60)|int }} remaining
+          {% endif %}
+      backyard_time_remaining_friendly:
+        friendly_name: "Backyard time remaining friendly"
+        value_template: |
+          {% if states('sensor.backyard_time_remaining')|float > 0 %}
+          {{- '%02d' % (states('sensor.backyard_time_remaining')|float / 60)|int -}}:
+          {{- '%02d' % (states('sensor.backyard_time_remaining')|float % 60)|int }} remaining
+          {% endif %}
+      backyard_recycled_time_remaining_friendly:
+        friendly_name: "Backyard Recycled time remaining friendly"
+        value_template: |
+          {% if states('sensor.backyard_recycled_time_remaining')|float > 0 %}
+          {{- '%02d' % (states('sensor.backyard_recycled_time_remaining')|float / 60)|int -}}:
+          {{- '%02d' % (states('sensor.backyard_recycled_time_remaining')|float % 60)|int }} remaining
+          {% endif %}
+      front_terrace_time_remaining_friendly:
+        friendly_name: "Front Terrace time remaining friendly"
+        value_template: |
+          {% if states('sensor.front_terrace_time_remaining')|float > 0 %}
+          {{- '%02d' % (states('sensor.front_terrace_time_remaining')|float / 60)|int -}}:
+          {{- '%02d' % (states('sensor.front_terrace_time_remaining')|float % 60)|int }} remaining
+          {% endif %}
+      front_terrace_recycled_time_remaining_friendly:
+        friendly_name: "Front Terrace Recycled time remaining friendly"
+        value_template: |
+          {% if states('sensor.front_terrace_recycled_time_remaining')|float > 0 %}
+          {{- '%02d' % (states('sensor.front_terrace_recycled_time_remaining')|float / 60)|int -}}:
+          {{- '%02d' % (states('sensor.front_terrace_recycled_time_remaining')|float % 60)|int }} remaining
+          {% endif %}
+      lower_lawn_time_remaining_friendly:
+        friendly_name: "Lower Lawn time remaining friendly"
+        value_template: |
+          {% if states('sensor.lower_lawn_time_remaining')|float > 0 %}
+          {{- '%02d' % (states('sensor.lower_lawn_time_remaining')|float / 60)|int -}}:
+          {{- '%02d' % (states('sensor.lower_lawn_time_remaining')|float % 60)|int }} remaining
+          {% endif %}
+      upper_lawn_time_remaining_friendly:
+        friendly_name: "Upper Lawn time remaining friendly"
+        value_template: |
+          {% if states('sensor.upper_lawn_time_remaining')|float > 0 %}
+          {{- '%02d' % (states('sensor.upper_lawn_time_remaining')|float / 60)|int -}}:
+          {{- '%02d' % (states('sensor.upper_lawn_time_remaining')|float % 60)|int }} remaining
+          {% endif %}
+      recycled_pump_time_remaining_friendly:
+        friendly_name: "Recycled Pump time remaining friendly"
+        value_template: |
+          {% if states('sensor.recycled_pump_time_remaining')|float > 0 %}
+          {{- '%02d' % (states('sensor.recycled_pump_time_remaining')|float / 60)|int -}}:
+          {{- '%02d' % (states('sensor.recycled_pump_time_remaining')|float % 60)|int }} remaining
+          {% endif %}
