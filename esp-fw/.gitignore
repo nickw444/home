@@ -1,9 +1,0 @@
-.pioenvs
-.piolibdeps
-.clang_complete
-.gcc-flags.json
-
-*pws.txt
-*.DS_Store
-*.gch
-config.h

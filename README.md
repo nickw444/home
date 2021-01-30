@@ -8,11 +8,9 @@ See individual project `README.md`'s for more information of each.
 
 ## Sub-Projects
 - [blindkit](blindkit/): A project to connect with 433.92MHz wireless roller blinds from RAEX.
-- [esp-fw](esp-fw/): Custom ESP/Arduino firmware used for automation projects.
 - [home-assistant](home-assistant/): [Home Assistant](https://home-assistant.io) configuration.
 - [custom_components](home-assistant/martin-pl/custom_components): A collection of my custom components developed for Home Assistant
 - [pcbs](pcbs/): A collection of PCB designs for ESP8266 integrated use-cases.
-- [sprinkle](sprinkle/): Control Sprinkler relays connected via RPi GPIO.
 
 ## Related Repos
 
