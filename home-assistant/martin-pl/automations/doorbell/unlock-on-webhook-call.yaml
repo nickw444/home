@@ -3,7 +3,7 @@ alias: 'doorbell: unlock the door on webhook call'
 description: ''
 trigger:
 - platform: webhook
-  webhook_id: zS6gE1kX3zM5xW5rM9jY3aF4gS4rB3nWsP1qT4pT5zT3cM1kV6zM7sT7vC2kL0hJ
+  webhook_id: !secret doorbell_webhook_id
 condition: []
 action:
 - service: lock.unlock
