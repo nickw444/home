@@ -1,4 +1,3 @@
-
 input_boolean:
   zigbee_permit_join:
     name: Allow devices to join
@@ -23,43 +22,6 @@ sensor:
       {{ now().strftime('%Y-%m-%d %H:%M:%S') }}
     # again, if you change base_topic of Zigbee2mqtt, change json_attributes_topic accordingly
     json_attributes_topic: zigbee2mqtt/bridge/networkmap/raw
-  - platform: template
-    sensors:
-      zigbee_offline_devices_count:
-        friendly_name: Zigbee Offline Devices Count
-        unit_of_measurement: 'Devices'
-        value_template: >-
-          {%- set ns = namespace(counter=0) -%}
-          {%- for state in states -%}
-            {%- if state.attributes.last_seen -%}
-              {%- set last_seen_dt = strptime(state.attributes.last_seen, '%Y-%m-%dT%H:%M:%S.%f%z') -%}
-              {%- if (now() - last_seen_dt).total_seconds() > 60 * 60 -%}
-                {%- set ns.counter = ns.counter + 1 -%}
-              {%- endif -%}
-            {%- endif -%}
-          {%- endfor -%}
-          {{ ns.counter }}
-      zigbee_offline_devices:
-        friendly_name: Zigbee Offline Devices
-        value_template: >-
-          {%- set ns = namespace(devices=[]) -%}
-          {%- for state in states -%}
-            {%- if state.attributes.last_seen -%}
-              {%- set last_seen_dt = strptime(state.attributes.last_seen, '%Y-%m-%dT%H:%M:%S.%f%z') -%}
-              {%- if (now() - last_seen_dt).total_seconds() > 60 * 60 -%}
-                {%- set ns.devices = ns.devices + [state.entity_id] -%}
-              {%- endif -%}
-            {%- endif -%}
-          {%- endfor -%}
-          {{ ', '.join(ns.devices) }}
-
-input_text:
-  old_friendly_name:
-    name: Old Friendly Name
-    initial: ''
-  new_friendly_name:
-    name: New Friendly Name
-    initial: ''
 
 automation:
   - id: enable_zigbee_join
@@ -105,73 +67,3 @@ automation:
     - service: input_boolean.turn_off
       data:
         entity_id: input_boolean.zigbee_permit_join
-  - id: '1601039238534'
-    alias: 'zigbee: notify when offline devices > 0 for more than 24 hours'
-    description: ''
-    trigger:
-    - platform: numeric_state
-      entity_id: sensor.zigbee_offline_devices_count
-      above: '0'
-      for: '24:00:00'
-    condition: []
-    action:
-    - service: persistent_notification.create
-      data:
-        title: Zigbee Devices Unavailable
-        message: '{{ trigger.to_state.state }} Zigbee devices have been unavailable
-          for more than 24 hours'
-        notification_id: zigbee-unavailable-devices-warning
-    mode: single
-  - id: '1601039713403'
-    alias: 'zigbee: remove notification when no offline devices'
-    description: ''
-    trigger:
-    - platform: state
-      entity_id: sensor.zigbee_offline_devices_count
-      to: '0'
-    condition: []
-    action:
-    - service: persistent_notification.dismiss
-      data:
-        notification_id: zigbee-unavailable-devices-warning
-    mode: single
-
-script:
-  reconfigure_zigbee_device:
-    sequence:
-      - condition: template
-        value_template: "{{ states('input_text.old_friendly_name') != '' }}"
-      - service: mqtt.publish
-        data:
-          topic: zigbee2mqtt/bridge/config/reconfigure
-          payload: "{{ states('input_text.old_friendly_name') }}"
-  remove_zigbee_device:
-    sequence:
-      - condition: template
-        value_template: "{{ states('input_text.old_friendly_name') != '' }}"
-      - service: mqtt.publish
-        data:
-          topic: zigbee2mqtt/bridge/config/remove
-          payload: "{{ states('input_text.old_friendly_name') }}"
-  rename_zigbee_device:
-    sequence:
-      - condition: template
-        value_template: "{{ states('input_text.new_friendly_name') != '' }}"
-      - choose:
-          - conditions:
-              - condition: template
-                value_template: "{{ states('input_text.old_friendly_name') == '' }}"
-            sequence:
-              - service: mqtt.publish
-                data:
-                  topic: zigbee2mqtt/bridge/config/rename_last
-                  payload: "{{ states('input_text.new_friendly_name') }}"
-        default:
-          - service: mqtt.publish
-            data:
-              topic: zigbee2mqtt/bridge/config/rename
-              payload: >-
-                {
-                  "old": "{{ states('input_text.old_friendly_name') }}",
-                  "new": "{{ states('input_text.new_friendly_name') }}"
-                }
