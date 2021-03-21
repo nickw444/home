@@ -1,7 +1,7 @@
 ios:
   push:
     categories:
-      - name: Alarm
+      - name: Doorbell
         identifier: doorbell
         actions:
           - identifier: 'UNLOCK_DOOR'
