@@ -1,0 +1,7 @@
+binary_sensor:
+  - platform: template
+    sensors:
+      some_lights_on:
+        friendly_name: "Some Lights On"
+        value_template: >-
+          {{ states.light | selectattr('state','eq','on') | list | length  > 0}}

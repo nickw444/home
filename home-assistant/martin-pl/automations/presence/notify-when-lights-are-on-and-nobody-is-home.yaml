@@ -1,0 +1,37 @@
+id: '1613558326686'
+alias: 'presence: notify when lights are on and nobody is home'
+description: ''
+trigger:
+- platform: state
+  entity_id: binary_sensor.some_lights_on
+  from: 'off'
+  to: 'on'
+- platform: state
+  entity_id: group.all_people
+  from: home
+  to: not_home
+  for: 00:30:00
+- platform: homeassistant
+  event: start
+condition:
+- condition: state
+  entity_id: binary_sensor.some_lights_on
+  state: 'on'
+- condition: state
+  entity_id: group.all_people
+  state: 'not_home'
+  for: 00:05:00
+- condition: state
+  entity_id: input_boolean.guest_mode
+  state: 'off'
+action:
+- service: notify.everyone
+  data:
+    title: The lights are on but nobody is home
+    message: |
+     {{ states.light | selectattr('state','eq','on') | map(attribute='name') | join(', ') }} are turned on.
+    data:
+      push:
+        thread-id: lights-on-nobody-home
+        category: all_lights
+mode: single
