@@ -53,7 +53,7 @@ async def async_setup_platform(hass, config, add_entities, discovery_info=None):
         CounterEntity(coordinator, service_id, "Uploaded", "uploadedMb", "MB"),
         CounterEntity(coordinator, service_id, "Billing Cycle Length",
                       "daysTotal", "days"),
-        CounterEntity(coordinator, service_id, "Aussie Broadband Billing Cycle Remaining",
+        CounterEntity(coordinator, service_id, "Billing Cycle Remaining",
                       "daysRemaining", "days"),
     ])
 
