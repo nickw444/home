@@ -1,17 +1,21 @@
-id: '1606596412318'
-alias: 'climate: notify when indoor temperature is higher than outdoor temperature
-  (Duplicate)'
+id: '1606596412342'
+alias: 'climate: notify when indoor temperature is higher than outdoor temperature'
 description: ''
 trigger:
 - platform: template
   value_template: '{{ states("sensor.outdoor_climate_temperature") < states("sensor.kitchen_climate_temperature") }}'
-condition: []
+condition:
+- condition: state
+  entity_id: binary_sensor.air_conditioner_power
+  state: 'on'
 action:
 - service: notify.mobile_app_nicks_iphone
   data:
-    title: Open the windows
+    title: Turn off AC
     message: The temperature inside is greater than the outdoor temperature
     data:
       push:
-        thread-id: cooling
+        thread-id: climate
+# Debounce for 15 minutes
+- delay: 00:15:00
 mode: single
