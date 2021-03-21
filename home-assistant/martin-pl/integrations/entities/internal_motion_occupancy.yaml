@@ -1,0 +1,10 @@
+binary_sensor:
+  - platform: template
+    sensors:
+      internal_motion_occupancy:
+        value_template: >
+          {{
+            states('binary_sensor.living_room_motion_occupancy') or
+            states('binary_sensor.hallway_motion_occupancy') or
+            states('binary_sensor.bathroom_motion_occupancy')
+          }}
