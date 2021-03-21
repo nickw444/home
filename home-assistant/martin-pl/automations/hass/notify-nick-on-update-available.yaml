@@ -1,0 +1,18 @@
+alias: "hass updater: notify nick on update available"
+id: "hass_updater_notify_nick_on_update_available"
+trigger:
+  - platform: state
+    entity_id: binary_sensor.updater
+    from: "off"
+    to: "on"
+  - platform: state
+    entity_id: sensor.updater_newest_version
+condition:
+  - condition: state
+    entity_id: binary_sensor.updater
+    state: 'on'
+action:
+  - service: notify.mobile_app_nicks_iphone
+    data:
+      title: "Update Available"
+      message: "Home Assistant {{ state_attr('binary_sensor.updater', 'newest_version') }} is available. Currently running {{ states('sensor.current_version') }}."
