@@ -158,8 +158,9 @@ class TimedCover(CoverEntity, RestoreEntity):
 
     @property
     def is_closed(self):
-        return self.hass.states.get(
-            self._cover_entity_id).state == STATE_CLOSED
+        state = self.hass.states.get(self._cover_entity_id)
+        if state:
+            return state == STATE_CLOSED
 
     def open_cover(self, **kwargs: Any) -> None:
         self._current_position = 100
