@@ -1,17 +1,3 @@
-light:
-  - platform: switch
-    name: Kitchen
-    entity_id: switch.kitchen
-  - platform: switch
-    name: Dining Table
-    entity_id: switch.dining_Table
-  - platform: switch
-    name: Bathroom
-    entity_id: switch.bathroom
-  - platform: switch
-    name: Study
-    entity_id: switch.study
-
 fan:
   - platform: template
     fans:
@@ -19,7 +5,7 @@ fan:
         friendly_name: "Bathroom Fan"
         value_template: "{{ states('switch.bathroom_fan') }}"
         availability_template: "{{ states('switch.bathroom_fan') != 'unknown' }}"
-        turn_on: 
+        turn_on:
           service: switch.turn_on
           data:
             entity_id: switch.bathroom_fan
@@ -27,4 +13,3 @@ fan:
           service: switch.turn_off
           data:
             entity_id: switch.bathroom_fan
-
