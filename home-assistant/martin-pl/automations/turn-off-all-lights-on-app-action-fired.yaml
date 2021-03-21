@@ -1,0 +1,14 @@
+id: '1606546290444'
+alias: 'ios: turn off all lights on app action fired'
+description: ''
+trigger:
+- platform: event
+  event_type: ios.notification_action_fired
+  event_data:
+    actionName: TURN_OFF_LIGHTS
+  context: {}
+condition: []
+action:
+- service: light.turn_off
+  entity_id: all
+mode: single
