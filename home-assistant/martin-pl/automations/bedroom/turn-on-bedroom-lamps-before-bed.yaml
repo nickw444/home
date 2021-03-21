@@ -4,7 +4,10 @@ description: ''
 trigger:
 - platform: time
   at: '22:15:00'
-condition: []
+condition:
+- condition: state
+  entity_id: group.all_people
+  state: home
 action:
 - service: light.turn_on
   data: {}
