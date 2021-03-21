@@ -16,6 +16,9 @@ condition:
 - condition: state
   entity_id: group.all_people
   state: home
+- condition: state
+  entity_id: input_boolean.guest_mode
+  state: 'off'
 - condition: sun
   after: sunrise
 action:

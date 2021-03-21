@@ -185,6 +185,9 @@ automation:
     - condition: state
       entity_id: alarm_control_panel.ha_alarm
       state: disarmed
+    - condition: state
+      entity_id: input_boolean.guest_mode
+      state: 'off'
     action:
     - service: alarm_control_panel.alarm_arm_away
       data: {}

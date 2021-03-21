@@ -2,11 +2,12 @@ id: '1605957734652'
 alias: 'hallway: turn on light on motion detected at night'
 description: ''
 trigger:
-- type: motion
-  platform: device
-  device_id: a2f90f45128311eb895559396066fbec
-  entity_id: binary_sensor.hallway_motion_occupancy
-  domain: binary_sensor
+- platform: state
+  entity_id:
+    - binary_sensor.hallway_motion_occupancy
+    - binary_sensor.living_room_motion_occupancy
+  from: 'off'
+  to: 'on'
 condition:
 - condition: or
   conditions:
@@ -17,16 +18,23 @@ condition:
 - condition: state
   entity_id: light.hallway
   state: 'off'
+- condition: state
+  entity_id: input_boolean.guest_mode
+  state: 'off'
 action:
 - service: light.turn_on
   data:
-    brightness_pct: 20
+    brightness_pct: 15
   entity_id: light.hallway
-- wait_template: '{{ is_state("binary_sensor.hallway_motion_occupancy", "off") and
-    is_state("binary_sensor.living_room_motion_occupancy", "off") }}'
-  continue_on_timeout: false
-- delay: 00:01:00
+- repeat:
+    sequence:
+      - wait_template: '{{ is_state("binary_sensor.internal_motion_occupancy", "off") }}'
+        continue_on_timeout: false
+      - delay: 00:01:00
+    until:
+      - condition: template
+        value_template: '{{ is_state("binary_sensor.internal_motion_occupancy", "off") }}'
 - service: light.turn_off
   data: {}
   entity_id: light.hallway
-mode: restart
+mode: single

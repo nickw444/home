@@ -1,0 +1,22 @@
+id: '1616301426418'
+alias: 'hass: notify daily if guest mode on for more than 24 hours'
+description: ''
+trigger:
+- platform: time
+  at: 09:00:00
+- platform: template
+  value_template: |-
+    {{ is_state('input_boolean.guest_mode', 'on') and (now() - states.input_boolean.guest_mode.last_changed).total_seconds() > 60 * 60 * 24 }}
+condition:
+- condition: template
+  value_template: |-
+    {{ is_state('input_boolean.guest_mode', 'on') and (now() - states.input_boolean.guest_mode.last_changed).total_seconds() > 60 * 60 * 24 }}
+action:
+- service: notify.everyone
+  data:
+    title: Guest Mode
+    message: Guest mode has been activated for longer than 24 hours
+    data:
+      push:
+        thread-id: guest-mode
+mode: single
