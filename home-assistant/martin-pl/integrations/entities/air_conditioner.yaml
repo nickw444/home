@@ -18,6 +18,13 @@
 #  - Swing:     { "SwingV": "Auto" }
 
 # 04:41:22 MQT: tele/ac_controller/RESULT = {"IrReceived":{"Protocol":"FUJITSU_AC","Bits":128,"Data":"0x1463001010FE0930700400000000203C","Repeat":0,"IRHVAC":{"Vendor":"FUJITSU_AC","Model":1,"Mode":"Heat","Power":"On","Celsius":"On","Temp":23,"FanSpeed":"Auto","SwingV":"Off","SwingH":"Off","Quiet":"Off","Turbo":"Off","Econo":"Off","Light":"Off","Filter":"Off","Clean":"Off","Beep":"Off","Sleep":-1}}}
+binary_sensor:
+  - platform: template
+    sensors:
+      air_conditioner_power:
+        friendly_name: "Air Conditioner Power"
+        value_template: |
+          {{ states('sensor.air_conditioning_power')|float >= 25 }}
 
 climate:
   - platform: tasmota_irhvac
