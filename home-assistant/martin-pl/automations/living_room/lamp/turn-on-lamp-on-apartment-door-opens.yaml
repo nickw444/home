@@ -18,7 +18,6 @@ condition:
     entity_id: group.all_people
     state: not_home
 action:
-  - device_id: 8c28feb17fb74368ac8b2a30f2a66355
-    domain: switch
-    entity_id: switch.living_room_lamp
-    type: turn_on
+  - service: light.turn_on
+    data: {}
+    entity_id: light.living_room_lamp
