@@ -24,7 +24,7 @@ condition:
         (now() - states.binary_sensor.front_door.last_changed).total_seconds() < 300
       ) }}
 action:
-- service: notify.mobile_app_nicks_iphone
+- service: notify.everyone
   data:
     title: Laundry Door Opened
     message: The laundry door was opened at {{ now().strftime('%I:%M %p') }} without recent activity
