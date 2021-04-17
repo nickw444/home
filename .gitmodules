@@ -6,3 +6,6 @@
 	path = home-assistant/martin-pl/custom_components/.src/Tasmota-IRHVAC
 	url = https://github.com/nickw444/Tasmota-IRHVAC.git
         ignore = dirty
+[submodule "home-assistant/martin-pl/custom_components/.src/frigate-hass-integration"]
+	path = home-assistant/martin-pl/custom_components/.src/frigate-hass-integration
+	url = https://github.com/blakeblackshear/frigate-hass-integration.git

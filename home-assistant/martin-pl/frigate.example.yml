@@ -1,0 +1,47 @@
+mqtt:
+  host: 192.168.2.10
+  user: changeme
+  password: changeme
+cameras:
+  study_window:
+    ffmpeg:
+      inputs:
+        - path: rtsp://192.168.2.82:8554/unicast
+          roles:
+            - detect
+            - record
+            - rtmp
+    width: 1280
+    height: 720
+    fps: 5
+    detect:
+      enabled: false
+
+record:
+  enabled: true
+  retain_days: 7
+
+ffmpeg:
+  # Optional: global ffmpeg args (default: shown below)
+  global_args: -hide_banner -loglevel warning
+  # Optional: global hwaccel args (default: shown below)
+  # NOTE: See hardware acceleration docs for your specific device
+  hwaccel_args:
+    - -c:v
+    - h264_v4l2m2m
+  # Optional: global input args (default: shown below)
+  input_args: -avoid_negative_ts make_zero -fflags +genpts+discardcorrupt -rtsp_transport tcp -stimeout 5000000 -use_wallclock_as_timestamps 1
+  # Optional: global output args
+  output_args:
+    # Optional: output args for detect streams (default: shown below)
+    detect: -f rawvideo -pix_fmt yuv420p
+    # Optional: output args for record streams (default: shown below)
+    record: -f segment -segment_time 300 -segment_format mp4 -reset_timestamps 1 -strftime 1 -c copy -an
+    # Optional: output args for clips streams (default: shown below)
+    clips: -f segment -segment_time 10 -segment_format mp4 -reset_timestamps 1 -strftime 1 -c copy -an
+    # Optional: output args for rtmp streams (default: shown below)
+    rtmp: -c copy -f flv
+
+detectors:
+  cpu1:
+    type: cpu
