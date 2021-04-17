@@ -17,7 +17,6 @@ homekit:
       - sensor.living_room_temperature
     exclude_entities:
       - cover.living_room_blinds
-      - cover.living_room_timed
       - light.bedroom_lamps
       - binary_sensor.internal_motion_occupancy
     exclude_entity_globs:
