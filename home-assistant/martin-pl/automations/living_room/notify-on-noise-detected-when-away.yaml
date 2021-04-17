@@ -3,7 +3,7 @@ alias: 'living_room: notify on noise detected when away'
 description: ''
 trigger:
 - platform: state
-  entity_id: binary_sensor.dog_cam_noise_detected
+  entity_id: binary_sensor.binary_sensor.living_room_noise_detected
   from: 'off'
   to: 'on'
 condition:
@@ -16,7 +16,7 @@ condition:
     {{ (now() - state_attr('automation.living_room_notify_on_noise_detected_when_away','last_triggered')).total_seconds() > 60 * 5 }}
 - condition: template
   value_template: |
-    {{ is_state('timer.camera_noise_notification_snooze_timer', 'idle') }}
+    {{ is_state('timer.living_room_camera_noise_notification_snooze_timer', 'idle') }}
 action:
 - service: notify.everyone
   data:
@@ -28,5 +28,5 @@ action:
       push:
         category: camera
         thread-id: noise-detected
-      entity_id: camera.dog_cam
+      entity_id: camera.living_room_camera
 mode: single

@@ -20,7 +20,7 @@ action:
      {%- elif trigger.event.data.actionName == "SNOOZE_UNTIL_HOME" -%}
        00:15:00
      {%- endif -%}
-  entity_id: timer.camera_noise_notification_snooze_timer
+  entity_id: timer.living_room_camera_noise_notification_snooze_timer
 - choose:
   - conditions:
     - condition: template
@@ -28,6 +28,6 @@ action:
     sequence:
     - service: timer.pause
       data: {}
-      entity_id: timer.camera_noise_notification_snooze_timer
+      entity_id: timer.living_room_camera_noise_notification_snooze_timer
   default: []
 mode: single

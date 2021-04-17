@@ -1,0 +1,16 @@
+ffmpeg:
+camera:
+  - platform: ffmpeg
+    name: Living Room Camera
+    input: rtsp://192.168.2.91:554/live0
+
+binary_sensor:
+  - platform: ffmpeg_noise
+    name: Living Room Noise Detected
+    input: rtsp://192.168.2.91:554/live0
+    extra_arguments: "-nostats"
+    peak: -24
+
+timer:
+  living_room_camera_noise_notification_snooze_timer:
+    duration: "00:00:00"
