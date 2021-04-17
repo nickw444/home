@@ -4,7 +4,6 @@ homekit:
       - light
       - fan
       - cover
-      - lock
     include_entity_globs:
       - binary_sensor.*_door
       - binary_sensor.*_motion_occupancy
