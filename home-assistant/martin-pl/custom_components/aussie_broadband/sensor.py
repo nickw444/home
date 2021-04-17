@@ -34,8 +34,10 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
 
 async def async_setup_platform(hass, config, add_entities, discovery_info=None):
     """Set up the sensor platform."""
+    def create_client():
+      return AussieBB(config[CONF_USERNAME], config[CONF_PASSWORD])
 
-    client = AussieBB(config[CONF_USERNAME], config[CONF_PASSWORD])
+    client = await hass.async_add_executor_job(create_client)
     service_id = config[CONF_SERVICE_ID]
 
     async def async_update_data():
