@@ -1,9 +1,9 @@
-id: '1610537918964'
+id: '16105379546964'
 alias: 'living_room: notify on noise detected when away'
 description: ''
 trigger:
 - platform: state
-  entity_id: binary_sensor.binary_sensor.living_room_noise_detected
+  entity_id: binary_sensor.living_room_noise_detected
   from: 'off'
   to: 'on'
 condition:
@@ -28,5 +28,5 @@ action:
       push:
         category: camera
         thread-id: noise-detected
-      entity_id: camera.living_room_camera
+      entity_id: camera.living_room
 mode: single

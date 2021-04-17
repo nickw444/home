@@ -1,7 +1,7 @@
 ffmpeg:
 camera:
   - platform: ffmpeg
-    name: Living Room Camera
+    name: Living Room
     input: rtsp://192.168.2.91:554/live0
 
 binary_sensor:
