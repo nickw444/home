@@ -7,18 +7,18 @@ homekit:
       - lock
     include_entity_globs:
       - binary_sensor.*_door
-      - binary_sensor.*_occupancy
+      - binary_sensor.*_motion_occupancy
       - binary_sensor.*_water_leak
       - sensor.*_illuminance_lux
       - sensor.*_climate_temperature
       - sensor.*_climate_humidity
       - sensor.*_climate_pressure
     include_entities:
-      - media_player.samsung_smart_tv
       - sensor.living_room_temperature
     exclude_entities:
       - cover.living_room_blinds
       - cover.living_room_timed
       - light.bedroom_lamps
+      - binary_sensor.internal_motion_occupancy
     exclude_entity_globs:
       - sensor.comms_cabinet_climate_*
