@@ -1,29 +1,11 @@
 homekit:
   filter:
-    exclude_entities:
-      - switch.sprinkle_back_yard_power
-      - switch.sprinkle_back_yard_trigger
-      - switch.sprinkle_back_yard_recycled_power
-      - switch.sprinkle_back_yard_recycled_trigger
-      - switch.sprinkle_front_terrace_power
-      - switch.sprinkle_front_terrace_trigger
-      - switch.sprinkle_front_terrace_recycled_power
-      - switch.sprinkle_front_terrace_recycled_trigger
-      - switch.sprinkle_herbs_power
-      - switch.sprinkle_herbs_trigger
-      - switch.sprinkle_lavender_power
-      - switch.sprinkle_lavender_trigger
-      - switch.sprinkle_lower_lawn_power
-      - switch.sprinkle_lower_lawn_trigger
-      - switch.sprinkle_recycled_pump_power
-      - switch.sprinkle_recycled_pump_trigger
-      - switch.sprinkle_upper_lawn_power
-      - switch.sprinkle_upper_lawn_trigger
-      - cover.upstairs
-      - cover.quiet_room
-      - cover.kitchen_rear
+    include_entities:
+      - cover.garage_door
+      - alarm_control_panel.alarm_panel
       - cover.kitchen_front
-      - binary_sensor.remote_ui
-    exclude_domains:
-      - device_tracker
-      - script
+      - cover.kitchen_back
+      - cover.quiet_room
+      - light.quiet_room_center
+      - light.quiet_room_mid
+      - light.quiet_room_outer
