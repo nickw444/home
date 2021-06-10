@@ -2,4 +2,4 @@ ffmpeg:
 camera:
   - platform: ffmpeg
     name: Study Window
-    input: rtsp://192.168.2.82:8554/unicast
+    input: rtsp://192.168.2.82:554/live0
