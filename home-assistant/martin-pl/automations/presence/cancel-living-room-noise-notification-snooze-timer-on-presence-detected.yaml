@@ -1,5 +1,5 @@
 id: '1613560357086'
-alias: 'presence: cancel dog cam noise notification snooze timer on presence detected'
+alias: 'presence: cancel living room noise notification snooze timer on presence detected'
 description: ''
 trigger:
 - platform: state
@@ -10,5 +10,5 @@ condition: []
 action:
 - service: timer.cancel
   data: {}
-  entity_id: timer.living_room_camera_noise_notification_snooze_timer
+  entity_id: timer.living_room_noise_notification_snooze_timer
 mode: single

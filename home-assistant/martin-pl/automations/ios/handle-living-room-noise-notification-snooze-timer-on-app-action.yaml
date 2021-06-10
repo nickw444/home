@@ -1,11 +1,11 @@
 id: '1613560799505'
-alias: 'ios: handle dog cam noise notification snooze timer on app action'
+alias: 'ios: handle living room noise notification snooze timer on app action'
 description: ''
 trigger:
 - platform: event
   event_type: ios.notification_action_fired
   event_data:
-    categoryName: camera
+    categoryName: CAMERA
 condition: []
 action:
 - service: timer.start
@@ -20,7 +20,7 @@ action:
      {%- elif trigger.event.data.actionName == "SNOOZE_UNTIL_HOME" -%}
        00:15:00
      {%- endif -%}
-  entity_id: timer.living_room_camera_noise_notification_snooze_timer
+  entity_id: timer.living_room_noise_notification_snooze_timer
 - choose:
   - conditions:
     - condition: template
@@ -28,6 +28,6 @@ action:
     sequence:
     - service: timer.pause
       data: {}
-      entity_id: timer.living_room_camera_noise_notification_snooze_timer
+      entity_id: timer.living_room_noise_notification_snooze_timer
   default: []
 mode: single

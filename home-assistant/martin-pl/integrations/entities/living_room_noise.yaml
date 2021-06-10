@@ -1,0 +1,3 @@
+timer:
+  living_room_noise_notification_snooze_timer:
+    duration: "00:00:00"
