@@ -1,0 +1,34 @@
+id: '160095323482734'
+alias: 'living_room: vacuum tiled areas on front door button single click'
+description: ''
+trigger:
+- platform: state
+  entity_id: sensor.front_door_button_click
+  to: single
+condition:
+- condition: not
+  conditions:
+    - condition: state
+      entity_id: vacuum.osmo
+      state: cleaning
+action:
+- service: input_boolean.turn_on
+  data: {}
+  target:
+    entity_id:
+      - input_boolean.osmo_clean_hallway
+      - input_boolean.osmo_clean_living_room
+      - input_boolean.osmo_clean_dining
+      - input_boolean.osmo_clean_kitchen
+- service: input_boolean.turn_off
+  data: {}
+  target:
+    entity_id:
+      - input_boolean.osmo_clean_bedroom
+      - input_boolean.osmo_clean_study
+- service: switch.turn_on
+  target:
+    entity_id: switch.osmo_cleaning_preference
+- service: script.osmo_clean_selected_rooms
+  data: {}
+mode: single

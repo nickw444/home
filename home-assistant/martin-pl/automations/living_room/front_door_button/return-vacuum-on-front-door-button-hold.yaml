@@ -1,0 +1,20 @@
+id: '160095323447334'
+alias: 'living_room: return vacuum on front door button hold'
+description: ''
+trigger:
+- platform: state
+  entity_id: sensor.front_door_button_action
+  to: hold
+condition:
+- condition: state
+  entity_id: vacuum.osmo
+  state: cleaning
+action:
+- service: script.turn_off
+  data: {}
+  target:
+    entity_id: script.osmo_clean_selected_rooms
+- service: vacuum.return_to_base
+  target:
+    entity_id: vacuum.osmo
+mode: single

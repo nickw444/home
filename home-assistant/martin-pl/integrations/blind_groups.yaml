@@ -4,3 +4,9 @@ cover:
     entities:
       - cover.living_room
       - cover.kitchen
+  - platform: group
+    name: 'All Blinds'
+    entities:
+      - cover.living_room
+      - cover.kitchen
+      - cover.study
