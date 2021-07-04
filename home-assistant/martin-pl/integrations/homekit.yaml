@@ -14,9 +14,21 @@ homekit:
       - sensor.*_climate_pressure
     include_entities:
       - sensor.living_room_temperature
+      - switch.electric_blanket
+      - script.osmo_cancel_cleaning
+      - script.osmo_clean_tiled_areas
+      - script.osmo_clean_all_areas
     exclude_entities:
       - cover.living_room_blinds
+      - cover.all_blinds
       - light.bedroom_lamps
       - binary_sensor.internal_motion_occupancy
     exclude_entity_globs:
       - sensor.comms_cabinet_climate_*
+  entity_config:
+    script.osmo_cancel_cleaning:
+      name: "Cancel cleaning"
+    script.osmo_clean_tiled_areas:
+      name: "Clean Tiles"
+    script.osmo_clean_all_areas:
+      name: "Clean Everywhere"
