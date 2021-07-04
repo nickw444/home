@@ -6,8 +6,8 @@ esphome:
     - raex_blind_tx.h
 
 wifi:
-  ssid: !secret wifi_ssid
-  password: !secret wifi_password
+  ssid: !secret smart_wifi_ssid
+  password: !secret smart_wifi_password
 
   # Enable fallback hotspot (captive portal) in case wifi connection fails
   ap:
