@@ -2,6 +2,3 @@
 	path = home-assistant/martin-pl/custom_components/.src/ha-samsungtv-tizen
 	url = https://github.com/jaruba/ha-samsungtv-tizen.git
         ignore = dirty
-[submodule "home-assistant/martin-pl/custom_components/.src/frigate-hass-integration"]
-	path = home-assistant/martin-pl/custom_components/.src/frigate-hass-integration
-	url = https://github.com/blakeblackshear/frigate-hass-integration.git
