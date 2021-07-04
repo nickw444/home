@@ -10,11 +10,6 @@ condition:
   entity_id: vacuum.osmo
   state: cleaning
 action:
-- service: script.turn_off
+- service: script.osmo_cancel_cleaning
   data: {}
-  target:
-    entity_id: script.osmo_clean_selected_rooms
-- service: vacuum.return_to_base
-  target:
-    entity_id: vacuum.osmo
 mode: single

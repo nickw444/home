@@ -229,6 +229,63 @@ automation:
   mode: single
 
 script:
+  osmo_cancel_cleaning:
+    alias: 'osmo: cancel cleaning'
+    mode: single
+    icon: mdi:stop-circle
+    sequence:
+      - service: script.turn_off
+        data: {}
+        target:
+          entity_id: script.osmo_clean_selected_rooms
+      - service: vacuum.return_to_base
+        target:
+          entity_id: vacuum.osmo
+  osmo_clean_tiled_areas:
+    alias: 'osmo: clean tiled areas'
+    mode: single
+    icon: mdi:broom
+    sequence:
+      - service: input_boolean.turn_on
+        data: {}
+        target:
+          entity_id:
+            - input_boolean.osmo_clean_hallway
+            - input_boolean.osmo_clean_living_room
+            - input_boolean.osmo_clean_dining
+            - input_boolean.osmo_clean_kitchen
+      - service: input_boolean.turn_off
+        data: {}
+        target:
+          entity_id:
+            - input_boolean.osmo_clean_bedroom
+            - input_boolean.osmo_clean_study
+      - service: switch.turn_on
+        target:
+          entity_id: switch.osmo_cleaning_preference
+      - service: script.osmo_clean_selected_rooms
+        data: {}
+  osmo_clean_all_areas:
+    alias: 'osmo: clean all areas'
+    mode: single
+    icon: mdi:broom
+    sequence:
+      - service: input_boolean.turn_on
+        data: {}
+        target:
+          entity_id:
+            - input_boolean.osmo_clean_hallway
+            - input_boolean.osmo_clean_living_room
+            - input_boolean.osmo_clean_dining
+            - input_boolean.osmo_clean_kitchen
+            - input_boolean.osmo_clean_bedroom
+            - input_boolean.osmo_clean_study
+      - service: switch.turn_on
+        target:
+          entity_id: switch.osmo_cleaning_preference
+      - service: script.osmo_clean_selected_rooms
+        data: {}
+
   osmo_clean_selected_rooms:
     alias: 'osmo: clean selected rooms'
     mode: single
