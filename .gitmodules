@@ -2,3 +2,6 @@
 	path = home-assistant/martin-pl/custom_components/.src/ha-samsungtv-tizen
 	url = https://github.com/jaruba/ha-samsungtv-tizen.git
         ignore = dirty
+[submodule "home-assistant/martin-pl/custom_components/.src/deebot-t8-hass"]
+	path = home-assistant/martin-pl/custom_components/.src/deebot-t8-hass
+	url = https://github.com/nickw444/deebot-t8-hass.git
