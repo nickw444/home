@@ -1,8 +1,8 @@
 #include "esphome.h"
 
 #define TX_PIN 3
-#define TRANSMIT_RETRIES 15
-#define TRANSMIT_RETRY_DELAY_MS 1000
+#define TRANSMIT_RETRIES 10
+#define TRANSMIT_RETRY_DELAY_MS 3000
 #define CLOCK_WIDTH 330
 
 static const char *TAG = "raex_blind_tx";
