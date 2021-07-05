@@ -6,7 +6,7 @@ trigger:
   event_data:
     entity_id: timer.sous_vide
 action:
-  - service: notify.notify
+  - service: notify.everyone
     data:
       title: "Sous vide"
       message: "Cooking completed."

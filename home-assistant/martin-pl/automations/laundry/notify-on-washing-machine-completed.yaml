@@ -10,10 +10,8 @@ condition: []
 action:
   - data:
       data:
-        apns_headers:
-          apns-collapse-id: washing-complete
-        push:
-          thread-id: laundry-appliance
+        tag: washing-complete
+        group: laundry-appliance
       message: The washing machine has completed. Time to hang out the clothes.
       title: Washing Complete!
     service: notify.everyone

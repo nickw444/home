@@ -75,8 +75,8 @@ automation:
         title: Alarm Triggered
         message: The alarm was triggered at {{ now().strftime('%I:%M %p') }}
         data:
+          group: alarm-status
           push:
-            thread-id: alarm-status
             category: alarm
             sound:
               name: default
@@ -105,10 +105,8 @@ automation:
         title: Alarm Disarmed
         message: The alarm was disarmed at {{ now().strftime('%I:%M %p') }}
         data:
-          apns_headers:
-            apns-collapse-id: alarm-status
-          push:
-            thread-id: alarm-status
+          group: alarm-status
+          tag: alarm-status
     mode: single
 
   - id: '1601035037271'
@@ -125,10 +123,9 @@ automation:
         title: Alarm Pending
         message: The alarm was pending at {{ now().strftime('%I:%M %p') }}
         data:
-          apns_headers:
-            apns-collapse-id: alarm-status
+          group: alarm-status
+          tag: alarm-status
           push:
-            thread-id: alarm-status
             category: alarm
     mode: single
 
@@ -148,11 +145,10 @@ automation:
         title: Alarm Armed
         message: The alarm was {{ trigger.to_state.state }} at {{ now().strftime('%I:%M %p') }}
         data:
-          apns_headers:
-            apns-collapse-id: alarm-status
+          group: alarm-status
+          tag: alarm-status
           push:
             category: alarm
-            thread-id: alarm-status
     mode: single
 
   - id: '1601035419737'

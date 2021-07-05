@@ -23,7 +23,7 @@ script:
             } %}
            {{ preset_temperatures[states('input_select.sous_vide_preset')] }}
       - wait_template: "{{ state_attr('climate.sous_vide', 'current_temperature') >= state_attr('climate.sous_vide', 'temperature')}}"
-      - service: notify.notify
+      - service: notify.everyone
         data:
           title: "Sous vide"
           message: "Target temperature has been reached, time to put in the food"
@@ -35,7 +35,7 @@ script:
   sous_vide_cook:
     sequence:
       - wait_template: "{{ state_attr('climate.sous_vide', 'current_temperature') >= state_attr('climate.sous_vide', 'temperature')}}"
-      - service: notify.notify
+      - service: notify.everyone
         data:
           title: "Sous vide"
           message: "Target temperature has been reached. The timer has started."

@@ -10,10 +10,8 @@ condition: []
 action:
   - data:
       data:
-        apns_headers:
-          apns-collapse-id: dryer-complete
-        push:
-          thread-id: laundry-appliance
+        tag: dryer-complete
+        group: laundry-appliance
       message: The dryer has completed.
       title: Dryer Complete!
     service: notify.everyone

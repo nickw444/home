@@ -14,8 +14,7 @@ action:
     title: Turn off AC
     message: The temperature inside is greater than the outdoor temperature
     data:
-      push:
-        thread-id: climate
+      group: climate
 # Debounce for 15 minutes
 - delay: 00:15:00
 mode: single

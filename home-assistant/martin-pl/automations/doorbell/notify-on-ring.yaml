@@ -13,7 +13,7 @@ action:
     title: Doorbell
     message: Someone is at the entry door
     data:
+      group: doorbell
       push:
-        thread-id: doorbell
         category: doorbell
 mode: single

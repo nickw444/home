@@ -23,10 +23,10 @@ action:
     title: Noise Detected
     message: Noise was detected in the living room
     data:
+      group: noise-detected
       attachment:
         content-type: jpeg
       push:
         category: camera
-        thread-id: noise-detected
       entity_id: camera.living_room
 mode: single

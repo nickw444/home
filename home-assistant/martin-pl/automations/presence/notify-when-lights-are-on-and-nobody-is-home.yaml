@@ -31,7 +31,7 @@ action:
     message: |
      {{ states.light | selectattr('state','eq','on') | map(attribute='name') | join(', ') }} are turned on.
     data:
+      group: lights-on-nobody-home
       push:
-        thread-id: lights-on-nobody-home
         category: all_lights
 mode: single

@@ -17,6 +17,5 @@ action:
     title: Guest Mode
     message: Guest mode has been activated for longer than 24 hours
     data:
-      push:
-        thread-id: guest-mode
+      tag: guest-mode
 mode: single
