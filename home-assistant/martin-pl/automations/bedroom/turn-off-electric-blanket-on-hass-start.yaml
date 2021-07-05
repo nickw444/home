@@ -1,0 +1,12 @@
+id: '1625471872471'
+alias: 'bedroom: turn off electric blanket at startup'
+description: ''
+trigger:
+- platform: homeassistant
+  event: start
+condition: []
+action:
+- service: switch.turn_off
+  target:
+    entity_id: switch.electric_blanket
+mode: single

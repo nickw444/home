@@ -1,0 +1,45 @@
+id: '1625471796352'
+alias: 'bedroom: turn on electric blanket when tv turns off after 10:00pm'
+description: ''
+trigger:
+- platform: state
+  entity_id: media_player.samsung_smart_tv
+  from: 'on'
+  to: 'off'
+  for: 00:00:30
+condition:
+- condition: time
+  after: '22:00:00'
+- condition: time
+  before: 01:00:00
+action:
+- service: switch.turn_on
+  target:
+    entity_id: switch.electric_blanket
+- service: notify.everyone
+  data:
+    title: Electric Blanket
+    message: Turning on the electric blanket. It will turn off at {{ (now() + timedelta(hours=1)).strftime('%I:%M%p')}}
+    data:
+      tag: electric-blanket
+- wait_for_trigger:
+  - platform: state
+    entity_id: switch.electric_blanket
+    from: 'on'
+    to: 'off'
+  timeout: 01:00:00
+- service: switch.turn_off
+  target:
+    entity_id: switch.electric_blanket
+- service: notify.everyone
+  data:
+    title: Electric Blanket
+    message: The electric blanket was turned off
+    data:
+      tag: electric-blanket
+# - service: notify.everyone
+#   data:
+#     message: clear_notification
+#     data:
+#       tag: 'electric-blanket'
+mode: single
