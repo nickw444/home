@@ -1,0 +1,18 @@
+alias: 'laundry: clear notifications every night'
+description: ''
+mode: single
+trigger:
+  - platform: time
+    at: '03:00:00'
+condition: []
+action:
+  - service: notify.everyone
+    data:
+      message: clear_notification
+      data:
+        tag: washing-complete
+  - service: notify.everyone
+    data:
+      message: clear_notification
+      data:
+        tag: dryer-complete
