@@ -2,8 +2,9 @@
 
 #define TX_PIN 3
 #define TRANSMIT_RETRIES 10
-#define TRANSMIT_RETRY_DELAY_MS 3000
-#define CLOCK_WIDTH 330
+#define TRANSMIT_RETRY_DELAY_MS 2000
+#define CLOCK_WIDTH 360
+#define LOCKOUT_DELAY_MS 200
 
 static const char *TAG = "raex_blind_tx";
 
@@ -17,20 +18,23 @@ typedef enum _raex_action raex_action_t;
 
 class RaexMessage {
  public:
-  RaexMessage(int execute_time, uint16_t remote_id, uint8_t channel_id, raex_action_t action_id);
+  RaexMessage(int execute_time, uint16_t remote_id, uint8_t channel_id, raex_action_t action_id, uint16_t clock_width);
 
   int execute_time;
   uint16_t remote_id;
   uint8_t channel_id;
   raex_action_t action_id;
+  uint16_t clock_width;
 };
 
-RaexMessage::RaexMessage(int execute_time, uint16_t remote_id, uint8_t channel_id, raex_action_t action_id): execute_time(execute_time), remote_id(remote_id), channel_id(channel_id), action_id(action_id) {};
+RaexMessage::RaexMessage(int execute_time, uint16_t remote_id, uint8_t channel_id, raex_action_t action_id, uint16_t clock_width): execute_time(execute_time), remote_id(remote_id), channel_id(channel_id), action_id(action_id), clock_width(clock_width) {};
 
 
 class RaexBlindTransmitComponent : public Component, public CustomAPIDevice {
  private:
   std::vector<RaexMessage> pending_messages;
+  int lockout_until = 0;
+
 
  public:
   void setup() override {
@@ -40,6 +44,8 @@ class RaexBlindTransmitComponent : public Component, public CustomAPIDevice {
 
     register_service(&RaexBlindTransmitComponent::transmit, "transmit",
                      {"remote_id", "channel_id", "action"});
+    register_service(&RaexBlindTransmitComponent::transmit_custom, "transmit_custom",
+                     {"remote_id", "channel_id", "action", "retries", "retry_delay", "clock_width"});
   }
 
   void loop() override {
@@ -47,18 +53,28 @@ class RaexBlindTransmitComponent : public Component, public CustomAPIDevice {
       int now = millis();
       auto msg = pending_messages.begin();
       if (msg->execute_time <= now) {
+        if (lockout_until > now) {
+          // To avoid trasmissions which are sent nearby to improve successful transmission.
+          ESP_LOGD(TAG, "Delaying send for [%d,%d,%d] as lockout has not passed", msg->remote_id, msg->channel_id, msg->action_id);
+          return;
+        }
         ESP_LOGD(TAG, "Executing send for [%d,%d,%d]", msg->remote_id, msg->channel_id, msg->action_id);
 
-        txPrepare(TX_PIN, 200);
-        txRaexSend(TX_PIN, msg->remote_id, msg->channel_id, msg->action_id);
+        txPrepare(TX_PIN, 200, msg->clock_width);
+        txRaexSend(TX_PIN, msg->remote_id, msg->channel_id, msg->action_id, msg->clock_width);
 
+        lockout_until = millis() + LOCKOUT_DELAY_MS;
         pending_messages.erase(msg);
       }
     }
   }
 
   void transmit(int remote_id, int channel_id, std::string action) {
-    ESP_LOGD(TAG, "Enqueing: %d, %d, %s", remote_id, channel_id, action.c_str());
+    transmit_custom(remote_id, channel_id, action, TRANSMIT_RETRIES, TRANSMIT_RETRY_DELAY_MS, CLOCK_WIDTH);
+  }
+
+  void transmit_custom(int remote_id, int channel_id, std::string action, int retries, int retry_delay, int clock_width) {
+    ESP_LOGD(TAG, "Enqueing: %d, %d, %s, ", remote_id, channel_id, action.c_str());
     int now = millis();
 
     raex_action_t action_id;
@@ -88,9 +104,9 @@ class RaexBlindTransmitComponent : public Component, public CustomAPIDevice {
 
     // Insert new messages (in order) for this remote/channel.
     ESP_LOGD(TAG, "Inserting new messages");
-    for (int i = 0; i < TRANSMIT_RETRIES; i++) {
+    for (int i = 0; i < retries; i++) {
       auto msg =
-          RaexMessage(now + (i * TRANSMIT_RETRY_DELAY_MS), remote_id, channel_id, action_id);
+          RaexMessage(now + (i * retry_delay), remote_id, channel_id, action_id, clock_width);
 
       // Insert in order
       bool inserted = false;
@@ -116,75 +132,75 @@ class RaexBlindTransmitComponent : public Component, public CustomAPIDevice {
     }
   }
 
-  static void manchesterWriteBit(int txPin, int clockWidth, bool bit) {
+  static void manchesterWriteBit(int txPin, uint16_t clockWidth, bool bit) {
     digitalWrite(txPin, bit ? LOW : HIGH);
     delayMicroseconds(clockWidth);
     digitalWrite(txPin, bit ? HIGH : LOW);
     delayMicroseconds(clockWidth);
   }
 
-  static void manchesterWriteByteBigEndian(int txPin, int clockWidth, uint8_t byte) {
+  static void manchesterWriteByteBigEndian(int txPin, uint16_t clockWidth, uint8_t byte) {
     for (size_t i = 0; i < 8; i++) {
       bool bit = (bool) (byte & (1 << i));
       manchesterWriteBit(txPin, clockWidth, bit);
     }
   }
 
-  static void txPrepare(int txPin, int numRounds) {
+  static void txPrepare(int txPin, int numRounds, uint16_t clockWidth) {
     for (int i = 0; i < numRounds; i++) {
       digitalWrite(txPin, HIGH);
-      delayMicroseconds(CLOCK_WIDTH);
+      delayMicroseconds(clockWidth);
       digitalWrite(txPin, LOW);
-      delayMicroseconds(CLOCK_WIDTH);
+      delayMicroseconds(clockWidth);
     }
     digitalWrite(txPin, HIGH);
-    delayMicroseconds(CLOCK_WIDTH);
+    delayMicroseconds(clockWidth);
   }
 
-  static void txRaexWriteHeader(int txPin) {
+  static void txRaexWriteHeader(int txPin, uint16_t clockWidth) {
     for (size_t i = 0; i < 20; i++) {
       digitalWrite(txPin, LOW);
-      delayMicroseconds(CLOCK_WIDTH * 2);
+      delayMicroseconds(clockWidth * 2);
       digitalWrite(txPin, HIGH);
-      delayMicroseconds(CLOCK_WIDTH * 2);
+      delayMicroseconds(clockWidth * 2);
     }
 
     // Finish off pre-header
     digitalWrite(txPin, LOW);
-    delayMicroseconds(CLOCK_WIDTH * 2);
+    delayMicroseconds(clockWidth * 2);
 
     // Transmit long part
     digitalWrite(txPin, HIGH);
-    delayMicroseconds(CLOCK_WIDTH * 2 * 4);
+    delayMicroseconds(clockWidth * 2 * 4);
     digitalWrite(txPin, LOW);
-    delayMicroseconds(CLOCK_WIDTH * 2 * 4);
+    delayMicroseconds(clockWidth * 2 * 4);
   }
 
-  static void rxRaexWriteData(int txPin, uint16_t remote, uint8_t channel, raex_action_t action, int checksum) {
+  static void rxRaexWriteData(int txPin, uint16_t remote, uint8_t channel, raex_action_t action, int checksum, uint16_t clockWidth) {
     // Write fixed first bit.
-    manchesterWriteBit(txPin, CLOCK_WIDTH * 2, 0);
+    manchesterWriteBit(txPin, clockWidth * 2, 0);
     // Write code data.
-    manchesterWriteByteBigEndian(txPin, CLOCK_WIDTH * 2, channel);
-    manchesterWriteByteBigEndian(txPin, CLOCK_WIDTH * 2, remote & 0xFF);
-    manchesterWriteByteBigEndian(txPin, CLOCK_WIDTH * 2, remote >> 8);
-    manchesterWriteByteBigEndian(txPin, CLOCK_WIDTH * 2, action);
-    manchesterWriteByteBigEndian(txPin, CLOCK_WIDTH * 2, checksum);
+    manchesterWriteByteBigEndian(txPin, clockWidth * 2, channel);
+    manchesterWriteByteBigEndian(txPin, clockWidth * 2, remote & 0xFF);
+    manchesterWriteByteBigEndian(txPin, clockWidth * 2, remote >> 8);
+    manchesterWriteByteBigEndian(txPin, clockWidth * 2, action);
+    manchesterWriteByteBigEndian(txPin, clockWidth * 2, checksum);
 
     // Write fixed last bits.
-    manchesterWriteBit(txPin, CLOCK_WIDTH * 2, 0);
-    manchesterWriteBit(txPin, CLOCK_WIDTH * 2, 0);
+    manchesterWriteBit(txPin, clockWidth * 2, 0);
+    manchesterWriteBit(txPin, clockWidth * 2, 0);
   }
 
   static uint8_t txRaexCalculateChecksum(uint16_t remote, uint8_t channel, uint8_t action) {
     return channel + (remote & 0xFF) + (remote >> 8) + (action & 0xFF) + 3;
   }
 
-  static void txRaexSend(int txPin, uint16_t remote, uint8_t channel, raex_action_t action) {
+  static void txRaexSend(int txPin, uint16_t remote, uint8_t channel, raex_action_t action, uint16_t clockWidth) {
     uint8_t checksum = txRaexCalculateChecksum(remote, channel, action);
 
     for (int i = 0; i < 4; i++) {
-      txRaexWriteHeader(txPin);
-      rxRaexWriteData(txPin, remote, channel, action, checksum);
+      txRaexWriteHeader(txPin, clockWidth);
+      rxRaexWriteData(txPin, remote, channel, action, checksum, clockWidth);
     }
   }
 };
