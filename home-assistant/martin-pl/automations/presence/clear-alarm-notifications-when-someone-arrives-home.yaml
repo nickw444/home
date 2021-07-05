@@ -1,0 +1,18 @@
+alias: 'presence: clear alarm notifications when someone arrives home'
+description: ''
+mode: single
+trigger:
+- platform: state
+  entity_id: group.all_people
+  from: not_home
+  to: home
+condition: []
+action:
+  # Wait 5 minutes to deal with any pending/disarmed
+  # notifications
+  - delay: 00:05:00
+  - service: notify.everyone
+    data:
+      message: clear_notification
+      data:
+        tag: alarm-status
