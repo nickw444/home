@@ -1,0 +1,16 @@
+id: 2F37F54A-B672-4C73-AC1F-83BB42BA7DBC
+alias: 'robot_vacuum: clear presence notifications when someone arrives home'
+description: ''
+mode: single
+trigger:
+  - platform: state
+    entity_id: group.all_people
+    from: not_home
+    to: home
+condition: []
+action:
+- service: notify.everyone
+  data:
+    title: clear_notification
+    data:
+      tag: osmo-no-one-home

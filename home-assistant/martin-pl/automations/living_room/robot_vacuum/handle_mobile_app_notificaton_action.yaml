@@ -1,0 +1,33 @@
+id: BF12644E-F008-466A-9BC8-43EAFF793D95
+alias: 'robot_vacuum: handle mobile app notification action'
+trigger:
+- platform: event
+  event_type: mobile_app_notification_action
+  event_data:
+    action: 'ROBOVAC_CLEAN_ALL'
+- platform: event
+  event_type: mobile_app_notification_action
+  event_data:
+    action: 'ROBOVAC_CLEAN_TILES'
+action:
+- alias: "Perform the action"
+  choose:
+    - conditions: "{{ trigger.event.data.action == CLEAN_ALL }}"
+      sequence:
+        - service: script.turn_on
+          target:
+            entity_id: script.osmo_clean_all_areas
+    - conditions: "{{ trigger.event.data.action == CLEAN_TILES }}"
+      sequence:
+        - service: script.turn_on
+          target:
+            entity_id: script.osmo_clean_tiled_areas
+- alias: "Clear notification from other devices"
+  choose:
+    - conditions: "{{ true if trigger.event.data.action_data and trigger.event.data.action_data.clear_tag else false }}"
+      sequence:
+      - service: notify.everyone
+        data:
+          message: clear_notification
+          data:
+            tag: "{{ trigger.event.data.action_data.clear_tag }}"
