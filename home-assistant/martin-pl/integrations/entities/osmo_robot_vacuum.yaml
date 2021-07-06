@@ -21,6 +21,36 @@ input_boolean:
     name: "Study"
     icon: "mdi:desk"
 
+input_datetime:
+  osmo_last_clean:
+    name: "Osmo Last Clean"
+    has_date: true
+    has_time: true
+  osmo_last_clean_living_room:
+    name: "Living Room Last Cleaned At"
+    has_date: true
+    has_time: true
+  osmo_last_clean_kitchen:
+    name: "Kitchen Last Cleaned At"
+    has_date: true
+    has_time: true
+  osmo_last_clean_dining:
+    name: "Dining Last Cleaned At"
+    has_date: true
+    has_time: true
+  osmo_last_clean_hallway:
+    name: "Hallway Last Cleaned At"
+    has_date: true
+    has_time: true
+  osmo_last_clean_bedroom:
+    name: "Bedroom Last Cleaned At"
+    has_date: true
+    has_time: true
+  osmo_last_clean_study:
+    name: "Study Last Cleaned At"
+    has_date: true
+    has_time: true
+
 input_select:
   osmo_num_passes:
     name: "Number of Passes"
@@ -356,7 +386,23 @@ script:
         from: cleaning
         to: returning
       timeout: 01:00:00
-      continue_on_timeout: true
-    - service: switch.turn_on
+      continue_on_timeout: false
+    - service: input_datetime.set_datetime
+      data:
+        timestamp: "{{ now().timestamp() }}"
       target:
-        entity_id: switch.osmo_truedetect
+        entity_id: >
+          {%- set rooms=
+            [
+              'living_room',
+              'dining',
+              'hallway',
+              'bedroom',
+              'study',
+              'kitchen',
+            ]
+          -%}
+          input_datetime.osmo_last_clean
+          {% for room_slug in rooms if is_state('input_boolean.osmo_clean_' + room_slug, 'on') -%}
+          , input_datetime.osmo_last_clean_{{  room_slug }}
+          {% endfor -%}
