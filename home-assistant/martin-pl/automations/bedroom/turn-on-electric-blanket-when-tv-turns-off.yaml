@@ -8,10 +8,12 @@ trigger:
   to: 'off'
   for: 00:00:30
 condition:
-- condition: time
-  after: '22:00:00'
-- condition: time
-  before: 01:00:00
+- condition: or
+  conditions:
+    - condition: time
+      after: '22:00:00'
+    - condition: time
+      before: 01:00:00
 action:
 - service: switch.turn_on
   target:
