@@ -107,6 +107,19 @@ sensor:
         {%- endfor %}
         ]
 
+    osmo_last_clean_living_room_pretty:
+      value_template: '{{ strptime(states("input_datetime.osmo_last_clean_living_room"), "%Y-%m-%d %H:%M:%S").strftime("%A") }}'
+    osmo_last_clean_kitchen_pretty:
+      value_template: '{{ strptime(states("input_datetime.osmo_last_clean_kitchen"), "%Y-%m-%d %H:%M:%S").strftime("%A") }}'
+    osmo_last_clean_dining_pretty:
+      value_template: '{{ strptime(states("input_datetime.osmo_last_clean_dining"), "%Y-%m-%d %H:%M:%S").strftime("%A") }}'
+    osmo_last_clean_hallway_pretty:
+      value_template: '{{ strptime(states("input_datetime.osmo_last_clean_hallway"), "%Y-%m-%d %H:%M:%S").strftime("%A") }}'
+    osmo_last_clean_bedroom_pretty:
+      value_template: '{{ strptime(states("input_datetime.osmo_last_clean_bedroom"), "%Y-%m-%d %H:%M:%S").strftime("%A") }}'
+    osmo_last_clean_study_pretty:
+      value_template: '{{ strptime(states("input_datetime.osmo_last_clean_study"), "%Y-%m-%d %H:%M:%S").strftime("%A") }}'
+
 automation:
 - id: 'osmo_toggle_all_areas_on'
   alias: 'osmo: toggle all areas on'
