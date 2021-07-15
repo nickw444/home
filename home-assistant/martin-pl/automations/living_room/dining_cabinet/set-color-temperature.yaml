@@ -1,0 +1,33 @@
+id: '1626341264291'
+alias: 'dining cabinet: set colour temperature at sunrise/sunset'
+description: ''
+trigger:
+- platform: sun
+  event: sunset
+  id: sunset
+  offset: '-30'
+- platform: sun
+  event: sunrise
+  id: sunrise
+  offset: '-30'
+condition: []
+action:
+- choose:
+  - conditions:
+    - condition: trigger
+      id: sunset
+    sequence:
+    - service: light.turn_on
+      data:
+        brightness_pct: 80
+        kelvin: 3000
+      target:
+        entity_id: light.cabinet_glow
+  default:
+  - service: light.turn_on
+    data:
+      brightness_pct: 100
+      kelvin: 6000
+    target:
+      entity_id: light.cabinet_glow
+mode: single

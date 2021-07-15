@@ -1,0 +1,49 @@
+id: '1626176121969'
+alias: 'dining cabinet: turn on when arriving home'
+description: ''
+trigger:
+- platform: state
+  entity_id: group.all_people
+  from: not_home
+  to: home
+  id: presence
+- platform: state
+  entity_id: binary_sensor.front_door
+  from: 'off'
+  to: 'on'
+  id: door
+condition:
+- condition: or
+  conditions:
+  - condition: sun
+    before: sunrise
+  - condition: sun
+    after: sunset
+- condition: state
+  entity_id: input_boolean.guest_mode
+  state: 'off'
+action:
+- choose:
+  - conditions:
+    - condition: trigger
+      id: presence
+    sequence:
+    - service: light.turn_on
+      target:
+        entity_id: light.cabinet_glow
+      data:
+        brightness_pct: 50
+  - conditions:
+    - condition: trigger
+      id: door
+    sequence:
+    - condition: template
+      value_template: '{{ is_state("group.all_people", "home") and (now() -
+        states.group.all_people.last_changed).total_seconds() < 600 }}'
+    - service: light.turn_on
+      target:
+        entity_id: light.cabinet_glow
+      data:
+        brightness_pct: 100
+  default: []
+mode: single
