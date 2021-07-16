@@ -1,4 +1,13 @@
 input_boolean:
+  # When a guest is staying over, perhaps sleeping in the living room
+  # Used to disable automations which might disrupt the experience of
+  # the guest
   guest_mode:
     name: Guest Mode
     icon: mdi:human-greeting
+  # When we are away and there is someone looking after the house
+  # Used to disable automations which cannot be reverted without logging
+  # into the Home Assistant instance.
+  away_mode:
+    name: Away Mode
+    icon: mdi:palm-tree

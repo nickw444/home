@@ -17,6 +17,9 @@ condition:
 - condition: template
   value_template: |
     {{ is_state('timer.living_room_noise_notification_snooze_timer', 'idle') }}
+- condition: state
+  entity_id: input_boolean.away_mode
+  state: 'off'
 action:
 - service: notify.everyone
   data:

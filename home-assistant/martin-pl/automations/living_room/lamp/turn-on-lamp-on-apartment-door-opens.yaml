@@ -17,6 +17,9 @@ condition:
   - condition: state
     entity_id: group.all_people
     state: not_home
+  - condition: state
+    entity_id: input_boolean.away_mode
+    state: 'off'
 action:
   - service: light.turn_on
     data: {}

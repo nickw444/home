@@ -9,7 +9,10 @@ trigger:
   event: sunset
   id: sunset
   offset: '-30'
-condition: []
+condition:
+- condition: state
+  entity_id: group.all_people
+  state: home
 action:
 - choose:
   - conditions:

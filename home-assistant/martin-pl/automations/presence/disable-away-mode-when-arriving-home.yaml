@@ -1,0 +1,17 @@
+id: '1626435326924'
+alias: 'presence: disable away mode when arriving home'
+description: ''
+trigger:
+- platform: state
+  entity_id: group.all_people
+  from: not_home
+  to: home
+condition:
+- condition: state
+  entity_id: input_boolean.away_mode
+  state: 'on'
+action:
+- service: input_boolean.turn_off
+  target:
+    entity_id: input_boolean.away_mode
+mode: single

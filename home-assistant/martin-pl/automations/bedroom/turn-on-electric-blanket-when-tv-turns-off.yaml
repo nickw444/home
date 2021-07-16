@@ -14,6 +14,9 @@ condition:
       after: '22:00:00'
     - condition: time
       before: 01:00:00
+- condition: state
+  entity_id: group.all_people
+  state: home
 action:
 - service: switch.turn_on
   target:

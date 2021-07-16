@@ -20,7 +20,10 @@ condition:
   - condition: sun
     after: sunset
 - condition: state
-  entity_id: input_boolean.guest_mode
+  entity_id: input_boolean.away_mode
+  state: 'off'
+- condition: state
+  entity_id: light.cabinet_glow
   state: 'off'
 action:
 - choose:
