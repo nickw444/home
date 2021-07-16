@@ -10,7 +10,7 @@ condition:
 - condition: or
   conditions:
   - condition: time
-    after: '11:00'
+    after: '23:00'
   - condition: sun
     before: sunrise
 - condition: state
