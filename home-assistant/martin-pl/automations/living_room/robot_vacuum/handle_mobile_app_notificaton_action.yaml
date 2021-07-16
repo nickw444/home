@@ -12,12 +12,12 @@ trigger:
 action:
 - alias: "Perform the action"
   choose:
-    - conditions: "{{ trigger.event.data.action == CLEAN_ALL }}"
+    - conditions: "{{ trigger.event.data.action == 'ROBOVAC_CLEAN_ALL' }}"
       sequence:
         - service: script.turn_on
           target:
             entity_id: script.osmo_clean_all_areas
-    - conditions: "{{ trigger.event.data.action == CLEAN_TILES }}"
+    - conditions: "{{ trigger.event.data.action == 'ROBOVAC_CLEAN_TILES' }}"
       sequence:
         - service: script.turn_on
           target:
