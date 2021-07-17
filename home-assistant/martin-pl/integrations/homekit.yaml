@@ -33,3 +33,6 @@ homekit:
       name: "Clean Tiles"
     script.osmo_clean_all_areas:
       name: "Clean Everywhere"
+    switch.play_music:
+      # "Hey siri, turn on/off the music"
+      name: "Music"
