@@ -14,15 +14,26 @@ action:
   - wait_template: '{{ is_state("group.all_people", "home") }}'
     timeout: '24:00:00'
   - delay: 00:05:00
+  - service: media_player.turn_off
+    data: {}
+    target:
+      entity_id:
+        - media_player.owntone_output_samsung_8_series_55
+        - media_player.owntone_output_soundbar_cast
+  - service: media_player.turn_on
+    data: {}
+    target:
+      entity_id:
+        - media_player.owntone_output_living_room
+        - media_player.owntone_output_bedroom
   - service: media_player.volume_set
     entity_id:
-      - media_player.kitchen_speaker
-      - media_player.living_room_speaker
+      - media_player.owntone_output_living_room
+      - media_player.owntone_output_bedroom
     data:
       volume_level: 0.5
   - service: tts.google_translate_say
     entity_id:
-      - media_player.kitchen_speaker
-      - media_player.living_room_speaker
+      - media_player.owntone_server
     data:
       message: The washing machine finished whilst away

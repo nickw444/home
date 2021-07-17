@@ -1,8 +1,8 @@
-id: '1592101514693'
-alias: 'laundry: broadcast on washing machine completed'
+id: '1592101534049328'
+alias: 'laundry: broadcast on dryer completed'
 description: ''
 trigger:
-  - entity_id: binary_sensor.washing_machine
+  - entity_id: binary_sensor.dryer
     from: 'on'
     platform: state
     to: 'off'
@@ -33,4 +33,4 @@ action:
     entity_id:
       - media_player.owntone_server
     data:
-      message: The washing machine has finished!
+      message: The dryer has finished!
