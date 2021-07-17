@@ -1,5 +1,5 @@
 id: '983479729828'
-alias: 'living_room: toggle house blinds on button hold'
+alias: 'kitchen button: toggle house blinds on button hold'
 description: ''
 trigger:
 - platform: state
