@@ -11,3 +11,6 @@
 [submodule "home-assistant/martin-pl/custom_components/.src/johnpdowling-custom-components"]
 	path = home-assistant/martin-pl/custom_components/.src/johnpdowling-custom-components
 	url = https://github.com/johnpdowling/custom_components.git
+[submodule "home-assistant/martin-pl/custom_components/.src/spotcast"]
+	path = home-assistant/martin-pl/custom_components/.src/spotcast
+	url = https://github.com/fondberg/spotcast.git

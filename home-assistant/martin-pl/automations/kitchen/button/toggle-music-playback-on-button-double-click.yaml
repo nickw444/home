@@ -1,0 +1,12 @@
+id: '98347972439857'
+alias: 'kitchen button: toggle music playback on button double click'
+description: ''
+trigger:
+- platform: state
+  entity_id: sensor.living_room_button_click
+  to: double
+condition: []
+action:
+- service: switch.toggle
+  entity_id: switch.play_music
+mode: single
