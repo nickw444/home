@@ -276,7 +276,7 @@ class ForkedDaapdCard extends LitElement {
   _callService(e, service, options, component = 'media_player') {
     e.stopPropagation();
     options = (options === null || options === undefined) ? {} : options;
-    options.entity_id = options.entity_id || this.config.entity;
+    options.entity_id = options.entity_id || this.config.entity;
     this._hass.callService(component, service, options);
   }
 

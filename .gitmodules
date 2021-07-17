@@ -8,3 +8,6 @@
 [submodule "home-assistant/martin-pl/custom_components/.src/ha-dyson"]
 	path = home-assistant/martin-pl/custom_components/.src/ha-dyson
 	url = https://github.com/shenxn/ha-dyson.git
+[submodule "home-assistant/martin-pl/custom_components/.src/johnpdowling-custom-components"]
+	path = home-assistant/martin-pl/custom_components/.src/johnpdowling-custom-components
+	url = https://github.com/johnpdowling/custom_components.git
