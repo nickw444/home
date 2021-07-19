@@ -4,9 +4,10 @@ import os
 import shutil
 import subprocess
 import tempfile
+from dataclasses import dataclass
 from hashlib import sha1
 from os.path import basename, splitext
-from typing import List, NamedTuple, Optional, Dict, Literal, Iterable
+from typing import List, NamedTuple, Optional, Dict, Iterable
 from urllib.parse import urlparse
 
 import requests
@@ -51,11 +52,34 @@ class Dependency(NamedTuple):
             return parsed.path[1:].rstrip('.git')
 
 
-class LockedDependency(NamedTuple):
+@dataclass
+class LockedDependency:
     source: str
     version: str
+
+    def get_name(self):
+        name, _ = splitext(basename(urlparse(self.source).path))
+        return name
+
+    def is_github(self):
+        return urlparse(self.source).hostname == 'github.com'
+
+    def get_github_slug(self):
+        parsed = urlparse(self.source)
+        if parsed.hostname == 'github.com':
+            return parsed.path[1:].rstrip('.git')
+
+
+@dataclass
+class CoreLockedDependency(LockedDependency):
+    components: List[str]
+    components_path: Optional[str]
+
+
+@dataclass
+class LovelaceLockedDependency(LockedDependency):
     is_release: bool
-    type: Literal['core', 'lovelace']
+    assets: List[str]
 
 
 def load_dependencies(path: str) -> List[Dependency]:
@@ -79,12 +103,22 @@ def load_locked_dependencies(path: str) -> Dict[str, LockedDependency]:
     dependencies = {}
     with open(path) as f:
         for source, data in yaml.load(f).items():
-            dependencies[source] = LockedDependency(
-                source=source,
-                version=data['version'],
-                is_release=data.get('is_release', False),
-                type=data['type'],
-            )
+            if data['type'] == 'lovelace':
+                dependencies[source] = LovelaceLockedDependency(
+                    source=source,
+                    version=data['version'],
+                    is_release=data.get('is_release', False),
+                    assets=data['assets'],
+                )
+            elif data['type'] == 'core':
+                dependencies[source] = CoreLockedDependency(
+                    source=source,
+                    version=data['version'],
+                    components=data['components'],
+                    components_path=data.get('components_path'),
+                )
+            else:
+                raise ValueError(f"Unknown dependency type: {data['type']}")
     return dependencies
 
 
@@ -92,55 +126,143 @@ def write_locked_dependencies(path: str, locked_dependencies: Dict[
     str, LockedDependency]):
     dumpable = {}
     for source, lock_info in locked_dependencies.items():
-        dumpable[source] = {
-            'version': lock_info.version,
-            'type': lock_info.type,
-        }
+        if isinstance(lock_info, LovelaceLockedDependency):
+            dumpable[source] = {
+                'type': 'lovelace',
+                'version': lock_info.version,
+                'assets': lock_info.assets,
+            }
+            if lock_info.is_release:
+                dumpable[source]['is_release'] = True
 
-        if lock_info.is_release:
-            dumpable[source]['is_release'] = True
+        elif isinstance(lock_info, CoreLockedDependency):
+            dumpable[source] = {
+                'type': 'lovelace',
+                'version': lock_info.version,
+                'assets': lock_info.components,
+            }
+            if lock_info.components_path is not None:
+                dumpable[source]['components_path'] = lock_info.components_path
 
     with open(path, 'w') as f:
         yaml.dump(dumpable, f)
 
 
-def install_dependency(config_root_path: str, dependency: Dependency,
-                       lock_info: LockedDependency):
-    click.echo(click.style(f'Installing: {dependency.get_name()} ', fg='green'))
-
-    with tempfile.TemporaryDirectory(
-            suffix='-' + dependency.get_name()) as cloned_path:
-        subprocess.run(
-            ['git', 'clone', dependency.source, cloned_path],
-            stdout=subprocess.DEVNULL,
-            stderr=subprocess.DEVNULL)
-
-        if maybe_install_core_dependency(config_root_path, dependency, cloned_path):
-            describe_result = subprocess.run(
-                ['git', 'describe', '--always'],
-                cwd=cloned_path, stdout=subprocess.PIPE)
-
-            return LockedDependency(
-                source=dependency.source,
-                version=describe_result.stdout.decode('utf-8').strip(),
-                is_release=False,
-                type='core'
-            )
-
-        # not core dependencies, try Lovelace dependencies
-        return maybe_install_lovelace_dependency(config_root_path, dependency, cloned_path)
+def fetch_source_dependency(dependency: LockedDependency):
+    cloned_path_tmpdir = tempfile.TemporaryDirectory(
+        suffix='-' + dependency.get_name())
+    subprocess.run(
+        ['git', 'clone', dependency.source, cloned_path_tmpdir.name],
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL)
+    subprocess.run(
+        ['git', 'checkout', dependency.version],
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+        cwd=cloned_path_tmpdir.name,
+    )
+    return cloned_path_tmpdir
 
 
-def maybe_install_core_dependency(
-        config_root_path: str,
+def install_dependency(config_root_path: str, dependency: LockedDependency):
+    click.echo(click.style(f'Installing: {dependency.get_name()}', fg='green'))
+
+    if isinstance(dependency, CoreLockedDependency):
+        with fetch_source_dependency(dependency) as source_path:
+            custom_components_path = os.path.join(
+                source_path,
+                dependency.components_path or 'custom_components')
+            for component in dependency.components:
+                component_path = os.path.join(custom_components_path,
+                                              component)
+                if not os.path.isdir(component_path):
+                    raise ArtifactNotFoundException()
+
+                destination_path = os.path.join(
+                    config_root_path, 'custom_components', component)
+                if os.path.exists(destination_path):
+                    shutil.rmtree(destination_path)
+
+                shutil.copytree(component_path, destination_path)
+                click.echo(f"installed {component}")
+
+    elif isinstance(dependency, LovelaceLockedDependency):
+        destination_path = os.path.join(
+            config_root_path, 'www', dependency.get_name())
+        if os.path.isdir(destination_path):
+            shutil.rmtree(destination_path)
+        os.mkdir(destination_path)
+
+        if dependency.is_release:
+            release_data = get_github_release(
+                dependency, ref=dependency.version)
+            indexed_assets: Dict[str, str] = {}
+            for asset in release_data['assets']:
+                indexed_assets[asset['name']] = ['browser_download_url']
+
+            for asset in dependency.assets:
+                asset_download_url = indexed_assets[asset]
+                asset_basename = os.path.basename(
+                    urlparse(asset_download_url).path)
+                asset_destination_path = os.path.join(destination_path,
+                                                      asset_basename)
+                resp = requests.get(asset_download_url)
+                resp.raise_for_status()
+                with open(asset_destination_path, 'wb') as f:
+                    f.write(resp.content)
+                print(f"installed {asset_basename}")
+
+        else:
+            with fetch_source_dependency(dependency) as source_path:
+
+                for asset in dependency.assets:
+                    asset_path = os.path.join(source_path, asset)
+                    asset_basename = os.path.basename(asset)
+                    artifact_destination_path = os.path.join(destination_path,
+                                                             asset_basename)
+                    shutil.copy(asset_path, artifact_destination_path)
+                    print(f"installed {asset_basename}")
+        #
+        #
+        # is_core = lock_info.type == 'core' if lock_info else is_core_dependency(
+        #     dependency, cloned_path)
+        # if is_core:
+        #     install_core_dependency(config_root_path, dependency, cloned_path)
+        #     describe_result = subprocess.run(
+        #         ['git', 'describe', '--always'],
+        #         cwd=cloned_path, stdout=subprocess.PIPE)
+        #
+        #     return LockedDependency(
+        #         source=dependency.source,
+        #         version=describe_result.stdout.decode('utf-8').strip(),
+        #         is_release=False,
+        #         type='core'
+        #     )
+        #
+        # # not core dependencies, try Lovelace dependencies
+        # return install_lovelace_dependency(config_root_path, dependency,
+        #                                    cloned_path, lock_info)
+
+
+def is_core_dependency(
         dependency: Dependency,
         cloned_path: str) -> bool:
     custom_components_path = os.path.join(cloned_path, 'custom_components')
     if dependency.root_is_custom_components:
         custom_components_path = cloned_path
 
-    if not os.path.exists(custom_components_path):
-        return False
+    return os.path.exists(custom_components_path)
+
+
+def install_core_dependency(
+        config_root_path: str,
+        dependency: Dependency,
+        cloned_path: str):
+    custom_components_path = os.path.join(cloned_path, 'custom_components')
+    if dependency.root_is_custom_components:
+        custom_components_path = cloned_path
+
+    did_install = False
 
     for component in os.listdir(custom_components_path):
         component_path = os.path.join(custom_components_path, component)
@@ -150,14 +272,17 @@ def maybe_install_core_dependency(
         if dependency.include is not None and component not in dependency.include:
             continue
 
-        destination_path = os.path.join(config_root_path, 'custom_components', component)
+        destination_path = os.path.join(config_root_path, 'custom_components',
+                                        component)
         if os.path.exists(destination_path):
             shutil.rmtree(destination_path)
 
         shutil.copytree(component_path, destination_path)
         click.echo(f"installed {component}")
+        did_install = True
 
-    return True
+    if not did_install:
+        raise ArtifactNotFoundException
 
 
 class ArtifactNotFoundException(Exception):
@@ -195,13 +320,16 @@ def find_github_releases_artifacts(dependency: Dependency, release_data):
 
     return artifacts
 
+
 def install_lovelace_asset(dependency: Dependency, path: str):
     pass
 
-def maybe_install_lovelace_dependency(
+
+def install_lovelace_dependency(
         config_root_path: str,
         dependency: Dependency,
         cloned_path: str,
+        lock_info: LockedDependency,
 ) -> LockedDependency:
     hacs_json_path = os.path.join(cloned_path, 'hacs.json')
     if os.path.exists(hacs_json_path):
