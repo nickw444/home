@@ -27,7 +27,7 @@ jobs:
       - script: |
           ./home-assistant/tools/test_config.sh mpl
         displayName: '[hass] check config: mpl'
-  - job: 'hass_check_config_mpl'
+  - job: 'hass_check_appdaemon_313a'
     displayName: '[hass] lint and test appdaemon: 313a'
     steps:
       - task: UsePythonVersion@0
