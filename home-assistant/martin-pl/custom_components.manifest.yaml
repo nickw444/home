@@ -1,6 +1,0 @@
-lovelace:
-  - maxwroc/battery-state-card
-  - azuwis/zigbee2mqtt-networkmap
-  - kalkih/mini-graph-card
-integrations:
-  - azogue/eventsensor
