@@ -15,6 +15,7 @@ ruamel-yaml = "*"
 click = "*"
 appdaemon = "*"
 colorthief = "*"
+hass-deps = "*"
 
 [requires]
 python_version = "3.8"

@@ -1,0 +1,62 @@
+https://github.com/thomasloven/lovelace-auto-entities.git:
+  version: 9961ee0
+  type: lovelace
+https://github.com/maxwroc/battery-state-card.git:
+  version: v1.6.4
+  type: lovelace
+  is_release: true
+https://github.com/thomasloven/lovelace-card-tools.git:
+  version: 477f3d4
+  type: lovelace
+https://github.com/AitorDB/home-assistant-sun-card.git:
+  version: v0.1.4
+  type: lovelace
+  is_release: true
+https://github.com/kalkih/mini-graph-card.git:
+  version: v0.10.0
+  type: lovelace
+  is_release: true
+https://github.com/custom-cards/secondaryinfo-entity-row.git:
+  version: 2ea0f5d
+  type: lovelace
+https://github.com/custom-cards/spotify-card.git:
+  version: 60b5444
+  type: lovelace
+https://github.com/azuwis/zigbee2mqtt-networkmap.git:
+  version: v0.6.0
+  type: lovelace
+  is_release: true
+https://github.com/johnpdowling/custom_components.git:
+  version: 6019dc0
+  type: core
+  components:
+  - owntone
+https://github.com/fondberg/spotcast.git:
+  version: bcc284c
+  type: core
+  components:
+  - spotcast
+https://github.com/jaruba/ha-samsungtv-tizen.git:
+  version: a49e349
+  type: core
+  components:
+  - samsungtv_tizen
+https://github.com/shenxn/ha-dyson.git:
+  version: 7b0d18e
+  type: core
+  components:
+  - dyson_local
+https://github.com/nickw444/deebot-t8-hass.git:
+  version: 4ae636b
+  type: core
+  components:
+  - deebot_t8
+https://github.com/kalkih/mini-media-player.git:
+  version: v1.12.1
+  type: lovelace
+  is_release: true
+https://github.com/nickw444/hass-custom-components:
+  version: '649e283'
+  type: core
+  components:
+  - aussie_broadband
