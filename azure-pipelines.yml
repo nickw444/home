@@ -30,6 +30,11 @@ jobs:
   - job: 'hass_check_config_mpl'
     displayName: '[hass] lint and test appdaemon: 313a'
     steps:
+      - task: UsePythonVersion@0
+        inputs:
+          versionSpec: '3.9'
+          addToPath: true
+          architecture: 'x64'
       - script: |
           cd ./home-assistant/313a/appdaemon
           black --check .
