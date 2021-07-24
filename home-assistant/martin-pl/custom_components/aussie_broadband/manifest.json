@@ -1,7 +1,0 @@
-{
-  "domain": "aussie_broadband",
-  "name": "Aussie Broadband",
-  "codeowners": ["@nickw444"],
-  "requirements": ["pyaussiebb==0.0.3"],
-  "version": "0.0.1"
-}
