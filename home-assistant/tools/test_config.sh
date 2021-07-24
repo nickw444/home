@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 set -eu
 
 CONFIG_PATH=$(dirname "$0")/../
