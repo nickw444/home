@@ -14,7 +14,7 @@ main() {
     pip3 install "homeassistant==${HA_VERSION}";
 
     # Workaround to "not a directory @ data['whitelist_external_dirs'][0]" failure in CI
-    sudo mkdir /config;
+    sudo mkdir -p /config;
 
     hass --script check_config -c . -f;
 }
