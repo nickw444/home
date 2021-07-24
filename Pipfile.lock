@@ -329,10 +329,10 @@
         },
         "hass-deps": {
             "hashes": [
-                "sha256:f05d60e2aa31e757e83b4f1b72b4da1a53c9798164e52e34be85652bc8449a76"
+                "sha256:3660019cad02221c693fb7a0714d9f8b187f7ee8ca05d54599318e57b6b047bb"
             ],
             "index": "pypi",
-            "version": "==1.0.2"
+            "version": "==1.0.3"
         },
         "idna": {
             "hashes": [
