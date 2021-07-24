@@ -1,4 +1,4 @@
-import mock
+from unittest import mock
 from appdaemon_testing.pytest import automation_fixture
 
 from apps.alarm_auto_arm import (
