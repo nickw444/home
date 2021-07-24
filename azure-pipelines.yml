@@ -1,0 +1,24 @@
+trigger:
+- master
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: '3.9'
+      addToPath: true
+      architecture: 'x64'
+  - script: |
+      ./home-assistant/tools/test_config.sh 313a
+    displayName: '[hass] check config: 313a'
+  - script: |
+      ./home-assistant/tools/test_config.sh martin-pl
+    displayName: '[hass] check config: martin-pl'
+  - script: |
+      cd ./home-assistant/313a/appdaemon
+      black --check .
+      flake8
+      pytest
+    displayName: '[hass] lint and test appdaemon: 313a'
