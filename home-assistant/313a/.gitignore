@@ -17,3 +17,7 @@ deps
 .storage
 
 smartctl
+
+# Managed by hass-deps (see hass-deps.yaml)
+custom_components/*
+www/community/*
