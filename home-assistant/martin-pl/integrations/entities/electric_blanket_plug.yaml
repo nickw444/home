@@ -1,0 +1,19 @@
+sensor:
+  platform: template
+  sensors:
+    electric_blanket_power:
+      friendly_name: Electric Blanket Power
+      unit_of_measurement: Watts
+      value_template: "{{ state_attr('switch.electric_blanket', 'current_power_w') }}"
+    electric_blanket_current:
+      friendly_name: Electric Blanket Current
+      unit_of_measurement: Amps
+      value_template: "{{ state_attr('switch.electric_blanket', 'current_a') }}"
+    electric_blanket_voltage:
+      friendly_name: Electric Blanket Voltage
+      unit_of_measurement: Volts
+      value_template: "{{ state_attr('switch.electric_blanket', 'voltage') }}"
+    electric_blanket_today_energy:
+      friendly_name: Electric Blanket Today Energy
+      unit_of_measurement: kWh
+      value_template: "{{ state_attr('switch.electric_blanket', 'today_energy_kwh') }}"
