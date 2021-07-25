@@ -56,7 +56,7 @@ https://github.com/kalkih/mini-media-player.git:
   type: lovelace
   is_release: true
 https://github.com/nickw444/hass-custom-components:
-  version: '649e283'
+  version: cd93fa6
   type: core
   components:
   - aussie_broadband
