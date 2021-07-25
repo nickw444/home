@@ -15,3 +15,6 @@ https://github.com/kalkih/mini-media-player.git:
 https://github.com/custom-cards/secondaryinfo-entity-row.git:
   version: 2ea0f5d
   type: lovelace
+https://github.com/gurbyz/power-wheel-card.git:
+  version: d136d6d
+  type: lovelace
