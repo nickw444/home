@@ -329,10 +329,10 @@
         },
         "hass-deps": {
             "hashes": [
-                "sha256:3660019cad02221c693fb7a0714d9f8b187f7ee8ca05d54599318e57b6b047bb"
+                "sha256:3f178a33aa172ad49604f50ee4d6c959baa3125a38bbc1168a074999fb48d8c9"
             ],
             "index": "pypi",
-            "version": "==1.0.3"
+            "version": "==1.0.7"
         },
         "idna": {
             "hashes": [
@@ -877,11 +877,10 @@
         },
         "appdaemon-testing": {
             "hashes": [
-                "sha256:571c540b33ed836622f0c02dab808a1b4511e1232f05a8d8d500a3ca2206c86b",
-                "sha256:c0649f7f4482e51e5aba7b7ed523e0ac4b37d520c4d0322958d6ffc107e4b279"
+                "sha256:e6ec1ff59f806561ce31c22920092ca0f6a16624fa6168a1fb32ada606b1663c"
             ],
             "index": "pypi",
-            "version": "==0.1.2"
+            "version": "==0.1.3"
         },
         "appdirs": {
             "hashes": [

@@ -1,0 +1,20 @@
+https://github.com/thomasloven/lovelace-auto-entities.git:
+  version: 9961ee0
+  type: lovelace
+https://github.com/kalkih/mini-graph-card.git:
+  version: v0.10.0
+  type: lovelace
+  is_release: true
+https://github.com/thomasloven/lovelace-card-tools.git:
+  version: 477f3d4
+  type: lovelace
+https://github.com/kalkih/mini-media-player.git:
+  version: v1.12.1
+  type: lovelace
+  is_release: true
+https://github.com/custom-cards/secondaryinfo-entity-row.git:
+  version: 2ea0f5d
+  type: lovelace
+https://github.com/gurbyz/power-wheel-card.git:
+  version: d136d6d
+  type: lovelace

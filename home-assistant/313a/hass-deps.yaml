@@ -1,0 +1,9 @@
+dependencies:
+- https://github.com/thomasloven/lovelace-auto-entities.git
+- https://github.com/kalkih/mini-graph-card.git
+- https://github.com/thomasloven/lovelace-card-tools.git
+- https://github.com/kalkih/mini-media-player.git
+- https://github.com/custom-cards/secondaryinfo-entity-row.git
+- source: https://github.com/gurbyz/power-wheel-card.git
+  assets:
+  - power-wheel-card.js
