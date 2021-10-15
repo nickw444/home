@@ -15,11 +15,11 @@ homeassistant:
   longitude: !secret longitude
   elevation: !secret elevation
   time_zone: Australia/Sydney
+  currency: AUD
 
 automation: !include automations.yaml
 script: !include scripts.yaml
 logger:
   default: info
   logs:
-    custom_components.tasmota_irhvac: debug
     homeassistant.components.http.ban: warning
