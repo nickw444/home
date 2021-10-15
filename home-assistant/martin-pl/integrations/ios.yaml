@@ -10,30 +10,3 @@ ios:
             authenticationRequired: false
             destructive: false
             behavior: 'default'
-      - name: Camera Noise Detected
-        identifier: camera
-        actions:
-          - identifier: 'SNOOZE_15_MIN'
-            title: 'Snooze for 15 minutes'
-            activationMode: 'background'
-            authenticationRequired: false
-            destructive: false
-            behavior: 'default'
-          - identifier: 'SNOOZE_1_HOUR'
-            title: 'Snooze for 1 hour'
-            activationMode: 'background'
-            authenticationRequired: false
-            destructive: false
-            behavior: 'default'
-          - identifier: 'SNOOZE_4_HOURS'
-            title: 'Snooze for 4 hours'
-            activationMode: 'background'
-            authenticationRequired: false
-            destructive: false
-            behavior: 'default'
-          - identifier: 'SNOOZE_UNTIL_HOME'
-            title: 'Snooze until home'
-            activationMode: 'background'
-            authenticationRequired: false
-            destructive: true
-            behavior: 'default'
