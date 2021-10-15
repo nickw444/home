@@ -11,6 +11,6 @@ condition:
     entity_id: input_boolean.guest_mode
     state: 'off'
 action:
-  - data: {}
-    entity_id: all
-    service: light.turn_off
+  - service: script.turn_on
+    target:
+      entity_id: script.turn_off_all_house_lights

@@ -7,6 +7,7 @@ trigger:
     to: hold
 condition: []
 action:
-  - service: light.turn_off
-    entity_id: all
+  - service: script.turn_on
+    target:
+      entity_id: script.turn_off_all_house_lights
 mode: single
