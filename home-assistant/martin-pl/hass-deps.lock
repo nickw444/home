@@ -20,10 +20,10 @@ https://github.com/custom-cards/secondaryinfo-entity-row.git:
   version: 2ea0f5d
   type: lovelace
 https://github.com/custom-cards/spotify-card.git:
-  version: 60b5444
+  version: '4297715'
   type: lovelace
 https://github.com/azuwis/zigbee2mqtt-networkmap.git:
-  version: v0.6.0
+  version: v0.7.0
   type: lovelace
   is_release: true
 https://github.com/johnpdowling/custom_components.git:
@@ -32,12 +32,12 @@ https://github.com/johnpdowling/custom_components.git:
   components:
   - owntone
 https://github.com/fondberg/spotcast.git:
-  version: bcc284c
+  version: 2037ebf
   type: core
   components:
   - spotcast
 https://github.com/jaruba/ha-samsungtv-tizen.git:
-  version: a49e349
+  version: c13be76
   type: core
   components:
   - samsungtv_tizen
@@ -52,11 +52,19 @@ https://github.com/nickw444/deebot-t8-hass.git:
   components:
   - deebot_t8
 https://github.com/kalkih/mini-media-player.git:
-  version: v1.12.1
+  version: v1.13.0
   type: lovelace
   is_release: true
-https://github.com/nickw444/hass-custom-components:
-  version: cd93fa6
+https://github.com/thomasloven/lovelace-card-mod:
+  version: 8e99e21
+  type: lovelace
+https://github.com/nickw444/tuya-home-assistant.git:
+  version: v1.4.1-71-gacdd69f
   type: core
   components:
-  - aussie_broadband
+  - tuya_v2
+https://github.com/nickw444/hass-custom-components:
+  version: b6bf892
+  type: core
+  components:
+  - calibrated_light

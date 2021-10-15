@@ -1,22 +1,24 @@
 dependencies:
-  - https://github.com/thomasloven/lovelace-auto-entities.git
-  - https://github.com/maxwroc/battery-state-card.git
-  - https://github.com/thomasloven/lovelace-card-tools.git
-  - https://github.com/AitorDB/home-assistant-sun-card.git
-  - https://github.com/kalkih/mini-graph-card.git
-  - https://github.com/custom-cards/secondaryinfo-entity-row.git
-  - https://github.com/custom-cards/spotify-card.git
-  - https://github.com/azuwis/zigbee2mqtt-networkmap.git
-  - source: https://github.com/johnpdowling/custom_components.git
-    root_is_custom_components: true
-    include:
-      - owntone
-  - https://github.com/fondberg/spotcast.git
-  - https://github.com/jaruba/ha-samsungtv-tizen.git
-  - https://github.com/shenxn/ha-dyson.git
-  - https://github.com/nickw444/deebot-t8-hass.git
-  - https://github.com/kalkih/mini-media-player.git
-  - source: https://github.com/nickw444/hass-custom-components
-    root_is_custom_components: true
-    include:
-      - aussie_broadband
+- https://github.com/thomasloven/lovelace-auto-entities.git
+- https://github.com/maxwroc/battery-state-card.git
+- https://github.com/thomasloven/lovelace-card-tools.git
+- https://github.com/AitorDB/home-assistant-sun-card.git
+- https://github.com/kalkih/mini-graph-card.git
+- https://github.com/custom-cards/secondaryinfo-entity-row.git
+- https://github.com/custom-cards/spotify-card.git
+- https://github.com/azuwis/zigbee2mqtt-networkmap.git
+- source: https://github.com/johnpdowling/custom_components.git
+  root_is_custom_components: true
+  include:
+  - owntone
+- https://github.com/fondberg/spotcast.git
+- https://github.com/jaruba/ha-samsungtv-tizen.git
+- https://github.com/shenxn/ha-dyson.git
+- https://github.com/nickw444/deebot-t8-hass.git
+- https://github.com/kalkih/mini-media-player.git
+- source: https://github.com/nickw444/hass-custom-components
+  root_is_custom_components: true
+  include:
+  - calibrated_light
+- https://github.com/thomasloven/lovelace-card-mod
+- https://github.com/nickw444/tuya-home-assistant.git
