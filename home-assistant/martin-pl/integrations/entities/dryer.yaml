@@ -1,30 +1,10 @@
-sensor:
-  platform: template
-  sensors:
-    dryer_power:
-      friendly_name: Dryer Power
-      unit_of_measurement: Watts
-      value_template: "{{ state_attr('switch.dryer', 'current_power_w') }}"
-    dryer_current:
-      friendly_name: Dryer Current
-      unit_of_measurement: Amps
-      value_template: "{{ state_attr('switch.dryer', 'current_a') }}"
-    dryer_voltage:
-      friendly_name: Dryer Voltage
-      unit_of_measurement: Volts
-      value_template: "{{ state_attr('switch.dryer', 'voltage') }}"
-    dryer_today_energy:
-      friendly_name: Dryer Today Energy
-      unit_of_measurement: kWh
-      value_template: "{{ state_attr('switch.dryer', 'today_energy_kwh') }}"
-
 binary_sensor:
   platform: template
   sensors:
     dryer:
       friendly_name: "Dryer"
       value_template: >-
-        {{ states('sensor.dryer_power')|float > 2 }}
+        {{ states('sensor.dryer_current_consumption')|float > 5 }}
       icon_template: "mdi:tumble-dryer"
       delay_on: 2
       delay_off: 5
