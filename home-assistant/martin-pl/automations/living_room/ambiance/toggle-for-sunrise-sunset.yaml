@@ -1,5 +1,5 @@
-id: '1626173678030'
-alias: 'dining cabinet: toggle for sunrise/sunset'
+id: '1626173678031'
+alias: 'living room ambiance: toggle for sunrise/sunset'
 description: ''
 trigger:
 - platform: sun
@@ -8,7 +8,6 @@ trigger:
 - platform: sun
   event: sunset
   id: sunset
-  offset: '-30'
 condition:
 - condition: state
   entity_id: group.all_people
@@ -21,7 +20,7 @@ action:
     sequence:
     - service: light.turn_off
       target:
-        entity_id: light.cabinet_glow
+        entity_id: light.living_room_ambiance
   - conditions:
     - condition: trigger
       id: sunset
@@ -29,11 +28,11 @@ action:
     - condition: and
       conditions:
       - condition: state
-        entity_id: group.all_people
-        state: home
+        entity_id: light.living_room_downlights
+        state: 'off'
     - service: light.turn_on
       target:
-        entity_id: light.cabinet_glow
+        entity_id: light.living_room_ambiance
       data: {}
   default: []
 mode: single

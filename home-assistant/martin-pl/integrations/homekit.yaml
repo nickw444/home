@@ -23,6 +23,8 @@ homekit:
       - cover.living_room_blinds
       - cover.all_blinds
       - light.bedroom_lamps
+      - light.living_room_downlights
+      - light.living_room_ambiance
       - binary_sensor.internal_motion_occupancy
     exclude_entity_globs:
       - sensor.comms_cabinet_climate_*

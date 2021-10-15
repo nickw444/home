@@ -1,0 +1,29 @@
+script:
+  tasmota_set_color:
+    # Support for setting color of Tasmota devices whilst they are not turned
+    # on using SetOption20 (Update of Dimmer/Color/CT without turning power on)
+    #
+    # There appears to be some ability to do this with the Home Assistant light
+    # entity via light.turn_on, however it often causes the light to turn on.
+    alias: 'tasmota: set color'
+    icon: mdi:lightbulb
+    mode: parallel
+    max: 20
+    fields:
+      topic:
+        description: The MQTT topic of the tasmota device
+        example: tasmota_AE5C3A
+      color:
+        description: The color to set
+        example: 255,255,255
+      retain_brightness:
+        description: Set color adjusted to current Dimmer value
+        example: false
+    sequence:
+      - service: mqtt.publish
+        data:
+          topic: cmnd/{{ topic }}/Color{{ '2' if retain_brightness else '' }}
+          payload: '{{ color }}'
+
+# B37D4D 3000K @ 70%
+# FFF6ED 6000K @ 100%

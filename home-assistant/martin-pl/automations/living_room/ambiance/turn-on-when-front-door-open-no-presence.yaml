@@ -1,0 +1,29 @@
+id: '9847983723989'
+alias: 'living room ambiance: turn on when front door opens and no presence'
+description: ''
+trigger:
+- platform: state
+  entity_id: binary_sensor.front_door
+  from: 'off'
+  to: 'on'
+condition:
+- condition: or
+  conditions:
+  - condition: sun
+    before: sunrise
+  - condition: sun
+    after: sunset
+- condition: state
+  entity_id: input_boolean.away_mode
+  state: 'off'
+- condition: state
+  entity_id: light.living_room_downlights
+  state: 'off'
+- condition: state
+  entity_id: group.all_people
+  state: 'not_home'
+action:
+- service: light.turn_on
+  target:
+    entity_id: light.living_room_ambiance
+mode: single

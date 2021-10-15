@@ -1,0 +1,27 @@
+id: '98437594832798'
+alias: 'dining cabinet: toggle for living room downlights state'
+description: ''
+trigger:
+- platform: state
+  entity_id: light.living_room_downlights
+  to:
+    - 'on'
+    - 'off'
+condition:
+- condition: or
+  conditions:
+  - condition: sun
+    before: sunrise
+  - condition: sun
+    after: sunset
+- condition: state
+  entity_id: input_boolean.away_mode
+  state: 'off'
+- condition: state
+  entity_id: group.all_people
+  state: 'home'
+action:
+- service: 'light.turn_{{ "off" if trigger.to_state.state == "on" else "on" }}'
+  target:
+    entity_id: light.cabinet_glow
+mode: single

@@ -1,0 +1,26 @@
+id: '1626176121966'
+alias: 'living room ambiance: turn on when presence is detected'
+description: ''
+trigger:
+- platform: state
+  entity_id: group.all_people
+  from: not_home
+  to: home
+condition:
+- condition: or
+  conditions:
+  - condition: sun
+    before: sunrise
+  - condition: sun
+    after: sunset
+- condition: state
+  entity_id: input_boolean.away_mode
+  state: 'off'
+- condition: state
+  entity_id: light.living_room_downlights
+  state: 'off'
+action:
+- service: light.turn_on
+  target:
+    entity_id: light.living_room_ambiance
+mode: single

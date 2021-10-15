@@ -5,11 +5,9 @@ trigger:
 - platform: sun
   event: sunset
   id: sunset
-  offset: '-30'
 - platform: sun
   event: sunrise
   id: sunrise
-  offset: '-30'
 condition: []
 action:
 - choose:
@@ -17,17 +15,15 @@ action:
     - condition: trigger
       id: sunset
     sequence:
-    - service: light.turn_on
+    - service: script.tasmota_set_color
       data:
-        brightness_pct: 80
-        kelvin: 3000
-      target:
-        entity_id: light.cabinet_glow
+        topic: tasmota_AE5C3A
+        # #B37D4D: 3000K @ 70%
+        color: '#B37D4D'
   default:
-  - service: light.turn_on
+  - service: script.tasmota_set_color
     data:
-      brightness_pct: 100
-      kelvin: 6000
-    target:
-      entity_id: light.cabinet_glow
+      topic: tasmota_AE5C3A
+      # #FFF6ED: 6000K @ 100%
+      color: '#FFF6ED'
 mode: single

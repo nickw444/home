@@ -1,0 +1,25 @@
+id: '98437594832473'
+alias: 'breakfast bar: turn off when living room downlights turn on'
+description: ''
+trigger:
+- platform: state
+  entity_id: light.living_room_downlights
+  to: 'on'
+condition:
+- condition: or
+  conditions:
+  - condition: sun
+    before: sunrise
+  - condition: sun
+    after: sunset
+- condition: state
+  entity_id: input_boolean.away_mode
+  state: 'off'
+- condition: state
+  entity_id: group.all_people
+  state: 'home'
+action:
+- service: 'light.turn_off'
+  target:
+    entity_id: light.breakfast_bar
+mode: single

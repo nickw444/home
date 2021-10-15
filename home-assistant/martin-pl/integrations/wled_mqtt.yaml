@@ -1,0 +1,20 @@
+script:
+  wled_set_color:
+    # Support for setting color of WLED devices whilst they are not turned
+    # on without turning the light on
+    alias: 'wled: set color'
+    icon: mdi:led-strip-variant
+    mode: parallel
+    max: 20
+    fields:
+      topic:
+        description: The MQTT topic of the wled device
+        example: wled/breakfast-bar
+      color:
+        description: The color to set
+        example: '#FF0000'
+    sequence:
+      - service: mqtt.publish
+        data:
+          topic: '{{ topic }}/col'
+          payload: '{{ color }}'

@@ -1,0 +1,6 @@
+light:
+  - platform: group
+    name: Living Room Ambiance
+    entities:
+      - light.cabinet_glow
+      - light.breakfast_bar_calibrated

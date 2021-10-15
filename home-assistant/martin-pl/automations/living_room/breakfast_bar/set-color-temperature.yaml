@@ -1,0 +1,27 @@
+id: '16263412645738'
+alias: 'breakfast bar: set colour temperature at sunrise/sunset'
+description: ''
+trigger:
+- platform: sun
+  event: sunset
+  id: sunset
+- platform: sun
+  event: sunrise
+  id: sunrise
+condition: []
+action:
+- choose:
+  - conditions:
+    - condition: trigger
+      id: sunset
+    sequence:
+    - service: script.wled_set_color
+      data:
+        topic: wled/breakfast-bar
+        color: '#FFA853'
+  default:
+  - service: script.wled_set_color
+    data:
+      topic: wled/breakfast-bar
+      color: '#FFD6B1'
+mode: single
