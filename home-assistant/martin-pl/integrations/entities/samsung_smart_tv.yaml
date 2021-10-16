@@ -3,8 +3,10 @@ media_player:
     name: "Samsung Smart TV"
     host: '192.168.2.20'
     mac: !secret samsung_smart_tv_mac
-    api_key: 113a43f1-2c8b-49e4-a334-bd59fd0ee478
-    device_id: 0c289186-443c-4b3c-8d2b-e51422bfbdac
+    update_method: websockets
+    # Avoid using SmartThings API as it makes TV uncontrollable
+    # api_key: !secret samsung_smart_tv_api_key
+    # device_id: !secret samsung_smart_tv_device_id
     app_list: >-
       {
         "7 Plus": "icp4AvUPiA.7plus",
@@ -18,6 +20,7 @@ media_player:
     channel_list: >-
       {
         "ABCTV HD": "20",
+        "ABC News 24": "24",
         "SBS HD": "30",
         "Seven HD": "70",
         "Nine HD": "90",
