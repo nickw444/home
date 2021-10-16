@@ -1,5 +1,0 @@
-sensor:
-  - platform: aussie_broadband
-    username: !secret aussie_broadband_username
-    password: !secret aussie_broadband_password
-    service_id: !secret aussie_broadband_service_id
