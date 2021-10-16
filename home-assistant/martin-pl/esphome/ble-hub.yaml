@@ -27,15 +27,15 @@ sensor:
   - platform: xiaomi_hhccjcy01
     mac_address: 'C4:7C:8D:6D:6F:41'
     temperature:
-      name: "Outdoor Flower Temperature"
+      name: "Outdoor Temperature"
     moisture:
-      name: "Outdoor Flower Moisture"
+      name: "Lemon Tree Moisture"
     illuminance:
-      name: "Outdoor Flower Illuminance"
+      name: "Outdoor Illuminance"
     conductivity:
-      name: "Outdoor Flower Soil Conductivity"
+      name: "Lemon Tree Soil Conductivity"
     battery_level:
-      name: "Outdoor Flower Battery Level"
+      name: "Lemon Tree Battery Level"
 
   - platform: xiaomi_miscale
     mac_address: 'C8:47:8C:CA:49:0C'
