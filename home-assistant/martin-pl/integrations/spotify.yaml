@@ -3,8 +3,15 @@ spotify:
   client_secret: !secret spotify_client_secret_nick
 
 spotcast:
-  sp_dc: !secret spotcast_sp_dc
-  sp_key: !secret spotcast_sp_key
+  sp_dc: !secret spotcast_nick_sp_dc
+  sp_key: !secret spotcast_nick_sp_key
+  accounts:
+    nick:
+      sp_dc: !secret spotcast_nick_sp_dc
+      sp_key: !secret spotcast_nick_sp_key
+    kate:
+      sp_dc: !secret spotcast_kate_sp_dc
+      sp_key: !secret spotcast_kate_sp_key
 
 sensor:
   - platform: spotcast
@@ -17,14 +24,20 @@ switch:
         icon_template: "mdi:speaker"
         value_template: >
           {{
-           is_state('media_player.spotify_nicholas_whyte', 'playing') and
-           is_state_attr('media_player.spotify_nicholas_whyte', 'source', 'Soundbar Cast')
+           (is_state('media_player.spotify_nicholas_whyte', 'playing') and
+           is_state_attr('media_player.spotify_nicholas_whyte', 'source', 'Soundbar Cast')) or
+           (is_state('media_player.spotify_kate_scott', 'playing') and
+           is_state_attr('media_player.spotify_kate_scott', 'source', 'Soundbar Cast'))
           }}
         turn_on:
           - service: spotcast.start
             data:
               entity_id: media_player.soundbar_cast
+              uri: ''
               force_playback: true
+              shuffle: true
+              random_song: true
+              account: "{{ 'nick' if is_state('person.nick_whyte','home') else 'kate' }}"
         turn_off:
           - service: media_player.media_pause
             target:
