@@ -1,0 +1,17 @@
+proximity:
+  home:
+    zone: home
+    devices:
+      - device_tracker.nicks_iphone_gps
+      - device_tracker.kates_iphone_gps
+    tolerance: 50
+  home_nick:
+    zone: home
+    devices:
+      - device_tracker.nicks_iphone_gps
+    tolerance: 50
+  home_kate:
+    zone: home
+    devices:
+      - device_tracker.kates_iphone_gps
+    tolerance: 50

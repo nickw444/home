@@ -1,0 +1,48 @@
+esphome:
+  name: living-room-ble-tracker
+  platform: ESP32
+  board: esp32dev
+  
+wifi:
+  ssid: !secret smart_wifi_ssid
+  password: !secret smart_wifi_password
+  use_address: 192.168.2.127
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "living_room_ble_tracker"
+    password: !secret wifi_fallback_password
+  
+captive_portal:
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+
+ota:
+
+esp32_ble_tracker:
+binary_sensor:
+  - platform: ble_presence
+    mac_address: E0:1D:2D:0B:4A:9B
+    name: "Evie"
+    id: evie
+    on_state:
+      then:
+        - if:
+            condition: 
+              binary_sensor.is_on: evie
+            then:
+              - homeassistant.service:
+                  service: device_tracker.see
+                  data:
+                    dev_id: evie
+                    location_name: 'home'
+            else:
+              - homeassistant.service:
+                  service: device_tracker.see
+                  data:
+                    dev_id: evie
+                    location_name: 'not_home'
