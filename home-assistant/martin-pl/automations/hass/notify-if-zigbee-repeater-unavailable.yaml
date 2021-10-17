@@ -1,0 +1,19 @@
+id: '309842390890238'
+alias: 'hass: notify if zigbee repeater unavailable'
+description: ''
+trigger:
+- platform: state
+  entity_id:
+    - binary_sensor.living_room_repeater_online
+    - binary_sensor.bedroom_repeater_online
+  from: 'on'
+  to: 'off'
+condition: []
+action:
+- service: notify.mobile_app_nicks_iphone
+  data:
+    title: Zigbee Status
+    message: The {{ trigger.from_state.attributes.friendly_name.rstrip(' Online') }} is offline.
+    data:
+      tag: zigbee-online
+mode: single
