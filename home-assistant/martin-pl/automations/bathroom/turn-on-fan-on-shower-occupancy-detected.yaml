@@ -14,7 +14,7 @@ action:
     message: >
       bathroom_shower_occupancy: {{ states('binary_sensor.bathroom_shower_occupancy') }}
       bathroom_climate_humidity_elevated: {{ states('binary_sensor.bathroom_climate_humidity_elevated') }}
-      bathroom_climate_humidity_increasing: {{ states('binary_sensor.bathroom_climate_humidity_increasing') }}
+      bathroom_motion_detected_recently: {{ states('binary_sensor.bathroom_motion_detected_recently') }}
       bathroom_climate_humidity: {{ states('sensor.bathroom_climate_humidity') }}
       bedroom_climate_humidity: {{ states('sensor.bedroom_climate_humidity') }}
 # - service: fan.turn_on

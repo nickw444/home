@@ -1,14 +1,4 @@
 binary_sensor:
-  # Tracks 3 humidity readings over 3 minutes.
-  # If the change is greater than 10%, evals to true. (10/(60*3))
-  - platform: trend
-    sensors:
-      bathroom_climate_humidity_increasing:
-        max_samples: 6
-        entity_id: sensor.bathroom_climate_humidity
-        sample_duration: 180
-        min_gradient: 0.05556
-
   - platform: template
     sensors:
       bathroom_climate_humidity_elevated:
@@ -16,9 +6,3 @@ binary_sensor:
         # Humidity considered "elevated" when 20% higher than measured bedroom humidity.
         value_template: >
           {{ states('sensor.bathroom_climate_humidity')|float > states('sensor.bedroom_climate_humidity')|float * 1.2  }}
-
-      bathroom_shower_occupancy:
-        # Occupancy detected when bathroom humidity elevated or on sharp increase of humidity
-        friendly_name: "Bathroom Shower Occupancy"
-        value_template: >
-          {{ states('binary_sensor.bathroom_climate_humidity_elevated') or states('binary_sensor.bathroom_climate_humidity_increasing')  }}
