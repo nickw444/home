@@ -1,0 +1,14 @@
+id: '1630232515648'
+alias: 'living room camera: turn off camera when arriving home'
+description: ''
+trigger:
+- platform: state
+  entity_id: group.all_people
+  to: home
+  for: 00:15:00
+condition: []
+action:
+- service: switch.turn_off
+  target:
+    entity_id: switch.living_room_camera_power
+mode: single
