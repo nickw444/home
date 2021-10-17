@@ -1,0 +1,6 @@
+template:
+  - binary_sensor:
+      - name: "Bathroom Motion Detected Recently"
+        state: "{{ states('binary_sensor.bathroom_motion_occupancy') }}"
+        delay_off: 00:10:00
+        device_class: occupancy
