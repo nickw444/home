@@ -18,6 +18,11 @@ condition:
   entity_id: group.all_people
   state: home
 action:
+- condition: not
+  conditions:
+    - condition: state
+      entity_id: switch.electric_blanket
+      state: unavailable
 - service: switch.turn_on
   target:
     entity_id: switch.electric_blanket
@@ -42,9 +47,4 @@ action:
     message: The electric blanket was turned off
     data:
       tag: electric-blanket
-# - service: notify.everyone
-#   data:
-#     message: clear_notification
-#     data:
-#       tag: 'electric-blanket'
 mode: single
