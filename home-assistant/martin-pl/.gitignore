@@ -18,6 +18,7 @@ image
 frigate.yml
 blueprints
 owntone/music
+zigbee2mqtt
 
 # Managed by hass-deps (see hass-deps.yaml)
 custom_components/*
