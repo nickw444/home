@@ -1,0 +1,15 @@
+id: "1627290516622"
+alias: "mailbox: notify on mailbox opened"
+description: ""
+trigger:
+  - platform: state
+    entity_id: binary_sensor.mailbox_contact
+    from: "off"
+    to: "on"
+condition: []
+action:
+  - service: notify.everyone
+    data:
+      message: The mailbox opened!
+      title: You have mail
+mode: single
