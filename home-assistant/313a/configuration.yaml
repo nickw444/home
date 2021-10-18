@@ -1,9 +1,9 @@
 default_config:
 homeassistant:
   name: 313A
-  latitude: -33.990236
-  longitude: 151.090537
-  elevation: 20
+  latitude: !secret latitude
+  longitude: !secret longitude
+  elevation: !secret elevation
   unit_system: metric
   time_zone: Australia/Sydney
   auth_providers:
