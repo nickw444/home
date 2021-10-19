@@ -5,8 +5,18 @@ cover:
       - cover.living_room
       - cover.kitchen
   - platform: group
+    name: 'Living Room Day Blinds'
+    entities:
+      - cover.living_room_day
+      - cover.kitchen_day
+  - platform: group
     name: 'All Blinds'
     entities:
       - cover.living_room
+      - cover.living_room_day
       - cover.kitchen
+      - cover.kitchen_day
       - cover.study
+      - cover.study_day
+      - cover.bedroom_window
+      - cover.bedroom_door
