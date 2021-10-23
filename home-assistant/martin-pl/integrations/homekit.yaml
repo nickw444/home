@@ -21,7 +21,6 @@ homekit:
       - script.osmo_clean_all_areas
     exclude_entities:
       - cover.living_room_blinds
-      - cover.living_room_day_blinds
       - cover.all_blinds
       - light.bedroom_lamps
       - light.living_room_downlights

@@ -1,31 +1,34 @@
-id: '1600774623357'
-alias: 'blinds: open the blinds on first motion detected, once per day, after sunrise'
-description: ''
+id: "1600774623357"
+alias: "blinds: open the blinds on first motion detected, once per day, after sunrise"
+description: ""
 trigger:
-- platform: time
-  at: 09:00:00
-- type: motion
-  platform: device
-  device_id: 42d8cbc5f64e490c996b0dd2d70c8681
-  entity_id: binary_sensor.living_room_motion_occupancy
-  domain: binary_sensor
+  - platform: time
+    at: 09:00:00
+  - type: motion
+    platform: device
+    device_id: 42d8cbc5f64e490c996b0dd2d70c8681
+    entity_id: binary_sensor.living_room_motion_occupancy
+    domain: binary_sensor
 condition:
-- condition: template
-  value_template: '{{ state_attr(''automation.open_blinds_on_motion'', ''last_triggered'')
-    < now().replace(hour=3, minute=0, second=0) }}'
-- condition: state
-  entity_id: group.all_people
-  state: home
-- condition: state
-  entity_id: input_boolean.guest_mode
-  state: 'off'
-- condition: sun
-  after: sunrise
+  - condition: template
+    value_template:
+      "{{ state_attr('automation.open_blinds_on_motion', 'last_triggered')
+      < now().replace(hour=3, minute=0, second=0) }}"
+  - condition: state
+    entity_id: group.all_people
+    state: home
+  - condition: state
+    entity_id: input_boolean.guest_mode
+    state: "off"
+  - condition: sun
+    after: sunrise
 action:
-- service: cover.open_cover
-  data: {}
-  entity_id:
-  - cover.kitchen
-  - cover.living_room
-  - cover.study
+  - service: cover.open_cover
+    data: {}
+    entity_id:
+      - cover.kitchen
+      - cover.kitchen_day
+      - cover.living_room
+      - cover.living_room_day
+      - cover.study
 mode: single
