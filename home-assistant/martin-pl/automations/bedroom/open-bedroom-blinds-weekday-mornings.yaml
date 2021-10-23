@@ -1,0 +1,27 @@
+id: "1600774623358"
+alias: "blinds: open bedroom blinds on weekday mornings"
+description: ""
+trigger:
+  - platform: time
+    at: 09:15:00
+condition:
+  - condition: state
+    entity_id: group.all_people
+    state: home
+  - condition: state
+    entity_id: input_boolean.away_mode
+    state: "off"
+  - condition: time
+    weekday:
+      - mon
+      - tue
+      - wed
+      - thu
+      - fri
+action:
+  - service: cover.open_cover
+    data: {}
+    entity_id:
+      - cover.bedroom_door
+      - cover.bedroom_window
+mode: single

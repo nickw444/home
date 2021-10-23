@@ -1,0 +1,12 @@
+id: "98347972982483"
+alias: "Bedroom Wall button: toggle bedroom blinds on button press"
+description: ""
+trigger:
+  - platform: state
+    entity_id: sensor.bedroom_wall_button_click
+    to: single
+condition: []
+action:
+  - service: cover.toggle
+    entity_id: cover.bedroom_blinds
+mode: single
