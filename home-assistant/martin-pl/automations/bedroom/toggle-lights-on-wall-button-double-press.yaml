@@ -1,0 +1,12 @@
+id: "9454988347972982483"
+alias: "Bedroom Wall button: toggle bedroom lights on button double press"
+description: ""
+trigger:
+  - platform: state
+    entity_id: sensor.bedroom_wall_button_click
+    to: double
+condition: []
+action:
+  - service: light.toggle
+    entity_id: light.bedroom_lamps
+mode: single
