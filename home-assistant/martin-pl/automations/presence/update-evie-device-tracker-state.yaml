@@ -1,0 +1,16 @@
+id: "1634814130270"
+alias: "presence: update evie device tracker"
+description: ""
+trigger:
+  - platform: state
+    entity_id: binary_sensor.evie
+  - platform: homeassistant
+    event: start
+condition: []
+action:
+  - service: device_tracker.see
+    data:
+      dev_id: evie
+      location_name: |-
+        {{ {"on": "home", "off": "not_home"}.get(states("binary_sensor.evie"),"unavailable") }}
+mode: single
