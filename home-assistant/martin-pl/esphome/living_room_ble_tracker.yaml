@@ -24,25 +24,10 @@ api:
 ota:
 
 esp32_ble_tracker:
+
 binary_sensor:
   - platform: ble_presence
-    mac_address: E0:1D:2D:0B:4A:9B
+    mac_address: !secret evie_itag_mac_address
     name: "Evie"
     id: evie
-    on_state:
-      then:
-        - if:
-            condition: 
-              binary_sensor.is_on: evie
-            then:
-              - homeassistant.service:
-                  service: device_tracker.see
-                  data:
-                    dev_id: evie
-                    location_name: 'home'
-            else:
-              - homeassistant.service:
-                  service: device_tracker.see
-                  data:
-                    dev_id: evie
-                    location_name: 'not_home'
+  
