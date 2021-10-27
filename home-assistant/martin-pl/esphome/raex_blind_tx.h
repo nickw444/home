@@ -21,6 +21,9 @@ enum _raex_action {
   TX_RAEX_ACTION_UP = 254,
   TX_RAEX_ACTION_DOWN = 252,
   TX_RAEX_ACTION_STOP = 253,
+  TX_RAEX_ACTION_REV_DIR = 238,
+  TX_RAEX_ACTION_NUDGE_LEFT = 220,
+  TX_RAEX_ACTION_NUDGE_RIGHT = 219,
   TX_RAEX_ACTION_PAIR = 127,
 };
 typedef enum _raex_action raex_action_t;
@@ -143,9 +146,20 @@ class RaexBlindTransmitComponent : public Component, public CustomAPIDevice {
         action_id = TX_RAEX_ACTION_STOP;
       } else if (action.compare("PAIR") == 0) {
         action_id = TX_RAEX_ACTION_PAIR;
+      } else if (action.compare("REV_DIR") == 0) {
+        action_id = TX_RAEX_ACTION_REV_DIR;
+      } else if (action.compare("OPEN_NUDGE") == 0) {
+        action_id = TX_RAEX_ACTION_NUDGE_LEFT;
+      } else if (action.compare("CLOSE_NUDGE") == 0) {
+        action_id = TX_RAEX_ACTION_NUDGE_RIGHT;
       } else {
         ESP_LOGE(TAG, "Malformed payload received. Unknown action [%s]", action.c_str());
         return;
+      }
+
+      if (action_id != TX_RAEX_ACTION_UP && action_id != TX_RAEX_ACTION_DOWN) {
+        // Only send multiple blocks for up/down. For all other actions, schedule a single block only
+        blocks = 1;
       }
 
       uint32_t key = remote_id << 8 | channel_id;
