@@ -22,6 +22,8 @@ api:
 
 ota:
 
+esp32_ble_tracker:
+
 binary_sensor:
   - platform: gpio
     pin: GPIO34
@@ -30,6 +32,12 @@ binary_sensor:
       - delayed_on: 100ms
   - platform: status
     name: "RF Controller Status"
+
+  # BLE Presence for iTag
+  - platform: ble_presence
+    mac_address: !secret evie_itag_mac_address
+    name: "Evie"
+    id: evie
 
 sensor:
   - platform: uptime
