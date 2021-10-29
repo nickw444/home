@@ -1,0 +1,22 @@
+id: "161079373912932"
+alias: "bathroom: turn on lights on occupancy detected"
+description: ""
+mode: single
+trigger:
+  - platform: state
+    entity_id: binary_sensor.bathroom_motion_occupancy
+    to: "on"
+condition:
+  - condition: state
+    entity_id: input_boolean.away_mode
+    state: "off"
+  - condition: numeric_state
+    entity_id: sensor.bathroom_motion_illuminance_lux
+    below: "50"
+  - condition: state
+    entity_id: light.bathroom
+    state: "off"
+action:
+  - service: light.turn_on
+    target:
+      entity_id: light.bathroom

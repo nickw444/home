@@ -1,23 +1,32 @@
-id: '1610793739127'
-alias: 'bathroom: turn on fan when shower occupancy detected'
-description: ''
+id: "1610793739127"
+alias: "bathroom: turn on fan when shower occupancy detected"
+description: ""
 trigger:
-- platform: state
-  entity_id: binary_sensor.bathroom_shower_occupancy
-  to: 'on'
-  from: 'off'
-condition: []
+  - platform: state
+    entity_id: binary_sensor.bathroom_climate_humidity_elevated
+    from: "off"
+    to: "on"
+condition:
+  - condition: state
+    entity_id: binary_sensor.bathroom_motion_detected_recently
+    state: "on"
+  - condition: state
+    entity_id: fan.bathroom
+    state: "off"
 action:
-- service: notify.mobile_app_nicks_iphone
-  data:
-    title: Would have turned on bathroom fan
-    message: >
-      bathroom_shower_occupancy: {{ states('binary_sensor.bathroom_shower_occupancy') }}
-      bathroom_climate_humidity_elevated: {{ states('binary_sensor.bathroom_climate_humidity_elevated') }}
-      bathroom_motion_detected_recently: {{ states('binary_sensor.bathroom_motion_detected_recently') }}
-      bathroom_climate_humidity: {{ states('sensor.bathroom_climate_humidity') }}
-      bedroom_climate_humidity: {{ states('sensor.bedroom_climate_humidity') }}
+  - service: notify.mobile_app_nicks_iphone
+    data:
+      title: Would have turned on bathroom fan
+      message: >
+        bathroom_climate_humidity_elevated: {{ states('binary_sensor.bathroom_climate_humidity_elevated') }}
+        bathroom_motion_detected_recently: {{ states('binary_sensor.bathroom_motion_detected_recently') }}
+        bathroom_climate_humidity: {{ states('sensor.bathroom_climate_humidity') }}
+        bedroom_climate_humidity: {{ states('sensor.bedroom_climate_humidity') }}
 # - service: fan.turn_on
 #   data: {}
 #   entity_id: fan.bathroom
+# Maybe (move timer to hass from shelly.)
+# - Wait until fan turned off manually
+# - Wait for humidity to not be elevated, turn off fan.
+# - Wait for some time period
 mode: single
