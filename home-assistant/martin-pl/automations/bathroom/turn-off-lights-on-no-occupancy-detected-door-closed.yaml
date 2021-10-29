@@ -1,0 +1,26 @@
+id: "328947345897239"
+alias: "bathroom: turn off lights on no occupancy detected when door is closed"
+description: >
+  Turns of bathroom lights when the door is closed and occupancy has not been 
+  detected for some longer period of time.
+mode: single
+trigger:
+  - platform: state
+    entity_id: binary_sensor.bathroom_motion_occupancy
+    to: "off"
+    from: "on"
+    for: "00:20:00"
+condition:
+  - condition: state
+    entity_id: input_boolean.away_mode
+    state: "off"
+  - condition: state
+    entity_id: light.bathroom
+    state: "on"
+  - condition: state
+    entity_id: binary_sensor.bathroom_door
+    state: "off" # Door is closed
+action:
+  - service: light.turn_off
+    target:
+      entity_id: light.bathroom
