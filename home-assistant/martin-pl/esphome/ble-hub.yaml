@@ -22,6 +22,12 @@ wifi:
 
 captive_portal:
 
+i2c:
+  sda: 18
+  scl: 19
+  scan: true
+  id: bus_a
+
 esp32_ble_tracker:
 sensor:
   - platform: xiaomi_hhccjcy01
@@ -36,6 +42,25 @@ sensor:
       name: "Lemon Tree Soil Conductivity"
     battery_level:
       name: "Lemon Tree Battery Level"
+
+  - platform: sgp30
+    eco2:
+      name: "Study eCO2"
+      accuracy_decimals: 1
+      filters:
+      - sliding_window_moving_average:
+          window_size: 30
+          send_every: 30
+    tvoc:
+      name: "Study TVOC"
+      accuracy_decimals: 1
+      filters:
+      - sliding_window_moving_average:
+          window_size: 30
+          send_every: 30
+    store_baseline: yes
+    address: 0x58
+    update_interval: 1s
 
   - platform: xiaomi_miscale
     mac_address: 'C8:47:8C:CA:49:0C'
