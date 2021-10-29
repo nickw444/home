@@ -1,0 +1,139 @@
+sensor:
+  - platform: template
+    sensors:
+      energy_tariff:
+        friendly_name: Energy Tariff
+        value_template: |-
+          {% set now = now() %}
+          {% set is_workday = is_state('binary_sensor.workday_sensor', 'on') %}
+          {% set is_summer = now.month in (11,12,1,2,3)  %}
+          {% set is_winter = now.month in (6,7,8)  %}
+
+          {% if now.hour < 7 or now.hour >= 22 %}
+            off_peak
+          {% elif is_summer and is_workday  %}
+            {% if now.hour >= 14 and now.hour < 20 %}
+              peak
+            {% else %}
+              shoulder
+            {% endif %}
+          {% elif is_winter and is_workday %}
+            {% if now.hour >= 17 and now.hour < 21 %}
+              peak
+            {% else %}
+              shoulder
+            {% endif %}
+          {% else %}
+            shoulder
+          {% endif %}
+      energy_tariff_rate:
+        friendly_name: Energy Tariff Rate
+        unit_of_measurement: $
+        value_template: |-
+          {%- if is_state('sensor.energy_tariff', 'peak') -%}
+            0.5287
+          {%- elif is_state('sensor.energy_tariff', 'shoulder') -%}
+            0.2764
+          {%- else -%}
+            0.1686
+          {%- endif -%}
+
+      mains_power_instantaneous_cost:
+        friendly_name: "Mains Power Instantaneous Cost"
+        unit_of_measurement: $/h
+        value_template: "{{ (states('sensor.energy_tariff_rate')|float * states('sensor.mains_input')|float / 1000) | round(2) }}"
+
+      mains_energy_consumed_daily:
+        friendly_name: "Mains Energy Consumed Today"
+        unit_of_measurement: kWh
+        value_template: |
+          {{
+            (
+              states('sensor.daily_energy_peak')|float +
+              states('sensor.daily_energy_shoulder')|float +
+              states('sensor.daily_energy_off_peak')|float
+            ) | round(2)
+          }}
+
+      mains_energy_consumed_daily_cost:
+        friendly_name: "Mains Energy Cost Today"
+        unit_of_measurement: $
+        value_template: |
+          {{ (
+            1.091 +
+            states('sensor.daily_energy_peak')|float * 0.5287 +
+            states('sensor.daily_energy_shoulder')|float * 0.2764 +
+            states('sensor.daily_energy_off_peak')|float * 0.1686
+          ) | round(2) }}
+      mains_energy_consumed_weekly_cost:
+        friendly_name: "Mains Energy Cost This Week"
+        unit_of_measurement: $
+        value_template: |
+          {{ (
+            ((now() - strptime(state_attr('sensor.weekly_energy_peak', 'last_reset'), '%Y-%m-%dT%H:%M:%S.%f%z')).days + 1) * 1.091 +
+            states('sensor.weekly_energy_peak')|float * 0.5287 +
+            states('sensor.weekly_energy_shoulder')|float * 0.2764 +
+            states('sensor.weekly_energy_off_peak')|float * 0.1686
+          ) | round(2) }}
+      mains_energy_consumed_quarterly_cost:
+        friendly_name: "Mains Energy Cost This Quarter"
+        unit_of_measurement: $
+        value_template: |
+          {{ (
+            ((now() - strptime(state_attr('sensor.quarterly_energy_peak', 'last_reset'), '%Y-%m-%dT%H:%M:%S.%f%z')).days + 1) * 1.091 +
+            states('sensor.quarterly_energy_peak')|float * 0.5287 +
+            states('sensor.quarterly_energy_shoulder')|float * 0.2764 +
+            states('sensor.quarterly_energy_off_peak')|float * 0.1686
+          ) | round(2) }}
+
+binary_sensor:
+  # Use workday sensor to determine whether tariff falls into
+  # "Weekends & public holidays" charge
+  # "off" if Sat, Sun or Pub Holiday
+  - platform: workday
+    country: AU
+    province: NSW
+
+utility_meter:
+  daily_energy:
+    # energy_consumed_2: Yearly energy consumed counter.
+    source: sensor.energy_consumed_2
+    cycle: daily
+    tariffs:
+      - peak
+      - shoulder
+      - off_peak
+  weekly_energy:
+    source: sensor.energy_consumed_2
+    cycle: weekly
+    tariffs:
+      - peak
+      - shoulder
+      - off_peak
+  quarterly_energy:
+    source: sensor.energy_consumed_2
+    cycle: quarterly
+    tariffs:
+      - peak
+      - shoulder
+      - off_peak
+
+automation:
+  - id: '1611648224640'
+    alias: 'energy: set utility meter tariff'
+    description: ''
+    trigger:
+    - platform: state
+      entity_id: sensor.energy_tariff
+    - platform: homeassistant
+      event: start
+    condition: []
+    action:
+    - service: utility_meter.select_tariff
+      data:
+        tariff: '{{ states(''sensor.energy_tariff'') }}'
+      entity_id:
+        - utility_meter.daily_energy
+        - utility_meter.weekly_energy
+        - utility_meter.quarterly_energy
+    mode: single
