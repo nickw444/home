@@ -58,6 +58,7 @@ input_select:
       - One
       - Two
       - Three
+      - Four
   osmo_vacuum_power:
     name: "Vacuum Power"
     options:
@@ -81,11 +82,11 @@ sensor:
       value_template: >
         {%- set rooms=
           [
-            ('input_boolean.osmo_clean_living_room', 4),
+            ('input_boolean.osmo_clean_living_room', 10),
             ('input_boolean.osmo_clean_dining', 6),
-            ('input_boolean.osmo_clean_hallway', 2),
-            ('input_boolean.osmo_clean_bedroom', 1),
-            ('input_boolean.osmo_clean_study', 3),
+            ('input_boolean.osmo_clean_hallway', 3),
+            ('input_boolean.osmo_clean_bedroom', 7),
+            ('input_boolean.osmo_clean_study', 2),
           ]
         -%}
         [
@@ -98,7 +99,7 @@ sensor:
       value_template: >
         {%- set rooms=
           [
-            ('input_boolean.osmo_clean_kitchen', 5),
+            ('input_boolean.osmo_clean_kitchen', 4),
           ]
         -%}
         [
@@ -121,159 +122,159 @@ sensor:
       value_template: '{{ strptime(states("input_datetime.osmo_last_clean_study"), "%Y-%m-%d %H:%M:%S").strftime("%A") }}'
 
 automation:
-- id: 'osmo_toggle_all_areas_on'
-  alias: 'osmo: toggle all areas on'
-  description: ''
-  trigger:
-  - platform: state
-    entity_id: input_boolean.osmo_toggle_clean_all_areas
-    from: 'off'
-    to: 'on'
-  condition: []
-  action:
-  - service: input_boolean.turn_on
-    target:
-      entity_id:
-      - input_boolean.osmo_clean_living_room
-      - input_boolean.osmo_clean_kitchen
-      - input_boolean.osmo_clean_dining
-      - input_boolean.osmo_clean_hallway
-      - input_boolean.osmo_clean_bedroom
-      - input_boolean.osmo_clean_study
-  mode: single
+  - id: "osmo_toggle_all_areas_on"
+    alias: "osmo: toggle all areas on"
+    description: ""
+    trigger:
+      - platform: state
+        entity_id: input_boolean.osmo_toggle_clean_all_areas
+        from: "off"
+        to: "on"
+    condition: []
+    action:
+      - service: input_boolean.turn_on
+        target:
+          entity_id:
+            - input_boolean.osmo_clean_living_room
+            - input_boolean.osmo_clean_kitchen
+            - input_boolean.osmo_clean_dining
+            - input_boolean.osmo_clean_hallway
+            - input_boolean.osmo_clean_bedroom
+            - input_boolean.osmo_clean_study
+    mode: single
 
-- id: 'osmo_toggle_all_areas_backward'
-  alias: 'osmo: toggle all areas backward'
-  description: ''
-  trigger:
-  - platform: state
-    entity_id:
-    - input_boolean.osmo_clean_living_room
-    - input_boolean.osmo_clean_kitchen
-    - input_boolean.osmo_clean_dining
-    - input_boolean.osmo_clean_hallway
-    - input_boolean.osmo_clean_bedroom
-    - input_boolean.osmo_clean_study
-    from: 'on'
-    to: 'off'
-  condition: []
-  action:
-  - service: input_boolean.turn_off
-    target:
-      entity_id: input_boolean.osmo_toggle_clean_all_areas
-  mode: single
+  - id: "osmo_toggle_all_areas_backward"
+    alias: "osmo: toggle all areas backward"
+    description: ""
+    trigger:
+      - platform: state
+        entity_id:
+          - input_boolean.osmo_clean_living_room
+          - input_boolean.osmo_clean_kitchen
+          - input_boolean.osmo_clean_dining
+          - input_boolean.osmo_clean_hallway
+          - input_boolean.osmo_clean_bedroom
+          - input_boolean.osmo_clean_study
+        from: "on"
+        to: "off"
+    condition: []
+    action:
+      - service: input_boolean.turn_off
+        target:
+          entity_id: input_boolean.osmo_toggle_clean_all_areas
+    mode: single
 
-- id: 'osmo_set_water_flow'
-  alias: 'osmo: set water flow'
-  description: ''
-  trigger:
-  - platform: state
-    entity_id: input_select.osmo_water_flow
-  condition: []
-  action:
-  - service: vacuum.send_command
-    target:
-      entity_id: vacuum.osmo
-    data:
-      command: set_water_level
-      params:
-        water_level: >
-          {{ {'Low': 1, 'Medium': 2, 'High': 3, 'Ultra High': 4 }.get(states('input_select.osmo_water_flow')) }}
-  mode: single
+  - id: "osmo_set_water_flow"
+    alias: "osmo: set water flow"
+    description: ""
+    trigger:
+      - platform: state
+        entity_id: input_select.osmo_water_flow
+    condition: []
+    action:
+      - service: vacuum.send_command
+        target:
+          entity_id: vacuum.osmo
+        data:
+          command: set_water_level
+          params:
+            water_level: >
+              {{ {'Low': 1, 'Medium': 2, 'High': 3, 'Ultra High': 4 }.get(states('input_select.osmo_water_flow')) }}
+    mode: single
 
-- id: 'osmo_set_vacuum_power'
-  alias: 'osmo: set vacuum power'
-  description: ''
-  trigger:
-  - platform: state
-    entity_id: input_select.osmo_vacuum_power
-  condition: []
-  action:
-  - service: vacuum.set_fan_speed
-    data:
-      fan_speed: "{{ states('input_select.osmo_vacuum_power') }}"
-    target:
-      entity_id: vacuum.osmo
-  mode: single
+  - id: "osmo_set_vacuum_power"
+    alias: "osmo: set vacuum power"
+    description: ""
+    trigger:
+      - platform: state
+        entity_id: input_select.osmo_vacuum_power
+    condition: []
+    action:
+      - service: vacuum.set_fan_speed
+        data:
+          fan_speed: "{{ states('input_select.osmo_vacuum_power') }}"
+        target:
+          entity_id: vacuum.osmo
+    mode: single
 
-- id: 'osmo_set_num_passes'
-  alias: 'osmo: set num passes'
-  description: ''
-  trigger:
-  - platform: state
-    entity_id: input_select.osmo_num_passes
-  condition: []
-  action:
-  - service: vacuum.send_command
-    target:
-      entity_id: vacuum.osmo
-    data:
-      command: set_clean_count
-      params:
-        clean_count: >
-          {{ {'One': 1, 'Two': 2, 'Three': 3 }.get(states('input_select.osmo_num_passes')) }}
-  mode: single
+  - id: "osmo_set_num_passes"
+    alias: "osmo: set num passes"
+    description: ""
+    trigger:
+      - platform: state
+        entity_id: input_select.osmo_num_passes
+    condition: []
+    action:
+      - service: vacuum.send_command
+        target:
+          entity_id: vacuum.osmo
+        data:
+          command: set_clean_count
+          params:
+            clean_count: >
+              {{ {'One': 1, 'Two': 2, 'Three': 3, 'Four': 4 }.get(states('input_select.osmo_num_passes')) }}
+    mode: single
 
-- id: 'osmo_update_water_flow_input'
-  alias: 'osmo: update water flow input select'
-  description: ''
-  trigger:
-  - platform: state
-    entity_id: vacuum.osmo
-    attribute: water_level
-  - platform: homeassistant
-    event: start
-  condition: []
-  action:
-  - service: input_select.select_option
-    target:
-      entity_id: input_select.osmo_water_flow
-    data:
-      option: >
-        {{ state_attr('input_select.osmo_water_flow', 'options')[state_attr('vacuum.osmo', 'water_level') - 1] }}
-  mode: single
+  - id: "osmo_update_water_flow_input"
+    alias: "osmo: update water flow input select"
+    description: ""
+    trigger:
+      - platform: state
+        entity_id: vacuum.osmo
+        attribute: water_level
+      - platform: homeassistant
+        event: start
+    condition: []
+    action:
+      - service: input_select.select_option
+        target:
+          entity_id: input_select.osmo_water_flow
+        data:
+          option: >
+            {{ state_attr('input_select.osmo_water_flow', 'options')[state_attr('vacuum.osmo', 'water_level') - 1] }}
+    mode: single
 
-- id: 'osmo_update_vacuum_power_input'
-  alias: 'osmo: update vacuum power input select'
-  description: ''
-  trigger:
-  - platform: state
-    entity_id: vacuum.osmo
-    attribute: vacuum_speed
-  - platform: homeassistant
-    event: start
-  condition: []
-  action:
-  - service: input_select.select_option
-    target:
-      entity_id: input_select.osmo_vacuum_power
-    data:
-      option: >
-        {{ state_attr('input_select.osmo_vacuum_power', 'options')[state_attr('vacuum.osmo', 'vacuum_speed') - 1] }}
-  mode: single
+  - id: "osmo_update_vacuum_power_input"
+    alias: "osmo: update vacuum power input select"
+    description: ""
+    trigger:
+      - platform: state
+        entity_id: vacuum.osmo
+        attribute: vacuum_speed
+      - platform: homeassistant
+        event: start
+    condition: []
+    action:
+      - service: input_select.select_option
+        target:
+          entity_id: input_select.osmo_vacuum_power
+        data:
+          option: >
+            {{ state_attr('input_select.osmo_vacuum_power', 'options')[state_attr('vacuum.osmo', 'vacuum_speed') - 1] }}
+    mode: single
 
-- id: 'osmo_update_num_passes_input'
-  alias: 'osmo: update num passes input select'
-  description: ''
-  trigger:
-  - platform: state
-    entity_id: vacuum.osmo
-    attribute: clean_count
-  - platform: homeassistant
-    event: start
-  condition: []
-  action:
-  - service: input_select.select_option
-    target:
-      entity_id: input_select.osmo_num_passes
-    data:
-      option: >
-        {{ state_attr('input_select.osmo_num_passes', 'options')[state_attr('vacuum.osmo', 'clean_count') - 1] }}
-  mode: single
+  - id: "osmo_update_num_passes_input"
+    alias: "osmo: update num passes input select"
+    description: ""
+    trigger:
+      - platform: state
+        entity_id: vacuum.osmo
+        attribute: clean_count
+      - platform: homeassistant
+        event: start
+    condition: []
+    action:
+      - service: input_select.select_option
+        target:
+          entity_id: input_select.osmo_num_passes
+        data:
+          option: >
+            {{ state_attr('input_select.osmo_num_passes', 'options')[state_attr('vacuum.osmo', 'clean_count') - 1] }}
+    mode: single
 
 script:
   osmo_cancel_cleaning:
-    alias: 'osmo: cancel cleaning'
+    alias: "osmo: cancel cleaning"
     mode: single
     icon: mdi:stop-circle
     sequence:
@@ -285,7 +286,7 @@ script:
         target:
           entity_id: vacuum.osmo
   osmo_clean_tiled_areas:
-    alias: 'osmo: clean tiled areas'
+    alias: "osmo: clean tiled areas"
     mode: single
     icon: mdi:broom
     sequence:
@@ -309,7 +310,7 @@ script:
       - service: script.osmo_clean_selected_rooms
         data: {}
   osmo_clean_all_areas:
-    alias: 'osmo: clean all areas'
+    alias: "osmo: clean all areas"
     mode: single
     icon: mdi:broom
     sequence:
@@ -330,92 +331,92 @@ script:
         data: {}
 
   osmo_clean_selected_rooms:
-    alias: 'osmo: clean selected rooms'
+    alias: "osmo: clean selected rooms"
     mode: single
     icon: mdi:broom
     sequence:
-    - service: vacuum.stop
-      target:
-        entity_id: vacuum.osmo
-    - choose:
-      - conditions:
-        - condition: template
-          value_template: >-
-            {{ states('sensor.osmo_selected_rooms_with_truedetect')|from_json|length > 0 }}
-        sequence:
-        - service: switch.turn_on
-          target:
-            entity_id: switch.osmo_truedetect
-        - delay: 00:00:05
-        - service: vacuum.send_command
-          target:
-            entity_id: vacuum.osmo
-          data:
-            command: clean_areas
-            params:
-              area_ids: "{{ states('sensor.osmo_selected_rooms_with_truedetect')|from_json }}"
-      default: []
-    - choose:
-      - conditions:
-        - condition: template
-          value_template: >-
-            {{
-              states('sensor.osmo_selected_rooms_with_truedetect')|from_json|length > 0 and
-              states('sensor.osmo_selected_rooms_without_truedetect')|from_json|length > 0
-            }}
-        sequence:
-        - wait_for_trigger:
+      - service: vacuum.stop
+        target:
+          entity_id: vacuum.osmo
+      - choose:
+          - conditions:
+              - condition: template
+                value_template: >-
+                  {{ states('sensor.osmo_selected_rooms_with_truedetect')|from_json|length > 0 }}
+            sequence:
+              - service: switch.turn_on
+                target:
+                  entity_id: switch.osmo_truedetect
+              - delay: 00:00:05
+              - service: vacuum.send_command
+                target:
+                  entity_id: vacuum.osmo
+                data:
+                  command: clean_areas
+                  params:
+                    area_ids: "{{ states('sensor.osmo_selected_rooms_with_truedetect')|from_json }}"
+        default: []
+      - choose:
+          - conditions:
+              - condition: template
+                value_template: >-
+                  {{
+                    states('sensor.osmo_selected_rooms_with_truedetect')|from_json|length > 0 and
+                    states('sensor.osmo_selected_rooms_without_truedetect')|from_json|length > 0
+                  }}
+            sequence:
+              - wait_for_trigger:
+                  - platform: state
+                    entity_id: vacuum.osmo
+                    from: cleaning
+                    to: returning
+                timeout: 01:00:00
+                continue_on_timeout: false
+              - service: vacuum.stop
+                target:
+                  entity_id: vacuum.osmo
+              - delay: 00:00:02
+      - choose:
+          - conditions:
+              - condition: template
+                value_template: >-
+                  {{ states('sensor.osmo_selected_rooms_without_truedetect')|from_json|length > 0 }}
+            sequence:
+              - service: switch.turn_off
+                target:
+                  entity_id: switch.osmo_truedetect
+              - delay: 00:00:05
+              - service: vacuum.send_command
+                target:
+                  entity_id: vacuum.osmo
+                data:
+                  command: clean_areas
+                  params:
+                    area_ids: "{{ states('sensor.osmo_selected_rooms_without_truedetect')|from_json }}"
+        default: []
+      - wait_for_trigger:
           - platform: state
             entity_id: vacuum.osmo
             from: cleaning
             to: returning
-          timeout: 01:00:00
-          continue_on_timeout: false
-        - service: vacuum.stop
-          target:
-            entity_id: vacuum.osmo
-        - delay: 00:00:02
-    - choose:
-      - conditions:
-        - condition: template
-          value_template: >-
-            {{ states('sensor.osmo_selected_rooms_without_truedetect')|from_json|length > 0 }}
-        sequence:
-        - service: switch.turn_off
-          target:
-            entity_id: switch.osmo_truedetect
-        - delay: 00:00:05
-        - service: vacuum.send_command
-          target:
-            entity_id: vacuum.osmo
-          data:
-            command: clean_areas
-            params:
-              area_ids: "{{ states('sensor.osmo_selected_rooms_without_truedetect')|from_json }}"
-      default: []
-    - wait_for_trigger:
-      - platform: state
-        entity_id: vacuum.osmo
-        from: cleaning
-        to: returning
-      timeout: 01:00:00
-      continue_on_timeout: false
-    - service: input_datetime.set_datetime
-      data:
-        timestamp: "{{ now().timestamp() }}"
-      target:
-        entity_id: >
-          {%- set rooms=
-            [
-              'living_room',
-              'dining',
-              'hallway',
-              'bedroom',
-              'study',
-              'kitchen',
-            ]
-          -%}
-          input_datetime.osmo_last_clean
-          {% for room_slug in rooms if is_state('input_boolean.osmo_clean_' + room_slug, 'on') -%}
-          , input_datetime.osmo_last_clean_{{  room_slug }}
-          {% endfor -%}
+        timeout: 01:00:00
+        continue_on_timeout: false
+      - service: input_datetime.set_datetime
+        data:
+          timestamp: "{{ now().timestamp() }}"
+        target:
+          entity_id: >
+            {%- set rooms=
+              [
+                'living_room',
+                'dining',
+                'hallway',
+                'bedroom',
+                'study',
+                'kitchen',
+              ]
+            -%}
+            input_datetime.osmo_last_clean
+            {% for room_slug in rooms if is_state('input_boolean.osmo_clean_' + room_slug, 'on') -%}
+            , input_datetime.osmo_last_clean_{{  room_slug }}
+            {% endfor -%}
