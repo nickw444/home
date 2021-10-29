@@ -38,6 +38,8 @@ binary_sensor:
     mac_address: !secret evie_itag_mac_address
     name: "Evie"
     id: evie
+    filters:
+      - delayed_off: 5min
 
 sensor:
   - platform: uptime
