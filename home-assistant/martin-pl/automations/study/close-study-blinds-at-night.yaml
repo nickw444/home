@@ -1,12 +1,14 @@
-id: '1606304284099'
-alias: 'blinds: close the study blind at sunset'
-description: ''
+id: "1606304284099"
+alias: "blinds: close the study blind at sunset"
+description: ""
 trigger:
-- event: sunset
-  platform: sun
+  - event: sunset
+    platform: sun
 condition: []
 action:
-- service: cover.close_cover
-  data: {}
-  entity_id: cover.study
+  - service: cover.close_cover
+    data: {}
+    entity_id:
+      - cover.study
+      - cover.study_day
 mode: single
