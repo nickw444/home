@@ -9,7 +9,7 @@ trigger:
     entity_id: binary_sensor.bathroom_motion_occupancy
     to: "off"
     from: "on"
-    for: "00:20:00"
+    for: "00:15:00"
 condition:
   - condition: state
     entity_id: input_boolean.away_mode

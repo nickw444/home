@@ -7,9 +7,9 @@ mode: single
 trigger:
   - platform: state
     entity_id: binary_sensor.bathroom_motion_occupancy
-    to: "off"
     from: "on"
-    for: "00:02:00"
+    to: "off"
+    for: "00:01:00"
 condition:
   - condition: state
     entity_id: input_boolean.away_mode
