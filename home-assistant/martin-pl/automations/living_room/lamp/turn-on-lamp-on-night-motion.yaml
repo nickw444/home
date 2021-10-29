@@ -1,38 +1,36 @@
-id: '1605957739472'
-alias: 'living_room: turn on lamp on hallway motion detected at night'
-description: ''
+id: "1605957739472"
+alias: "living_room: turn on lamp on hallway motion detected at night"
+description: ""
 trigger:
-- platform: state
-  entity_id:
-    - binary_sensor.hallway_motion_occupancy
-    - binary_sensor.living_room_motion_occupancy
-  from: 'off'
-  to: 'on'
+  - platform: state
+    entity_id:
+      - binary_sensor.hallway_motion_occupancy
+      - binary_sensor.living_room_motion_occupancy
+    from: "off"
+    to: "on"
 condition:
-- condition: or
-  conditions:
-  - condition: time
-    after: '23:00:00'
-  - condition: sun
-    before: sunrise
-- condition: state
-  entity_id: light.living_room_lamp
-  state: 'off'
-- condition: state
-  entity_id: input_boolean.guest_mode
-  state: 'off'
+  - condition: or
+    conditions:
+      - condition: time
+        after: "23:00:00"
+      - condition: sun
+        before: sunrise
+  - condition: state
+    entity_id: light.living_room_lamp
+    state: "off"
+  - condition: state
+    entity_id: input_boolean.guest_mode
+    state: "off"
 action:
-- service: light.turn_on
-  entity_id: light.living_room_lamp
-- repeat:
-    sequence:
-      - wait_template: '{{ is_state("binary_sensor.internal_motion_occupancy", "off") }}'
-        continue_on_timeout: false
-      - delay: 00:01:00
-    until:
-      - condition: template
-        value_template: '{{ is_state("binary_sensor.internal_motion_occupancy", "off") }}'
-- service: light.turn_off
-  data: {}
-  entity_id: light.living_room_lamp
+  - service: light.turn_on
+    entity_id: light.living_room_lamp
+  - wait_for_trigger:
+      - platform: state
+        entity_id: binary_sensor.internal_motion_occupancy
+        from: "on"
+        to: "off"
+        for: 00:01:00
+  - service: light.turn_off
+    data: {}
+    entity_id: light.living_room_lamp
 mode: single
