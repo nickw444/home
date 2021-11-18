@@ -1,0 +1,45 @@
+on: [push, pull_request]
+
+jobs:
+  hass_check_config_313a:
+    name: '[hass] check config: 313a'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: "actions/setup-python@v2"
+        with:
+          python-version: "3.9"
+      - name: '[hass] check config: 313a'
+        script: |
+          ./home-assistant/tools/test_config.sh 313a
+  hass_check_config_mpl:
+    name: '[hass] check config: martin-pl'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: "actions/setup-python@v2"
+        with:
+          python-version: "3.9"
+      - name: '[hass] check config: martin-pl'
+        run: |
+          ./home-assistant/tools/test_config.sh martin-pl
+  hass_check_appdaemon_313a:
+    name: '[hass] lint and test appdaemon: 313a'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: "actions/setup-python@v2"
+        with:
+          python-version: "3.9"
+      - name: 'install dependencies'
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install pipenv
+          pipenv install --system --dev
+      - name: '[hass] lint and test appdaemon: 313a'
+        run: |
+          cd ./home-assistant/313a/appdaemon
+          black --check .
+          flake8
+          pytest
+        
