@@ -1,4 +1,4 @@
-on: [push, pull_request]
+on: push
 
 jobs:
   hass_check_config_313a:
@@ -10,7 +10,7 @@ jobs:
         with:
           python-version: "3.9"
       - name: '[hass] check config: 313a'
-        script: |
+        run: |
           ./home-assistant/tools/test_config.sh 313a
   hass_check_config_mpl:
     name: '[hass] check config: martin-pl'
