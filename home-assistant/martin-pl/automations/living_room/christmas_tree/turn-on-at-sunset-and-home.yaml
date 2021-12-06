@@ -1,0 +1,15 @@
+id: "1584944740804"
+alias: "living_room: turn on christmas tree at sunset when people home"
+description: ""
+trigger:
+  - event: sunset
+    offset: -00:30:00
+    platform: sun
+condition:
+  - condition: state
+    entity_id: group.all_people
+    state: home
+action:
+  - service: light.turn_on
+    data: {}
+    entity_id: light.christmas_tree

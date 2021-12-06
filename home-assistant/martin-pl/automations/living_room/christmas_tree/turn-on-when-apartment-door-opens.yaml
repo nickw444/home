@@ -1,0 +1,26 @@
+id: "1584944483272"
+alias: "living_room: turn on christmas tree on apartment door open"
+description: >-
+  Turn on the christmas tree when the apartment door opens when;
+    * at night
+    * no presence detected (if presence is detected, the tree will already be on)
+trigger:
+  - device_id: e824e2b2a4ff4dea9b16fd7f6234dfc1
+    domain: binary_sensor
+    entity_id: binary_sensor.front_door
+    platform: device
+    type: opened
+condition:
+  - after: sunset
+    after_offset: -00:60:00
+    condition: sun
+  - condition: state
+    entity_id: group.all_people
+    state: not_home
+  - condition: state
+    entity_id: input_boolean.away_mode
+    state: "off"
+action:
+  - service: light.turn_on
+    data: {}
+    entity_id: light.christmas_tree

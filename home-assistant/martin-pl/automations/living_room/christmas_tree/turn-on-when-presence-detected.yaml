@@ -1,0 +1,16 @@
+id: "1584444187934"
+alias: "living_room: turn on christmas tree on presence detected"
+description: ""
+trigger:
+  - entity_id: group.all_people
+    from: not_home
+    platform: state
+    to: home
+condition:
+  - after: sunset
+    after_offset: -00:60:00
+    condition: sun
+action:
+  - service: light.turn_on
+    data: {}
+    entity_id: light.christmas_tree
