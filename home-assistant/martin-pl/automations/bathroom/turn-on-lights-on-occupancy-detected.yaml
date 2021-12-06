@@ -12,7 +12,7 @@ condition:
     state: "off"
   - condition: numeric_state
     entity_id: sensor.bathroom_motion_illuminance_lux
-    below: "50"
+    below: "60"
   - condition: state
     entity_id: light.bathroom
     state: "off"
