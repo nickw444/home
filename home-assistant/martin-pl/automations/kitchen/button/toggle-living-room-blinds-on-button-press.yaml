@@ -1,12 +1,13 @@
-id: '4389479823798'
-alias: 'kitchen button: toggle living room blinds on button hold'
-description: ''
+id: "4389479823798"
+alias: "kitchen button: toggle living room window blinds on button hold"
+description: ""
 trigger:
-- platform: state
-  entity_id: sensor.living_room_button_click
-  to: single
+  - platform: state
+    entity_id: sensor.living_room_button_click
+    to: single
 condition: []
 action:
-- service: cover.toggle
-  entity_id: cover.living_room_blinds
+  - service: cover.toggle
+    entity_id:
+      - cover.living_room_window_blinds
 mode: single

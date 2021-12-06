@@ -12,6 +12,11 @@ cover:
       - cover.kitchen
       - cover.kitchen_day
   - platform: group
+    name: "Living Room Window Blinds"
+    entities:
+      - cover.living_room
+      - cover.living_room_day
+  - platform: group
     name: "All Blinds"
     entities:
       - cover.living_room
