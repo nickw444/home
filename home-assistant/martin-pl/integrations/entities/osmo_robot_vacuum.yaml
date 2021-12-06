@@ -74,15 +74,14 @@ input_select:
       - High
       - Ultra High
 
-sensor:
-  platform: template
-  sensors:
-    osmo_selected_rooms_with_truedetect:
-      friendly_name: "Osmo Selected Rooms"
-      value_template: >
+template:
+  - sensor:
+      name: "Osmo Selected Rooms"
+      unique_id: osmo_selected_rooms_with_truedetect
+      state: >-
         {%- set rooms=
           [
-            ('input_boolean.osmo_clean_living_room', 10),
+            ('input_boolean.osmo_clean_living_room', 0),
             ('input_boolean.osmo_clean_dining', 6),
             ('input_boolean.osmo_clean_hallway', 3),
             ('input_boolean.osmo_clean_bedroom', 7),
@@ -91,12 +90,13 @@ sensor:
         -%}
         [
         {%- for entity, room_id in rooms if is_state(entity, 'on') -%}
-         {{-  room_id -}}{% if not loop.last %},{% endif %}
+          {{-  room_id -}}{% if not loop.last %}, {% endif %}
         {%- endfor %}
         ]
-    osmo_selected_rooms_without_truedetect:
-      friendly_name: "Osmo Selected Rooms (Without TrueDetect)"
-      value_template: >
+  - sensor:
+      unique_id: osmo_selected_rooms_without_truedetect
+      name: "Osmo Selected Rooms (Without TrueDetect)"
+      state: >-
         {%- set rooms=
           [
             ('input_boolean.osmo_clean_kitchen', 4),
@@ -104,22 +104,27 @@ sensor:
         -%}
         [
         {%- for entity, room_id in rooms if is_state(entity, 'on') -%}
-         {{-  room_id -}}{% if not loop.last %},{% endif %}
+          {{-  room_id -}}{% if not loop.last %}, {% endif %}
         {%- endfor %}
         ]
-
-    osmo_last_clean_living_room_pretty:
-      value_template: '{{ strptime(states("input_datetime.osmo_last_clean_living_room"), "%Y-%m-%d %H:%M:%S").strftime("%A") }}'
-    osmo_last_clean_kitchen_pretty:
-      value_template: '{{ strptime(states("input_datetime.osmo_last_clean_kitchen"), "%Y-%m-%d %H:%M:%S").strftime("%A") }}'
-    osmo_last_clean_dining_pretty:
-      value_template: '{{ strptime(states("input_datetime.osmo_last_clean_dining"), "%Y-%m-%d %H:%M:%S").strftime("%A") }}'
-    osmo_last_clean_hallway_pretty:
-      value_template: '{{ strptime(states("input_datetime.osmo_last_clean_hallway"), "%Y-%m-%d %H:%M:%S").strftime("%A") }}'
-    osmo_last_clean_bedroom_pretty:
-      value_template: '{{ strptime(states("input_datetime.osmo_last_clean_bedroom"), "%Y-%m-%d %H:%M:%S").strftime("%A") }}'
-    osmo_last_clean_study_pretty:
-      value_template: '{{ strptime(states("input_datetime.osmo_last_clean_study"), "%Y-%m-%d %H:%M:%S").strftime("%A") }}'
+  - sensor:
+      unique_id: osmo_last_clean_living_room_pretty
+      state: '{{ strptime(states("input_datetime.osmo_last_clean_living_room"), "%Y-%m-%d %H:%M:%S").strftime("%A") }}'
+  - sensor:
+      unique_id: osmo_last_clean_kitchen_pretty
+      state: '{{ strptime(states("input_datetime.osmo_last_clean_kitchen"), "%Y-%m-%d %H:%M:%S").strftime("%A") }}'
+  - sensor:
+      unique_id: osmo_last_clean_dining_pretty
+      state: '{{ strptime(states("input_datetime.osmo_last_clean_dining"), "%Y-%m-%d %H:%M:%S").strftime("%A") }}'
+  - sensor:
+      unique_id: osmo_last_clean_hallway_pretty
+      state: '{{ strptime(states("input_datetime.osmo_last_clean_hallway"), "%Y-%m-%d %H:%M:%S").strftime("%A") }}'
+  - sensor:
+      unique_id: osmo_last_clean_bedroom_pretty
+      state: '{{ strptime(states("input_datetime.osmo_last_clean_bedroom"), "%Y-%m-%d %H:%M:%S").strftime("%A") }}'
+  - sensor:
+      unique_id: osmo_last_clean_study_pretty
+      state: '{{ strptime(states("input_datetime.osmo_last_clean_study"), "%Y-%m-%d %H:%M:%S").strftime("%A") }}'
 
 automation:
   - id: "osmo_toggle_all_areas_on"
@@ -354,7 +359,8 @@ script:
                 data:
                   command: clean_areas
                   params:
-                    area_ids: "{{ states('sensor.osmo_selected_rooms_with_truedetect')|from_json }}"
+                    area_ids: >-
+                      {{ states('sensor.osmo_selected_rooms_with_truedetect')|from_json }}
         default: []
       - choose:
           - conditions:
@@ -392,7 +398,8 @@ script:
                 data:
                   command: clean_areas
                   params:
-                    area_ids: "{{ states('sensor.osmo_selected_rooms_without_truedetect')|from_json }}"
+                    area_ids: >-
+                      {{ states('sensor.osmo_selected_rooms_without_truedetect')|from_json }}
         default: []
       - wait_for_trigger:
           - platform: state
