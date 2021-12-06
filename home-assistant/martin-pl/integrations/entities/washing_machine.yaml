@@ -1,10 +1,11 @@
-binary_sensor:
-  platform: template
-  sensors:
-    washing_machine:
-      friendly_name: "Washing Machine"
-      value_template: >-
-        {{ states('sensor.washing_machine_current_consumption')|float > 5 }}
-      icon_template: "mdi:washing-machine"
+template:
+  binary_sensor:
+    - name: "Washing Machine"
+      unique_id: washing_machine
       delay_on: 2
       delay_off: 5
+      state: >-
+        {{ states('sensor.washing_machine_current_consumption')|float > 2 }}
+      icon: "mdi:washing-machine"
+      availability: >-
+        {{ not is_state('switch.washing_machine', 'unavailable') }}

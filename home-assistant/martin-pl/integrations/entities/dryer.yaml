@@ -1,10 +1,11 @@
-binary_sensor:
-  platform: template
-  sensors:
-    dryer:
-      friendly_name: "Dryer"
-      value_template: >-
-        {{ states('sensor.dryer_current_consumption')|float > 5 }}
-      icon_template: "mdi:tumble-dryer"
+template:
+  binary_sensor:
+    - name: "Dryer"
+      unique_id: dryer
       delay_on: 2
       delay_off: 5
+      state: >-
+        {{ states('sensor.dryer_current_consumption')|float > 2 }}
+      icon: "mdi:tumble-dryer"
+      availability: >-
+        {{ not is_state('switch.dryer', 'unavailable') }}
