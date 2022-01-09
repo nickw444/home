@@ -60,7 +60,7 @@ class MediaPlayerLight(hass.Hass):
             level="INFO",
         )
 
-        self.turn_on(self.args[CONF_LIGHT_ENTITY], rgb_color=rgb_color)
+        self.turn_on(self.args[CONF_LIGHT_ENTITY], rgb_color=rgb_color, transition=5)
 
     def get_fully_qualified_artwork_url(self, image_path):
         return urljoin(self.args["hass_base_url"], image_path)

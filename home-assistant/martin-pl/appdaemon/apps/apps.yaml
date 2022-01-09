@@ -3,13 +3,13 @@ media_player_light_nick:
   class: MediaPlayerLight
   enable_source: "Samsung TV UA55RU8000WXXY"
   hass_base_url: https://hass.mpl.nickwhyte.com
-  media_player_entity: media_player.spotify_nick
-  light_entity: light.tv_led_strip
+  media_player_entity: media_player.spotify_nicholas_whyte
+  light_entity: light.tv_led_strip_calibrated
 
 media_player_light_kate:
   module: media_player_light
   class: MediaPlayerLight
   enable_source: "Samsung TV UA55RU8000WXXY"
   hass_base_url: https://hass.mpl.nickwhyte.com
-  media_player_entity: media_player.spotify_kate
-  light_entity: light.tv_led_strip
+  media_player_entity: media_player.spotify_kate_scott
+  light_entity: light.tv_led_strip_calibrated
