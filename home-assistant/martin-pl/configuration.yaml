@@ -2,12 +2,26 @@
 default_config:
 homeassistant:
   auth_providers:
-    - type: homeassistant
     - type: trusted_networks
       trusted_networks:
+        # LAN
         - 192.168.2.0/24
+        # VPN
         - 192.168.90.0/24
-        - fe80::/10
+        # Guest
+        - 192.168.60.0/24
+      trusted_users:
+        192.168.2.0/24:
+          - deb570a932bc44f09855a3e8ef83e190 # Nick
+          - 7c2269c75dcd4321bec4084876ae0e18 # Kate
+          - e2f92fb2af8745b2a16fed0101eec985 # Guest
+        192.168.90.0/24:
+          - deb570a932bc44f09855a3e8ef83e190 # Nick
+          - 7c2269c75dcd4321bec4084876ae0e18 # Kate
+          - e2f92fb2af8745b2a16fed0101eec985 # Guest
+        192.168.60.0/24: e2f92fb2af8745b2a16fed0101eec985 # Guest
+      allow_bypass_login: true
+    - type: homeassistant
   packages: !include_dir_named integrations
   internal_url: !secret http_base_url
   external_url: !secret http_base_url
