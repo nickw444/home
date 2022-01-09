@@ -32,7 +32,7 @@ https://github.com/johnpdowling/custom_components.git:
   components:
   - owntone
 https://github.com/fondberg/spotcast.git:
-  version: 2037ebf
+  version: 3fa9e7e
   type: core
   components:
   - spotcast
