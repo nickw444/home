@@ -1,0 +1,10 @@
+id: "16412689980483"
+alias: "study: toggle blinds on wall button press/hold"
+description: ""
+use_blueprint:
+  path: aqara_button_multi_cover_control.yaml
+  input:
+    button_action: sensor.study_button_action
+    day_blinds: cover.study_day
+    blockout_blinds: cover.study_blockout
+    all_blinds: cover.study

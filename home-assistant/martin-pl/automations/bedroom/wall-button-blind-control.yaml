@@ -1,0 +1,10 @@
+id: "1641268998010"
+alias: "bedroom: toggle blinds on wall button press/hold"
+description: ""
+use_blueprint:
+  path: aqara_button_multi_cover_control.yaml
+  input:
+    button_action: sensor.bedroom_wall_button_action
+    day_blinds: cover.bedroom_day
+    blockout_blinds: cover.bedroom_blockout
+    all_blinds: cover.bedroom

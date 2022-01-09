@@ -9,6 +9,6 @@ action:
   - service: cover.close_cover
     data: {}
     entity_id:
-      - cover.study
+      - cover.study_blockout
       - cover.study_day
 mode: single

@@ -3,7 +3,7 @@ alias: "blinds: open bedroom blinds on weekday mornings"
 description: ""
 trigger:
   - platform: time
-    at: 09:15:00
+    at: 09:30:00
 condition:
   - condition: state
     entity_id: group.all_people
@@ -22,6 +22,8 @@ action:
   - service: cover.open_cover
     data: {}
     entity_id:
-      - cover.bedroom_door
-      - cover.bedroom_window
+      - cover.bedroom_door_blockout
+      - cover.bedroom_window_blockout
+      - cover.bedroom_door_day
+      - cover.bedroom_window_day
 mode: single

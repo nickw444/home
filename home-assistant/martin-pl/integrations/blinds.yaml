@@ -1,19 +1,19 @@
 homeassistant:
   customize:
-    cover.living_room: &id001
+    cover.living_room_blockout: &id001
       assumed_state: true
     cover.living_room_day: *id001
-    cover.study: *id001
+    cover.study_blockout: *id001
     cover.study_day: *id001
-    cover.kitchen: *id001
-    cover.kitchen_day: *id001
-    cover.bedroom_door: *id001
-    cover.bedroom_window: *id001
+    cover.bedroom_door_day: *id001
+    cover.bedroom_window_day: *id001
+    cover.bedroom_door_blockout: *id001
+    cover.bedroom_window_blockout: *id001
 cover:
 - platform: template
   covers:
-    living_room:
-      friendly_name: Living Room
+    living_room_blockout:
+      friendly_name: Living Room Blockout
       device_class: blind
       open_cover:
         service: esphome.rf_controller_transmit
@@ -58,8 +58,8 @@ cover:
           action: STOP
       availability_template: |-
         {{ is_state('binary_sensor.rf_controller_status', 'on') }}
-    study:
-      friendly_name: Study
+    study_blockout:
+      friendly_name: Study Blockout
       device_class: blind
       open_cover:
         service: esphome.rf_controller_transmit
@@ -104,8 +104,8 @@ cover:
           action: STOP
       availability_template: |-
         {{ is_state('binary_sensor.rf_controller_status', 'on') }}
-    kitchen:
-      friendly_name: Kitchen
+    bedroom_door_day:
+      friendly_name: Bedroom Door Day
       device_class: blind
       open_cover:
         service: esphome.rf_controller_transmit
@@ -127,8 +127,8 @@ cover:
           action: STOP
       availability_template: |-
         {{ is_state('binary_sensor.rf_controller_status', 'on') }}
-    kitchen_day:
-      friendly_name: Kitchen Day
+    bedroom_window_day:
+      friendly_name: Bedroom Window Day
       device_class: blind
       open_cover:
         service: esphome.rf_controller_transmit
@@ -150,8 +150,8 @@ cover:
           action: STOP
       availability_template: |-
         {{ is_state('binary_sensor.rf_controller_status', 'on') }}
-    bedroom_door:
-      friendly_name: Bedroom Door
+    bedroom_door_blockout:
+      friendly_name: Bedroom Door Blockout
       device_class: blind
       open_cover:
         service: esphome.rf_controller_transmit
@@ -173,8 +173,8 @@ cover:
           action: STOP
       availability_template: |-
         {{ is_state('binary_sensor.rf_controller_status', 'on') }}
-    bedroom_window:
-      friendly_name: Bedroom Window
+    bedroom_window_blockout:
+      friendly_name: Bedroom Window Blockout
       device_class: blind
       open_cover:
         service: esphome.rf_controller_transmit
@@ -199,8 +199,8 @@ cover:
 switch:
   platform: template
   switches:
-    living_room_blind_pairing:
-      friendly_name: Living Room Blind Pairing
+    living_room_blockout_blind_pairing:
+      friendly_name: Living Room Blockout Blind Pairing
       value_template: off
       turn_on:
         service: esphome.rf_controller_transmit
@@ -223,8 +223,8 @@ switch:
       turn_off: []
       availability_template: |-
         {{ is_state('binary_sensor.rf_controller_status', 'on') }}
-    study_blind_pairing:
-      friendly_name: Study Blind Pairing
+    study_blockout_blind_pairing:
+      friendly_name: Study Blockout Blind Pairing
       value_template: off
       turn_on:
         service: esphome.rf_controller_transmit
@@ -247,8 +247,8 @@ switch:
       turn_off: []
       availability_template: |-
         {{ is_state('binary_sensor.rf_controller_status', 'on') }}
-    kitchen_blind_pairing:
-      friendly_name: Kitchen Blind Pairing
+    bedroom_door_day_blind_pairing:
+      friendly_name: Bedroom Door Day Blind Pairing
       value_template: off
       turn_on:
         service: esphome.rf_controller_transmit
@@ -259,8 +259,8 @@ switch:
       turn_off: []
       availability_template: |-
         {{ is_state('binary_sensor.rf_controller_status', 'on') }}
-    kitchen_day_blind_pairing:
-      friendly_name: Kitchen Day Blind Pairing
+    bedroom_window_day_blind_pairing:
+      friendly_name: Bedroom Window Day Blind Pairing
       value_template: off
       turn_on:
         service: esphome.rf_controller_transmit
@@ -271,8 +271,8 @@ switch:
       turn_off: []
       availability_template: |-
         {{ is_state('binary_sensor.rf_controller_status', 'on') }}
-    bedroom_door_blind_pairing:
-      friendly_name: Bedroom Door Blind Pairing
+    bedroom_door_blockout_blind_pairing:
+      friendly_name: Bedroom Door Blockout Blind Pairing
       value_template: off
       turn_on:
         service: esphome.rf_controller_transmit
@@ -283,8 +283,8 @@ switch:
       turn_off: []
       availability_template: |-
         {{ is_state('binary_sensor.rf_controller_status', 'on') }}
-    bedroom_window_blind_pairing:
-      friendly_name: Bedroom Window Blind Pairing
+    bedroom_window_blockout_blind_pairing:
+      friendly_name: Bedroom Window Blockout Blind Pairing
       value_template: off
       turn_on:
         service: esphome.rf_controller_transmit

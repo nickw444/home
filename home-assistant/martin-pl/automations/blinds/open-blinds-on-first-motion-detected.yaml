@@ -26,9 +26,7 @@ action:
   - service: cover.open_cover
     data: {}
     entity_id:
-      - cover.kitchen
-      - cover.kitchen_day
-      - cover.living_room
+      - cover.living_room_blockout
       - cover.living_room_day
-      - cover.study
+      - cover.study_blockout
 mode: single

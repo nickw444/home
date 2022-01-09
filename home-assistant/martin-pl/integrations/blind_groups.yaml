@@ -1,29 +1,39 @@
 cover:
   - platform: group
-    name: "Bedroom Blinds"
+    name: "Bedroom Blockout"
     entities:
-      - cover.bedroom_door
-      - cover.bedroom_window
+      - cover.bedroom_door_blockout
+      - cover.bedroom_window_blockout
   - platform: group
-    name: "Living Room Blinds"
+    name: "Bedroom Day"
     entities:
-      - cover.living_room
-      - cover.living_room_day
-      - cover.kitchen
-      - cover.kitchen_day
+      - cover.bedroom_door_day
+      - cover.bedroom_window_day
   - platform: group
-    name: "Living Room Window Blinds"
+    name: "Bedroom"
     entities:
-      - cover.living_room
+      - cover.bedroom_door_blockout
+      - cover.bedroom_window_blockout
+      - cover.bedroom_door_day
+      - cover.bedroom_window_day
+  - platform: group
+    name: "Living Room"
+    entities:
+      - cover.living_room_blockout
       - cover.living_room_day
+  - platform: group
+    name: "Study"
+    entities:
+      - cover.study_blockout
+      - cover.study_day
   - platform: group
     name: "All Blinds"
     entities:
-      - cover.living_room
+      - cover.living_room_blockout
       - cover.living_room_day
-      - cover.kitchen
-      - cover.kitchen_day
-      - cover.study
+      - cover.study_blockout
       - cover.study_day
-      - cover.bedroom_window
-      - cover.bedroom_door
+      - cover.bedroom_window_blockout
+      - cover.bedroom_window_day
+      - cover.bedroom_door_blockout
+      - cover.bedroom_door_day

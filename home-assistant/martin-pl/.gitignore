@@ -16,7 +16,6 @@ tts
 ip_bans.yaml
 image
 frigate.yml
-blueprints
 owntone/music
 zigbee2mqtt
 

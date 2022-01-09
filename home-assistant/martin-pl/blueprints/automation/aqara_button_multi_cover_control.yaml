@@ -1,0 +1,140 @@
+blueprint:
+  name: Aqara Button Multi Cover Control
+  description: >
+    Control multi-stage (day/blockout) cover entities with an Aqara button 
+    via the single and hold button actions.
+  domain: automation
+  input:
+    button_action:
+      name: "Button Action"
+      description: "The Aqara button device action entity"
+      selector:
+        entity:
+          domain: sensor
+    day_blinds:
+      name: "Day Blinds"
+      description: "The entity for day blinds"
+      selector:
+        entity:
+          domain: cover
+    blockout_blinds:
+      name: "Blockout Blinds"
+      description: "The entity for blockout blinds"
+      selector:
+        entity:
+          domain: cover
+    all_blinds:
+      name: "All Blinds"
+      description: "The entity for both day and blockout blinds"
+      selector:
+        entity:
+          domain: cover
+
+trigger:
+  - platform: state
+    entity_id: !input button_action
+    to: single
+    id: single
+  - platform: state
+    entity_id: !input button_action
+    id: hold
+    to: hold
+
+# | Blockout | Day    | Action                      |
+# | -------- | -----  | --------------------------- |
+# | Open     | Open   | Before Sunset: Close Day    |
+# |          |        | After Sunset: Close Both    |
+# | Closed   | Open   | Before Sunset: Open Both    |
+# |          |        | After Sunset: Close Both    |
+# | Open     | Closed | Open Both                   |
+# | Closed   | Closed | Open Blockout               |
+action:
+  - choose:
+      - conditions:
+          - condition: trigger
+            id: "hold"
+        sequence:
+          - service: cover.toggle
+            target:
+              entity_id: !input all_blinds
+      - conditions:
+          - condition: state
+            entity_id: !input blockout_blinds
+            state: open
+          - condition: state
+            entity_id: !input day_blinds
+            state: open
+          - condition: sun
+            before: sunset
+            before_offset: -00:60:00
+        sequence:
+          - service: cover.close_cover
+            target:
+              entity_id: !input day_blinds
+      - conditions:
+          - condition: state
+            entity_id: !input blockout_blinds
+            state: open
+          - condition: state
+            entity_id: !input day_blinds
+            state: open
+        sequence:
+          - service: cover.close_cover
+            target:
+              entity_id:
+                - !input blockout_blinds
+                - !input day_blinds
+      - conditions:
+          - condition: state
+            entity_id: !input blockout_blinds
+            state: closed
+          - condition: state
+            entity_id: !input day_blinds
+            state: open
+          - condition: sun
+            before: sunset
+            before_offset: -00:60:00
+        sequence:
+          - service: cover.open_cover
+            target:
+              entity_id:
+                - !input blockout_blinds
+                - !input day_blinds
+      - conditions:
+          - condition: state
+            entity_id: !input blockout_blinds
+            state: closed
+          - condition: state
+            entity_id: !input day_blinds
+            state: open
+        sequence:
+          - service: cover.close_cover
+            target:
+              entity_id:
+                - !input blockout_blinds
+                - !input day_blinds
+      - conditions:
+          - condition: state
+            entity_id: !input blockout_blinds
+            state: open
+          - condition: state
+            entity_id: !input day_blinds
+            state: closed
+        sequence:
+          - service: cover.open_cover
+            target:
+              entity_id:
+                - !input blockout_blinds
+                - !input day_blinds
+      - conditions:
+          - condition: state
+            entity_id: !input blockout_blinds
+            state: closed
+          - condition: state
+            entity_id: !input day_blinds
+            state: closed
+        sequence:
+          - service: cover.open_cover
+            target:
+              entity_id: !input blockout_blinds
+    default: []
