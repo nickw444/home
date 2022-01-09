@@ -6,6 +6,7 @@ esphome:
 wifi:
   ssid: !secret smart_wifi_ssid
   password: !secret smart_wifi_password
+  power_save_mode: none
 
   # Enable fallback hotspot (captive portal) in case wifi connection fails
   ap:
@@ -22,8 +23,6 @@ api:
 
 ota:
 
-esp32_ble_tracker:
-
 binary_sensor:
   - platform: gpio
     pin: GPIO34
@@ -33,20 +32,13 @@ binary_sensor:
   - platform: status
     name: "RF Controller Status"
 
-  # BLE Presence for iTag
-  - platform: ble_presence
-    mac_address: !secret evie_itag_mac_address
-    name: "Evie"
-    id: evie
-    filters:
-      - delayed_off: 5min
-
 sensor:
   - platform: uptime
     name: Doorbell Uptime
   - platform: wifi_signal
     name: "Doorbell Wifi Signal"
     update_interval: 60s
+
 switch:
   - platform: gpio
     pin: GPIO32
