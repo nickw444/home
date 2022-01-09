@@ -1,5 +1,5 @@
 esphome:
-  name: rf_controller
+  name: rf-controller
   platform: ESP8266
   board: esp01_1m
   includes:
@@ -11,7 +11,7 @@ wifi:
 
   # Enable fallback hotspot (captive portal) in case wifi connection fails
   ap:
-    ssid: "rf_controller"
+    ssid: "rf-controller"
     password: !secret wifi_fallback_password
 
 captive_portal:
