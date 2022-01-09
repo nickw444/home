@@ -23,5 +23,5 @@ condition:
 action:
 - service: 'light.turn_{{ "off" if trigger.to_state.state == "on" else "on" }}'
   target:
-    entity_id: light.cabinet_glow
+    entity_id: light.cabinet_glow_calibrated
 mode: single

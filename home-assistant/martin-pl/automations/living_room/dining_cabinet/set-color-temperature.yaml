@@ -1,29 +1,27 @@
-id: '1626341264291'
-alias: 'dining cabinet: set colour temperature at sunrise/sunset'
-description: ''
+id: "1626341264291"
+alias: "dining cabinet: set colour temperature at sunrise/sunset"
+description: ""
 trigger:
-- platform: sun
-  event: sunset
-  id: sunset
-- platform: sun
-  event: sunrise
-  id: sunrise
+  - platform: sun
+    event: sunset
+    id: sunset
+  - platform: sun
+    event: sunrise
+    id: sunrise
 condition: []
 action:
-- choose:
-  - conditions:
-    - condition: trigger
-      id: sunset
-    sequence:
-    - service: script.tasmota_set_color
-      data:
-        topic: tasmota_AE5C3A
-        # #B37D4D: 3000K @ 70%
-        color: '#B37D4D'
-  default:
-  - service: script.tasmota_set_color
-    data:
-      topic: tasmota_AE5C3A
-      # #FFF6ED: 6000K @ 100%
-      color: '#FFF6ED'
+  - choose:
+      - conditions:
+          - condition: trigger
+            id: sunset
+        sequence:
+          - service: script.wled_set_color
+            data:
+              topic: wled/cabinet-glow
+              color: "#FF975E"
+    default:
+      - service: script.wled_set_color
+        data:
+          topic: wled/cabinet-glow
+          color: "#FFB690"
 mode: single

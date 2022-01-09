@@ -1,0 +1,5 @@
+light:
+  - platform: calibrated_light
+    name: "Nicks Monitor"
+    entity_id: light.nicks_monitor
+    calibration_rgb: [0, -32, -64]

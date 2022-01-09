@@ -1,54 +1,63 @@
-id: '1626174325613'
-alias: 'living room ambiance: turn on when motion detected at night'
-description: ''
+id: "1626174325613"
+alias: "living room ambiance: turn on when motion detected at night"
+description: ""
 trigger:
-- platform: state
-  entity_id: binary_sensor.living_room_motion_occupancy
-  from: 'off'
-  to: 'on'
+  - platform: state
+    entity_id: binary_sensor.living_room_motion_occupancy
+    from: "off"
+    to: "on"
 condition:
-- condition: or
-  conditions:
-  - condition: time
-    after: '23:00'
-  - condition: sun
-    before: sunrise
-- condition: state
-  entity_id: light.living_room_ambiance
-  state: 'off'
-- condition: state
-  entity_id: light.living_room_downlights
-  state: 'off'
-- condition: state
-  entity_id: input_boolean.guest_mode
-  state: 'off'
-- condition: state
-  entity_id: group.all_people
-  state: home
-action:
-- service: light.turn_on
-  target:
+  - condition: or
+    conditions:
+      - condition: time
+        after: "23:00"
+      - condition: sun
+        before: sunrise
+  - condition: state
     entity_id: light.living_room_ambiance
-  data:
-    transition: 5
-- wait_for_trigger:
-  - platform: state
-    entity_id: binary_sensor.internal_motion_occupancy
-    from: 'on'
-    to: 'off'
-    for: 00:01:00
-  # Bail out if the downlights turn on
-  - platform: state
+    state: "off"
+  - condition: state
     entity_id: light.living_room_downlights
-    from: 'off'
-    to: 'on'
-  # Bail out if the cabinet light is turned off
-  - platform: state
-    entity_id: light.living_room_ambiance
-    from: 'on'
-    to: 'off'
-  timeout: 00:10:00
-- service: light.turn_off
-  target:
-    entity_id: light.living_room_ambiance
+    state: "off"
+  - condition: state
+    entity_id: input_boolean.guest_mode
+    state: "off"
+  - condition: state
+    entity_id: group.all_people
+    state: home
+action:
+  - service: script.wled_set_scene
+    data:
+      entity_id_base: cabinet_glow
+      brightness: 128
+      effect: Solid
+      color_palette: "* Color 1"
+      transition: 5
+  - service: script.wled_set_scene
+    data:
+      entity_id_base: breakfast_bar
+      brightness: 128
+      effect: Solid
+      color_palette: "* Color 1"
+      transition: 5
+  - wait_for_trigger:
+      - platform: state
+        entity_id: binary_sensor.internal_motion_occupancy
+        from: "on"
+        to: "off"
+        for: 00:01:00
+      # Bail out if the downlights turn on
+      - platform: state
+        entity_id: light.living_room_downlights
+        from: "off"
+        to: "on"
+      # Bail out if the ambient light is turned off
+      - platform: state
+        entity_id: light.living_room_ambiance
+        from: "on"
+        to: "off"
+    timeout: 00:10:00
+  - service: light.turn_off
+    target:
+      entity_id: light.living_room_ambiance
 mode: single

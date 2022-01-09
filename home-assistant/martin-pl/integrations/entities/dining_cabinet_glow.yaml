@@ -1,0 +1,8 @@
+light:
+  - platform: calibrated_light
+    name: "Cabinet Glow"
+    entity_id: light.cabinet_glow
+    # "White" @ 255, 214, 176
+    # calibration_rgb: [0, -41, -79]
+    # "White" @ 255, 182, 144
+    calibration_rgb: [0, -73, -111]

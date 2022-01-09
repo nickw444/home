@@ -1,38 +1,46 @@
-id: '1626173678031'
-alias: 'living room ambiance: toggle for sunrise/sunset'
-description: ''
+id: "1626173678031"
+alias: "living room ambiance: toggle for sunrise/sunset"
+description: ""
 trigger:
-- platform: sun
-  event: sunrise
-  id: sunrise
-- platform: sun
-  event: sunset
-  id: sunset
+  - platform: sun
+    event: sunrise
+    id: sunrise
+  - platform: sun
+    event: sunset
+    id: sunset
 condition:
-- condition: state
-  entity_id: group.all_people
-  state: home
+  - condition: state
+    entity_id: group.all_people
+    state: home
 action:
-- choose:
-  - conditions:
-    - condition: trigger
-      id: sunrise
-    sequence:
-    - service: light.turn_off
-      target:
-        entity_id: light.living_room_ambiance
-  - conditions:
-    - condition: trigger
-      id: sunset
-    sequence:
-    - condition: and
-      conditions:
-      - condition: state
-        entity_id: light.living_room_downlights
-        state: 'off'
-    - service: light.turn_on
-      target:
-        entity_id: light.living_room_ambiance
-      data: {}
-  default: []
+  - choose:
+      - conditions:
+          - condition: trigger
+            id: sunrise
+        sequence:
+          - service: light.turn_off
+            target:
+              entity_id: light.living_room_ambiance
+      - conditions:
+          - condition: trigger
+            id: sunset
+        sequence:
+          - condition: and
+            conditions:
+              - condition: state
+                entity_id: light.living_room_downlights
+                state: "off"
+          - service: script.wled_set_scene
+            data:
+              entity_id_base: cabinet_glow
+              brightness: 255
+              effect: Solid
+              color_palette: "* Color 1"
+          - service: script.wled_set_scene
+            data:
+              entity_id_base: breakfast_bar
+              brightness: 255
+              effect: Solid
+              color_palette: "* Color 1"
+    default: []
 mode: single

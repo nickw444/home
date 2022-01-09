@@ -2,7 +2,7 @@ script:
   wled_set_color:
     # Support for setting color of WLED devices whilst they are not turned
     # on without turning the light on
-    alias: 'wled: set color'
+    alias: "wled: set color"
     icon: mdi:led-strip-variant
     mode: parallel
     max: 20
@@ -12,9 +12,91 @@ script:
         example: wled/breakfast-bar
       color:
         description: The color to set
-        example: '#FF0000'
+        example: "#FF0000"
     sequence:
       - service: mqtt.publish
         data:
-          topic: '{{ topic }}/col'
-          payload: '{{ color }}'
+          topic: "{{ topic }}/col"
+          payload: "{{ color }}"
+
+  wled_set_scene:
+    alias: "wled: set scene"
+    icon: "mdi:led-strip-variant"
+    mode: parallel
+    max: 20
+    fields:
+      entity_id_base:
+        description: Entity id base name
+        example: "breakfast_bar"
+      effect:
+        description: The name of the WLED effect
+        example: Solid
+        default: "Solid"
+        required: no
+        selector:
+          text:
+      color_palette:
+        description: The name of the WLED color palette to use
+        example: "Magred"
+        default: "Default"
+        required: no
+        selector:
+          text:
+      intensity:
+        description: The intensity of the effect
+        example: "128"
+        default: "128"
+        required: no
+        selector:
+          number:
+            min: 0
+            max: 255
+      speed:
+        description: The speed of the effect
+        example: "128"
+        default: "128"
+        required: no
+        selector:
+          number:
+            min: 0
+            max: 255
+      brightness:
+        description: The brightness of the light
+        example: "255"
+        default: "255"
+        required: no
+        selector:
+          number:
+            min: 0
+            max: 255
+      transition:
+        description: Transition (in seconds) when turning light on
+        example: "5"
+        required: no
+        selector:
+          number:
+            min: 0
+            max: 30
+    sequence:
+      - service: number.set_value
+        data:
+          value: "{{ intensity or 128 }}"
+        target:
+          entity_id: "number.{{ entity_id_base }}_intensity"
+      - service: number.set_value
+        data:
+          value: "{{ speed or 128 }}"
+        target:
+          entity_id: "number.{{ entity_id_base }}_speed"
+      - service: select.select_option
+        data:
+          option: "{{ color_palette or 'Default' }}"
+        target:
+          entity_id: "select.{{ entity_id_base }}_color_palette"
+      - service: light.turn_on
+        data:
+          brightness: "{{ brightness or 255 }}"
+          effect: "{{ effect or 'Solid' }}"
+          transition: "{{ transition or 0 }}"
+        target:
+          entity_id: "light.{{ entity_id_base }}"
