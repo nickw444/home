@@ -22,3 +22,5 @@ dependencies:
   - calibrated_light
 - https://github.com/thomasloven/lovelace-card-mod
 - https://github.com/nickw444/tuya-home-assistant.git
+- source: https://github.com/matejdro/login_control.git
+  root_is_custom_components: true

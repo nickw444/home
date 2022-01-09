@@ -1,0 +1,20 @@
+id: "1640752411965"
+alias: "hass: remove guest access"
+description: ""
+trigger:
+  - platform: time
+    at: 03:00:00
+  - platform: state
+    entity_id: input_boolean.guest_mode
+    to: "off"
+    from: "on"
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 10
+condition: []
+action:
+  - service: login_control.clear_refresh_tokens
+    data:
+      user_id: e2f92fb2af8745b2a16fed0101eec985 # Home Guest
+mode: single

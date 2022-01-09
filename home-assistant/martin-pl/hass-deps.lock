@@ -68,3 +68,8 @@ https://github.com/nickw444/hass-custom-components:
   type: core
   components:
   - calibrated_light
+https://github.com/matejdro/login_control.git:
+  version: ffec632
+  type: core
+  components:
+  - login_control
