@@ -1,0 +1,58 @@
+esphome:
+  name: living-room-hub
+  platform: ESP32
+  board: esp32dev
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+
+ota:
+
+wifi:
+  ssid: !secret smart_wifi_ssid
+  password: !secret smart_wifi_password
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "living-room-hub"
+    password: !secret wifi_fallback_password
+
+captive_portal:
+
+esp32_ble_tracker:
+
+i2c:
+  sda: 18
+  scl: 19
+  scan: true
+  id: bus_a
+  
+binary_sensor:
+  - platform: ble_presence
+    mac_address: !secret evie_itag_mac_address
+    name: "Evie"
+    filters:
+      - delayed_off: 5min
+
+sensor:
+  - platform: sgp30
+    eco2:
+      name: "Living Room eCO2"
+      accuracy_decimals: 1
+      filters:
+      - sliding_window_moving_average:
+          window_size: 60
+          send_every: 60
+    tvoc:
+      name: "Living Room TVOC"
+      accuracy_decimals: 1
+      filters:
+      - sliding_window_moving_average:
+          window_size: 60
+          send_every: 60
+    store_baseline: yes
+    address: 0x58
+    update_interval: 1s

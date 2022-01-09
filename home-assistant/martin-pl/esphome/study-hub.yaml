@@ -1,5 +1,5 @@
 esphome:
-  name: ble-hub
+  name: study-hub
   platform: ESP32
   board: esp32dev
 
@@ -17,7 +17,7 @@ wifi:
 
   # Enable fallback hotspot (captive portal) in case wifi connection fails
   ap:
-    ssid: "ble-hub"
+    ssid: "study-hub"
     password: !secret wifi_fallback_password
 
 captive_portal:
@@ -35,7 +35,7 @@ sensor:
     temperature:
       name: "Outdoor Temperature"
     moisture:
-      name: "Lemon Tree Moisture"
+      name: "Lemon Tree Soil Moisture"
     illuminance:
       name: "Outdoor Illuminance"
     conductivity:
@@ -49,16 +49,16 @@ sensor:
       accuracy_decimals: 1
       filters:
       - sliding_window_moving_average:
-          window_size: 30
-          send_every: 30
+          window_size: 60
+          send_every: 60
     tvoc:
       name: "Study TVOC"
       accuracy_decimals: 1
       filters:
       - sliding_window_moving_average:
-          window_size: 30
-          send_every: 30
-    store_baseline: yes
+          window_size: 60
+          send_every: 60
+    store_baseline: no
     address: 0x58
     update_interval: 1s
 
