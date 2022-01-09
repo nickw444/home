@@ -1,19 +1,21 @@
-id: '1606546134312'
-alias: 'doorbell: notify when the doorbell rings'
-description: ''
+id: "1606546134312"
+alias: "doorbell: notify when the doorbell rings"
+description: ""
 trigger:
-- platform: state
-  entity_id: binary_sensor.doorbell
-  from: 'off'
-  to: 'on'
+  - platform: state
+    entity_id: binary_sensor.doorbell
+    from: "off"
+    to: "on"
 condition: []
 action:
-- service: notify.everyone
-  data:
-    title: Doorbell
-    message: Someone is at the entry door
+  - service: notify.everyone
     data:
-      group: doorbell
-      push:
-        category: doorbell
+      title: Doorbell
+      message: Someone is at the entry door
+      data:
+        group: doorbell
+        actions:
+          - action: "UNLOCK_DOOR"
+            title: "Unlock Door"
+            authenticationRequired: true
 mode: single

@@ -1,16 +1,3 @@
-ios:
-  push:
-    categories:
-      - name: Doorbell
-        identifier: doorbell
-        actions:
-          - identifier: 'UNLOCK_DOOR'
-            title: 'Unlock Door'
-            activationMode: 'background'
-            authenticationRequired: true
-            destructive: false
-            behavior: 'default'
-
 lock:
   - platform: template
     name: Complex Door

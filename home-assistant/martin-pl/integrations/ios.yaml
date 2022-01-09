@@ -1,12 +1,1 @@
 ios:
-  push:
-    categories:
-      - name: All Lights
-        identifier: all_lights
-        actions:
-          - identifier: 'TURN_OFF_LIGHTS'
-            title: 'Turn Off Lights'
-            activationMode: 'background'
-            authenticationRequired: false
-            destructive: false
-            behavior: 'default'
