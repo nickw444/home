@@ -1,12 +1,12 @@
-id: '1609991469286'
-alias: 'laundry: notify on laundry door open without recent home activity'
-description: ''
+id: "1609991469286"
+alias: "laundry: notify on laundry door open without recent home activity"
+description: ""
 trigger:
-- type: opened
-  platform: device
-  device_id: 6ebac700fde711eabf1a89a94693ffa5
-  entity_id: binary_sensor.laundry_door
-  domain: binary_sensor
+  - type: opened
+    platform: device
+    device_id: 6ebac700fde711eabf1a89a94693ffa5
+    entity_id: binary_sensor.laundry_door
+    domain: binary_sensor
 condition:
   # Alarm is disarmed
   - condition: state
@@ -19,13 +19,13 @@ condition:
   - condition: template
     value_template: >-
       {{ not(
-        (is_state('person.nick', 'home') and (now() - states.person.nick.last_changed).total_seconds() < 600) or
-        (is_state('person.kate', 'home') and (now() - states.person.kate.last_changed).total_seconds() < 600) or
+        (is_state('device_tracker.nicks_iphone', 'home') and (now() - states.device_tracker.nicks_iphone.last_changed).total_seconds() < 600) or
+        (is_state('device_tracker.kates_iphone', 'home') and (now() - states.device_tracker.kates_iphone.last_changed).total_seconds() < 600) or
         (now() - states.binary_sensor.front_door.last_changed).total_seconds() < 300
       ) }}
 action:
-- service: notify.everyone
-  data:
-    title: Laundry Door Opened
-    message: The laundry door was opened at {{ now().strftime('%I:%M %p') }} without recent activity
+  - service: notify.everyone
+    data:
+      title: Laundry Door Opened
+      message: The laundry door was opened at {{ now().strftime('%I:%M %p') }} without recent activity
 mode: single

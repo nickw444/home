@@ -33,11 +33,11 @@ switch:
           - service: spotcast.start
             data:
               entity_id: media_player.soundbar_cast
-              uri: ''
+              uri: ""
               force_playback: true
               shuffle: true
               random_song: true
-              account: "{{ 'nick' if is_state('person.nick_whyte','home') else 'kate' }}"
+              account: "{{ 'nick' if is_state('device_tracker.nicks_iphone','home') else 'kate' }}"
         turn_off:
           - service: media_player.media_pause
             target:
