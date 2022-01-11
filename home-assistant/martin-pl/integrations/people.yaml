@@ -1,5 +1,5 @@
 group:
   all_people:
     entities:
-      - device_tracker.nicks_iphone
-      - device_tracker.kates_iphone
+      - person.nick_whyte
+      - person.kate_scott
