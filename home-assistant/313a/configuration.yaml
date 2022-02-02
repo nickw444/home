@@ -15,7 +15,7 @@ homeassistant:
         - 192.168.8.0/24
         - 192.168.81.0/24
   packages: !include_dir_named integrations
-  internal_url: !secret http_base_url
+  internal_url: !secret http_base_url_internal
   external_url: !secret http_base_url
   whitelist_external_dirs:
     - /config

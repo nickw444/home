@@ -23,7 +23,7 @@ homeassistant:
       allow_bypass_login: true
     - type: homeassistant
   packages: !include_dir_named integrations
-  internal_url: !secret http_base_url
+  internal_url: !secret http_base_url_internal
   external_url: !secret http_base_url
   latitude: !secret latitude
   longitude: !secret longitude
