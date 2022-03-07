@@ -26,16 +26,11 @@ condition:
     entity_id: group.all_people
     state: home
 action:
-  - service: script.wled_set_scene
+  - service: script.wled_set_scene_multi
     data:
-      entity_id_base: cabinet_glow
-      brightness: 128
-      effect: Solid
-      color_palette: "* Color 1"
-      transition: 5
-  - service: script.wled_set_scene
-    data:
-      entity_id_base: breakfast_bar
+      entities:
+        - cabinet_glow
+        - breakfast_bar
       brightness: 128
       effect: Solid
       color_palette: "* Color 1"

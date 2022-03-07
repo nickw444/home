@@ -20,14 +20,20 @@ condition:
     entity_id: light.living_room_downlights
     state: "off"
 action:
-  - service: script.wled_set_scene
+  - service: script.turn_on
+    target:
+      entity_id: script.wled_set_scene
     data:
-      entity_id_base: cabinet_glow
-      effect: Solid
-      color_palette: "* Color 1"
-  - service: script.wled_set_scene
+      variables:
+        entity_id_base: cabinet_glow
+        effect: Solid
+        color_palette: "* Color 1"
+  - service: script.turn_on
+    target:
+      entity_id: script.wled_set_scene
     data:
-      entity_id_base: breakfast_bar
-      effect: Twinkleup
-      color_palette: "* Color 1"
+      variables:
+        entity_id_base: breakfast_bar
+        effect: Twinkleup
+        color_palette: "* Color 1"
 mode: single
