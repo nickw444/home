@@ -3,7 +3,7 @@ alias: "blinds: open bedroom blinds on weekend mornings"
 description: ""
 trigger:
   - platform: time
-    at: 11:00:00
+    at: "11:00:00"
 condition:
   - condition: state
     entity_id: group.all_people
