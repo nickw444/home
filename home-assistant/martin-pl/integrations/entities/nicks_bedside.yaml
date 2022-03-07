@@ -1,0 +1,4 @@
+light:
+  - platform: switch
+    name: Nicks Bedside
+    entity_id: switch.nicks_bedside
