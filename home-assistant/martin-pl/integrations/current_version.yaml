@@ -1,5 +1,4 @@
 sensor:
-  - platform: version
   - platform: template
     sensors:
       updater_newest_version:
