@@ -1,7 +1,0 @@
-template:
-  - binary_sensor:  
-    - name: 'Lemon Tree Moisture Low'
-      unique_id: 050D02A1-3D8E-475B-B0D6-4243715B48D7
-      state: "{{ states('sensor.lemon_tree_moisture')|float < 10 }}"
-      delay_on: 00:10:00
-      delay_off: 00:10:00
