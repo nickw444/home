@@ -1,8 +1,8 @@
 https://github.com/thomasloven/lovelace-auto-entities.git:
-  version: 9961ee0
+  version: af905a0
   type: lovelace
 https://github.com/maxwroc/battery-state-card.git:
-  version: v1.6.4
+  version: v2.1.0
   type: lovelace
   is_release: true
 https://github.com/thomasloven/lovelace-card-tools.git:
@@ -32,7 +32,7 @@ https://github.com/johnpdowling/custom_components.git:
   components:
   - owntone
 https://github.com/fondberg/spotcast.git:
-  version: 3fa9e7e
+  version: 0c6c505
   type: core
   components:
   - spotcast
@@ -42,7 +42,7 @@ https://github.com/jaruba/ha-samsungtv-tizen.git:
   components:
   - samsungtv_tizen
 https://github.com/shenxn/ha-dyson.git:
-  version: 7b0d18e
+  version: '52017e9'
   type: core
   components:
   - dyson_local
@@ -52,11 +52,11 @@ https://github.com/nickw444/deebot-t8-hass.git:
   components:
   - deebot_t8
 https://github.com/kalkih/mini-media-player.git:
-  version: v1.13.0
+  version: v1.16.1
   type: lovelace
   is_release: true
 https://github.com/thomasloven/lovelace-card-mod:
-  version: 8e99e21
+  version: 9748f1c
   type: lovelace
 https://github.com/nickw444/tuya-home-assistant.git:
   version: v1.4.1-71-gacdd69f
