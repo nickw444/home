@@ -4,4 +4,4 @@ http:
     - 127.0.0.1
     - ::1
   ip_ban_enabled: true
-  login_attempts_threshold: 5
+  login_attempts_threshold: 7
