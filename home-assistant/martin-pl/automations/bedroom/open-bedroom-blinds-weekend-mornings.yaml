@@ -1,9 +1,9 @@
-id: "1600774623358"
-alias: "blinds: open bedroom blinds on weekday mornings"
+id: "1600774623448"
+alias: "blinds: open bedroom blinds on weekend mornings"
 description: ""
 trigger:
   - platform: time
-    at: 09:15:00
+    at: 11:00:00
 condition:
   - condition: state
     entity_id: group.all_people
@@ -13,11 +13,8 @@ condition:
     state: "off"
   - condition: time
     weekday:
-      - mon
-      - tue
-      - wed
-      - thu
-      - fri
+      - sat
+      - sun
 action:
   # Handle the case where no motion has been detected, perhaps it's a public
   # holiday and wanted a sleep in. If no motion since dawn, then delay until
@@ -32,13 +29,12 @@ action:
               - platform: numeric_state
                 entity_id: sensor.internal_motion_occupancy_since_dawn
                 above: "0"
-            timeout: "02:00:00" # Wait for up to two hours (11:15am), then continue
+            timeout: "01:00:00" # Wait for up to one hour (12:00pm), then continue
             continue_on_timeout: true
   - service: cover.open_cover
     data: {}
     entity_id:
+      # Only open blockout
       - cover.bedroom_door_blockout
       - cover.bedroom_window_blockout
-      - cover.bedroom_door_day
-      - cover.bedroom_window_day
 mode: single

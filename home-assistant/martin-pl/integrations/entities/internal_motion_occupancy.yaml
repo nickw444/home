@@ -8,3 +8,12 @@ binary_sensor:
             states('binary_sensor.hallway_motion_occupancy') or
             states('binary_sensor.bathroom_motion_occupancy')
           }}
+
+sensor:
+  - platform: history_stats
+    name: Internal Motion Occupancy Since Dawn
+    entity_id: binary_sensor.internal_motion_occupancy
+    state: "on"
+    type: count
+    start: "{{ state_attr('sun.sun', 'next_dawn') | as_datetime | as_local - timedelta(days=1) }}"
+    end: "{{ now() }}"
