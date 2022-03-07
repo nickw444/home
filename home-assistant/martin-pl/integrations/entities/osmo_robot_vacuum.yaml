@@ -76,55 +76,48 @@ input_select:
 
 template:
   - sensor:
-      name: "Osmo Selected Rooms"
-      unique_id: osmo_selected_rooms_with_truedetect
-      state: >-
-        {%- set rooms=
+      - name: "Osmo Selected Rooms"
+        unique_id: osmo_selected_rooms_with_truedetect
+        state: >-
+          {%- set rooms=
+            [
+              ('input_boolean.osmo_clean_living_room', 0),
+              ('input_boolean.osmo_clean_dining', 7),
+              ('input_boolean.osmo_clean_hallway', 5),
+              ('input_boolean.osmo_clean_bedroom', 4),
+              ('input_boolean.osmo_clean_study', 2),
+            ]
+          -%}
           [
-            ('input_boolean.osmo_clean_living_room', 0),
-            ('input_boolean.osmo_clean_dining', 6),
-            ('input_boolean.osmo_clean_hallway', 3),
-            ('input_boolean.osmo_clean_bedroom', 7),
-            ('input_boolean.osmo_clean_study', 2),
+          {%- for entity, room_id in rooms if is_state(entity, 'on') -%}
+            {{-  room_id -}}{% if not loop.last %}, {% endif %}
+          {%- endfor %}
           ]
-        -%}
-        [
-        {%- for entity, room_id in rooms if is_state(entity, 'on') -%}
-          {{-  room_id -}}{% if not loop.last %}, {% endif %}
-        {%- endfor %}
-        ]
-  - sensor:
-      unique_id: osmo_selected_rooms_without_truedetect
-      name: "Osmo Selected Rooms (Without TrueDetect)"
-      state: >-
-        {%- set rooms=
+      - unique_id: osmo_selected_rooms_without_truedetect
+        name: "Osmo Selected Rooms (Without TrueDetect)"
+        state: >-
+          {%- set rooms=
+            [
+              ('input_boolean.osmo_clean_kitchen', 6),
+            ]
+          -%}
           [
-            ('input_boolean.osmo_clean_kitchen', 4),
+          {%- for entity, room_id in rooms if is_state(entity, 'on') -%}
+            {{-  room_id -}}{% if not loop.last %}, {% endif %}
+          {%- endfor %}
           ]
-        -%}
-        [
-        {%- for entity, room_id in rooms if is_state(entity, 'on') -%}
-          {{-  room_id -}}{% if not loop.last %}, {% endif %}
-        {%- endfor %}
-        ]
-  - sensor:
-      unique_id: osmo_last_clean_living_room_pretty
-      state: '{{ strptime(states("input_datetime.osmo_last_clean_living_room"), "%Y-%m-%d %H:%M:%S").strftime("%A") }}'
-  - sensor:
-      unique_id: osmo_last_clean_kitchen_pretty
-      state: '{{ strptime(states("input_datetime.osmo_last_clean_kitchen"), "%Y-%m-%d %H:%M:%S").strftime("%A") }}'
-  - sensor:
-      unique_id: osmo_last_clean_dining_pretty
-      state: '{{ strptime(states("input_datetime.osmo_last_clean_dining"), "%Y-%m-%d %H:%M:%S").strftime("%A") }}'
-  - sensor:
-      unique_id: osmo_last_clean_hallway_pretty
-      state: '{{ strptime(states("input_datetime.osmo_last_clean_hallway"), "%Y-%m-%d %H:%M:%S").strftime("%A") }}'
-  - sensor:
-      unique_id: osmo_last_clean_bedroom_pretty
-      state: '{{ strptime(states("input_datetime.osmo_last_clean_bedroom"), "%Y-%m-%d %H:%M:%S").strftime("%A") }}'
-  - sensor:
-      unique_id: osmo_last_clean_study_pretty
-      state: '{{ strptime(states("input_datetime.osmo_last_clean_study"), "%Y-%m-%d %H:%M:%S").strftime("%A") }}'
+      - unique_id: osmo_last_clean_living_room_pretty
+        state: '{{ strptime(states("input_datetime.osmo_last_clean_living_room"), "%Y-%m-%d %H:%M:%S").strftime("%A") }}'
+      - unique_id: osmo_last_clean_kitchen_pretty
+        state: '{{ strptime(states("input_datetime.osmo_last_clean_kitchen"), "%Y-%m-%d %H:%M:%S").strftime("%A") }}'
+      - unique_id: osmo_last_clean_dining_pretty
+        state: '{{ strptime(states("input_datetime.osmo_last_clean_dining"), "%Y-%m-%d %H:%M:%S").strftime("%A") }}'
+      - unique_id: osmo_last_clean_hallway_pretty
+        state: '{{ strptime(states("input_datetime.osmo_last_clean_hallway"), "%Y-%m-%d %H:%M:%S").strftime("%A") }}'
+      - unique_id: osmo_last_clean_bedroom_pretty
+        state: '{{ strptime(states("input_datetime.osmo_last_clean_bedroom"), "%Y-%m-%d %H:%M:%S").strftime("%A") }}'
+      - unique_id: osmo_last_clean_study_pretty
+        state: '{{ strptime(states("input_datetime.osmo_last_clean_study"), "%Y-%m-%d %H:%M:%S").strftime("%A") }}'
 
 automation:
   - id: "osmo_toggle_all_areas_on"
