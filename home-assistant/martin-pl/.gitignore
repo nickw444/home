@@ -2,6 +2,8 @@
 *.db-shm
 *.db-wal
 *.log
+*.log.1
+*.log.fault
 .cloud
 .homekit.state
 .ios.conf
