@@ -26,11 +26,6 @@ https://github.com/azuwis/zigbee2mqtt-networkmap.git:
   version: v0.7.0
   type: lovelace
   is_release: true
-https://github.com/johnpdowling/custom_components.git:
-  version: 6019dc0
-  type: core
-  components:
-  - owntone
 https://github.com/fondberg/spotcast.git:
   version: 0c6c505
   type: core
@@ -47,7 +42,7 @@ https://github.com/shenxn/ha-dyson.git:
   components:
   - dyson_local
 https://github.com/nickw444/deebot-t8-hass.git:
-  version: 4ae636b
+  version: ca1656d
   type: core
   components:
   - deebot_t8
