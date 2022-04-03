@@ -14,22 +14,33 @@ condition:
   - condition: state
     entity_id: binary_sensor.in_bed
     state: "off"
+
 action:
-  - service: media_player.turn_on
-    data: {}
-    target:
-      entity_id:
-        - media_player.living_room_homepod
-        - media_player.bedroom_homepod
-  - service: media_player.volume_set
-    entity_id:
-      - media_player.living_room_homepod
-      - media_player.bedroom_homepod
-    data:
-      volume_level: 0.5
-  - service: tts.google_translate_say
-    entity_id:
-      - media_player.living_room_homepod
-      - media_player.bedroom_homepod
-    data:
-      message: The dryer has finished!
+  # Repeat the broadcast again if the laundry isn't visited.
+  - repeat:
+      sequence:
+        - service: media_player.turn_on
+          data: {}
+          target:
+            entity_id:
+              - media_player.living_room_homepod
+              - media_player.bedroom_homepod
+        - service: media_player.volume_set
+          entity_id:
+            - media_player.living_room_homepod
+            - media_player.bedroom_homepod
+          data:
+            volume_level: 0.5
+        - service: tts.google_translate_say
+          entity_id:
+            - media_player.living_room_homepod
+            - media_player.bedroom_homepod
+          data:
+            message: The dryer has finished!
+
+        - wait_for_trigger:
+            - platform: state
+              entity_id: binary_sensor.laundry_door
+              to: "on"
+          timeout: "00:25:00"
+      until: "{{ wait.trigger is not none or repeat.index > 3 }}"
