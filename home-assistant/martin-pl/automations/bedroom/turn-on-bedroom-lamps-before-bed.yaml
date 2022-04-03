@@ -1,15 +1,19 @@
-id: '1603018075175'
-alias: 'bedroom: turn on the bedroom lamps before bed'
-description: ''
+id: "1603018075175"
+alias: "bedroom: turn on the bedroom lamps before bed"
+description: ""
 trigger:
-- platform: time
-  at: '22:15:00'
+  - platform: time
+    at: "22:15:00"
 condition:
-- condition: state
-  entity_id: group.all_people
-  state: home
+  - condition: state
+    entity_id: group.all_people
+    state: home
+  # Only turn on if occupants are not already in bed.
+  - condition: state
+    entity_id: binary_sensor.in_bed
+    state: "off"
 action:
-- service: light.turn_on
-  data: {}
-  entity_id: light.bedroom_lamps
+  - service: light.turn_on
+    data: {}
+    entity_id: light.bedroom_lamps
 mode: single

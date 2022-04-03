@@ -1,0 +1,16 @@
+template:
+  - binary_sensor:
+      # Bed sensor is an approximation/prediction of whether all occupants are in
+      # bed. Occupants are "in bed" when there is no motion in the last 10 minutes
+      # and no lights are turned on, but there is occupancy, and the sun is below
+      # horizon and the TV is off.
+      - name: "In Bed"
+        state: >
+          {{ 
+            is_state('binary_sensor.internal_motion_occupancy', 'off')
+            and (now() - states.binary_sensor.internal_motion_occupancy.last_changed).total_seconds() > 600
+            and is_state('binary_sensor.some_lights_on', 'off')
+            and is_state('group.all_people', 'home')
+            and is_state('sun.sun', 'below_horizon')
+            and is_state('media_player.living_room_tv', 'off')
+          }}

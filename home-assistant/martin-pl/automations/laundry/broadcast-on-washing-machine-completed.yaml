@@ -11,9 +11,9 @@ condition:
     entity_id: group.all_people
     state: home
   # Make sure we don't wake anyone up!
-  - condition: time
-    after: "09:00:00"
-    before: "22:00:00"
+  - condition: state
+    entity_id: binary_sensor.in_bed
+    state: "off"
 action:
   - service: media_player.turn_on
     data: {}

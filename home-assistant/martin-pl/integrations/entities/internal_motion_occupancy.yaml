@@ -4,9 +4,9 @@ binary_sensor:
       internal_motion_occupancy:
         value_template: >
           {{
-            states('binary_sensor.living_room_motion_occupancy') or
-            states('binary_sensor.hallway_motion_occupancy') or
-            states('binary_sensor.bathroom_motion_occupancy')
+            is_state('binary_sensor.living_room_motion_occupancy', 'on') or
+            is_state('binary_sensor.hallway_motion_occupancy', 'on') or
+            is_state('binary_sensor.bathroom_motion_occupancy', 'on')
           }}
 
 sensor:
