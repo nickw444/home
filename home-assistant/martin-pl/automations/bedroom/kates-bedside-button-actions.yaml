@@ -1,0 +1,40 @@
+id: "1646909327860"
+alias: "bedroom: Kates bedside button actions"
+description: ""
+trigger:
+  - platform: state
+    entity_id: sensor.kates_bedside_button_action
+    to: "on"
+    id: "on"
+  - platform: state
+    entity_id: sensor.kates_bedside_button_action
+    to: "off"
+    id: "off"
+  - platform: state
+    entity_id: sensor.kates_bedside_button_action
+    to: "brightness_move_down"
+    id: "all_off"
+condition: []
+action:
+  - choose:
+      - conditions:
+          - condition: trigger
+            id: "on"
+        sequence:
+          - service: light.turn_on
+            data: {}
+            target:
+              entity_id: light.bedroom_lamps
+      - conditions:
+          - condition: trigger
+            id: "all_off"
+        sequence:
+          - service: script.turn_on
+            target:
+              entity_id: script.turn_off_all_house_lights
+    default:
+      - service: light.turn_off
+        data: {}
+        target:
+          entity_id: light.bedroom_lamps
+mode: single
