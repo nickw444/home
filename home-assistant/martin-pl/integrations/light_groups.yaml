@@ -2,7 +2,7 @@ light:
   - platform: group
     name: Bedroom Lamps
     entities:
-      - light.bedroom_kates_bedside
+      - light.kates_bedside
       - light.nicks_bedside
 
   - platform: group
