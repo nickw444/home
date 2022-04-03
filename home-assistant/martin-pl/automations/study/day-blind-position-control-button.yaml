@@ -1,0 +1,45 @@
+id: "1647313038555"
+alias: "study: Set day blind position with up down button"
+description: ""
+trigger:
+  - platform: state
+    entity_id: sensor.study_day_blind_button_action
+    to:
+      - "off"
+      - brightness_move_down
+    id: move_down
+  - platform: state
+    entity_id: sensor.study_day_blind_button_action
+    to:
+      - "on"
+      - brightness_move_up
+    id: move_up
+  - platform: state
+    entity_id: sensor.study_day_blind_button_action
+    to: brightness_stop
+    id: move_stop
+condition: []
+action:
+  - choose:
+      - conditions:
+          - condition: trigger
+            id: move_up
+        sequence:
+          - service: cover.open_cover
+            data: {}
+            target:
+              entity_id: cover.study_day
+      - conditions:
+          - condition: trigger
+            id: move_down
+        sequence:
+          - service: cover.close_cover
+            data: {}
+            target:
+              entity_id: cover.study_day
+    default:
+      - service: cover.stop_cover
+        data: {}
+        target:
+          entity_id: cover.study_day
+mode: single
