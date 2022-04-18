@@ -43,4 +43,10 @@ action:
               entity_id: binary_sensor.laundry_door
               to: "on"
           timeout: "00:25:00"
-      until: "{{ wait.trigger is not none or repeat.index > 3 }}"
+      until: <
+        {{
+        wait.trigger is not none
+        or repeat.index > 3
+        or is_state('group.all_people', 'not_home')
+        or is_state('binary_sensor.in_bed', 'on')
+        }}
