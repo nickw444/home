@@ -63,6 +63,8 @@ automation:
           message: The alarm was triggered at {{ now().strftime('%I:%M %p') }}
           data:
             group: alarm-status
+            url: "/lovelace/security"
+            entity_id: camera.living_room
             actions:
               - action: "DISARM_ALARM"
                 title: "Disarm"
@@ -114,6 +116,8 @@ automation:
           title: Alarm Pending
           message: The alarm was pending at {{ now().strftime('%I:%M %p') }}
           data:
+            url: "/lovelace/security"
+            entity_id: camera.living_room
             group: alarm-status
             tag: alarm-status
             push:
