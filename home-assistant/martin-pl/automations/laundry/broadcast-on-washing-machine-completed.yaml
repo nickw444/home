@@ -1,6 +1,7 @@
 id: "1592101514693"
 alias: "laundry: broadcast on washing machine completed"
 description: ""
+mode: single
 trigger:
   - entity_id: binary_sensor.washing_machine
     from: "on"
@@ -15,8 +16,10 @@ condition:
     entity_id: binary_sensor.in_bed
     state: "off"
 action:
-  # Repeat the broadcast again if the laundry isn't visited.
+  # Repeat the broadcast again if the laundry isn't visited. It will be
+  # terminated early by automation.laundry_cancel_broadcasts
   - repeat:
+      count: 3
       sequence:
         - service: media_player.turn_on
           data: {}
@@ -36,16 +39,4 @@ action:
             - media_player.bedroom_homepod
           data:
             message: The washing machine has finished!
-
-        - wait_for_trigger:
-            - platform: state
-              entity_id: binary_sensor.laundry_door
-              to: "on"
-          timeout: "00:25:00"
-      until: <
-        {{
-        wait.trigger is not none
-        or repeat.index > 3
-        or is_state('group.all_people', 'not_home')
-        or is_state('binary_sensor.in_bed', 'on')
-        }}
+        - delay: "00:25:00"
