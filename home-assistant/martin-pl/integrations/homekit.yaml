@@ -13,6 +13,7 @@ homekit:
       - sensor.*_climate_pressure
     include_entities:
       - sensor.living_room_temperature
+      - switch.electric_blanket
       - switch.play_music
       - script.osmo_cancel_cleaning
       - script.osmo_clean_tiled_areas
