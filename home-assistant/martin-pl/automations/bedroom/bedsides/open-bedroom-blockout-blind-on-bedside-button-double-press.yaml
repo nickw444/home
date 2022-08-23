@@ -1,0 +1,15 @@
+id: "9454988347972938283"
+alias: "bedroom button: toggle blockout blind on bedside button double press"
+description: ""
+trigger:
+  - platform: state
+    entity_id: sensor.kates_bedside_button_click
+    to: double
+  - platform: state
+    entity_id: sensor.nicks_bedside_button_click
+    to: double
+condition: []
+action:
+  - service: cover.toggle
+    entity_id: cover.bedroom_blockout
+mode: single

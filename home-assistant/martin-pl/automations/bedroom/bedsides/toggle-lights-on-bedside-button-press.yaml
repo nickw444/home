@@ -1,0 +1,16 @@
+id: "1600953878712"
+alias: "bedroom: toggle bedsides on bedside button press"
+description: ""
+trigger:
+  - platform: state
+    entity_id: sensor.nicks_bedside_button_click
+    to: single
+  - platform: state
+    entity_id: sensor.kates_bedside_button_click
+    to: single
+condition: []
+action:
+  - service: light.toggle
+    data: {}
+    entity_id: light.bedroom_lamps
+mode: single

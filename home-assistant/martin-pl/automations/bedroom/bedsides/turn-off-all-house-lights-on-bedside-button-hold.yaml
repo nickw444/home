@@ -1,0 +1,16 @@
+id: "1600933873712"
+alias: "bedroom: turn off all house lights on bedside button hold"
+description: ""
+trigger:
+  - platform: state
+    entity_id: sensor.nicks_bedside_button_action
+    to: hold
+  - platform: state
+    entity_id: sensor.kates_bedside_button_action
+    to: hold
+condition: []
+action:
+  - service: script.turn_on
+    target:
+      entity_id: script.turn_off_all_house_lights
+mode: single
