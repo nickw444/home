@@ -5,6 +5,6 @@ use_blueprint:
   path: aqara_button_multi_cover_control.yaml
   input:
     button_action: sensor.bedroom_wall_button_action
-    day_blinds: cover.bedroom_day
+    screen_blinds: cover.bedroom_screen
     blockout_blinds: cover.bedroom_blockout
     all_blinds: cover.bedroom

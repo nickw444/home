@@ -1,7 +1,7 @@
 blueprint:
   name: Aqara Button Multi Cover Control
   description: >
-    Control multi-stage (day/blockout) cover entities with an Aqara button 
+    Control multi-stage (screen/blockout) cover entities with an Aqara button 
     via the single and hold button actions.
   domain: automation
   input:
@@ -11,9 +11,9 @@ blueprint:
       selector:
         entity:
           domain: sensor
-    day_blinds:
-      name: "Day Blinds"
-      description: "The entity for day blinds"
+    screen_blinds:
+      name: "Screen Blinds"
+      description: "The entity for screen blinds"
       selector:
         entity:
           domain: cover
@@ -25,7 +25,7 @@ blueprint:
           domain: cover
     all_blinds:
       name: "All Blinds"
-      description: "The entity for both day and blockout blinds"
+      description: "The entity for both screen and blockout blinds"
       selector:
         entity:
           domain: cover
@@ -62,7 +62,7 @@ action:
             entity_id: !input blockout_blinds
             state: open
           - condition: state
-            entity_id: !input day_blinds
+            entity_id: !input screen_blinds
             state: open
           - condition: sun
             before: sunset
@@ -70,26 +70,26 @@ action:
         sequence:
           - service: cover.close_cover
             target:
-              entity_id: !input day_blinds
+              entity_id: !input screen_blinds
       - conditions:
           - condition: state
             entity_id: !input blockout_blinds
             state: open
           - condition: state
-            entity_id: !input day_blinds
+            entity_id: !input screen_blinds
             state: open
         sequence:
           - service: cover.close_cover
             target:
               entity_id:
                 - !input blockout_blinds
-                - !input day_blinds
+                - !input screen_blinds
       - conditions:
           - condition: state
             entity_id: !input blockout_blinds
             state: closed
           - condition: state
-            entity_id: !input day_blinds
+            entity_id: !input screen_blinds
             state: open
           - condition: sun
             before: sunset
@@ -99,39 +99,39 @@ action:
             target:
               entity_id:
                 - !input blockout_blinds
-                - !input day_blinds
+                - !input screen_blinds
       - conditions:
           - condition: state
             entity_id: !input blockout_blinds
             state: closed
           - condition: state
-            entity_id: !input day_blinds
+            entity_id: !input screen_blinds
             state: open
         sequence:
           - service: cover.close_cover
             target:
               entity_id:
                 - !input blockout_blinds
-                - !input day_blinds
+                - !input screen_blinds
       - conditions:
           - condition: state
             entity_id: !input blockout_blinds
             state: open
           - condition: state
-            entity_id: !input day_blinds
+            entity_id: !input screen_blinds
             state: closed
         sequence:
           - service: cover.open_cover
             target:
               entity_id:
                 - !input blockout_blinds
-                - !input day_blinds
+                - !input screen_blinds
       - conditions:
           - condition: state
             entity_id: !input blockout_blinds
             state: closed
           - condition: state
-            entity_id: !input day_blinds
+            entity_id: !input screen_blinds
             state: closed
         sequence:
           - service: cover.open_cover

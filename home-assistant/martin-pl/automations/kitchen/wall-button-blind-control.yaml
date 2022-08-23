@@ -1,0 +1,10 @@
+id: "1641267033382"
+alias: "kitchen: toggle blinds on wall button press/hold"
+description: ""
+use_blueprint:
+  path: aqara_button_multi_cover_control.yaml
+  input:
+    button_action: sensor.kitchen_window_button_action
+    screen_blinds: cover.kitchen_screen
+    blockout_blinds: cover.kitchen_blockout
+    all_blinds: cover.kitchen

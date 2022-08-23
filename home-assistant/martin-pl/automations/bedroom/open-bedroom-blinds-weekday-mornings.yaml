@@ -37,8 +37,6 @@ action:
   - service: cover.open_cover
     data: {}
     entity_id:
-      - cover.bedroom_door_blockout
-      - cover.bedroom_window_blockout
-      - cover.bedroom_door_day
-      - cover.bedroom_window_day
+      - cover.bedroom_blockout
+      - cover.bedroom_screen
 mode: single

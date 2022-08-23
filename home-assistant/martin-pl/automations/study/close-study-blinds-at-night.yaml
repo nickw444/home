@@ -10,5 +10,5 @@ action:
     data: {}
     entity_id:
       - cover.study_blockout
-      - cover.study_day
+      - cover.study_screen
 mode: single

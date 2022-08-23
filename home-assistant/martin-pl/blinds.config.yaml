@@ -5,27 +5,30 @@
 ---
 tx_device: rf_controller
 blinds:
-  - name: Living Room Blockout
-    remote: 40
-    channel: 0
-  - name: Living Room Day
-    remote: 40
-    channel: 20
-  - name: Study Blockout
+  - name: Bedroom Screen
     remote: 40
     channel: 1
-  - name: Study Day
-    remote: 40
-    channel: 21
-  - name: Bedroom Door Day
+  - name: Bedroom Blockout
     remote: 40
     channel: 2
-  - name: Bedroom Window Day
-    remote: 40
-    channel: 22
-  - name: Bedroom Door Blockout
+  - name: Study Screen
     remote: 40
     channel: 3
-  - name: Bedroom Window Blockout
+  - name: Study Blockout
     remote: 40
     channel: 4
+  - name: Kitchen Screen
+    remote: 40
+    channel: 5
+  - name: Kitchen Blockout
+    remote: 40
+    channel: 6
+  - name: Living Right Blockout
+    remote: 40
+    channel: 7
+  - name: Living Left Blockout
+    remote: 40
+    channel: 8
+  - name: Living Side Blockout
+    remote: 40
+    channel: 9

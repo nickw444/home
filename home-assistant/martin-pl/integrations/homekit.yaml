@@ -19,13 +19,11 @@ homekit:
       - script.osmo_clean_tiled_areas
       - script.osmo_clean_all_areas
       - cover.living_room_blockout
-      - cover.living_room_day
+      - cover.living_room_screen
       - cover.study_blockout
-      - cover.study_day
-      - cover.bedroom_window_blockout
-      - cover.bedroom_window_day
-      - cover.bedroom_door_blockout
-      - cover.bedroom_door_day
+      - cover.study_screen
+      - cover.bedroom_blockout
+      - cover.bedroom_screen
     exclude_entities:
       - light.bedroom_lamps
       - light.living_room_downlights

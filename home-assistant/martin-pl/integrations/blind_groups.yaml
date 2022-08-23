@@ -1,39 +1,34 @@
 cover:
   - platform: group
-    name: "Bedroom Blockout"
-    entities:
-      - cover.bedroom_door_blockout
-      - cover.bedroom_window_blockout
-  - platform: group
-    name: "Bedroom Day"
-    entities:
-      - cover.bedroom_door_day
-      - cover.bedroom_window_day
-  - platform: group
     name: "Bedroom"
     entities:
-      - cover.bedroom_door_blockout
-      - cover.bedroom_window_blockout
-      - cover.bedroom_door_day
-      - cover.bedroom_window_day
+      - cover.bedroom_blockout
+      - cover.bedroom_screen
   - platform: group
-    name: "Living Room"
+    name: "Kitchen"
     entities:
-      - cover.living_room_blockout
-      - cover.living_room_day
+      - cover.kitchen_blockout
+      - cover.kitchen_screen
   - platform: group
     name: "Study"
     entities:
       - cover.study_blockout
-      - cover.study_day
+      - cover.study_screen
+  - platform: group
+    name: "Living Blockout"
+    entities:
+      - cover.living_side_blockout
+      - cover.living_left_blockout
+      - cover.living_right_blockout
   - platform: group
     name: "All Blinds"
     entities:
-      - cover.living_room_blockout
-      - cover.living_room_day
+      - cover.kitchen_blockout
+      - cover.kitchen_screen
       - cover.study_blockout
-      - cover.study_day
-      - cover.bedroom_window_blockout
-      - cover.bedroom_window_day
-      - cover.bedroom_door_blockout
-      - cover.bedroom_door_day
+      - cover.study_screen
+      - cover.bedroom_blockout
+      - cover.bedroom_screen
+      - cover.living_side_blockout
+      - cover.living_left_blockout
+      - cover.living_right_blockout
