@@ -4,7 +4,7 @@ description: ""
 use_blueprint:
   path: aqara_button_multi_cover_control.yaml
   input:
-    button_action: sensor.study_button_action
+    button_action: sensor.study_wall_button_action
     screen_blinds: cover.study_screen
     blockout_blinds: cover.study_blockout
     all_blinds: cover.study
