@@ -1,8 +1,0 @@
-binary_sensor:
-  - platform: template
-    sensors:
-      bathroom_climate_humidity_elevated:
-        friendly_name: "Bathroom Climate Humidity Elevated"
-        # Humidity considered "elevated" when 20% higher than measured bedroom humidity.
-        value_template: >
-          {{ states('sensor.bathroom_climate_humidity')|float > states('sensor.bedroom_climate_humidity')|float * 1.2  }}
