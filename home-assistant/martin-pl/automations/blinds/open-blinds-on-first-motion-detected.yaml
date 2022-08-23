@@ -4,11 +4,9 @@ description: ""
 trigger:
   - platform: time
     at: "11:00:00"
-  - type: motion
-    platform: device
-    device_id: 42d8cbc5f64e490c996b0dd2d70c8681
-    entity_id: binary_sensor.living_room_motion_occupancy
-    domain: binary_sensor
+  - platform: state
+    entity_id: binary_sensor.internal_motion_occupancy
+    to: "on"
 condition:
   - condition: template
     value_template:

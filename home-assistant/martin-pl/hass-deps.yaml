@@ -20,3 +20,4 @@ dependencies:
 - https://github.com/nickw444/tuya-home-assistant.git
 - source: https://github.com/matejdro/login_control.git
   root_is_custom_components: true
+- https://github.com/iMicknl/ha-nest-protect.git

@@ -68,3 +68,8 @@ https://github.com/matejdro/login_control.git:
   type: core
   components:
   - login_control
+https://github.com/iMicknl/ha-nest-protect.git:
+  version: 5b7e4bc
+  type: core
+  components:
+  - nest_protect

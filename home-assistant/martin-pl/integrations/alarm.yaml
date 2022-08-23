@@ -37,6 +37,7 @@ automation:
           - binary_sensor.living_room_motion_occupancy
           - binary_sensor.hallway_motion_occupancy
           - binary_sensor.study_motion_occupancy
+          - binary_sensor.nest_protect_kitchen_occupancy
         to: "on"
     condition:
       - condition: state
@@ -208,6 +209,7 @@ automation:
           - binary_sensor.living_room_motion_occupancy
           - binary_sensor.hallway_motion_occupancy
           - binary_sensor.study_motion_occupancy
+          - binary_sensor.nest_protect_kitchen_occupancy
           - binary_sensor.front_door
           - binary_sensor.back_door
         to:
@@ -230,6 +232,9 @@ automation:
           - condition: state
             entity_id: binary_sensor.study_motion_occupancy
             state: "off"
+          - condition: state
+            entity_id: binary_sensor.nest_protect_kitchen_occupancy
+            state: "off"
       - condition: time
         after: "22:30:00"
         before: "06:00:00"
@@ -249,6 +254,7 @@ automation:
           - binary_sensor.living_room_motion_occupancy
           - binary_sensor.hallway_motion_occupancy
           - binary_sensor.study_motion_occupancy
+          - binary_sensor.nest_protect_kitchen_occupancy
         to: "on"
       - platform: time
         at: 07:00:00
