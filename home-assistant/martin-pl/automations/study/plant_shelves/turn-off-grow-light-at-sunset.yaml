@@ -1,0 +1,14 @@
+id: "1661736577355"
+alias: "study: turn off grow light at sunset"
+description: ""
+trigger:
+  - platform: sun
+    event: sunset
+    offset: "-00:30:00"
+condition: []
+action:
+  - service: light.turn_off
+    data: {}
+    target:
+      entity_id: light.study_grow_light
+mode: single

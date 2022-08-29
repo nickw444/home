@@ -1,0 +1,17 @@
+id: "1661736521437"
+alias: "study: turn on grow light at sunrise if low brightness"
+description: ""
+trigger:
+  - platform: sun
+    event: sunrise
+    offset: 0
+condition:
+  - condition: numeric_state
+    entity_id: sensor.study_shelves_illuminance_illuminance_lux
+    below: "500"
+action:
+  - service: light.turn_on
+    data: {}
+    target:
+      entity_id: light.study_grow_light
+mode: single

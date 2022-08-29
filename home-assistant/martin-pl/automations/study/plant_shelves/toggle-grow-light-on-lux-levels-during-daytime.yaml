@@ -1,0 +1,44 @@
+id: "1661736200116"
+alias: "study: toggle grow light on lux levels during daytime"
+description: ""
+trigger:
+  - platform: numeric_state
+    entity_id: sensor.study_shelves_illuminance_illuminance_lux
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 30
+    id: bright
+    above: "1000"
+  - platform: numeric_state
+    entity_id: sensor.study_shelves_illuminance_illuminance_lux
+    for:
+      hours: 0
+      minutes: 5
+      seconds: 0
+    id: dim
+    below: "700"
+condition:
+  - condition: state
+    entity_id: sun.sun
+    state: above_horizon
+action:
+  - choose:
+      - conditions:
+          - condition: trigger
+            id: dim
+        sequence:
+          - service: light.turn_on
+            data: {}
+            target:
+              entity_id: light.study_grow_light
+      - conditions:
+          - condition: trigger
+            id: bright
+        sequence:
+          - service: light.turn_off
+            data: {}
+            target:
+              entity_id: light.study_grow_light
+    default: []
+mode: single
