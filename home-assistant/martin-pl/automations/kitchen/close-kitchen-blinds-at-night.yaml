@@ -1,5 +1,5 @@
-id: "1606304284099"
-alias: "study: close the study blinds at sunset"
+id: "1606304284483"
+alias: "kitchen: close the kitchen blinds at sunset"
 description: ""
 trigger:
   - platform: sun
@@ -10,6 +10,6 @@ action:
   - service: cover.close_cover
     data: {}
     entity_id:
-      - cover.study_blockout
-      - cover.study_screen
+      - cover.kitchen_blockout
+      - cover.kitchen_screen
 mode: single
