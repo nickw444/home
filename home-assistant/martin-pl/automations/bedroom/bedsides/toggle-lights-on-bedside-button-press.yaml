@@ -5,12 +5,25 @@ trigger:
   - platform: state
     entity_id: sensor.nicks_bedside_button_click
     to: single
+    id: nick
   - platform: state
     entity_id: sensor.kates_bedside_button_click
     to: single
+    id: kate
 condition: []
 action:
-  - service: light.toggle
-    data: {}
-    entity_id: light.bedroom_lamps
-mode: single
+  - choose:
+      - conditions:
+          - condition: trigger
+            id: "nick"
+        sequence:
+          - service: light.toggle
+            entity_id: light.nicks_bedside
+      - conditions:
+          - condition: trigger
+            id: "kate"
+        sequence:
+          - service: light.toggle
+            entity_id: light.kates_bedside
+    default: []
+mode: parallel
