@@ -1,0 +1,12 @@
+id: "945498834872872483"
+alias: "Study Wall button: toggle study shelves fairy lights on button double press"
+description: ""
+trigger:
+  - platform: state
+    entity_id: sensor.study_wall_button_click
+    to: double
+condition: []
+action:
+  - service: light.toggle
+    entity_id: light.study_fairy_lights
+mode: single

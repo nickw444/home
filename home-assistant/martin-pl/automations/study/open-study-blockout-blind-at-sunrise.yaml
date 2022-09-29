@@ -1,0 +1,14 @@
+id: "1606304284264563"
+alias: "study: open the study blockout blind at sunrise"
+description: ""
+trigger:
+  - platform: sun
+    event: sunrise
+    offset: "00:05:00"
+condition: []
+action:
+  - service: cover.open_cover
+    data: {}
+    entity_id:
+      - cover.study_blockout
+mode: single
