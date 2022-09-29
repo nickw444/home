@@ -3,6 +3,8 @@ alarm_control_panel:
     delay_time: 60
     arming_time: 60
     trigger_time: 120
+    armed_night:
+      delay_time: 15
 
 automation:
   - id: "1601034054491"
@@ -38,6 +40,9 @@ automation:
           - binary_sensor.hallway_motion_occupancy
           - binary_sensor.study_motion_occupancy
           - binary_sensor.nest_protect_kitchen_occupancy
+          - binary_sensor.laundry_motion_occupancy
+          - binary_sensor.spare_room_motion_occupancy
+          - binary_sensor.bedroom_motion_occupancy
         to: "on"
     condition:
       - condition: state
@@ -57,7 +62,7 @@ automation:
         to: triggered
     condition: []
     action:
-      - service: notify.everyone
+      - service: notify.mobile_app_nicks_iphone
         data:
           title: Alarm Triggered
           message: The alarm was triggered at {{ now().strftime('%I:%M %p') }}
@@ -74,6 +79,24 @@ automation:
               sound:
                 name: default
                 critical: 1
+      - service: notify.mobile_app_kates_iphone
+        data:
+          title: Alarm Triggered
+          message: The alarm was triggered at {{ now().strftime('%I:%M %p') }}
+          data:
+            group: alarm-status
+            url: "/lovelace/security"
+            entity_id: camera.living_room
+            actions:
+              - action: "DISARM_ALARM"
+                title: "Disarm"
+                authenticationRequired: true
+                destructive: true
+            push:
+              sound:
+                name: default
+                critical: 1
+                volume: 0
     mode: single
 
   - id: "1601035010807"
@@ -209,7 +232,7 @@ automation:
           - binary_sensor.living_room_motion_occupancy
           - binary_sensor.hallway_motion_occupancy
           - binary_sensor.study_motion_occupancy
-          - binary_sensor.nest_protect_kitchen_occupancy
+          - binary_sensor.laundry_motion_occupancy
           - binary_sensor.front_door
           - binary_sensor.back_door
         to:
@@ -219,8 +242,13 @@ automation:
       - condition: time
         after: "22:30:00"
         before: "06:00:00"
+      - condition: not
+        conditions:
+          - condition: state
+            entity_id: media_player.living_room_tv
+            state: "off"
     action:
-      - delay: 00:30:00
+      - delay: 00:15:00
       - condition: and
         conditions:
           - condition: state
@@ -233,7 +261,7 @@ automation:
             entity_id: binary_sensor.study_motion_occupancy
             state: "off"
           - condition: state
-            entity_id: binary_sensor.nest_protect_kitchen_occupancy
+            entity_id: binary_sensor.laundry_motion_occupancy
             state: "off"
       - condition: time
         after: "22:30:00"
@@ -251,10 +279,7 @@ automation:
     trigger:
       - platform: state
         entity_id:
-          - binary_sensor.living_room_motion_occupancy
           - binary_sensor.hallway_motion_occupancy
-          - binary_sensor.study_motion_occupancy
-          - binary_sensor.nest_protect_kitchen_occupancy
         to: "on"
       - platform: time
         at: 07:00:00
