@@ -1,0 +1,17 @@
+alias: "dog_door: keep pets locked in when away for long period"
+id: "239847389473209101"
+mode: single
+trigger:
+  - platform: state
+    entity_id: group.all_people
+    to: not_home
+    for:
+      hours: 0
+      minutes: 30
+      seconds: 0
+condition: []
+action:
+  - service: lock.lock
+    data: {}
+    target:
+      entity_id: lock.backyard_locked_in

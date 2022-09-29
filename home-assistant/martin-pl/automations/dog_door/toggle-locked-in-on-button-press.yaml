@@ -1,0 +1,27 @@
+id: "160095323e489547"
+alias: "dog_door: toggle locked in on living room button press"
+description: ""
+trigger:
+  - platform: state
+    entity_id: sensor.living_room_button_click
+    to: single
+action:
+  - alias: "lock/unlock"
+    choose:
+      - conditions:
+          - condition: state
+            entity_id: lock.backyard_locked_in
+            state: "locked"
+        sequence:
+          - service: lock.unlock
+            target:
+              entity_id: lock.backyard_locked_in
+      - conditions:
+          - condition: state
+            entity_id: lock.backyard_locked_in
+            state: "unlocked"
+        sequence:
+          - service: lock.lock
+            target:
+              entity_id: lock.backyard_locked_in
+mode: single

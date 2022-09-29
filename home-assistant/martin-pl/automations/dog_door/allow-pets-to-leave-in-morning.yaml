@@ -1,0 +1,15 @@
+alias: "dog_door: allow pets to leave in morning"
+id: "2398473894732472362"
+mode: single
+trigger:
+  - platform: time
+    at: "07:00:00"
+condition:
+  - condition: state
+    entity_id: group.all_people
+    state: "home"
+action:
+  - service: lock.unlock
+    data: {}
+    target:
+      entity_id: lock.backyard_locked_in

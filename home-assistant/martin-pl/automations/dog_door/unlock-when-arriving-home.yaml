@@ -1,0 +1,13 @@
+alias: "dog_door: unlock dog door when arriving home"
+id: "2398473894732294848"
+mode: single
+trigger:
+  - platform: state
+    entity_id: group.all_people
+    to: home
+condition: []
+action:
+  - service: lock.unlock
+    data: {}
+    target:
+      entity_id: lock.backyard_locked_in

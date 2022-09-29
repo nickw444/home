@@ -1,0 +1,18 @@
+alias: "dog_door: keep pets locked in at night"
+id: "23984738947389247"
+description: ""
+mode: single
+trigger:
+  - platform: state
+    entity_id:
+      - alarm_control_panel.ha_alarm
+    to: armed_night
+condition:
+  - condition: state
+    entity_id: group.all_people
+    state: "home"
+action:
+  - service: lock.lock
+    data: {}
+    target:
+      entity_id: lock.backyard_locked_in
