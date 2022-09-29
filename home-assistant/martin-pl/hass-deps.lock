@@ -73,3 +73,6 @@ https://github.com/iMicknl/ha-nest-protect.git:
   type: core
   components:
   - nest_protect
+https://github.com/thomasloven/lovelace-fold-entity-row.git:
+  version: 419ec48
+  type: lovelace

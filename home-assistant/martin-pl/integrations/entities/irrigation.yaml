@@ -1,0 +1,45 @@
+sensor:
+  - platform: template
+    sensors:
+      front_herbs_time_remaining_friendly:
+        friendly_name: "Front Herbs time remaining friendly"
+        value_template: |
+          {% if states('sensor.front_herbs_time_remaining')|float > 0 %}
+          {{- '%02d' % (states('sensor.front_herbs_time_remaining')|float / 60)|int -}}:
+          {{- '%02d' % (states('sensor.front_herbs_time_remaining')|float % 60)|int }} remaining
+          {% endif %}
+      front_lawn_time_remaining_friendly:
+        friendly_name: "Front Lawn time remaining friendly"
+        value_template: |
+          {% if states('sensor.front_lawn_time_remaining')|float > 0 %}
+          {{- '%02d' % (states('sensor.front_lawn_time_remaining')|float / 60)|int -}}:
+          {{- '%02d' % (states('sensor.front_lawn_time_remaining')|float % 60)|int }} remaining
+          {% endif %}
+      front_drippers_time_remaining_friendly:
+        friendly_name: "Front Drippers time remaining friendly"
+        value_template: |
+          {% if states('sensor.front_drippers_time_remaining')|float > 0 %}
+          {{- '%02d' % (states('sensor.front_drippers_time_remaining')|float / 60)|int -}}:
+          {{- '%02d' % (states('sensor.front_drippers_time_remaining')|float % 60)|int }} remaining
+          {% endif %}
+      back_herbs_time_remaining_friendly:
+        friendly_name: "Back Herbs time remaining friendly"
+        value_template: |
+          {% if states('sensor.back_herbs_time_remaining')|float > 0 %}
+          {{- '%02d' % (states('sensor.back_herbs_time_remaining')|float / 60)|int -}}:
+          {{- '%02d' % (states('sensor.back_herbs_time_remaining')|float % 60)|int }} remaining
+          {% endif %}
+      back_lawn_time_remaining_friendly:
+        friendly_name: "Back Lawn time remaining friendly"
+        value_template: |
+          {% if states('sensor.back_lawn_time_remaining')|float > 0 %}
+          {{- '%02d' % (states('sensor.back_lawn_time_remaining')|float / 60)|int -}}:
+          {{- '%02d' % (states('sensor.back_lawn_time_remaining')|float % 60)|int }} remaining
+          {% endif %}
+      back_drippers_time_remaining_friendly:
+        friendly_name: "Back Drippers time remaining friendly"
+        value_template: |
+          {% if states('sensor.back_drippers_time_remaining')|float > 0 %}
+          {{- '%02d' % (states('sensor.back_drippers_time_remaining')|float / 60)|int -}}:
+          {{- '%02d' % (states('sensor.back_drippers_time_remaining')|float % 60)|int }} remaining
+          {% endif %}
