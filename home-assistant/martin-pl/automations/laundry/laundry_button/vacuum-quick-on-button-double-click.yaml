@@ -1,0 +1,17 @@
+id: "160095323482724"
+alias: "laundry: vacuum quick on laundry button double click"
+description: ""
+trigger:
+  - platform: state
+    entity_id: sensor.laundry_button_click
+    to: double
+condition:
+  - condition: not
+    conditions:
+      - condition: state
+        entity_id: vacuum.osmo
+        state: cleaning
+action:
+  - service: script.osmo_quick_clean
+    data: {}
+mode: single

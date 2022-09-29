@@ -4,18 +4,27 @@ input_boolean:
     icon: "mdi:home-outline"
   osmo_clean_living_room:
     name: "Living Room"
-    icon: "mdi:television"
+    icon: "mdi:silverware-fork-knife"
   osmo_clean_kitchen:
     name: "Kitchen"
     icon: "mdi:stove"
-  osmo_clean_dining:
-    name: "Dining"
-    icon: "mdi:silverware-fork-knife"
+  osmo_clean_lounge:
+    name: "Lounge"
+    icon: "mdi:television"
+  osmo_clean_laundry:
+    name: "Laundry"
+    icon: "mdi:washing-machine"
+  osmo_clean_bathroom:
+    name: "Bathroom"
+    icon: "mdi:bathtub"
   osmo_clean_hallway:
     name: "Hallway"
     icon: "mdi:walk"
   osmo_clean_bedroom:
     name: "Bedroom"
+    icon: "mdi:bed"
+  osmo_clean_guest_bedroom:
+    name: "Guest Bedroom"
     icon: "mdi:bed"
   osmo_clean_study:
     name: "Study"
@@ -34,8 +43,16 @@ input_datetime:
     name: "Kitchen Last Cleaned At"
     has_date: true
     has_time: true
-  osmo_last_clean_dining:
-    name: "Dining Last Cleaned At"
+  osmo_last_clean_lounge:
+    name: "Lounge Last Cleaned At"
+    has_date: true
+    has_time: true
+  osmo_last_clean_laundry:
+    name: "Laundry Last Cleaned At"
+    has_date: true
+    has_time: true
+  osmo_last_clean_bathroom:
+    name: "Bathroom Last Cleaned At"
     has_date: true
     has_time: true
   osmo_last_clean_hallway:
@@ -44,6 +61,10 @@ input_datetime:
     has_time: true
   osmo_last_clean_bedroom:
     name: "Bedroom Last Cleaned At"
+    has_date: true
+    has_time: true
+  osmo_last_clean_guest_bedroom:
+    name: "Gues Bedroom Last Cleaned At"
     has_date: true
     has_time: true
   osmo_last_clean_study:
@@ -81,11 +102,14 @@ template:
         state: >-
           {%- set rooms=
             [
-              ('input_boolean.osmo_clean_living_room', 0),
-              ('input_boolean.osmo_clean_dining', 7),
-              ('input_boolean.osmo_clean_hallway', 5),
+              ('input_boolean.osmo_clean_living_room', 2),
+              ('input_boolean.osmo_clean_lounge', 8),
+              ('input_boolean.osmo_clean_laundry', 6),
+              ('input_boolean.osmo_clean_bathroom', 5),
+              ('input_boolean.osmo_clean_hallway', 1),
               ('input_boolean.osmo_clean_bedroom', 4),
-              ('input_boolean.osmo_clean_study', 2),
+              ('input_boolean.osmo_clean_guest_bedroom', 0),
+              ('input_boolean.osmo_clean_study', 3),
             ]
           -%}
           [
@@ -98,7 +122,7 @@ template:
         state: >-
           {%- set rooms=
             [
-              ('input_boolean.osmo_clean_kitchen', 6),
+              ('input_boolean.osmo_clean_kitchen', 7),
             ]
           -%}
           [
@@ -110,12 +134,18 @@ template:
         state: '{{ strptime(states("input_datetime.osmo_last_clean_living_room"), "%Y-%m-%d %H:%M:%S").strftime("%A") }}'
       - unique_id: osmo_last_clean_kitchen_pretty
         state: '{{ strptime(states("input_datetime.osmo_last_clean_kitchen"), "%Y-%m-%d %H:%M:%S").strftime("%A") }}'
-      - unique_id: osmo_last_clean_dining_pretty
-        state: '{{ strptime(states("input_datetime.osmo_last_clean_dining"), "%Y-%m-%d %H:%M:%S").strftime("%A") }}'
+      - unique_id: osmo_last_clean_lounge_pretty
+        state: '{{ strptime(states("input_datetime.osmo_last_clean_lounge"), "%Y-%m-%d %H:%M:%S").strftime("%A") }}'
+      - unique_id: osmo_last_clean_laundry_pretty
+        state: '{{ strptime(states("input_datetime.osmo_last_clean_laundry"), "%Y-%m-%d %H:%M:%S").strftime("%A") }}'
+      - unique_id: osmo_last_clean_bathroom_pretty
+        state: '{{ strptime(states("input_datetime.osmo_last_clean_bathroom"), "%Y-%m-%d %H:%M:%S").strftime("%A") }}'
       - unique_id: osmo_last_clean_hallway_pretty
         state: '{{ strptime(states("input_datetime.osmo_last_clean_hallway"), "%Y-%m-%d %H:%M:%S").strftime("%A") }}'
       - unique_id: osmo_last_clean_bedroom_pretty
         state: '{{ strptime(states("input_datetime.osmo_last_clean_bedroom"), "%Y-%m-%d %H:%M:%S").strftime("%A") }}'
+      - unique_id: osmo_last_clean_guest_bedroom_pretty
+        state: '{{ strptime(states("input_datetime.osmo_last_clean_guest_bedroom"), "%Y-%m-%d %H:%M:%S").strftime("%A") }}'
       - unique_id: osmo_last_clean_study_pretty
         state: '{{ strptime(states("input_datetime.osmo_last_clean_study"), "%Y-%m-%d %H:%M:%S").strftime("%A") }}'
 
@@ -135,9 +165,12 @@ automation:
           entity_id:
             - input_boolean.osmo_clean_living_room
             - input_boolean.osmo_clean_kitchen
-            - input_boolean.osmo_clean_dining
+            - input_boolean.osmo_clean_lounge
+            - input_boolean.osmo_clean_laundry
+            - input_boolean.osmo_clean_bathroom
             - input_boolean.osmo_clean_hallway
             - input_boolean.osmo_clean_bedroom
+            - input_boolean.osmo_clean_guest_bedroom
             - input_boolean.osmo_clean_study
     mode: single
 
@@ -149,9 +182,12 @@ automation:
         entity_id:
           - input_boolean.osmo_clean_living_room
           - input_boolean.osmo_clean_kitchen
-          - input_boolean.osmo_clean_dining
+          - input_boolean.osmo_clean_lounge
+          - input_boolean.osmo_clean_laundry
+          - input_boolean.osmo_clean_bathroom
           - input_boolean.osmo_clean_hallway
           - input_boolean.osmo_clean_bedroom
+          - input_boolean.osmo_clean_guest_bedroom
           - input_boolean.osmo_clean_study
         from: "on"
         to: "off"
@@ -283,8 +319,8 @@ script:
       - service: vacuum.return_to_base
         target:
           entity_id: vacuum.osmo
-  osmo_clean_tiled_areas:
-    alias: "osmo: clean tiled areas"
+  osmo_clean_living_area:
+    alias: "osmo: clean living area"
     mode: single
     icon: mdi:broom
     sequence:
@@ -292,23 +328,26 @@ script:
         data: {}
         target:
           entity_id:
-            - input_boolean.osmo_clean_hallway
             - input_boolean.osmo_clean_living_room
-            - input_boolean.osmo_clean_dining
+            - input_boolean.osmo_clean_lounge
             - input_boolean.osmo_clean_kitchen
       - service: input_boolean.turn_off
         data: {}
         target:
           entity_id:
             - input_boolean.osmo_clean_bedroom
+            - input_boolean.osmo_clean_guest_bedroom
             - input_boolean.osmo_clean_study
+            - input_boolean.osmo_clean_bathroom
+            - input_boolean.osmo_clean_laundry
+            - input_boolean.osmo_clean_hallway
       - service: switch.turn_on
         target:
           entity_id: switch.osmo_cleaning_preference
       - service: script.osmo_clean_selected_rooms
         data: {}
-  osmo_clean_all_areas:
-    alias: "osmo: clean all areas"
+  osmo_clean_bedrooms:
+    alias: "osmo: clean bedrooms"
     mode: single
     icon: mdi:broom
     sequence:
@@ -316,18 +355,142 @@ script:
         data: {}
         target:
           entity_id:
-            - input_boolean.osmo_clean_hallway
-            - input_boolean.osmo_clean_living_room
-            - input_boolean.osmo_clean_dining
-            - input_boolean.osmo_clean_kitchen
             - input_boolean.osmo_clean_bedroom
+            - input_boolean.osmo_clean_guest_bedroom
             - input_boolean.osmo_clean_study
+            - input_boolean.osmo_clean_hallway
+      - service: input_boolean.turn_off
+        data: {}
+        target:
+          entity_id:
+            - input_boolean.osmo_clean_living_room
+            - input_boolean.osmo_clean_lounge
+            - input_boolean.osmo_clean_kitchen
+            - input_boolean.osmo_clean_bathroom
+            - input_boolean.osmo_clean_laundry
       - service: switch.turn_on
         target:
           entity_id: switch.osmo_cleaning_preference
       - service: script.osmo_clean_selected_rooms
         data: {}
-
+  osmo_quick_clean:
+    alias: "osmo: quick clean"
+    mode: single
+    icon: mdi:broom
+    sequence:
+      - service: input_boolean.turn_on
+        data: {}
+        target:
+          entity_id:
+            - input_boolean.osmo_clean_bedroom
+            - input_boolean.osmo_clean_study
+            - input_boolean.osmo_clean_guest_bedroom
+            - input_boolean.osmo_clean_bathroom
+            - input_boolean.osmo_clean_hallway
+            - input_boolean.osmo_clean_living_room
+            - input_boolean.osmo_clean_lounge
+            - input_boolean.osmo_clean_kitchen
+            - input_boolean.osmo_clean_laundry
+      - service: switch.turn_off
+        target:
+          entity_id: switch.osmo_cleaning_preference
+      - service: input_select.select_option
+        data:
+          option: One
+        target:
+          entity_id: input_select.osmo_num_passes
+      - service: input_select.select_option
+        data:
+          option: Standard
+        target:
+          entity_id: input_select.osmo_vacuum_power
+      - service: input_select.select_option
+        data:
+          option: Low
+        target:
+          entity_id: input_select.osmo_water_flow
+      - service: script.osmo_clean_selected_rooms
+        data: {}
+  osmo_auto_clean:
+    alias: "osmo: auto clean"
+    mode: single
+    icon: mdi:broom
+    sequence:
+      - service: input_boolean.turn_on
+        data: {}
+        target:
+          entity_id:
+            - input_boolean.osmo_clean_bedroom
+            - input_boolean.osmo_clean_study
+            - input_boolean.osmo_clean_guest_bedroom
+            - input_boolean.osmo_clean_bathroom
+            - input_boolean.osmo_clean_hallway
+            - input_boolean.osmo_clean_living_room
+            - input_boolean.osmo_clean_lounge
+            - input_boolean.osmo_clean_kitchen
+            - input_boolean.osmo_clean_laundry
+      - service: switch.turn_on
+        target:
+          entity_id: switch.osmo_cleaning_preference
+      - service: script.osmo_clean_selected_rooms
+        data: {}
+  osmo_deep_clean:
+    alias: "osmo: deep clean"
+    mode: single
+    icon: mdi:broom
+    sequence:
+      - service: input_boolean.turn_on
+        data: {}
+        target:
+          entity_id:
+            - input_boolean.osmo_clean_bedroom
+            - input_boolean.osmo_clean_study
+            - input_boolean.osmo_clean_guest_bedroom
+            - input_boolean.osmo_clean_bathroom
+            - input_boolean.osmo_clean_hallway
+            - input_boolean.osmo_clean_living_room
+            - input_boolean.osmo_clean_lounge
+            - input_boolean.osmo_clean_kitchen
+            - input_boolean.osmo_clean_laundry
+      - service: switch.turn_off
+        target:
+          entity_id: switch.osmo_cleaning_preference
+      - service: input_select.select_option
+        data:
+          option: Three
+        target:
+          entity_id: input_select.osmo_num_passes
+      - service: input_select.select_option
+        data:
+          option: Max
+        target:
+          entity_id: input_select.osmo_vacuum_power
+      - service: input_select.select_option
+        data:
+          option: Low
+        target:
+          entity_id: input_select.osmo_water_flow
+      - service: script.osmo_clean_selected_rooms
+        data: {}
+  osmo_summon:
+    alias: "osmo: summon"
+    mode: single
+    icon: mdi:broom
+    sequence:
+      - service: vacuum.stop
+        target:
+          entity_id: vacuum.osmo
+      - service: vacuum.send_command
+        target:
+          entity_id: vacuum.osmo
+        data:
+          command: clean_custom
+          params:
+            custom_area: "-1327,6254,-1051,5978"
+      - delay: 00:00:10
+      - service: vacuum.stop
+        target:
+          entity_id: vacuum.osmo
   osmo_clean_selected_rooms:
     alias: "osmo: clean selected rooms"
     mode: single
@@ -369,7 +532,7 @@ script:
                     entity_id: vacuum.osmo
                     from: cleaning
                     to: returning
-                timeout: 01:00:00
+                timeout: 01:30:00
                 continue_on_timeout: false
               - service: vacuum.stop
                 target:
@@ -409,11 +572,14 @@ script:
             {%- set rooms=
               [
                 'living_room',
-                'dining',
+                'kitchen',
+                'lounge',
+                'laundry',
+                'bathroom',
                 'hallway',
                 'bedroom',
-                'study',
-                'kitchen',
+                'guest_bedroom',
+                'study',                
               ]
             -%}
             input_datetime.osmo_last_clean
