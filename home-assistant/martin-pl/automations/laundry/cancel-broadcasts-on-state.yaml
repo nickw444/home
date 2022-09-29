@@ -9,12 +9,8 @@ trigger:
   - platform: state
     entity_id: binary_sensor.in_bed
     to: "on"
-  # TODO: Change to motion detection as laundry_door entity no longer exists
-  # - platform: state
-  #  entity_id: binary_sensor.laundry_door
-  #  to: "on"
   - platform: state
-    entity_id: binary_sensor.front_door
+    entity_id: binary_sensor.laundry_motion_occupancy
     to: "on"
 action:
   - choose:
