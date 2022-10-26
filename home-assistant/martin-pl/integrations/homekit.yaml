@@ -3,6 +3,7 @@ homekit:
     include_domains:
       - light
       - fan
+
     include_entity_globs:
       - binary_sensor.*_door
       - binary_sensor.*_motion_occupancy
@@ -11,33 +12,80 @@ homekit:
       - sensor.*_climate_temperature
       - sensor.*_climate_humidity
       - sensor.*_climate_pressure
+
     include_entities:
       - sensor.living_room_temperature
       - switch.electric_blanket
       - switch.play_music
+
+      - switch.back_drippers
+      - switch.back_herbs
+      - switch.back_lawn
+      - switch.front_drippers
+      - switch.front_herbs
+      - switch.front_lawn
+
       - script.osmo_cancel_cleaning
-      - script.osmo_clean_tiled_areas
-      - script.osmo_clean_all_areas
-      - cover.living_room_blockout
-      - cover.living_room_screen
+      - script.osmo_auto_clean
+      - script.osmo_quick_clean
+      - script.osmo_deep_clean
+      - script.osmo_clean_bedrooms
+      - script.osmo_clean_living_area
+
+      - cover.living_left_blockout
+      - cover.living_side_blockout
+      - cover.living_right_blockout
+      - cover.living_right_screen
+
       - cover.study_blockout
       - cover.study_screen
       - cover.bedroom_blockout
       - cover.bedroom_screen
+      - cover.kitchen_blockout
+      - cover.kitchen_screen
+
+      - lock.backyard_locked_in
+
     exclude_entities:
       - light.bedroom_lamps
       - light.living_room_downlights
       - light.living_room_ambiance
+
+      # Exclude any lights with _calibrated counterparts
+      - light.breakfast_bar
+      - light.nicks_monitor
+      - light.tv_led_strip
+
       - binary_sensor.internal_motion_occupancy
+
     exclude_entity_globs:
       - sensor.comms_cabinet_climate_*
+
   entity_config:
     script.osmo_cancel_cleaning:
       name: "Cancel cleaning"
-    script.osmo_clean_tiled_areas:
-      name: "Clean Tiles"
-    script.osmo_clean_all_areas:
-      name: "Clean Everywhere"
+    script.osmo_auto_clean:
+      name: "Auto Clean"
+    script.osmo_quick_clean:
+      name: "Quick Clean"
+    script.osmo_deep_clean:
+      name: "Deep Clean"
+    script.osmo_clean_bedrooms:
+      name: "Clean Bedrooms"
+    script.osmo_clean_living_area:
+      name: "Clean Living"
+
+    switch.back_drippers: &sprinkler
+      type: sprinkler
+    switch.back_herbs: *sprinkler
+    switch.back_lawn: *sprinkler
+    switch.front_drippers: *sprinkler
+    switch.front_herbs: *sprinkler
+    switch.front_lawn: *sprinkler
+
+    lock.backyard_locked_in:
+      name: "Dog Door"
+
     switch.play_music:
       # "Hey siri, turn on/off the music"
       name: "Music"
