@@ -22,3 +22,6 @@ dependencies:
   root_is_custom_components: true
 - https://github.com/iMicknl/ha-nest-protect.git
 - https://github.com/thomasloven/lovelace-fold-entity-row.git
+- https://github.com/DeebotUniverse/Deebot-4-Home-Assistant.git
+- https://github.com/denysdovhan/vacuum-card.git
+- https://github.com/bremor/bureau_of_meteorology.git
