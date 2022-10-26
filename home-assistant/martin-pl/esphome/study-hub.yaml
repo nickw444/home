@@ -29,20 +29,9 @@ i2c:
   id: bus_a
 
 esp32_ble_tracker:
-sensor:
-  - platform: xiaomi_hhccjcy01
-    mac_address: 'C4:7C:8D:6D:6F:41'
-    temperature:
-      name: "Outdoor Temperature"
-    moisture:
-      name: "Lemon Tree Soil Moisture"
-    illuminance:
-      name: "Outdoor Illuminance"
-    conductivity:
-      name: "Lemon Tree Soil Conductivity"
-    battery_level:
-      name: "Lemon Tree Battery Level"
+bluetooth_proxy:
 
+sensor:
   - platform: sgp30
     eco2:
       name: "Study eCO2"

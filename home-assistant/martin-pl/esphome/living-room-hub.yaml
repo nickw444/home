@@ -23,6 +23,8 @@ wifi:
 captive_portal:
 
 esp32_ble_tracker:
+bluetooth_proxy:
+
 
 i2c:
   sda: 18
