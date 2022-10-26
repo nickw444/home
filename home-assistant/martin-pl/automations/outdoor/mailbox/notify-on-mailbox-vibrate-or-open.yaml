@@ -1,0 +1,23 @@
+id: "1661736779952"
+alias: "mailbox: notify on mailbox open or vibrate"
+description: ""
+trigger:
+  - platform: state
+    entity_id:
+      - binary_sensor.mailbox_contact_contact
+    from: "off"
+    to: "on"
+  - platform: state
+    entity_id:
+      - binary_sensor.mailbox_vibration
+    from: "off"
+    to: "on"
+condition: []
+action:
+  - service: notify.everyone
+    data:
+      title: You have mail
+      message: The mailbox was opened or vibrated
+  # Debounce for 30 minutes
+  - delay: 00:30:00
+mode: single
