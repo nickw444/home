@@ -15,6 +15,11 @@ cover:
       - cover.study_blockout
       - cover.study_screen
   - platform: group
+    name: "Living"
+    entities:
+      - cover.living_blockout
+      - cover.living_right_screen
+  - platform: group
     name: "Living Blockout"
     entities:
       - cover.living_side_blockout
@@ -31,4 +36,5 @@ cover:
       - cover.bedroom_screen
       - cover.living_side_blockout
       - cover.living_left_blockout
+      - cover.living_right_screen
       - cover.living_right_blockout

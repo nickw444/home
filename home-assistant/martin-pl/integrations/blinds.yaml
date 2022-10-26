@@ -7,6 +7,7 @@ homeassistant:
     cover.study_blockout: *id001
     cover.kitchen_screen: *id001
     cover.kitchen_blockout: *id001
+    cover.living_right_screen: *id001
     cover.living_right_blockout: *id001
     cover.living_left_blockout: *id001
     cover.living_side_blockout: *id001
@@ -151,26 +152,49 @@ cover:
           action: STOP
       availability_template: |-
         {{ is_state('binary_sensor.rf_controller_status', 'on') }}
+    living_right_screen:
+      friendly_name: Living Right Screen
+      device_class: blind
+      open_cover:
+        service: esphome.rf_controller_transmit
+        data:
+          remote_id: 41
+          channel_id: 1
+          action: OPEN
+      close_cover:
+        service: esphome.rf_controller_transmit
+        data:
+          remote_id: 41
+          channel_id: 1
+          action: CLOSE
+      stop_cover:
+        service: esphome.rf_controller_transmit
+        data:
+          remote_id: 41
+          channel_id: 1
+          action: STOP
+      availability_template: |-
+        {{ is_state('binary_sensor.rf_controller_status', 'on') }}
     living_right_blockout:
       friendly_name: Living Right Blockout
       device_class: blind
       open_cover:
         service: esphome.rf_controller_transmit
         data:
-          remote_id: 40
-          channel_id: 7
+          remote_id: 41
+          channel_id: 2
           action: OPEN
       close_cover:
         service: esphome.rf_controller_transmit
         data:
-          remote_id: 40
-          channel_id: 7
+          remote_id: 41
+          channel_id: 2
           action: CLOSE
       stop_cover:
         service: esphome.rf_controller_transmit
         data:
-          remote_id: 40
-          channel_id: 7
+          remote_id: 41
+          channel_id: 2
           action: STOP
       availability_template: |-
         {{ is_state('binary_sensor.rf_controller_status', 'on') }}
@@ -295,14 +319,26 @@ switch:
       turn_off: []
       availability_template: |-
         {{ is_state('binary_sensor.rf_controller_status', 'on') }}
+    living_right_screen_blind_pairing:
+      friendly_name: Living Right Screen Blind Pairing
+      value_template: off
+      turn_on:
+        service: esphome.rf_controller_transmit
+        data:
+          remote_id: 41
+          channel_id: 1
+          action: PAIR
+      turn_off: []
+      availability_template: |-
+        {{ is_state('binary_sensor.rf_controller_status', 'on') }}
     living_right_blockout_blind_pairing:
       friendly_name: Living Right Blockout Blind Pairing
       value_template: off
       turn_on:
         service: esphome.rf_controller_transmit
         data:
-          remote_id: 40
-          channel_id: 7
+          remote_id: 41
+          channel_id: 2
           action: PAIR
       turn_off: []
       availability_template: |-

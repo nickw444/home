@@ -27,4 +27,5 @@ action:
       - cover.kitchen_screen
       - cover.kitchen_blockout
       - cover.study_blockout
+      - cover.living_blockout
 mode: single

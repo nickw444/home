@@ -23,9 +23,12 @@ blinds:
   - name: Kitchen Blockout
     remote: 40
     channel: 6
+  - name: Living Right Screen
+    remote: 41
+    channel: 1
   - name: Living Right Blockout
-    remote: 40
-    channel: 7
+    remote: 41
+    channel: 2
   - name: Living Left Blockout
     remote: 40
     channel: 8

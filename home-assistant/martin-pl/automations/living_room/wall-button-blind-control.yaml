@@ -1,0 +1,10 @@
+id: "16412689983987"
+alias: "living room: toggle blinds on wall button press/hold"
+description: ""
+use_blueprint:
+  path: aqara_button_multi_cover_control.yaml
+  input:
+    button_action: sensor.living_room_button_action
+    screen_blinds: cover.living_right_screen
+    blockout_blinds: cover.living_blockout
+    all_blinds: cover.living

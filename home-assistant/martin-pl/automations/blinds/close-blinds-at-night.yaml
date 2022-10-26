@@ -1,0 +1,23 @@
+id: "16063042895494897"
+alias: "blinds: close all blinds at sunset"
+description: ""
+trigger:
+  - platform: sun
+    event: sunset
+    offset: "-00:30:00"
+condition: []
+action:
+  - service: cover.close_cover
+    data: {}
+    entity_id:
+      - cover.living_side_blockout
+      - cover.living_left_blockout
+      - cover.living_right_screen
+      - cover.living_right_blockout
+      - cover.bedroom_blockout
+      - cover.bedroom_screen
+      - cover.study_blockout
+      - cover.study_screen
+      - cover.kitchen_blockout
+      - cover.kitchen_screen
+mode: single
