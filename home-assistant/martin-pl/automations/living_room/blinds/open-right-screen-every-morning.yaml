@@ -1,0 +1,34 @@
+id: "160077462393928"
+alias: "blinds: open living room right screen every morning"
+description: ""
+trigger:
+  - platform: time
+    at: 09:15:00
+condition:
+  - condition: state
+    entity_id: group.all_people
+    state: home
+  - condition: state
+    entity_id: input_boolean.away_mode
+    state: "off"
+action:
+  # Handle the case where no motion has been detected, perhaps it's a public
+  # holiday and wanted a sleep in. If no motion since dawn, then delay until
+  # motion has been detected.
+  - choose:
+      - conditions:
+          - condition: numeric_state
+            entity_id: sensor.internal_motion_occupancy_since_dawn
+            below: "1"
+        sequence:
+          - wait_for_trigger:
+              - platform: numeric_state
+                entity_id: sensor.internal_motion_occupancy_since_dawn
+                above: "0"
+            timeout: "02:00:00" # Wait for up to two hours (11:15am), then continue
+            continue_on_timeout: true
+  - service: cover.open_cover
+    data: {}
+    entity_id:
+      - cover.living_right_screen
+mode: single
