@@ -60,8 +60,8 @@ action:
   - alias: Set up variables for the actions
     variables:
       action_cancel: "{{ 'CANCEL_' ~ context.id }}"
-      action_start_now_tiles: "{{ 'START_NOW_TILES_' ~ context.id }}"
-      action_start_now_all: "{{ 'START_NOW_ALL_' ~ context.id }}"
+      action_start_now_auto: "{{ 'START_NOW_AUTO_' ~ context.id }}"
+      action_start_now_deep: "{{ 'START_NOW_DEEP_' ~ context.id }}"
   - service: notify.everyone
     data:
       title: Osmo
@@ -71,10 +71,10 @@ action:
         actions:
           - action: "{{ action_cancel }}"
             title: Cancel
-          - action: "{{ action_start_now_tiles }}"
-            title: Clean Tiles Only
-          - action: "{{ action_start_now_all }}"
-            title: Clean All
+          - action: "{{ action_start_now_auto }}"
+            title: Auto Clean Only
+          - action: "{{ action_start_now_deep }}"
+            title: Deep Clean
   - alias: Wait for a response
     wait_for_trigger:
       - platform: event
@@ -84,11 +84,11 @@ action:
       - platform: event
         event_type: mobile_app_notification_action
         event_data:
-          action: "{{ action_start_now_tiles }}"
+          action: "{{ action_start_now_auto }}"
       - platform: event
         event_type: mobile_app_notification_action
         event_data:
-          action: "{{ action_start_now_all }}"
+          action: "{{ action_start_now_deep }}"
     timeout: "00:05:00"
   - choose:
       - conditions:
@@ -97,13 +97,13 @@ action:
         sequence: []
       - conditions:
           - condition: template
-            value_template: "{{ wait.trigger.event.data.action == action_start_now_tiles }}"
+            value_template: "{{ wait.trigger.event.data.action == action_start_now_deep }}"
         sequence:
           - service: script.turn_on
             target:
-              entity_id: script.osmo_clean_tiled_areas
+              entity_id: script.osmo_deep_clean
     default:
       - service: script.turn_on
         target:
-          entity_id: script.osmo_clean_all_areas
+          entity_id: script.osmo_auto_clean
 mode: single

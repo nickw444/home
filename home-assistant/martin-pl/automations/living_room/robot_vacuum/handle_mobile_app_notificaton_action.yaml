@@ -1,33 +1,53 @@
 id: BF12644E-F008-466A-9BC8-43EAFF793D95
-alias: 'robot_vacuum: handle mobile app notification action'
+alias: "robot_vacuum: handle mobile app notification action"
 trigger:
-- platform: event
-  event_type: mobile_app_notification_action
-  event_data:
-    action: 'ROBOVAC_CLEAN_ALL'
-- platform: event
-  event_type: mobile_app_notification_action
-  event_data:
-    action: 'ROBOVAC_CLEAN_TILES'
+  - platform: event
+    id: "auto_clean"
+    event_type: mobile_app_notification_action
+    event_data:
+      action: "ROBOVAC_CLEAN_AUTO"
+  - platform: event
+    id: "quick_clean"
+    event_type: mobile_app_notification_action
+    event_data:
+      action: "ROBOVAC_CLEAN_QUICK"
+  - platform: event
+    id: "deep_clean"
+    event_type: mobile_app_notification_action
+    event_data:
+      action: "ROBOVAC_CLEAN_DEEP"
+
 action:
-- alias: "Perform the action"
-  choose:
-    - conditions: "{{ trigger.event.data.action == 'ROBOVAC_CLEAN_ALL' }}"
-      sequence:
-        - service: script.turn_on
-          target:
-            entity_id: script.osmo_clean_all_areas
-    - conditions: "{{ trigger.event.data.action == 'ROBOVAC_CLEAN_TILES' }}"
-      sequence:
-        - service: script.turn_on
-          target:
-            entity_id: script.osmo_clean_tiled_areas
-- alias: "Clear notification from other devices"
-  choose:
-    - conditions: "{{ true if trigger.event.data.action_data and trigger.event.data.action_data.clear_tag else false }}"
-      sequence:
-      - service: notify.everyone
-        data:
-          message: clear_notification
-          data:
-            tag: "{{ trigger.event.data.action_data.clear_tag }}"
+  - alias: "Perform the action"
+    choose:
+      - conditions:
+          - condition: trigger
+            id: "auto_clean"
+        sequence:
+          - service: script.turn_on
+            target:
+              entity_id: script.osmo_auto_clean
+      - conditions:
+          - condition: trigger
+            id: "quick_clean"
+        sequence:
+          - service: script.turn_on
+            target:
+              entity_id: script.osmo_quick_clean
+      - conditions:
+          - condition: trigger
+            id: "deep_clean"
+        sequence:
+          - service: script.turn_on
+            target:
+              entity_id: script.osmo_deep_clean
+
+  - alias: "Clear notification from other devices"
+    choose:
+      - conditions: "{{ true if trigger.event.data.action_data and trigger.event.data.action_data.clear_tag else false }}"
+        sequence:
+          - service: notify.everyone
+            data:
+              message: clear_notification
+              data:
+                tag: "{{ trigger.event.data.action_data.clear_tag }}"

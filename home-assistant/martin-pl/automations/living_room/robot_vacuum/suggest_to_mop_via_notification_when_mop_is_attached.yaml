@@ -1,21 +1,21 @@
-id: 'BC048F88-3BB4-4591-887E-8A18AE44D94E'
-alias: 'robot_vacuum: suggest to mop when when mop is attached'
-description: ''
+id: "BC048F88-3BB4-4591-887E-8A18AE44D94E"
+alias: "robot_vacuum: suggest to mop when when mop is attached"
+description: ""
 trigger:
-- platform: state
-  entity_id: binary_sensor.osmo_mop_attached
-  from: 'off'
-  to: 'on'
+  - platform: state
+    entity_id: binary_sensor.osmo_mop_attached
+    from: "off"
+    to: "on"
 condition: []
 action:
-- service: notify.everyone
-  data:
-    title: Osmo
-    message: Mop was attached. Do you want to start mopping all tiled areas?
+  - service: notify.everyone
     data:
-      tag: osmo-mop-attached
-      action_data:
-        clear_tag: osmo-mop-attached
-      actions:
-      - action: 'ROBOVAC_CLEAN_TILES'
-        title: Begin Mopping
+      title: Osmo
+      message: Mop was attached. Do you want to start mopping all areas?
+      data:
+        tag: osmo-mop-attached
+        action_data:
+          clear_tag: osmo-mop-attached
+        actions:
+          - action: "ROBOVAC_CLEAN_AUTO"
+            title: Begin Mopping

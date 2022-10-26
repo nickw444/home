@@ -35,7 +35,9 @@ action:
         action_data:
           clear_tag: osmo-no-one-home
         actions:
-          - action: "ROBOVAC_CLEAN_ALL"
-            title: Clean All Areas
-          - action: "ROBOVAC_CLEAN_TILES"
-            title: Clean Tiled Areas
+          - action: "ROBOVAC_CLEAN_AUTO"
+            title: Auto Clean
+          - action: "ROBOVAC_CLEAN_QUICK"
+            title: Quick Clean
+          - action: "ROBOVAC_CLEAN_DEEP"
+            title: Deep Clean
