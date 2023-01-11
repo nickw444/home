@@ -1,0 +1,27 @@
+id: "166728221523098"
+alias: "irrigation: water drippers at sunrise"
+trigger:
+  - platform: sun
+    event: sunrise
+    offset: "-00:10:00"
+condition:
+  - alias: "less than 2mm rain today"
+    condition: numeric_state
+    entity_id: sensor.fo79_rain_daily
+    below: 2
+  - alias: "less than 3mm rain forecast"
+    condition: numeric_state
+    entity_id: sensor.oatley_rain_amount_min_0
+    below: 3
+action:
+  - service: notify.mobile_app_nicks_iphone
+    data:
+      message: "Turning on front and back drippers"
+      title: "Irrigation"
+  - service: switch.turn_on
+    data: {}
+    target:
+      entity_id:
+        - switch.front_drippers
+        - switch.back_drippers
+mode: single

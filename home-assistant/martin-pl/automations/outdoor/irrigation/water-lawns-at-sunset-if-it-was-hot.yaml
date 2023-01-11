@@ -1,0 +1,26 @@
+id: "4328957543897"
+alias: "irrigation: water front and back lawns at sunset if it was hot today"
+trigger:
+  - platform: sun
+    event: sunset
+condition:
+  - alias: "less than 5mm rain forecast"
+    condition: numeric_state
+    entity_id: sensor.oatley_rain_amount_min_0
+    below: 5
+  - alias: "today max temperature greater than 28"
+    condition: numeric_state
+    entity_id: sensor.fo79_temperature_max_8h
+    above: 28
+action:
+  - service: notify.mobile_app_nicks_iphone
+    data:
+      message: "Watering lawns as it was hot today"
+      title: "Irrigation"
+  - service: switch.turn_on
+    data: {}
+    target:
+      entity_id:
+        - switch.front_lawn
+        - switch.back_lawn
+mode: single

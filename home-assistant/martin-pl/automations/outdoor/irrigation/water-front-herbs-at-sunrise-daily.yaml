@@ -1,0 +1,34 @@
+id: "1667282153289372"
+alias: "irrigation: water front herbs at sunrise"
+trigger:
+  - platform: sun
+    event: sunrise
+condition:
+  - alias: "no rain detected today"
+    condition: numeric_state
+    entity_id: sensor.rain_detected_today_count
+    below: 1
+  - condition: or
+    conditions:
+      - alias: "moisture sensor unavailable"
+        condition: state
+        entity_id: sensor.front_herbs_moisture
+        state: "unavailable"
+      - alias: "moisture less than 60%"
+        condition: numeric_state
+        entity_id: sensor.front_herbs_moisture
+        below: 60
+  - alias: "less than 3mm rain forecast"
+    condition: numeric_state
+    entity_id: sensor.oatley_rain_amount_min_0
+    below: 3
+action:
+  - service: notify.mobile_app_nicks_iphone
+    data:
+      message: "Turning on front herbs"
+      title: "Irrigation"
+  - service: switch.turn_on
+    data: {}
+    target:
+      entity_id: switch.front_herbs
+mode: single

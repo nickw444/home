@@ -1,0 +1,37 @@
+id: "1667282153223234"
+alias: "irrigation: water front and back herbs at midday if hot"
+trigger:
+  - platform: time
+    at: "13:00:00"
+condition:
+  - condition: or
+    conditions:
+      - alias: "moisture sensor unavailable"
+        condition: state
+        entity_id: sensor.front_herbs_moisture
+        state: "unavailable"
+      - alias: "moisture less than 60%"
+        condition: numeric_state
+        entity_id: sensor.front_herbs_moisture
+        below: 60
+  - alias: "less than 5mm rain forecast"
+    condition: numeric_state
+    entity_id: sensor.oatley_rain_amount_min_0
+    below: 5
+  - alias: "today max temperature greater than 27"
+    condition: numeric_state
+    entity_id: sensor.fo79_temperature_max_8h
+    above: 27
+
+action:
+  - service: notify.mobile_app_nicks_iphone
+    data:
+      message: "Turning on front and back herbs for a quick spritz"
+      title: "Irrigation"
+  - service: switch.turn_on
+    data: {}
+    target:
+      entity_id:
+        - switch.front_herbs
+        - switch.back_herbs
+mode: single
