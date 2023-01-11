@@ -1,0 +1,4 @@
+media_player:
+  - platform: mpd
+    host: 192.168.2.40
+    name: "Outdoor Speakers"

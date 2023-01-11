@@ -1,0 +1,4 @@
+media_player:
+  - platform: mpd
+    host: 192.168.2.41
+    name: "Soundbar"
