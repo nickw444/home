@@ -1,0 +1,103 @@
+sensor:
+  - platform: statistics
+    name: "Outdoor Temperature Max 8h"
+    entity_id: sensor.outdoor_climate_temperature
+    state_characteristic: value_max
+    max_age:
+      hours: 8
+  - platform: statistics
+    name: "Outdoor Temperature Mean 1d"
+    entity_id: sensor.outdoor_climate_temperature
+    state_characteristic: mean
+    max_age:
+      hours: 24
+  - platform: statistics
+    name: "Outdoor Temperature Max 1d"
+    entity_id: sensor.outdoor_climate_temperature
+    state_characteristic: value_max
+    max_age:
+      hours: 24
+  - platform: statistics
+    name: "Outdoor Temperature Mean 2d"
+    entity_id: sensor.outdoor_climate_temperature
+    state_characteristic: mean
+    max_age:
+      hours: 48
+  - platform: statistics
+    name: "Outdoor Temperature Max 2d"
+    entity_id: sensor.outdoor_climate_temperature
+    state_characteristic: value_max
+    max_age:
+      hours: 48
+  - platform: statistics
+    name: "Outdoor Temperature Mean 3d"
+    entity_id: sensor.outdoor_climate_temperature
+    state_characteristic: mean
+    max_age:
+      hours: 72
+  - platform: statistics
+    name: "Outdoor Temperature Max 3d"
+    entity_id: sensor.outdoor_climate_temperature
+    state_characteristic: value_max
+    max_age:
+      hours: 72
+
+  - platform: statistics
+    name: "FO79 Temperature Max 8h"
+    entity_id: sensor.fo79_weather_temperature
+    state_characteristic: value_max
+    max_age:
+      hours: 8
+  - platform: statistics
+    name: "FO79 Temperature Mean 1d"
+    entity_id: sensor.fo79_weather_temperature
+    state_characteristic: mean
+    max_age:
+      hours: 24
+  - platform: statistics
+    name: "FO79 Temperature Max 1d"
+    entity_id: sensor.fo79_weather_temperature
+    state_characteristic: value_max
+    max_age:
+      hours: 24
+  - platform: statistics
+    name: "FO79 Temperature Mean 2d"
+    entity_id: sensor.fo79_weather_temperature
+    state_characteristic: mean
+    max_age:
+      hours: 48
+  - platform: statistics
+    name: "FO79 Temperature Max 2d"
+    entity_id: sensor.fo79_weather_temperature
+    state_characteristic: value_max
+    max_age:
+      hours: 48
+  - platform: statistics
+    name: "FO79 Temperature Mean 3d"
+    entity_id: sensor.fo79_weather_temperature
+    state_characteristic: mean
+    max_age:
+      hours: 72
+  - platform: statistics
+    name: "FO79 Temperature Max 3d"
+    entity_id: sensor.fo79_weather_temperature
+    state_characteristic: value_max
+    max_age:
+      hours: 72
+
+utility_meter:
+  fo79_rain_weekly:
+    name: "FO79 Rain Weekly"
+    unique_id: fo79_rain_weekly
+    source: sensor.fo79_weather_rain_total
+    cycle: weekly
+  fo79_rain_daily:
+    name: "FO79 Rain Daily"
+    unique_id: fo79_rain_daily
+    source: sensor.fo79_weather_rain_total
+    cycle: daily
+  fo79_rain_hourly:
+    name: "FO79 Rain Hourly"
+    unique_id: fo79_rain_hourly
+    source: sensor.fo79_weather_rain_total
+    cycle: hourly
