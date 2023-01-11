@@ -27,7 +27,7 @@ https://github.com/azuwis/zigbee2mqtt-networkmap.git:
   type: lovelace
   is_release: true
 https://github.com/fondberg/spotcast.git:
-  version: d3de262
+  version: 02f4c90
   type: core
   components:
   - spotcast
@@ -77,7 +77,7 @@ https://github.com/thomasloven/lovelace-fold-entity-row.git:
   version: 419ec48
   type: lovelace
 https://github.com/DeebotUniverse/Deebot-4-Home-Assistant.git:
-  version: 1.4.1
+  version: 693e9e5
   type: core
   components:
   - deebot
@@ -89,3 +89,13 @@ https://github.com/bremor/bureau_of_meteorology.git:
   type: core
   components:
   - bureau_of_meteorology
+https://github.com/thomasloven/hass-browser_mod.git:
+  version: e57867a
+  type: core
+  components:
+  - browser_mod
+https://github.com/dummylabs/thewatchman.git:
+  version: b633bae
+  type: core
+  components:
+  - watchman
