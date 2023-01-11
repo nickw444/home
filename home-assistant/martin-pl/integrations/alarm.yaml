@@ -60,26 +60,17 @@ automation:
       - platform: state
         entity_id: alarm_control_panel.ha_alarm
         to: triggered
-    condition: []
+    condition:
+      condition: not
+      conditions:
+        - condition: state
+          entity_id: vacuum.osmo
+          state: cleaning
+        - condition: state
+          entity_id: vacuum.osmo
+          state: returning
     action:
-      - service: notify.mobile_app_nicks_iphone
-        data:
-          title: Alarm Triggered
-          message: The alarm was triggered at {{ now().strftime('%I:%M %p') }}
-          data:
-            group: alarm-status
-            url: "/lovelace/security"
-            entity_id: camera.living_room
-            actions:
-              - action: "DISARM_ALARM"
-                title: "Disarm"
-                authenticationRequired: true
-                destructive: true
-            push:
-              sound:
-                name: default
-                critical: 1
-      - service: notify.mobile_app_kates_iphone
+      - service: notify.everyone
         data:
           title: Alarm Triggered
           message: The alarm was triggered at {{ now().strftime('%I:%M %p') }}
