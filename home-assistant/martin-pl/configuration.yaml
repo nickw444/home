@@ -30,6 +30,7 @@ homeassistant:
   elevation: !secret elevation
   time_zone: Australia/Sydney
   currency: AUD
+  country: AU
 
 automation: !include automations.yaml
 script: !include scripts.yaml
