@@ -26,9 +26,6 @@ wifi:
 
 captive_portal:
 
-esp32_ble_tracker:
-bluetooth_proxy:
-
 text_sensor:
   - platform: wifi_info
     ip_address:
