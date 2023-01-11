@@ -21,22 +21,22 @@ homeassistant:
 
 utility_meter:
   mains_energy_consumed_quarterly:
-    source: sensor.mains_total_energy
+    source: sensor.mains_energy
     cycle: quarterly
   mains_energy_consumed_weekly:
-    source: sensor.mains_total_energy
+    source: sensor.mains_energy
     cycle: weekly
   mains_energy_consumed_daily:
-    source: sensor.mains_total_energy
+    source: sensor.mains_energy
     cycle: daily
   air_conditioning_energy_consumed_quarterly:
-    source: sensor.air_conditioning_total_energy
+    source: sensor.air_conditioning_energy
     cycle: quarterly
   air_conditioning_energy_consumed_weekly:
-    source: sensor.air_conditioning_total_energy
+    source: sensor.air_conditioning_energy
     cycle: weekly
   air_conditioning_energy_consumed_daily:
-    source: sensor.air_conditioning_total_energy
+    source: sensor.air_conditioning_energy
     cycle: daily
   washing_machine_energy_consumed_quarterly:
     source: sensor.washing_machine_today_energy
@@ -61,43 +61,43 @@ sensor:
     sensors:
       energy_meter_estimated_reading:
         # Estimated Meter Reading
-        # Meter Read as at 16:00, 10/10/2020: 54603
+        # Meter Read as at 13:16 04/01/2023: 00189
         friendly_name: "Energy Meter Estimated Reading"
         unit_of_measurement: kWh
-        value_template: "{{ states('sensor.mains_total_energy')|float + states('input_number.energy_meter_offset_adjustment')|float + 54603  }}"
+        value_template: "{{ states('sensor.mains_energy')|float + states('input_number.energy_meter_offset_adjustment')|float + 189  }}"
       mains_power_instantaneous_cost:
         friendly_name: "Mains Power Instantaneous Cost"
         unit_of_measurement: c/h
-        value_template: "{{ (20.60 * states('sensor.mains_power')|float / 1000) | round(2) }}"
+        value_template: "{{ (24.74 * states('sensor.mains_power')|float / 1000) | round(2) }}"
       air_conditioning_power_instantaneous_cost:
         friendly_name: "Air Conditioning Power Instantaneous Cost"
         unit_of_measurement: c/h
-        value_template: "{{ (20.59 * states('sensor.air_conditioning_power')|float / 1000) | round(2) }}"
+        value_template: "{{ (24.74 * states('sensor.air_conditioning_power')|float / 1000) | round(2) }}"
       mains_energy_consumed_daily_cost:
         friendly_name: "Mains Energy Cost Today"
         unit_of_measurement: $
-        value_template: "{{ (1.0209 + states('sensor.mains_energy_consumed_daily')|float * 0.2059) | round(2) }}"
+        value_template: "{{ (1.2155 + 0.952 + states('sensor.mains_energy_consumed_daily')|float * 0.2474) | round(2) }}"
       mains_energy_consumed_weekly_cost:
         friendly_name: "Mains Energy Cost This Week"
         unit_of_measurement: $
         value_template: >-
-          {{ (((now() - strptime(state_attr('sensor.mains_energy_consumed_weekly', 'last_reset'), '%Y-%m-%dT%H:%M:%S.%f%z')).days + 1) * 1.0209
-          + states('sensor.mains_energy_consumed_weekly')|float * 0.2059) | round(2) }}
+          {{ (((now() - strptime(state_attr('sensor.mains_energy_consumed_weekly', 'last_reset'), '%Y-%m-%dT%H:%M:%S.%f%z')).days + 1) * (1.2155 + 0.952)
+          + states('sensor.mains_energy_consumed_weekly')|float * 0.2474) | round(2) }}
       mains_energy_consumed_quarterly_cost:
         friendly_name: "Mains Energy Cost This Quarter"
         unit_of_measurement: $
         value_template: >-
-          {{ (((now() - strptime(state_attr('sensor.mains_energy_consumed_quarterly', 'last_reset'), '%Y-%m-%dT%H:%M:%S.%f%z')).days + 1) * 1.0209
-          + states('sensor.mains_energy_consumed_quarterly')|float * 0.2059) | round(2) }}
+          {{ (((now() - strptime(state_attr('sensor.mains_energy_consumed_quarterly', 'last_reset'), '%Y-%m-%dT%H:%M:%S.%f%z')).days + 1) * (1.2155 + 0.952)
+          + states('sensor.mains_energy_consumed_quarterly')|float * 0.2474) | round(2) }}
       air_conditioning_energy_consumed_daily_cost:
         friendly_name: "Air Conditioning Energy Cost Today"
         unit_of_measurement: $
-        value_template: "{{ (states('sensor.air_conditioning_energy_consumed_daily')|float * 0.2059) | round(2) }}"
+        value_template: "{{ (states('sensor.air_conditioning_energy_consumed_daily')|float * 0.2474) | round(2) }}"
       air_conditioning_energy_consumed_weekly_cost:
         friendly_name: "Air Conditioning Energy Cost This Week"
         unit_of_measurement: $
-        value_template: "{{ (states('sensor.air_conditioning_energy_consumed_weekly')|float * 0.2059) | round(2) }}"
+        value_template: "{{ (states('sensor.air_conditioning_energy_consumed_weekly')|float * 0.2474) | round(2) }}"
       air_conditioning_energy_consumed_quarterly_cost:
         friendly_name: "Air Conditioning Energy Cost This Quarter"
         unit_of_measurement: $
-        value_template: "{{ (states('sensor.air_conditioning_energy_consumed_quarterly')|float * 0.2059) | round(2) }}"
+        value_template: "{{ (states('sensor.air_conditioning_energy_consumed_quarterly')|float * 0.2474) | round(2) }}"
