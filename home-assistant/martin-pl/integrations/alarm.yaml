@@ -354,7 +354,9 @@ automation:
         continue_on_timeout: false
       - service: media_player.media_stop
         data: {}
-        entity_id: media_player.study_speaker
+        entity_id:
+          - media_player.living_room_homepod
+          - media_player.bedroom_homepod
     mode: restart
 
   # Other Ideas:

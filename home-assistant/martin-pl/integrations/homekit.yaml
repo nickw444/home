@@ -14,7 +14,6 @@ homekit:
       - sensor.*_climate_pressure
 
     include_entities:
-      - sensor.living_room_temperature
       - switch.electric_blanket
       - switch.play_music
 
@@ -53,7 +52,6 @@ homekit:
 
       # Exclude any lights with _calibrated counterparts
       - light.breakfast_bar
-      - light.nicks_monitor
       - light.tv_led_strip
 
       - binary_sensor.internal_motion_occupancy

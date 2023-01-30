@@ -255,7 +255,7 @@ script:
             - input_boolean.osmo_clean_hallway
       - service: switch.turn_on
         target:
-          entity_id: switch.osmo_cleaning_preference
+          entity_id: switch.osmo_clean_preference
       - service: script.osmo_clean_selected_rooms
         data: {}
   osmo_clean_bedrooms:
@@ -282,7 +282,7 @@ script:
             - input_boolean.osmo_clean_laundry
       - service: switch.turn_on
         target:
-          entity_id: switch.osmo_cleaning_preference
+          entity_id: switch.osmo_clean_preference
       - service: script.osmo_clean_selected_rooms
         data: {}
   osmo_quick_clean:
@@ -305,7 +305,7 @@ script:
             - input_boolean.osmo_clean_laundry
       - service: switch.turn_off
         target:
-          entity_id: switch.osmo_cleaning_preference
+          entity_id: switch.osmo_clean_preference
       - service: number.set_value
         data:
           value: "1"
@@ -343,7 +343,7 @@ script:
             - input_boolean.osmo_clean_laundry
       - service: switch.turn_on
         target:
-          entity_id: switch.osmo_cleaning_preference
+          entity_id: switch.osmo_clean_preference
       - service: script.osmo_clean_selected_rooms
         data: {}
   osmo_deep_clean:
@@ -366,7 +366,7 @@ script:
             - input_boolean.osmo_clean_laundry
       - service: switch.turn_off
         target:
-          entity_id: switch.osmo_cleaning_preference
+          entity_id: switch.osmo_clean_preference
       - service: number.set_value
         data:
           value: "1"

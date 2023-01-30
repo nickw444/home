@@ -4,10 +4,10 @@ trigger:
   - platform: sun
     event: sunrise
 condition:
-  - alias: "no rain detected today"
+  - alias: "less than 2mm rain today"
     condition: numeric_state
-    entity_id: sensor.rain_detected_today_count
-    below: 1
+    entity_id: sensor.fo79_rain_daily
+    below: 2
   - condition: or
     conditions:
       - alias: "moisture sensor unavailable"

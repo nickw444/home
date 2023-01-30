@@ -17,7 +17,13 @@ homeassistant:
     sensor.washing_machine_energy_consumed_weekly:
       friendly_name: Washing Machine Energy Consumed This Week
     sensor.washing_machine_energy_consumed_daily:
-      friendly_name: Washing Machine Energy Consumed Today
+      friendly_name: Dryer Energy Consumed Today
+    sensor.dryer_energy_consumed_quarterly:
+      friendly_name: Dryer Energy Consumed This Quarter
+    sensor.dryer_energy_consumed_weekly:
+      friendly_name: Dryer Energy Consumed This Week
+    sensor.dryer_energy_consumed_daily:
+      friendly_name: Dryer Energy Consumed Today
 
 utility_meter:
   mains_energy_consumed_quarterly:
@@ -39,13 +45,22 @@ utility_meter:
     source: sensor.air_conditioning_energy
     cycle: daily
   washing_machine_energy_consumed_quarterly:
-    source: sensor.washing_machine_today_energy
+    source: sensor.washing_machine_total_consumption
     cycle: quarterly
   washing_machine_energy_consumed_weekly:
-    source: sensor.washing_machine_today_energy
+    source: sensor.washing_machine_total_consumption
     cycle: weekly
   washing_machine_energy_consumed_daily:
-    source: sensor.washing_machine_today_energy
+    source: sensor.washing_machine_total_consumption
+    cycle: daily
+  dryer_energy_consumed_quarterly:
+    source: sensor.dryer_total_consumption
+    cycle: quarterly
+  dryer_energy_consumed_weekly:
+    source: sensor.dryer_total_consumption
+    cycle: weekly
+  dryer_energy_consumed_daily:
+    source: sensor.dryer_total_consumption
     cycle: daily
 
 input_number:
