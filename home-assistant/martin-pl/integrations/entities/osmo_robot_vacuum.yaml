@@ -419,7 +419,7 @@ script:
             sequence:
               - service: switch.turn_on
                 target:
-                  entity_id: switch.osmo_truedetect
+                  entity_id: switch.osmo_true_detect
               - delay: 00:00:05
               - service: vacuum.send_command
                 target:
@@ -458,7 +458,7 @@ script:
             sequence:
               - service: switch.turn_off
                 target:
-                  entity_id: switch.osmo_truedetect
+                  entity_id: switch.osmo_true_detect
               - delay: 00:00:05
               - service: vacuum.send_command
                 target:
