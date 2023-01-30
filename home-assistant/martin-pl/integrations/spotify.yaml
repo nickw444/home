@@ -19,22 +19,22 @@ switch:
         friendly_name: "Play Music"
         icon_template: "mdi:speaker"
         value_template: >
-          {{
-            (is_state('media_player.spotify_nicholas_whyte', 'playing') and
-            is_state_attr('media_player.spotify_nicholas_whyte', 'source', 'Soundbar Cast')) or
-            (is_state('media_player.spotify_kate_scott', 'playing') and
-            is_state_attr('media_player.spotify_kate_scott', 'source', 'Soundbar Cast'))
-          }}
+          {{ is_state('media_player.owntone_server', 'playing') }}
         turn_on:
-          - service: spotcast.start
+          - service: media_player.play_media
             data:
-              entity_id: media_player.soundbar_cast
-              uri: ""
-              force_playback: true
-              shuffle: true
-              random_song: true
-              account: "{{ 'nick' if is_state('device_tracker.nicks_iphone','home') else 'kate' }}"
-        turn_off:
-          - service: media_player.media_pause
+              media_content_id: http://www.abc.net.au/res/streaming/audio/mp3/triplej.pls
+              media_content_type: playlist
             target:
-              entity_id: media_player.soundbar_cast
+              entity_id: media_player.owntone_server
+          - service: media_player.turn_on
+            target:
+              entity_id:
+                - media_player.owntone_output_soundbar
+                - media_player.owntone_output_bathroom
+                - media_player.owntone_output_study
+                - media_player.owntone_output_bedroom
+        turn_off:
+          - service: media_player.turn_off
+            target:
+              entity_id: media_player.owntone_server
