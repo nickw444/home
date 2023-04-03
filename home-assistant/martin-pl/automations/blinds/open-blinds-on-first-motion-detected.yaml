@@ -24,7 +24,6 @@ action:
   - service: cover.open_cover
     data: {}
     entity_id:
-      - cover.kitchen_screen
       - cover.kitchen_blockout
       - cover.study_blockout
       - cover.living_blockout
