@@ -33,9 +33,16 @@ action:
                 - light.kitchen_strip
                 - light.bench_strip
     default:
+      # We must pre-set brightness with a separate call, then turn the light
+      # on due to SetOption20
       - service: light.turn_on
         data:
           brightness_pct: 60
+        target:
+          entity_id:
+            - light.kitchen_strip
+            - light.bench_strip
+      - service: light.turn_on
         target:
           entity_id:
             - light.kitchen_strip

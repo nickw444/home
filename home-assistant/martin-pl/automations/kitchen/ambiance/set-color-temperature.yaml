@@ -15,25 +15,43 @@ action:
           - condition: trigger
             id: sunset
         sequence:
-          - service: script.tasmota_set_ct
+          - service: light.turn_on
             data:
-              # Bench Strip
-              topic: tasmota_6D0A96
-              ct: 450
-          - service: script.tasmota_set_ct
-            data:
-              # Kitchen Strip
-              topic: tasmota_6D2EFA
-              ct: 450
+              color_temp: 450
+              brightness_pct: 60
+            target:
+              entity_id:
+                - light.kitchen_strip
+                - light.bench_strip
+          # - service: script.tasmota_set_ct
+          #   data:
+          #     # Bench Strip
+          #     topic: tasmota_6D0A96
+          #     ct: 450
+          # - service: script.tasmota_set_ct
+          #   data:
+          #     # Kitchen Strip
+          #     topic: tasmota_6D2EFA
+          #     ct: 450
     default:
-      - service: script.tasmota_set_ct
+      # - service: script.tasmota_set_ct
+      #   data:
+      #     # Bench Strip
+      #     topic: tasmota_6D0A96
+      #     ct: 200
+      # - service: script.tasmota_set_ct
+      #   data:
+      #     # Kitchen Strip
+      #     topic: tasmota_6D2EFA
+      #     ct: 200
+      # We can color temp/brightness with a turn_on call without the light turning on
+      # due to SetOption20
+      - service: light.turn_on
         data:
-          # Bench Strip
-          topic: tasmota_6D0A96
-          ct: 200
-      - service: script.tasmota_set_ct
-        data:
-          # Kitchen Strip
-          topic: tasmota_6D2EFA
-          ct: 200
+          color_temp: 200
+          brightness_pct: 90
+        target:
+          entity_id:
+            - light.kitchen_strip
+            - light.bench_strip
 mode: single
