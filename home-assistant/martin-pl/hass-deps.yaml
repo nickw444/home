@@ -27,3 +27,4 @@ dependencies:
 - https://github.com/bremor/bureau_of_meteorology.git
 - https://github.com/thomasloven/hass-browser_mod.git
 - https://github.com/dummylabs/thewatchman.git
+- https://github.com/thomasloven/lovelace-layout-card.git

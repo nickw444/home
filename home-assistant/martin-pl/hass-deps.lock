@@ -99,3 +99,6 @@ https://github.com/dummylabs/thewatchman.git:
   type: core
   components:
   - watchman
+https://github.com/thomasloven/lovelace-layout-card.git:
+  version: 2.2.3-24-g9146e3b
+  type: lovelace
