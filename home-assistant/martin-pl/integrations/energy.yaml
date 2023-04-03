@@ -91,18 +91,18 @@ sensor:
       mains_energy_consumed_daily_cost:
         friendly_name: "Mains Energy Cost Today"
         unit_of_measurement: $
-        value_template: "{{ (1.2155 + 0.952 + states('sensor.mains_energy_consumed_daily')|float * 0.2474) | round(2) }}"
+        value_template: "{{ (1.2155 + 0.0952 + states('sensor.mains_energy_consumed_daily')|float * 0.2474) | round(2) }}"
       mains_energy_consumed_weekly_cost:
         friendly_name: "Mains Energy Cost This Week"
         unit_of_measurement: $
         value_template: >-
-          {{ (((now() - strptime(state_attr('sensor.mains_energy_consumed_weekly', 'last_reset'), '%Y-%m-%dT%H:%M:%S.%f%z')).days + 1) * (1.2155 + 0.952)
+          {{ (((now() - strptime(state_attr('sensor.mains_energy_consumed_weekly', 'last_reset'), '%Y-%m-%dT%H:%M:%S.%f%z')).days + 1) * (1.2155 + 0.0952)
           + states('sensor.mains_energy_consumed_weekly')|float * 0.2474) | round(2) }}
       mains_energy_consumed_quarterly_cost:
         friendly_name: "Mains Energy Cost This Quarter"
         unit_of_measurement: $
         value_template: >-
-          {{ (((now() - strptime(state_attr('sensor.mains_energy_consumed_quarterly', 'last_reset'), '%Y-%m-%dT%H:%M:%S.%f%z')).days + 1) * (1.2155 + 0.952)
+          {{ (((now() - strptime(state_attr('sensor.mains_energy_consumed_quarterly', 'last_reset'), '%Y-%m-%dT%H:%M:%S.%f%z')).days + 1) * (1.2155 + 0.0952)
           + states('sensor.mains_energy_consumed_quarterly')|float * 0.2474) | round(2) }}
       air_conditioning_energy_consumed_daily_cost:
         friendly_name: "Air Conditioning Energy Cost Today"
