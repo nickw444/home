@@ -1,0 +1,35 @@
+id: "9847983723966"
+alias: "kitchen ambiance: turn on when front door opens and no presence"
+description: ""
+trigger:
+  - platform: state
+    entity_id: binary_sensor.front_door
+    from: "off"
+    to: "on"
+condition:
+  - condition: or
+    conditions:
+      - condition: sun
+        before: sunrise
+      - condition: sun
+        after: sunset
+  - condition: state
+    entity_id: input_boolean.away_mode
+    state: "off"
+  - condition: not
+    conditions:
+      - condition: state
+        entity_id: light.kitchen
+        state: "on"
+  - condition: state
+    entity_id: group.all_people
+    state: "not_home"
+action:
+  - service: light.turn_on
+    data:
+      brightness_pct: 60
+    target:
+      entity_id:
+        - light.kitchen_strip
+        - light.bench_strip
+mode: single

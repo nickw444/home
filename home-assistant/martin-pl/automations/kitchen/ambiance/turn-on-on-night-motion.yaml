@@ -1,9 +1,13 @@
-id: "1626174325613"
-alias: "living room ambiance: turn on when motion detected at night"
+id: "1626174525614"
+alias: "kitchen ambiance: turn on when motion detected at night"
 description: ""
 trigger:
   - platform: state
-    entity_id: binary_sensor.living_room_motion_occupancy
+    entity_id: binary_sensor.hallway_motion_occupancy
+    from: "off"
+    to: "on"
+  - platform: state
+    entity_id: binary_sensor.kitchen_motion_occupancy
     from: "off"
     to: "on"
 condition:
@@ -14,11 +18,16 @@ condition:
       - condition: sun
         before: sunrise
   - condition: state
-    entity_id: light.living_room_ambiance
+    entity_id: light.kitchen_strip
     state: "off"
   - condition: state
-    entity_id: light.living_room_downlights
+    entity_id: light.bench_strip
     state: "off"
+  - condition: not
+    conditions:
+      - condition: state
+        entity_id: light.kitchen
+        state: "on"
   - condition: state
     entity_id: input_boolean.guest_mode
     state: "off"
@@ -26,15 +35,14 @@ condition:
     entity_id: group.all_people
     state: home
 action:
-  - service: script.wled_set_scene_multi
+  - service: light.turn_on
     data:
-      entities:
-        - cabinet_glow
-        - breakfast_bar
-      brightness: 128
-      effect: Solid
-      color_palette: "* Color 1"
+      brightness_pct: 30
       transition: 5
+    target:
+      entity_id:
+        - light.kitchen_strip
+        - light.bench_strip
   - wait_for_trigger:
       - platform: state
         entity_id: binary_sensor.internal_motion_occupancy
@@ -43,16 +51,27 @@ action:
         for: 00:01:00
       # Bail out if the downlights turn on
       - platform: state
-        entity_id: light.living_room_downlights
+        entity_id: light.kitchen
+        from: "off"
+        to: "on"
+      - platform: state
+        entity_id: light.lounge
         from: "off"
         to: "on"
       # Bail out if the ambient light is turned off
       - platform: state
-        entity_id: light.living_room_ambiance
+        entity_id: light.kitchen_strip
+        from: "on"
+        to: "off"
+      - platform: state
+        entity_id: light.bench_strip
         from: "on"
         to: "off"
     timeout: 00:10:00
+    continue_on_timeout: true
   - service: light.turn_off
     target:
-      entity_id: light.living_room_ambiance
+      entity_id:
+        - light.kitchen_strip
+        - light.bench_strip
 mode: single

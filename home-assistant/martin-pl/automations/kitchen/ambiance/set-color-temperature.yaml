@@ -1,0 +1,39 @@
+id: "16263412645738"
+alias: "kitchen ambiance: set colour temperature at sunrise/sunset"
+description: ""
+trigger:
+  - platform: sun
+    event: sunset
+    id: sunset
+  - platform: sun
+    event: sunrise
+    id: sunrise
+condition: []
+action:
+  - choose:
+      - conditions:
+          - condition: trigger
+            id: sunset
+        sequence:
+          - service: script.tasmota_set_ct
+            data:
+              # Bench Strip
+              topic: tasmota_6D0A96
+              ct: 450
+          - service: script.tasmota_set_ct
+            data:
+              # Kitchen Strip
+              topic: tasmota_6D2EFA
+              ct: 450
+    default:
+      - service: script.tasmota_set_ct
+        data:
+          # Bench Strip
+          topic: tasmota_6D0A96
+          ct: 200
+      - service: script.tasmota_set_ct
+        data:
+          # Kitchen Strip
+          topic: tasmota_6D2EFA
+          ct: 200
+mode: single

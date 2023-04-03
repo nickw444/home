@@ -1,5 +1,5 @@
-id: "1626173678031"
-alias: "living room ambiance: toggle for sunrise/sunset"
+id: "1626173674033"
+alias: "kitchen ambiance: toggle for sunrise/sunset"
 description: ""
 trigger:
   - platform: sun
@@ -20,23 +20,24 @@ action:
         sequence:
           - service: light.turn_off
             target:
-              entity_id: light.living_room_ambiance
+              entity_id:
+                - light.kitchen_strip
+                - light.bench_strip
       - conditions:
           - condition: trigger
             id: sunset
         sequence:
-          - condition: and
+          - condition: not
             conditions:
               - condition: state
-                entity_id: light.living_room_downlights
-                state: "off"
-          - service: script.wled_set_scene_multi
+                entity_id: light.kitchen
+                state: "on"
+          - service: light.turn_on
             data:
-              entities:
-                - cabinet_glow
-                - breakfast_bar
-              brightness: 255
-              effect: Solid
-              color_palette: "* Color 1"
+              brightness_pct: 60
+            target:
+              entity_id:
+                - light.kitchen_strip
+                - light.bench_strip
     default: []
 mode: single

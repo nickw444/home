@@ -1,0 +1,20 @@
+script:
+  tasmota_set_ct:
+    # Support for setting color of Tasmota devices whilst they are not turned
+    # on using SetOption20 (Update of Dimmer/Color/CT without turning power on).
+    alias: "tasmota: set color temperature"
+    icon: mdi:lightbulb
+    mode: parallel
+    max: 20
+    fields:
+      topic:
+        description: The MQTT topic of the tasmota device
+        example: tasmota_AE5C3A
+      ct:
+        description: The color temperature to set
+        example: "color temperature from 153 (cold) to 500 (warm) for CT lights"
+    sequence:
+      - service: mqtt.publish
+        data:
+          topic: cmnd/{{ topic }}/CT
+          payload: "{{ ct }}"

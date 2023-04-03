@@ -47,11 +47,8 @@ homekit:
 
     exclude_entities:
       - light.bedroom_lamps
-      - light.living_room_downlights
-      - light.living_room_ambiance
 
       # Exclude any lights with _calibrated counterparts
-      - light.breakfast_bar
       - light.tv_led_strip
 
       - binary_sensor.internal_motion_occupancy

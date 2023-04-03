@@ -1,0 +1,30 @@
+id: "16261761231966"
+alias: "kitchen ambiance: turn on when presence is detected"
+description: ""
+trigger:
+  - platform: state
+    entity_id: group.all_people
+    from: not_home
+    to: home
+condition:
+  - condition: or
+    conditions:
+      - condition: sun
+        before: sunrise
+      - condition: sun
+        after: sunset
+  - condition: state
+    entity_id: input_boolean.away_mode
+    state: "off"
+  - condition: state
+    entity_id: light.kitchen
+    state: "off"
+action:
+  - service: light.turn_on
+    data:
+      brightness_pct: 60
+    target:
+      entity_id:
+        - light.kitchen_strip
+        - light.bench_strip
+mode: single

@@ -1,9 +1,9 @@
-id: "98437594832798"
-alias: "dining cabinet: toggle for living room downlights state"
+id: "98437594832563"
+alias: "kitchen ambiance: toggle for downlights state"
 description: ""
 trigger:
   - platform: state
-    entity_id: light.living_room_downlights
+    entity_id: light.kitchen
     to:
       - "on"
       - "off"
@@ -29,12 +29,15 @@ action:
         sequence:
           - service: "light.turn_off"
             target:
-              entity_id: light.cabinet_glow_calibrated
+              entity_id:
+                - light.kitchen_strip
+                - light.bench_strip
     default:
-      - service: script.wled_set_scene
+      - service: light.turn_on
         data:
-          entity_id_base: cabinet_glow
-          brightness: 255
-          effect: Solid
-          color_palette: "* Color 1"
+          brightness_pct: 60
+        target:
+          entity_id:
+            - light.kitchen_strip
+            - light.bench_strip
 mode: single

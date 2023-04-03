@@ -1,6 +1,0 @@
-light:
-  - platform: calibrated_light
-    name: "Breakfast Bar"
-    entity_id: light.breakfast_bar
-    # "White" @ 255, 199, 159
-    calibration_rgb: [0, -56, -96]
