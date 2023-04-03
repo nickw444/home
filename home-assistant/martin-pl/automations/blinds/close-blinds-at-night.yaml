@@ -2,10 +2,32 @@ id: "16063042895494897"
 alias: "blinds: close all blinds at sunset"
 description: ""
 trigger:
+  # Wait until outdor luminance is low
+  - platform: numeric_state
+    entity_id: sensor.fo79_weather_lux
+    below: 100
+    for: "00:05:00"
+  # Fallback: Re-trigger after sunset
   - platform: sun
     event: sunset
-    offset: "-00:30:00"
-condition: []
+    offset: "01:00:00"
+condition:
+  # Only run once per day
+  - condition: template
+    value_template: "{{ state_attr('automation.blinds_close_all_blinds_at_sunset_2', 'last_triggered') == None or state_attr('automation.blinds_close_all_blinds_at_sunset_2', 'last_triggered') < now().replace(hour=3, minute=0, second=0) }}"
+  # Only run when near sunset time (sunset - 1:00:00 < time < sunset + 1:30:00)
+  - condition: sun
+    after: sunset
+    after_offset: "-01:00:00"
+  - condition: sun
+    before: sunset
+    before_offset: "01:30:00"
+  # Note: There is an edge case where the trigger will occur (lux < x for n minutes),
+  # but the we will not be near sunset time. If the trigger does not reoccur (e.g.
+  # stays dark outside, stormy), then the automation will not run.
+  # KIIS principle so will not handle this, but if it is needed, then it could be handled
+  # by replacing sun condition with a wait until expression on sun condition with an exit
+  # check for continued darkness. Otherwise, restart.
 action:
   - service: cover.close_cover
     data: {}
