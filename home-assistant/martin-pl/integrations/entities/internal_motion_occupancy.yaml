@@ -7,7 +7,7 @@ binary_sensor:
             is_state('binary_sensor.living_room_motion_occupancy', 'on') or
             is_state('binary_sensor.hallway_motion_occupancy', 'on') or
             is_state('binary_sensor.study_motion_occupancy', 'on') or
-            is_state('binary_sensor.nest_protect_kitchen_occupancy', 'on')
+            is_state('binary_sensor.kitchen_motion_occupancy', 'on')
           }}
 
 sensor:

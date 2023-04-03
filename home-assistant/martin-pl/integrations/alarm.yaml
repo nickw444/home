@@ -39,7 +39,7 @@ automation:
           - binary_sensor.living_room_motion_occupancy
           - binary_sensor.hallway_motion_occupancy
           - binary_sensor.study_motion_occupancy
-          - binary_sensor.nest_protect_kitchen_occupancy
+          - binary_sensor.kitchen_motion_occupancy
           - binary_sensor.laundry_motion_occupancy
           - binary_sensor.spare_room_motion_occupancy
           - binary_sensor.bedroom_motion_occupancy
