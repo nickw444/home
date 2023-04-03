@@ -1,0 +1,216 @@
+# Theme based on Google light and dark modem UI
+# Creator: Juan - @juanmtech
+# Website: https://www.juanmtech.com
+# YouTube Channel: https://youtube.com/juanmtech
+# My Home Assistant Config files: https://github.com/JuanMTech/Home_Assistant_files
+# https://github.com/JuanMTech/google-theme
+#
+Google Theme:
+  modes:
+    light:
+      # Header:
+      app-header-background-color: rgb(248, 248, 248)
+      app-header-text-color: var(--primary-text-color)
+      app-header-selection-bar-color: var(--primary-color)
+      app-header-edit-background-color: rgb(178, 183, 190)
+      # Main Interface Colors
+      primary-color: rgb(26, 115, 232)
+      primary-background-color: rgb(248, 248, 248)
+      secondary-background-color: rgb(230, 230, 230)
+      divider-color: var(--primary-background-color)
+      accent-color: rgb(26, 115, 232)
+      # Text
+      primary-text-color: rgb(32, 33, 36)
+      secondary-text-color: rgb(95, 99, 104)
+      text-primary-color: var(--primary-text-color)
+      disabled-text-color: rgba(95, 99, 104, 0.4)
+      # Sidebar Menu
+      sidebar-icon-color: rgb(95, 99, 104)
+      sidebar-text-color: var(--sidebar-icon-color)
+      sidebar-background-color: rgb(255, 255, 255)
+      sidebar-selected-icon-color: rgb(26, 115, 232)
+      sidebar-selected-text-color: var(--sidebar-selected-icon-color)
+      # Buttons
+      paper-item-icon-color: rgb(95, 99, 104)
+      paper-item-icon-active-color: var(--primary-color)
+      mdc-button-outline-color: rgb(26, 115, 232)
+      # States and Badges
+      state-icon-color: var(--paper-item-icon-color)
+      state-icon-active-color: var(--paper-item-icon-active-color)
+      state-icon-unavailable-color: var(--disabled-text-color)
+      # Sliders
+      paper-slider-knob-color: rgb(26, 115, 232)
+      paper-slider-knob-start-color: var(--paper-slider-knob-color)
+      paper-slider-pin-color: var(--paper-slider-knob-color)
+      paper-slider-active-color: var(--paper-slider-knob-color)
+      paper-slider-secondary-color: var(--light-primary-color)
+      # Labels
+      label-badge-background-color: rgb(248, 250, 249)
+      label-badge-text-color: var(--primary-text-color)
+      label-badge-red: rgb(199, 72, 76)
+      label-badge-green: rgb(109, 192, 113)
+      label-badge-blue: rgb(26, 115, 232)
+      label-badge-yellow: rgb(217, 183, 87)
+      label-badge-gray: rgb(95, 98, 103)
+      # Cards
+      card-background-color: rgb(255, 255, 255)
+      ha-card-background: rgb(255, 255, 255)
+      ha-card-border-color: rgb(235, 235, 235)
+      paper-dialog-background-color: var(--card-background-color)
+      paper-listbox-background-color: var(--card-background-color)
+      paper-card-background-color: var(--card-background-color)
+      # Switches
+      switch-checked-button-color: rgb(26, 115, 232)
+      switch-checked-track-color: rgb(26, 115, 232)
+      switch-unchecked-button-color: rgb(189, 193, 198)
+      switch-unchecked-track-color: rgb(189, 193, 198)
+      # Toggles
+      paper-toggle-button-checked-button-color: var(--switch-checked-button-color)
+      paper-toggle-button-checked-bar-color: var(--switch-checked-track-color)
+      paper-toggle-button-unchecked-button-color: var(--switch-unchecked-button-color)
+      paper-toggle-button-unchecked-bar-color: var(--switch-unchecked-track-color)
+      # Table
+      table-row-background-color: var(--card-background-color)
+      table-row-alternative-background-color: var(--primary-background-color)
+      data-table-background-color: var(--primary-background-color)
+      # Dropdowns
+      material-background-color: var(--card-background-color)
+      material-secondary-background-color: var(--primary-background-color)
+      mdc-theme-surface: var(--primary-background-color)
+      # Pre/Code
+      markdown-code-background-color: rgb(242, 242, 242)
+      code-editor-background-color: rgb(242, 242, 242)
+      # Checkboxes
+      mdc-checkbox-unchecked-color: rgb(191, 191, 191)
+      mdc-checkbox-disable-color: var(--disabled-text-color)
+      mdc-select-fill-color: rgb(245, 245, 245)
+      mdc-select-ink-color: var(--primary-text-color)
+      mdc-select-label-ink-color: var(--secondary-text-color)
+      mdc-select-idle-line-color: var(--primary-text-color)
+      mdc-select-dropdown-icon-color: var(--secondary-text-color)
+      mdc-select-hover-line-color: var(--accent-color)
+      mdc-text-field-fill-color: var(--mdc-select-fill-color)
+      # Input
+      input-fill-color: var(--secondary-background-color)
+      input-dropdown-icon-color: var(--secondary-text-color)
+      input-ink-color: var(--primary-text-color)
+      input-label-ink-color: var(--secondary-text-color)
+      input-idle-line-color: var(--primary-text-color)
+      input-hover-line-color: var(--accent-color)
+      #RGB
+      rgb-primary-text-color: 32, 33, 36
+      rgb-primary-color: 32, 33, 36
+      rgb-accent-color: 26, 115, 232
+      rgb-state-switch-color: var(--rgb-accent-color)
+      rgb-state-light-color: var(--rgb-accent-color)
+      rgb-state-fan-color: var(--rgb-accent-color)
+      rgb-state-script-color: var(--rgb-accent-color)
+      rgb-state-vacuum-color: var(--rgb-accent-color)
+      rgb-state-remote-color: var(--rgb-accent-color)
+      rgb-state-input-boolean-color: var(--rgb-accent-color)
+      rgb-state-humidifier-color: var(--rgb-accent-color)
+      rgb-state-cover-color: var(--rgb-accent-color)
+    #
+    dark:
+      # Header:
+      app-header-background-color: rgb(23, 23, 23)
+      app-header-text-color: rgb(198, 203, 210)
+      app-header-selection-bar-color: var(--primary-color)
+      app-header-edit-background-color: rgb(136, 136, 136)
+      # Main Interface Colors
+      primary-color: rgb(138, 180, 248)
+      primary-background-color: rgb(23, 23, 23)
+      secondary-background-color: rgb(32, 33, 36)
+      divider-color: var(--primary-background-color)
+      accent-color: var(--primary-color)
+      # Text
+      primary-text-color: rgb(242, 242, 242)
+      secondary-text-color: rgb(166, 166, 166)
+      text-primary-color: var(--primary-text-color)
+      disabled-text-color: rgba(184, 190, 199, 0.4)
+      # Sidebar Menu
+      sidebar-icon-color: rgb(169, 177, 188)
+      sidebar-text-color: rgb(198, 203, 210)
+      sidebar-background-color: rgb(32, 33, 36)
+      sidebar-selected-icon-color: rgb(138, 180, 248)
+      sidebar-selected-text-color: var(--sidebar-selected-icon-color)
+      # Buttons
+      paper-item-icon-color: rgb(169, 177, 188)
+      paper-item-icon-active-color: rgb(138, 180, 248)
+      mdc-button-outline-color: rgb(138, 180, 248)
+      # States and Badges
+      state-icon-color: var(--paper-item-icon-color)
+      state-icon-active-color: var(--paper-item-icon-active-color)
+      state-icon-unavailable-color: var(--disabled-text-color)
+      # Sliders
+      paper-slider-knob-color: rgb(138, 180, 248)
+      paper-slider-knob-start-color: var(--paper-slider-knob-color)
+      paper-slider-pin-color: var(--paper-slider-knob-color)
+      paper-slider-active-color: var(--paper-slider-knob-color)
+      paper-slider-secondary-color: var(--light-primary-color)
+      # Labels
+      label-badge-background-color: var(--secondary-background-color)
+      label-badge-text-color: var(--primary-text-color)
+      label-badge-red: rgb(208, 101, 104)
+      label-badge-green: rgb(128, 200, 132)
+      label-badge-blue: rgb(138, 180, 248)
+      label-badge-yellow: rgb(223, 194, 113)
+      label-badge-gray: rgb(95, 98, 103)
+      # Cards
+      card-background-color: rgb(32, 33, 36)
+      ha-card-background: rgb(32, 33, 36)
+      ha-card-border-color: rgb(42, 43, 46)
+      paper-dialog-background-color: var(--card-background-color)
+      paper-listbox-background-color: var(--card-background-color)
+      paper-card-background-color: var(--card-background-color)
+      # Switches
+      switch-checked-button-color: rgb(138, 180, 248)
+      switch-checked-track-color: rgb(138, 180, 248)
+      switch-unchecked-button-color: rgb(172, 176, 185)
+      switch-unchecked-track-color: rgb(154, 160, 166)
+      # Toggles
+      paper-toggle-button-checked-button-color: var(--switch-checked-button-color)
+      paper-toggle-button-checked-bar-color: var(--switch-checked-track-color)
+      paper-toggle-button-unchecked-button-color: var(--switch-unchecked-button-color)
+      paper-toggle-button-unchecked-bar-color: var(--switch-unchecked-track-color)
+      # Table
+      table-row-background-color: var(--primary-background-color)
+      table-row-alternative-background-color: var(--secondary-background-color)
+      data-table-background-color: var(--primary-background-color)
+      # Dropdowns
+      material-background-color: var(--table-row-background-color)
+      material-secondary-background-color: var(--table-row-alternative-background-color)
+      mdc-theme-surface: var(--secondary-background-color)
+      # Pre/Code
+      markdown-code-background-color: rgb(23, 23, 23)
+      code-editor-background-color: rgb(23, 23, 23)
+      # Checkboxes
+      mdc-checkbox-unchecked-color: rgb(169, 177, 188)
+      mdc-checkbox-disable-color: var(--disabled-text-color)
+      mdc-select-fill-color: rgb(42, 43, 46)
+      mdc-select-ink-color: var(--primary-text-color)
+      mdc-select-label-ink-color: var(--secondary-text-color)
+      mdc-select-idle-line-color: var(--primary-text-color)
+      mdc-select-dropdown-icon-color: var(--secondary-text-color)
+      mdc-select-hover-line-color: var(--accent-color)
+      mdc-text-field-fill-color: var(--mdc-select-fill-color)
+      # Input
+      input-fill-color: var(--secondary-background-color)
+      input-dropdown-icon-color: var(--secondary-text-color)
+      input-ink-color: var(--primary-text-color)
+      input-label-ink-color: var(--secondary-text-color)
+      input-idle-line-color: var(--primary-text-color)
+      input-hover-line-color: var(--accent-color)
+      #RGB
+      rgb-primary-text-color: 169, 177, 188
+      rgb-primary-color: 169, 177, 188
+      rgb-accent-color: 138, 180, 248
+      rgb-state-switch-color: var(--rgb-accent-color)
+      rgb-state-light-color: var(--rgb-accent-color)
+      rgb-state-fan-color: var(--rgb-accent-color)
+      rgb-state-script-color: var(--rgb-accent-color)
+      rgb-state-vacuum-color: var(--rgb-accent-color)
+      rgb-state-remote-color: var(--rgb-accent-color)
+      rgb-state-input-boolean-color: var(--rgb-accent-color)
+      rgb-state-humidifier-color: var(--rgb-accent-color)
+      rgb-state-cover-color: var(--rgb-accent-color)
