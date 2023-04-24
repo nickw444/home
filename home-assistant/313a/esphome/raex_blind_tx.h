@@ -13,7 +13,7 @@
 #define TRANSMIT_RETRY_DELAY_MS 1000
 
 #define CLOCK_WIDTH 330
-#define LOCKOUT_DELAY_MS 200
+#define LOCKOUT_DELAY_MS 400
 
 static const char *TAG = "raex_blind_tx";
 
@@ -68,6 +68,8 @@ class RaexBlindTransmitComponent : public Component, public CustomAPIDevice {
     std::map<uint32_t, RaexMessage*> pending_messages;
     int lockout_until = 0;
 
+    std::map<uint32_t, RaexMessage*>::iterator pending_messages_iter = pending_messages.begin();
+
   public:
 
     void setup() override {
@@ -82,51 +84,51 @@ class RaexBlindTransmitComponent : public Component, public CustomAPIDevice {
     }
 
     void loop() override {
-      if (!pending_messages.empty()) {
-        int now = millis();
-        if (lockout_until > now) {
-          // To avoid trasmissions which are sent nearby to improve successful transmission.
-          return;
-        }
-
-        // Check for pending messages
-        for (auto it = pending_messages.begin(); it != pending_messages.end(); it++) {
-          auto key = it->first;
-          auto msg = it->second;
-
-          if (msg->execute_time <= now) {
-            ESP_LOGD(TAG, "Executing send for [%d,%d,%d] [retries: %d, blocks: %d]",
-              msg->remote_id, msg->channel_id, msg->action_id, msg->retries_remain, msg->blocks_remain);
-
-            txPrepare(TX_PIN, 200, CLOCK_WIDTH);
-            txRaexSend(TX_PIN, msg->remote_id, msg->channel_id, msg->action_id, CLOCK_WIDTH);
-            lockout_until = millis() + LOCKOUT_DELAY_MS;
-
-            if (msg->retries_remain > 0) {
-              // Schedule next retry
-              msg->retries_remain--;
-              msg->execute_time = now + TRANSMIT_RETRY_DELAY_MS;
-              return;
-            }
-
-            if (msg->blocks_remain > 0) {
-              // Schedule next block
-              msg->blocks_remain--;
-              msg->retries_remain = TRANSMIT_RETRIES - 1;
-              msg->execute_time = now + TRANSMIT_BLOCKS_DELAY_MS;
-              return;
-            }
-
-
-            // No retries or blocks remain, remove from pending messages
-            ESP_LOGD(TAG, "No retries or blocks remain for [%d,%d,%d], removing",
-              msg->remote_id, msg->channel_id, msg->action_id);
-            pending_messages.erase(it);
-            delete msg;
-            return;
-          }
-        }
+      int now = millis();
+      if (lockout_until > now) {
+        // To avoid trasmissions which are sent nearby to improve successful transmission.
+        return;
       }
+      
+      if (pending_messages.empty()) {
+        return;
+      }
+
+      if (pending_messages_iter == pending_messages.end()) {
+        pending_messages_iter = pending_messages.begin();
+      }
+
+      auto key = pending_messages_iter->first;
+      auto msg = pending_messages_iter->second;
+
+      if (msg->execute_time <= now) {
+        ESP_LOGD(TAG, "Executing send for [%d,%d,%d] [retries: %d, blocks: %d] (%d)",
+          msg->remote_id, msg->channel_id, msg->action_id, msg->retries_remain, msg->blocks_remain, now);
+
+        txPrepare(TX_PIN, 200, CLOCK_WIDTH);
+        txRaexSend(TX_PIN, msg->remote_id, msg->channel_id, msg->action_id, CLOCK_WIDTH);
+
+        if (msg->retries_remain > 0) {
+          // Schedule next retry
+          msg->retries_remain--;
+          msg->execute_time = now + TRANSMIT_RETRY_DELAY_MS;
+        } else if (msg->blocks_remain > 0) {
+          // Schedule next block
+          msg->blocks_remain--;
+          msg->retries_remain = TRANSMIT_RETRIES - 1;
+          msg->execute_time = now + TRANSMIT_BLOCKS_DELAY_MS;
+        } else {
+          // No retries or blocks remain, remove from pending messages
+          ESP_LOGD(TAG, "No retries or blocks remain for [%d,%d,%d], removing",
+            msg->remote_id, msg->channel_id, msg->action_id);
+          pending_messages.erase(pending_messages_iter);
+          delete msg;
+        }
+        
+        lockout_until = millis() + LOCKOUT_DELAY_MS;
+      }
+
+      pending_messages_iter++;;
     }
 
     void transmit(int remote_id, int channel_id, std::string action) {
