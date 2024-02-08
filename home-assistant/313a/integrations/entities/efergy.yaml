@@ -25,39 +25,24 @@ homeassistant:
       icon: mdi:power
 
 sensor:
-  - platform: efergy
-    app_token: !secret efergy_app_token
-    utc_offset: -600 # 660 for DST.
-    monitored_variables:
-      - type: amount
-        period: day
-      - type: amount
-        period: year
-      - type: current_values
-
   # A handful of integration sensors to measure power over time (energy). These
   # are used with the Home Assistant "Energy" dashboard in combination with the
   # utility_meter sensor counterparts.
   - platform: integration
     source: sensor.efergy_731181
     name: "Solar Energy"
-    unit: Wh
   - platform: integration
     source: sensor.efergy_784242
     name: "Phase B Energy"
-    unit: Wh
   - platform: integration
     source: sensor.efergy_786148
     name: "Phase A/C Energy"
-    unit: Wh
   - platform: integration
     source: sensor.mains_input
     name: "Grid Energy Consumed"
-    unit: Wh
   - platform: integration
     source: sensor.mains_output
     name: "Grid Energy Produced"
-    unit: Wh
 
   - platform: template
     # efergy_784242: Phase B Load
@@ -66,7 +51,7 @@ sensor:
     sensors:
       mains_input:
         friendly_name: "Mains Input"
-        unit_of_measurement: 'W'
+        unit_of_measurement: "W"
         value_template: |
           {% if states.sensor.efergy_784242.state|float > states.sensor.efergy_731181.state|float %}
             {{ states.sensor.efergy_786148.state|float + states.sensor.efergy_784242.state|float - states.sensor.efergy_731181.state|float }}
@@ -76,7 +61,7 @@ sensor:
 
       mains_output:
         friendly_name: "Mains Output"
-        unit_of_measurement: 'W'
+        unit_of_measurement: "W"
         value_template: |
           {% if states.sensor.efergy_784242.state|float > states.sensor.efergy_731181.state|float %}
             0
@@ -86,13 +71,13 @@ sensor:
 
       current_load:
         friendly_name: Current Load
-        unit_of_measurement: 'W'
+        unit_of_measurement: "W"
         value_template: |
           {{ states("sensor.efergy_784242") | float +  states("sensor.efergy_786148") | float }}
 
       current_load_kw:
         friendly_name: Current Load
-        unit_of_measurement: 'kW'
+        unit_of_measurement: "kW"
         value_template: |
           {{ states("sensor.current_load")|float / 1000 | round(2) }}
 

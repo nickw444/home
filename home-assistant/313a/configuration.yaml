@@ -1,6 +1,6 @@
 default_config:
 homeassistant:
-  name: 313A
+  name: Whyte House
   latitude: !secret latitude
   longitude: !secret longitude
   elevation: !secret elevation
@@ -9,11 +9,6 @@ homeassistant:
   time_zone: Australia/Sydney
   auth_providers:
     - type: homeassistant
-    - type: trusted_networks
-      trusted_networks:
-        - 192.168.2.0/24
-        - 192.168.8.0/24
-        - 192.168.81.0/24
   packages: !include_dir_named integrations
   internal_url: !secret http_base_url_internal
   external_url: !secret http_base_url

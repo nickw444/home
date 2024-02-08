@@ -1,0 +1,21 @@
+id: "1669714840315"
+alias: "outdoor: turn off tree lights at 10:00pm"
+description: ""
+trigger:
+  - platform: time
+    at: "22:00:00"
+  - platform: homeassistant
+    event: start
+condition:
+  - condition: or
+    conditions:
+      - condition: sun
+        before: sunset
+      - condition: time
+        after: "21:59:59"
+action:
+  - service: light.turn_off
+    data: {}
+    target:
+      entity_id: light.tree_lights
+mode: single

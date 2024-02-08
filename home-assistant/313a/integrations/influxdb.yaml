@@ -1,7 +1,6 @@
 influxdb:
-  host: 192.168.8.10
-  port: 8086
-  database: home_assistant
+  host: a0d7b954-influxdb
+  database: homeassistant
   username: homeassistant
   password: !secret influxdb_password
   max_retries: 3

@@ -14,7 +14,7 @@ ALARM_ENTITY = "alarm_control_panel.alarm"
 ARMING_CODE = "123456"
 ENABLE_ENTITY = "input_boolean.enable"
 ENABLE_OVERRIDE_ENTITY = "input_boolean.enable_override"
-PRESENCE_ENTITY = "group.people"
+PRESENCE_ENTITY = "binary_sensor.people_home"
 
 
 def test_callbacks_are_registered(hass_driver, auto_arm):
@@ -31,12 +31,12 @@ def test_callbacks_are_registered(hass_driver, auto_arm):
 
 def test_when_everyone_leaves_then_arm(hass_driver, auto_arm):
     with hass_driver.setup():
-        hass_driver.set_state(PRESENCE_ENTITY, "home")
+        hass_driver.set_state(PRESENCE_ENTITY, "on")
         hass_driver.set_state(ALARM_ENTITY, "disarmed")
         hass_driver.set_state(ENABLE_ENTITY, "on")
         hass_driver.set_state(ENABLE_OVERRIDE_ENTITY, "on")
 
-    hass_driver.set_state(PRESENCE_ENTITY, "not_home")
+    hass_driver.set_state(PRESENCE_ENTITY, "off")
 
     call_service = hass_driver.get_mock("call_service")
     call_service.assert_any_call(
@@ -46,12 +46,12 @@ def test_when_everyone_leaves_then_arm(hass_driver, auto_arm):
 
 def test_logs_to_logbook_when_armed(hass_driver, auto_arm):
     with hass_driver.setup():
-        hass_driver.set_state(PRESENCE_ENTITY, "home")
+        hass_driver.set_state(PRESENCE_ENTITY, "on")
         hass_driver.set_state(ALARM_ENTITY, "disarmed")
         hass_driver.set_state(ENABLE_ENTITY, "on")
         hass_driver.set_state(ENABLE_OVERRIDE_ENTITY, "on")
 
-    hass_driver.set_state(PRESENCE_ENTITY, "not_home")
+    hass_driver.set_state(PRESENCE_ENTITY, "off")
 
     call_service = hass_driver.get_mock("call_service")
     call_service.assert_any_call(
@@ -61,14 +61,27 @@ def test_logs_to_logbook_when_armed(hass_driver, auto_arm):
     )
 
 
-def test_when_everyone_leaves_and_not_enabled_then_do_not_arm(hass_driver, auto_arm):
+def test_when_presence_unavailable_then_do_not_arm(hass_driver, auto_arm):
     with hass_driver.setup():
-        hass_driver.set_state(PRESENCE_ENTITY, "home")
+        hass_driver.set_state(PRESENCE_ENTITY, "on")
         hass_driver.set_state(ALARM_ENTITY, "disarmed")
         hass_driver.set_state(ENABLE_ENTITY, "off")
         hass_driver.set_state(ENABLE_OVERRIDE_ENTITY, "on")
 
-    hass_driver.set_state(PRESENCE_ENTITY, "not_home")
+    hass_driver.set_state(PRESENCE_ENTITY, "unavailable")
+
+    call_service = hass_driver.get_mock("call_service")
+    call_service.assert_not_called()
+
+
+def test_when_everyone_leaves_and_not_enabled_then_do_not_arm(hass_driver, auto_arm):
+    with hass_driver.setup():
+        hass_driver.set_state(PRESENCE_ENTITY, "on")
+        hass_driver.set_state(ALARM_ENTITY, "disarmed")
+        hass_driver.set_state(ENABLE_ENTITY, "off")
+        hass_driver.set_state(ENABLE_OVERRIDE_ENTITY, "on")
+
+    hass_driver.set_state(PRESENCE_ENTITY, "off")
 
     call_service = hass_driver.get_mock("call_service")
     call_service.assert_not_called()
@@ -78,12 +91,12 @@ def test_when_everyone_leaves_and_not_enabled_via_override_then_do_not_arm(
     hass_driver, auto_arm
 ):
     with hass_driver.setup():
-        hass_driver.set_state(PRESENCE_ENTITY, "home")
+        hass_driver.set_state(PRESENCE_ENTITY, "on")
         hass_driver.set_state(ALARM_ENTITY, "disarmed")
         hass_driver.set_state(ENABLE_ENTITY, "on")
         hass_driver.set_state(ENABLE_OVERRIDE_ENTITY, "off")
 
-    hass_driver.set_state(PRESENCE_ENTITY, "not_home")
+    hass_driver.set_state(PRESENCE_ENTITY, "off")
 
     call_service = hass_driver.get_mock("call_service")
     call_service.assert_not_called()
@@ -91,12 +104,12 @@ def test_when_everyone_leaves_and_not_enabled_via_override_then_do_not_arm(
 
 def test_when_everyone_leaves_and_armed_do_not_arm(hass_driver, auto_arm):
     with hass_driver.setup():
-        hass_driver.set_state(PRESENCE_ENTITY, "home")
+        hass_driver.set_state(PRESENCE_ENTITY, "on")
         hass_driver.set_state(ALARM_ENTITY, "armed_away")
         hass_driver.set_state(ENABLE_ENTITY, "on")
         hass_driver.set_state(ENABLE_OVERRIDE_ENTITY, "on")
 
-    hass_driver.set_state(PRESENCE_ENTITY, "not_home")
+    hass_driver.set_state(PRESENCE_ENTITY, "off")
 
     call_service = hass_driver.get_mock("call_service")
     call_service.assert_not_called()
@@ -104,7 +117,7 @@ def test_when_everyone_leaves_and_armed_do_not_arm(hass_driver, auto_arm):
 
 def test_when_re_enabled_then_arm(hass_driver, auto_arm):
     with hass_driver.setup():
-        hass_driver.set_state(PRESENCE_ENTITY, "not_home")
+        hass_driver.set_state(PRESENCE_ENTITY, "off")
         hass_driver.set_state(ALARM_ENTITY, "disarmed")
         hass_driver.set_state(ENABLE_ENTITY, "off")
         hass_driver.set_state(ENABLE_OVERRIDE_ENTITY, "on")
@@ -119,7 +132,7 @@ def test_when_re_enabled_then_arm(hass_driver, auto_arm):
 
 def test_when_override_re_enabled_then_arm(hass_driver, auto_arm):
     with hass_driver.setup():
-        hass_driver.set_state(PRESENCE_ENTITY, "not_home")
+        hass_driver.set_state(PRESENCE_ENTITY, "off")
         hass_driver.set_state(ALARM_ENTITY, "disarmed")
         hass_driver.set_state(ENABLE_ENTITY, "on")
         hass_driver.set_state(ENABLE_OVERRIDE_ENTITY, "off")
@@ -134,7 +147,7 @@ def test_when_override_re_enabled_then_arm(hass_driver, auto_arm):
 
 def test_when_re_enabled_but_override_disabled_then_do_not_arm(hass_driver, auto_arm):
     with hass_driver.setup():
-        hass_driver.set_state(PRESENCE_ENTITY, "not_home")
+        hass_driver.set_state(PRESENCE_ENTITY, "off")
         hass_driver.set_state(ALARM_ENTITY, "disarmed")
         hass_driver.set_state(ENABLE_ENTITY, "off")
         hass_driver.set_state(ENABLE_OVERRIDE_ENTITY, "off")
@@ -147,12 +160,27 @@ def test_when_re_enabled_but_override_disabled_then_do_not_arm(hass_driver, auto
 
 def test_when_someone_home_disarm(hass_driver, auto_arm):
     with hass_driver.setup():
-        hass_driver.set_state(PRESENCE_ENTITY, "not_home")
+        hass_driver.set_state(PRESENCE_ENTITY, "off")
         hass_driver.set_state(ALARM_ENTITY, "armed_away")
         hass_driver.set_state(ENABLE_ENTITY, "on")
         hass_driver.set_state(ENABLE_OVERRIDE_ENTITY, "on")
 
-    hass_driver.set_state(PRESENCE_ENTITY, "home")
+    hass_driver.set_state(PRESENCE_ENTITY, "on")
+
+    call_service = hass_driver.get_mock("call_service")
+    call_service.assert_any_call(
+        "alarm_control_panel/alarm_disarm", entity_id=ALARM_ENTITY, code=ARMING_CODE
+    )
+
+
+def test_when_presence_unavailable_then_disarm(hass_driver, auto_arm):
+    with hass_driver.setup():
+        hass_driver.set_state(PRESENCE_ENTITY, "off")
+        hass_driver.set_state(ALARM_ENTITY, "armed_away")
+        hass_driver.set_state(ENABLE_ENTITY, "on")
+        hass_driver.set_state(ENABLE_OVERRIDE_ENTITY, "on")
+
+    hass_driver.set_state(PRESENCE_ENTITY, "unavailable")
 
     call_service = hass_driver.get_mock("call_service")
     call_service.assert_any_call(
@@ -162,12 +190,12 @@ def test_when_someone_home_disarm(hass_driver, auto_arm):
 
 def test_fires_event_when_disarmed(hass_driver, auto_arm):
     with hass_driver.setup():
-        hass_driver.set_state(PRESENCE_ENTITY, "not_home")
+        hass_driver.set_state(PRESENCE_ENTITY, "off")
         hass_driver.set_state(ALARM_ENTITY, "armed_away")
         hass_driver.set_state(ENABLE_ENTITY, "on")
         hass_driver.set_state(ENABLE_OVERRIDE_ENTITY, "on")
 
-    hass_driver.set_state(PRESENCE_ENTITY, "home")
+    hass_driver.set_state(PRESENCE_ENTITY, "on")
 
     fire_event = hass_driver.get_mock("fire_event")
     fire_event.assert_any_call("auto_arm_disarmed")
@@ -175,12 +203,12 @@ def test_fires_event_when_disarmed(hass_driver, auto_arm):
 
 def test_logs_to_logbook_when_disarmed(hass_driver, auto_arm):
     with hass_driver.setup():
-        hass_driver.set_state(PRESENCE_ENTITY, "not_home")
+        hass_driver.set_state(PRESENCE_ENTITY, "off")
         hass_driver.set_state(ALARM_ENTITY, "armed_away")
         hass_driver.set_state(ENABLE_ENTITY, "on")
         hass_driver.set_state(ENABLE_OVERRIDE_ENTITY, "on")
 
-    hass_driver.set_state(PRESENCE_ENTITY, "home")
+    hass_driver.set_state(PRESENCE_ENTITY, "on")
 
     call_service = hass_driver.get_mock("call_service")
     call_service.assert_any_call(
@@ -192,12 +220,12 @@ def test_logs_to_logbook_when_disarmed(hass_driver, auto_arm):
 
 def test_when_someone_home_but_override_disabled_dont_disarm(hass_driver, auto_arm):
     with hass_driver.setup():
-        hass_driver.set_state(PRESENCE_ENTITY, "not_home")
+        hass_driver.set_state(PRESENCE_ENTITY, "off")
         hass_driver.set_state(ALARM_ENTITY, "armed_away")
         hass_driver.set_state(ENABLE_ENTITY, "on")
         hass_driver.set_state(ENABLE_OVERRIDE_ENTITY, "off")
 
-    hass_driver.set_state(PRESENCE_ENTITY, "home")
+    hass_driver.set_state(PRESENCE_ENTITY, "on")
 
     call_service = hass_driver.get_mock("call_service")
     call_service.assert_not_called()
@@ -205,12 +233,12 @@ def test_when_someone_home_but_override_disabled_dont_disarm(hass_driver, auto_a
 
 def test_when_someone_home_but_disabled_then_disarm(hass_driver, auto_arm):
     with hass_driver.setup():
-        hass_driver.set_state(PRESENCE_ENTITY, "not_home")
+        hass_driver.set_state(PRESENCE_ENTITY, "off")
         hass_driver.set_state(ALARM_ENTITY, "armed_away")
         hass_driver.set_state(ENABLE_ENTITY, "off")
         hass_driver.set_state(ENABLE_OVERRIDE_ENTITY, "on")
 
-    hass_driver.set_state(PRESENCE_ENTITY, "home")
+    hass_driver.set_state(PRESENCE_ENTITY, "on")
 
     call_service = hass_driver.get_mock("call_service")
     call_service.assert_any_call(

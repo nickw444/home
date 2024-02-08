@@ -119,21 +119,21 @@ utility_meter:
       - off_peak
 
 automation:
-  - id: '1611648224640'
-    alias: 'energy: set utility meter tariff'
-    description: ''
+  - id: "1611648224640"
+    alias: "energy: set utility meter tariff"
+    description: ""
     trigger:
-    - platform: state
-      entity_id: sensor.energy_tariff
-    - platform: homeassistant
-      event: start
+      - platform: state
+        entity_id: sensor.energy_tariff
+      - platform: homeassistant
+        event: start
     condition: []
     action:
-    - service: utility_meter.select_tariff
-      data:
-        tariff: '{{ states(''sensor.energy_tariff'') }}'
-      entity_id:
-        - utility_meter.daily_energy
-        - utility_meter.weekly_energy
-        - utility_meter.quarterly_energy
+      - service: select.select_option
+        data:
+          tariff: "{{ states('sensor.energy_tariff') }}"
+        entity_id:
+          - utility_meter.daily_energy
+          - utility_meter.weekly_energy
+          - utility_meter.quarterly_energy
     mode: single

@@ -1,0 +1,13 @@
+id: "1669714700223"
+alias: "outdoor: turn tree lights on at sunset"
+description: "outdoor: turn tree lights on at sunset"
+trigger:
+  - platform: sun
+    event: sunset
+    offset: 30
+action:
+  - service: light.turn_on
+    data: {}
+    target:
+      entity_id: light.tree_lights
+mode: single

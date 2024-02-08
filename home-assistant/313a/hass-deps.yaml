@@ -7,3 +7,4 @@ dependencies:
 - source: https://github.com/gurbyz/power-wheel-card.git
   assets:
   - power-wheel-card.js
+- https://github.com/thomasloven/lovelace-fold-entity-row.git

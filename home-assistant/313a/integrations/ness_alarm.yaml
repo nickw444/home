@@ -1,5 +1,5 @@
 ness_alarm:
-  host: alarm.home
+  host: 192.168.8.30
   port: 8234
   zones:
     - name: Garage x2
@@ -30,55 +30,167 @@ input_boolean:
     icon: mdi:alarm-light
 
 automation:
-  - id: '1591598639314'
-    alias: when the alarm auto arms, notify
-    description: ''
+  - id: "1601034697138"
+    alias: "alarm: send notification when triggered"
+    description: ""
     trigger:
-    - event_data: {}
-      event_type: auto_arm_armed
-      platform: event
+      - platform: state
+        entity_id: alarm_control_panel.alarm_panel
+        to: triggered
     condition: []
     action:
-    - data:
-        message: The alarm was automatically armed
-      service: notify.telegram
-  - id: '1591598795007'
-    alias: when the alarm auto disarms, notify
-    description: ''
+      - service: notify.admins
+        data:
+          title: Alarm Triggered
+          message: The alarm was triggered at {{ now().strftime('%I:%M %p') }}
+          data:
+            group: alarm-status
+            url: "/lovelace/security"
+            entity_id: camera.nvr_garage_lowres
+            actions:
+              - action: "DISARM_ALARM"
+                title: "Disarm"
+                authenticationRequired: true
+                destructive: true
+            push:
+              sound:
+                name: default
+                critical: 1
+    mode: single
+
+  - id: "1601035010803"
+    alias: "alarm: send notification on disarm"
+    description: ""
     trigger:
-    - event_data: {}
-      event_type: auto_arm_disarmed
-      platform: event
+      - platform: state
+        entity_id: alarm_control_panel.alarm_panel
+        to: disarmed
+    action:
+      - service: notify.admins
+        data:
+          title: Alarm Disarmed
+          message: The alarm was disarmed at {{ now().strftime('%I:%M %p') }}
+          data:
+            group: alarm-status
+            tag: alarm-status
+    mode: single
+
+  - id: "1601035010807"
+    alias: "alarm: send notification on disarm if triggered or pending"
+    description: ""
+    trigger:
+      - platform: state
+        entity_id: alarm_control_panel.alarm_panel
+        to: disarmed
+    condition:
+      - condition: or
+        conditions:
+          - condition: state
+            entity_id: alarm_control_panel.alarm_panel
+            state: pending
+          - condition: state
+            entity_id: alarm_control_panel.alarm_panel
+            state: triggered
+    action:
+      - service: notify.admins
+        data:
+          title: Alarm Disarmed
+          message: The alarm was disarmed at {{ now().strftime('%I:%M %p') }}
+          data:
+            group: alarm-status
+            tag: alarm-status
+    mode: single
+
+  - id: "1601035037271"
+    alias: "alarm: send notification when pending"
+    description: ""
+    trigger:
+      - platform: state
+        entity_id: alarm_control_panel.alarm_panel
+        to: pending
     condition: []
     action:
-    - data:
-        message: The alarm was automatically disarmed
-      service: notify.telegram
-  - id: '1591583687656'
-    alias: every thursday at 7:30am, turn off alarm auto arm
-    description: ''
+      - service: notify.admins
+        data:
+          title: Alarm Pending
+          message: The alarm was pending at {{ now().strftime('%I:%M %p') }}
+          data:
+            url: "/lovelace/security"
+            entity_id: camera.nvr_garage_lowres
+            group: alarm-status
+            tag: alarm-status
+            push:
+              category: alarm
+            actions:
+              - action: "DISARM_ALARM"
+                title: "Disarm"
+                authenticationRequired: true
+                destructive: true
+    mode: single
+
+  - id: "1601035065291"
+    alias: "alarm: send notification when armed"
+    description: ""
     trigger:
-    - at: 07:30
-      platform: time
-    condition:
-    - condition: time
-      weekday:
-      - thu
+      - platform: state
+        entity_id: alarm_control_panel.alarm_panel
+        to:
+          - armed_away
+          - armed_night
+    condition: []
     action:
-    - data: {}
-      entity_id: input_boolean.alarm_auto_arm_schedule
-      service: input_boolean.turn_off
-  - id: '1591583801235'
-    alias: every thursday at 12pm, turn on alarm auto arm
-    description: ''
+      - service: notify.admins
+        data:
+          title: Alarm Armed
+          message: The alarm was armed at {{ now().strftime('%I:%M %p') }}
+          data:
+            group: alarm-status
+            tag: alarm-status
+            push:
+              category: alarm
+    mode: single
+
+  - id: "1601036735034"
+    alias: "alarm: disarm when mobile app disarm action fired"
+    description: ""
     trigger:
-    - at: '12:00'
-      platform: time
-    condition:
-    - condition: time
-      weekday:
-      - thu
+      - platform: event
+        event_type: ios.notification_action_fired
+        event_data:
+          actionName: DISARM_ALARM
+    condition: []
     action:
-    - data: {}
-      entity_id: input_boolean.alarm_auto_arm_schedule
-      service: input_boolean.turn_on
+      - service: alarm_control_panel.alarm_disarm
+        data:
+          code: !secret arming_code
+        entity_id: alarm_control_panel.alarm_panel
+    mode: single
+
+  - id: "1591583687656"
+    alias: "alarm: every thursday at 7:30am, turn off alarm auto arm"
+    description: ""
+    trigger:
+      - at: 07:30
+        platform: time
+    condition:
+      - condition: time
+        weekday:
+          - thu
+    action:
+      - data: {}
+        entity_id: input_boolean.alarm_auto_arm_schedule
+        service: input_boolean.turn_off
+  - id: "1591583801235"
+    alias: "alarm: every thursday at 12pm, turn on alarm auto arm"
+    description: ""
+    trigger:
+      - at: "12:00"
+        platform: time
+    condition:
+      - condition: time
+        weekday:
+          - thu
+    action:
+      - data: {}
+        entity_id: input_boolean.alarm_auto_arm_schedule
+        service: input_boolean.turn_on

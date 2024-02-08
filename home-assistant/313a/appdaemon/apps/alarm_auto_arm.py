@@ -40,7 +40,7 @@ class AlarmAutoArm(hass.Hass):
         )
 
     def on_presence_state_change(self, entity, attribute, old, new, kwargs):
-        if new == "not_home":
+        if new == "off":
             self._maybe_arm()
         else:
             self._maybe_disarm()
@@ -93,7 +93,7 @@ class AlarmAutoArm(hass.Hass):
         enable_state = self.get_state(self.args[CONF_ENABLE_ENTITY])
         return (
             alarm_state == "disarmed"
-            and presence_state == "not_home"
+            and presence_state == "off"
             and enable_state == "on"
             and self._is_enabled()
         )

@@ -1,0 +1,12 @@
+notify:
+  - name: everyone
+    platform: group
+    services:
+      - service: mobile_app_charlottes_iphone
+      - service: mobile_app_nicks_iphone
+      - service: mobile_app_prw_iphone_12_pro
+  - name: admins
+    platform: group
+    services:
+      - service: mobile_app_nicks_iphone
+      - service: mobile_app_prw_iphone_12_pro

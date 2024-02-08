@@ -1,10 +1,14 @@
 family:
   name: Family
   entities:
-    - person.peter
-    - person.louise
-    - person.nick
-    - person.oliver
-    - person.joe
-    - person.charlotte
-    - person.kate
+    - device_tracker.peters_iphone
+    - device_tracker.louises_iphone
+    - device_tracker.nicks_iphone
+    - device_tracker.olivers_iphone
+    - device_tracker.joes_iphone
+    - device_tracker.charlottes_iphone
+    - device_tracker.kates_iphone
+    - device_tracker.millies_iphone
+    - device_tracker.kikis_iphone
+    - device_tracker.yvonnes_iphone
+    - device_tracker.nashs_iphone

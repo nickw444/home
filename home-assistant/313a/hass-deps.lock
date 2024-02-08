@@ -18,3 +18,6 @@ https://github.com/custom-cards/secondaryinfo-entity-row.git:
 https://github.com/gurbyz/power-wheel-card.git:
   version: d136d6d
   type: lovelace
+https://github.com/thomasloven/lovelace-fold-entity-row.git:
+  version: 419ec48
+  type: lovelace

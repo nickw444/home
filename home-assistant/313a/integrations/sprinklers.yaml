@@ -1,20 +1,127 @@
-input_number:
-  sprinkle_watering_duration:
-    name: Watering Duration
-    initial: 10
-    min: 2
-    max: 30
-    step: 1
-    unit_of_measurement: minutes
-    icon: mdi:timer
-  sprinkle_watering_duration_recycled:
-    name: Watering Duration (Recycled)
-    initial: 20
-    min: 2
-    max: 30
-    step: 1
-    unit_of_measurement: minutes
-    icon: mdi:timer
+input_boolean:
+  herbs_mon:
+  herbs_tue:
+  herbs_wed:
+  herbs_thu:
+  herbs_fri:
+  herbs_sat:
+  herbs_sun:
+
+  lavender_mon:
+  lavender_tue:
+  lavender_wed:
+  lavender_thu:
+  lavender_fri:
+  lavender_sat:
+  lavender_sun:
+
+  back_yard_mon:
+  back_yard_tue:
+  back_yard_wed:
+  back_yard_thu:
+  back_yard_fri:
+  back_yard_sat:
+  back_yard_sun:
+
+  back_yard_recycled_mon:
+  back_yard_recycled_tue:
+  back_yard_recycled_wed:
+  back_yard_recycled_thu:
+  back_yard_recycled_fri:
+  back_yard_recycled_sat:
+  back_yard_recycled_sun:
+
+  front_terrace_mon:
+  front_terrace_tue:
+  front_terrace_wed:
+  front_terrace_thu:
+  front_terrace_fri:
+  front_terrace_sat:
+  front_terrace_sun:
+
+  front_terrace_recycled_mon:
+  front_terrace_recycled_tue:
+  front_terrace_recycled_wed:
+  front_terrace_recycled_thu:
+  front_terrace_recycled_fri:
+  front_terrace_recycled_sat:
+  front_terrace_recycled_sun:
+
+  lower_lawn_mon:
+  lower_lawn_tue:
+  lower_lawn_wed:
+  lower_lawn_thu:
+  lower_lawn_fri:
+  lower_lawn_sat:
+  lower_lawn_sun:
+
+  upper_lawn_mon:
+  upper_lawn_tue:
+  upper_lawn_wed:
+  upper_lawn_thu:
+  upper_lawn_fri:
+  upper_lawn_sat:
+  upper_lawn_sun:
+
+input_select:
+  herbs_timer_mode:
+    options:
+      - "Sunrise"
+      - "Sunset"
+      - "Fixed Time"
+  lavender_timer_mode:
+    options:
+      - "Sunrise"
+      - "Sunset"
+      - "Fixed Time"
+  back_yard_timer_mode:
+    options:
+      - "Sunrise"
+      - "Sunset"
+      - "Fixed Time"
+  back_yard_recycled_timer_mode:
+    options:
+      - "Sunrise"
+      - "Sunset"
+      - "Fixed Time"
+  front_terrace_timer_mode:
+    options:
+      - "Sunrise"
+      - "Sunset"
+      - "Fixed Time"
+  front_terrace_recycled_timer_mode:
+    options:
+      - "Sunrise"
+      - "Sunset"
+      - "Fixed Time"
+  lower_lawn_timer_mode:
+    options:
+      - "Sunrise"
+      - "Sunset"
+      - "Fixed Time"
+  upper_lawn_timer_mode:
+    options:
+      - "Sunrise"
+      - "Sunset"
+      - "Fixed Time"
+
+input_datetime:
+  herbs_time:
+    has_time: true
+  lavender_time:
+    has_time: true
+  back_yard_time:
+    has_time: true
+  back_yard_recycled_time:
+    has_time: true
+  front_terrace_time:
+    has_time: true
+  front_terrace_recycled_time:
+    has_time: true
+  lower_lawn_time:
+    has_time: true
+  upper_lawn_time:
+    has_time: true
 
 sensor:
   - platform: template
@@ -33,19 +140,19 @@ sensor:
           {{- '%02d' % (states('sensor.lavender_time_remaining')|float / 60)|int -}}:
           {{- '%02d' % (states('sensor.lavender_time_remaining')|float % 60)|int }} remaining
           {% endif %}
-      backyard_time_remaining_friendly:
-        friendly_name: "Backyard time remaining friendly"
+      back_yard_time_remaining_friendly:
+        friendly_name: "Back Yard time remaining friendly"
         value_template: |
-          {% if states('sensor.backyard_time_remaining')|float > 0 %}
-          {{- '%02d' % (states('sensor.backyard_time_remaining')|float / 60)|int -}}:
-          {{- '%02d' % (states('sensor.backyard_time_remaining')|float % 60)|int }} remaining
+          {% if states('sensor.back_yard_time_remaining')|float > 0 %}
+          {{- '%02d' % (states('sensor.back_yard_time_remaining')|float / 60)|int -}}:
+          {{- '%02d' % (states('sensor.back_yard_time_remaining')|float % 60)|int }} remaining
           {% endif %}
-      backyard_recycled_time_remaining_friendly:
-        friendly_name: "Backyard Recycled time remaining friendly"
+      back_yard_recycled_time_remaining_friendly:
+        friendly_name: "Back Yard Recycled time remaining friendly"
         value_template: |
-          {% if states('sensor.backyard_recycled_time_remaining')|float > 0 %}
-          {{- '%02d' % (states('sensor.backyard_recycled_time_remaining')|float / 60)|int -}}:
-          {{- '%02d' % (states('sensor.backyard_recycled_time_remaining')|float % 60)|int }} remaining
+          {% if states('sensor.back_yard_recycled_time_remaining')|float > 0 %}
+          {{- '%02d' % (states('sensor.back_yard_recycled_time_remaining')|float / 60)|int -}}:
+          {{- '%02d' % (states('sensor.back_yard_recycled_time_remaining')|float % 60)|int }} remaining
           {% endif %}
       front_terrace_time_remaining_friendly:
         friendly_name: "Front Terrace time remaining friendly"
@@ -82,3 +189,85 @@ sensor:
           {{- '%02d' % (states('sensor.recycled_pump_time_remaining')|float / 60)|int -}}:
           {{- '%02d' % (states('sensor.recycled_pump_time_remaining')|float % 60)|int }} remaining
           {% endif %}
+
+automation:
+  - id: "sprinkle_auto_timer_herbs"
+    alias: "sprinkle: auto timer: herbs"
+    description: ""
+    use_blueprint:
+      path: sprinkle_auto_timer.yaml
+      input:
+        fixed_time: input_datetime.herbs_time
+        timer_mode: input_select.herbs_timer_mode
+        valve: switch.herbs
+        valve_slug: herbs
+  - id: "sprinkle_auto_timer_lavender"
+    alias: "sprinkle: auto timer: lavender"
+    description: ""
+    use_blueprint:
+      path: sprinkle_auto_timer.yaml
+      input:
+        fixed_time: input_datetime.lavender_time
+        timer_mode: input_select.lavender_timer_mode
+        valve: switch.lavender
+        valve_slug: lavender
+  - id: "sprinkle_auto_timer_back_yard"
+    alias: "sprinkle: auto timer: back yard"
+    description: ""
+    use_blueprint:
+      path: sprinkle_auto_timer.yaml
+      input:
+        fixed_time: input_datetime.back_yard_time
+        timer_mode: input_select.back_yard_timer_mode
+        valve: switch.back_yard
+        valve_slug: back_yard
+  - id: "sprinkle_auto_timer_back_yard_recycled"
+    alias: "sprinkle: auto timer: back yard recycled"
+    description: ""
+    use_blueprint:
+      path: sprinkle_auto_timer.yaml
+      input:
+        fixed_time: input_datetime.back_yard_recycled_time
+        timer_mode: input_select.back_yard_recycled_timer_mode
+        valve: switch.back_yard_recycled
+        valve_slug: back_yard_recycled
+  - id: "sprinkle_auto_timer_front_terrace"
+    alias: "sprinkle: auto timer: front_terrace"
+    description: ""
+    use_blueprint:
+      path: sprinkle_auto_timer.yaml
+      input:
+        fixed_time: input_datetime.front_terrace_time
+        timer_mode: input_select.front_terrace_timer_mode
+        valve: switch.front_terrace
+        valve_slug: front_terrace
+  - id: "sprinkle_auto_timer_front_terrace_recycled"
+    alias: "sprinkle: auto timer: front_terrace_recycled"
+    description: ""
+    use_blueprint:
+      path: sprinkle_auto_timer.yaml
+      input:
+        fixed_time: input_datetime.front_terrace_recycled_time
+        timer_mode: input_select.front_terrace_recycled_timer_mode
+        valve: switch.front_terrace_recycled
+        valve_slug: front_terrace_recycled
+  - id: "sprinkle_auto_timer_lower_lawn"
+    alias: "sprinkle: auto timer: lower_lawn"
+    description: ""
+    use_blueprint:
+      path: sprinkle_auto_timer.yaml
+      input:
+        fixed_time: input_datetime.lower_lawn_time
+        timer_mode: input_select.lower_lawn_timer_mode
+        valve: switch.lower_lawn
+        valve_slug: lower_lawn
+  - id: "sprinkle_auto_timer_upper_lawn"
+    alias: "sprinkle: auto timer: upper_lawn"
+    description: ""
+    use_blueprint:
+      path: sprinkle_auto_timer.yaml
+      input:
+        fixed_time: input_datetime.upper_lawn_time
+        timer_mode: input_select.upper_lawn_timer_mode
+        valve: switch.upper_lawn
+        valve_slug: upper_lawn

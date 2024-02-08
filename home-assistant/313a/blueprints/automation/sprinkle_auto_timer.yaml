@@ -1,0 +1,112 @@
+blueprint:
+  name: "sprinkle: auto timer"
+  description: Auto timer for sprinklers
+  domain: automation
+  input:
+    fixed_time:
+      name: Fixed Time
+      description: "The input datetime entity for fixed time timer mode"
+      selector:
+        entity:
+          domain: input_datetime
+    timer_mode:
+      name: Timer Mode
+      description: "The entity which controls the timer mode (Sunrise, Sunset, Fixed Time)"
+      selector:
+        entity:
+          domain: input_select
+    valve:
+      name: Valve
+      description: The switch entity to turn on
+      selector:
+        entity:
+          domain: switch
+
+    valve_slug:
+      name: Valve Name Slug
+      description: 'e.g. "back_yard"'
+
+variables:
+  valve_slug: !input valve_slug
+
+trigger:
+  - platform: time
+    at: !input fixed_time
+    id: fixed_time
+  - platform: sun
+    event: sunrise
+    offset: 0
+    id: sunrise
+  - platform: sun
+    event: sunset
+    offset: 0
+    id: sunset
+
+condition:
+  - condition: or
+    conditions:
+      - condition: and
+        conditions:
+          - condition: state
+            entity_id: !input timer_mode
+            state: Sunrise
+          - condition: trigger
+            id: sunrise
+        alias: Sunrise
+      - condition: and
+        conditions:
+          - condition: state
+            entity_id: !input timer_mode
+            state: Sunset
+          - condition: trigger
+            id: sunset
+        alias: Sunset
+      - condition: and
+        conditions:
+          - condition: state
+            entity_id: !input timer_mode
+            state: Fixed Time
+          - condition: trigger
+            id: fixed_time
+        alias: Fixed Time
+  - condition: template
+    value_template: >-
+      {{ is_state('input_boolean.' + valve_slug + '_' + ['mon', 'tue', 'wed', 'thu', 'fri',
+      'sat', 'sun'][now().weekday()], 'on') }}
+    alias: Test enabled weekday
+
+action:
+  - delay: |-
+      {%- set mode = states('input_select.' + valve_slug + '_timer_mode') -%}
+      {%- if mode == 'Fixed Time' -%}
+        0 {# No delay for fixed-time setting #}
+      {% else %}
+        {%- set ns = namespace(delay=0, found=0) -%}
+        {%- set day = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'][now().weekday()] %}
+        {%- for valve in [
+          'herbs', 
+          'lavender', 
+          'back_yard', 
+          'back_yard_recycled',
+          'front_terrace', 
+          'front_terrace_recycled', 
+          'lower_lawn', 
+          'upper_lawn'
+        ] if not ns.found -%} {# until found valve_slug  #}
+          {%- if valve == valve_slug -%}
+            {%- set ns.found = true -%}
+          {%- elif (
+            is_state('input_select.' + valve + '_timer_mode', mode)
+            and is_state('input_boolean.' + valve + '_' + day, 'on')
+            and is_state('automation.sprinkle_auto_timer_' + valve, 'on')
+          ) %} {# same timer mode, enabled DoW, and automation enabled #}
+            {%- set ns.delay = ns.delay + int(states('number.' + valve + '_watering_duration')) + 1 -%}
+          {%- endif -%}
+        {%- endfor -%}
+        {{- ns.delay * 60 -}}
+      {% endif %}
+  - service: switch.turn_on
+    data: {}
+    target:
+      entity_id: !input valve
+mode: single

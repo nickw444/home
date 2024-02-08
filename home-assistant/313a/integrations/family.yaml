@@ -1,0 +1,11 @@
+template:
+  - binary_sensor:
+      - name: Family Is Home
+        unique_id: family_is_home
+        availability: |-
+          {%- set group_size = expand('group.family') | length -%}
+          {%- set num_unavailable = expand('group.family') | selectattr('state', 'equalto', 'unavailable') | list | count -%}
+          {{ num_unavailable < group_size }}
+        state: |-
+          {%- set num_home = expand('group.family') | selectattr('state', 'equalto', 'home') | list | count -%}
+          {{ num_home > 0 }}

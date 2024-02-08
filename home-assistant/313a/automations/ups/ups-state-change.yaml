@@ -1,0 +1,13 @@
+id: "1591600935265"
+alias: on UPS state change, send a notification
+description: ""
+trigger:
+  - entity_id: sensor.ups_status
+    platform: state
+condition: []
+action:
+  - data_template:
+      message: >
+        The UPS status changed to {{ trigger.from_state.state }} 
+        to {{ trigger.to_state.state }}
+    service: notify.admins
