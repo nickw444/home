@@ -1,0 +1,337 @@
+esphome:
+  name: sprinkle-1
+
+esp32:
+  board: esp32dev
+  framework:
+    type: arduino
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+
+ota:
+  password: !secret ota_password_sprinkle_1
+
+wifi:
+  networks:
+    - ssid: Smart
+      priority: 5
+      hidden: true
+      bssid: !secret outdoor_store_wifi_bssid
+      password: !secret smart_wifi_password
+    - ssid: !secret wifi_ssid
+      password: !secret wifi_password
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "sprinkle-1"
+    password: !secret wifi_fallback_password
+    ap_timeout: 2min
+
+captive_portal:
+
+text_sensor:
+  - platform: wifi_info
+    ip_address:
+      name: sprinkle-1 IP Address
+    ssid:
+      name: sprinkle-1 Connected SSID
+    bssid:
+      name: sprinkle-1 Connected BSSID
+    mac_address:
+      name: sprinkle-1 Mac Wifi Address
+
+
+binary_sensor:
+  - platform: status
+    name: sprinkle-1 Status
+
+sensor:
+  - platform: uptime
+    name: sprinkle-1 Uptime
+  - platform: wifi_signal
+    name: sprinkle-1 WiFi Signal
+    update_interval: 60s
+
+
+# Front Terrace
+# Front Terrace Recycled
+# Back Yard
+# Back Yard Recycled
+# Recycled Pump
+# Tree Lights
+
+  - platform: template
+    name: "Front Terrace Time Remaining"
+    id: time_remaining_front_terrace
+    unit_of_measurement: seconds
+  - platform: template
+    name: "Front Terrace Recycled Time Remaining"
+    id: time_remaining_front_terrace_recycled
+    unit_of_measurement: seconds
+  - platform: template
+    name: "Back Yard Time Remaining"
+    id: time_remaining_back_yard
+    unit_of_measurement: seconds
+  - platform: template
+    name: "Back Yard Recycled Time Remaining"
+    id: time_remaining_back_yard_recycled
+    unit_of_measurement: seconds
+  - platform: template
+    name: "Recycled Pump Time Remaining"
+    id: time_remaining_recycled_pump
+    unit_of_measurement: seconds
+
+output:
+  - platform: gpio
+    id: tree_lights_output
+    pin: GPIO19
+
+light:
+  - platform: binary
+    name: "Tree Lights"
+    output: tree_lights_output
+
+switch:
+  - platform: gpio
+    pin:
+      number: GPIO33
+    id: front_terrace
+    name: "Front Terrace"
+    restore_mode: ALWAYS_OFF
+    on_turn_on:
+      - script.execute: countdown_front_terrace
+      - delay: !lambda "return id(front_terrace_watering_duration).state * 60 * 1000;"
+      - switch.turn_off: front_terrace
+    on_turn_off:
+      - script.stop: countdown_front_terrace
+      - sensor.template.publish:
+          id: time_remaining_front_terrace
+          state: 0
+    interlock: &front_terrace_interlock_group [front_terrace, front_terrace_recycled]
+  
+  - platform: gpio
+    pin:
+      number: GPIO32
+    id: front_terrace_recycled
+    name: "Front Terrace (Recycled)"
+    restore_mode: ALWAYS_OFF
+    on_turn_on:
+      - switch.turn_on: recycled_pump_power
+      - script.execute: countdown_front_terrace_recycled
+      - delay: !lambda "return id(front_terrace_recycled_watering_duration).state * 60 * 1000;"
+      - switch.turn_off: front_terrace_recycled
+    on_turn_off:
+      - script.execute: maybe_turn_off_pump
+      - script.stop: countdown_front_terrace_recycled
+      - sensor.template.publish:
+          id: time_remaining_front_terrace_recycled
+          state: 0
+    interlock: *front_terrace_interlock_group
+
+  - platform: gpio
+    pin:
+      number: GPIO13
+    id: back_yard
+    name: "Back Yard"
+    restore_mode: ALWAYS_OFF
+    on_turn_on:
+      - script.execute: countdown_back_yard
+      - delay: !lambda "return id(back_yard_watering_duration).state * 60 * 1000;"
+      - switch.turn_off: back_yard
+    on_turn_off:
+      - script.stop: countdown_back_yard
+      - sensor.template.publish:
+          id: time_remaining_back_yard
+          state: 0
+    interlock: &back_yard_interlock_group [back_yard, back_yard_recycled]
+
+  - platform: gpio
+    pin:
+      number: GPIO12
+    id: back_yard_recycled
+    name: "Back Yard (Recycled)"
+    restore_mode: ALWAYS_OFF
+    on_turn_on:
+      - switch.turn_on: recycled_pump_power
+      - script.execute: countdown_back_yard_recycled
+      - delay: !lambda "return id(back_yard_recycled_watering_duration).state * 60 * 1000;"
+      - switch.turn_off: back_yard_recycled
+    on_turn_off:
+      - script.execute: maybe_turn_off_pump
+      - script.stop: countdown_back_yard_recycled
+      - sensor.template.publish:
+          id: time_remaining_back_yard_recycled
+          state: 0
+    interlock: *back_yard_interlock_group
+
+  - platform: gpio
+    pin:
+      number: GPIO21
+    id: recycled_pump_power
+    restore_mode: ALWAYS_OFF
+
+  - platform: template
+    id: recycled_pump
+    name: "Recycled Pump"
+    icon: "mdi:water-pump"
+    lambda: "return id(recycled_pump_power).state;"
+    turn_on_action:
+      - switch.turn_on: recycled_pump_power
+      - script.execute: countdown_recycled_pump
+      - delay: !lambda "return id(recycled_pump_watering_duration).state * 60 * 1000;"
+      - switch.turn_off: recycled_pump_power
+    turn_off_action:
+      - switch.turn_off: recycled_pump_power
+    on_turn_off:
+      - script.stop: countdown_recycled_pump
+      - sensor.template.publish:
+          id: time_remaining_recycled_pump
+          state: 0
+      - switch.turn_off: back_yard_recycled
+      - switch.turn_off: front_terrace_recycled
+
+number:
+  - platform: template
+    name: "Front Terrace Watering Duration"
+    id: 'front_terrace_watering_duration'
+    optimistic: true
+    min_value: 5
+    max_value: 30
+    restore_value: true
+    initial_value: 10
+    step: 1
+  - platform: template
+    name: "Front Terrace Recycled Watering Duration"
+    id: 'front_terrace_recycled_watering_duration'
+    optimistic: true
+    min_value: 5
+    max_value: 30
+    restore_value: true
+    initial_value: 10
+    step: 1 
+  - platform: template
+    name: "Back Yard Watering Duration"
+    id: 'back_yard_watering_duration'
+    optimistic: true
+    min_value: 5
+    max_value: 30
+    restore_value: true
+    initial_value: 10
+    step: 1 
+  - platform: template
+    name: "Back Yard Recycled Watering Duration"
+    id: 'back_yard_recycled_watering_duration'
+    optimistic: true
+    min_value: 5
+    max_value: 30
+    restore_value: true
+    initial_value: 10
+    step: 1 
+  - platform: template
+    name: "Recycled Pump Watering Duration"
+    id: 'recycled_pump_watering_duration'
+    optimistic: true
+    min_value: 5
+    max_value: 60
+    restore_value: true
+    initial_value: 10
+    step: 1 
+
+globals:
+  - id: front_terrace_time_remaining
+    type: int
+    restore_value: no
+    initial_value: '0'
+  - id: front_terrace_recycled_time_remaining
+    type: int
+    restore_value: no
+    initial_value: '0'
+  - id: back_yard_time_remaining
+    type: int
+    restore_value: no
+    initial_value: '0'
+  - id: back_yard_recycled_time_remaining
+    type: int
+    restore_value: no
+    initial_value: '0'
+  - id: recycled_pump_time_remaining
+    type: int
+    restore_value: no
+    initial_value: '0'
+
+
+script:
+  - id: maybe_turn_off_pump
+    then:
+      - if:
+          condition:
+            and:
+              - switch.is_off: front_terrace_recycled
+              - switch.is_off: back_yard_recycled
+          then:
+            - switch.turn_off: recycled_pump
+
+  - id: countdown_front_terrace
+    then:
+      - lambda: 'id(front_terrace_time_remaining) = id(front_terrace_watering_duration).state * 60;'
+      - while:
+          condition:
+            lambda: "return id(front_terrace_time_remaining) > 0;"
+          then:
+            - sensor.template.publish:
+                id: time_remaining_front_terrace
+                state: !lambda 'return id(front_terrace_time_remaining);'
+            - delay: 5 seconds
+            - lambda: "id(front_terrace_time_remaining) -= 5;"
+  - id: countdown_front_terrace_recycled
+    then:
+      - lambda: 'id(front_terrace_recycled_time_remaining) = id(front_terrace_recycled_watering_duration).state * 60;'
+      - while:
+          condition:
+            lambda: "return id(front_terrace_recycled_time_remaining) > 0;"
+          then:
+            - sensor.template.publish:
+                id: time_remaining_front_terrace_recycled
+                state: !lambda 'return id(front_terrace_recycled_time_remaining);'
+            - delay: 5 seconds
+            - lambda: "id(front_terrace_recycled_time_remaining) -= 5;"
+  - id: countdown_back_yard
+    then:
+      - lambda: 'id(back_yard_time_remaining) = id(back_yard_watering_duration).state * 60;'
+      - while:
+          condition:
+            lambda: "return id(back_yard_time_remaining) > 0;"
+          then:
+            - sensor.template.publish:
+                id: time_remaining_back_yard
+                state: !lambda 'return id(back_yard_time_remaining);'
+            - delay: 5 seconds
+            - lambda: "id(back_yard_time_remaining) -= 5;"
+  - id: countdown_back_yard_recycled
+    then:
+      - lambda: 'id(back_yard_recycled_time_remaining) = id(back_yard_recycled_watering_duration).state * 60;'
+      - while:
+          condition:
+            lambda: "return id(back_yard_recycled_time_remaining) > 0;"
+          then:
+            - sensor.template.publish:
+                id: time_remaining_back_yard_recycled
+                state: !lambda 'return id(back_yard_recycled_time_remaining);'
+            - delay: 5 seconds
+            - lambda: "id(back_yard_recycled_time_remaining) -= 5;"
+  - id: countdown_recycled_pump
+    then:
+      - lambda: 'id(recycled_pump_time_remaining) = id(recycled_pump_watering_duration).state * 60;'
+      - while:
+          condition:
+            lambda: "return id(recycled_pump_time_remaining) > 0;"
+          then:
+            - sensor.template.publish:
+                id: time_remaining_recycled_pump
+                state: !lambda 'return id(recycled_pump_time_remaining);'
+            - delay: 5 seconds
+            - lambda: "id(recycled_pump_time_remaining) -= 5;"

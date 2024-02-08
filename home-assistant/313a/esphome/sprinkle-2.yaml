@@ -1,0 +1,250 @@
+esphome:
+  name: sprinkle-2
+
+esp32:
+  board: esp32dev
+  framework:
+    type: arduino
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+
+ota:
+  password: !secret ota_password_sprinkle_2
+
+wifi:
+  networks:
+    - ssid: Smart
+      priority: 5
+      hidden: true
+      bssid: !secret outdoor_store_wifi_bssid
+      password: !secret smart_wifi_password
+    - ssid: !secret wifi_ssid
+      password: !secret wifi_password
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "sprinkle-2"
+    password: !secret wifi_fallback_password
+    ap_timeout: 2min
+
+captive_portal:
+
+text_sensor:
+  - platform: wifi_info
+    ip_address:
+      name: sprinkle-2 IP Address
+    ssid:
+      name: sprinkle-2 Connected SSID
+    bssid:
+      name: sprinkle-2 Connected BSSID
+    mac_address:
+      name: sprinkle-2 Mac Wifi Address
+
+
+binary_sensor:
+  - platform: status
+    name: sprinkle-2 Status
+
+sensor:
+  - platform: uptime
+    name: sprinkle-2 Uptime
+  - platform: wifi_signal
+    name: sprinkle-2 WiFi Signal
+    update_interval: 60s
+
+# Herbs
+# Lavender
+# Upper Lawn
+# Lower Lawn
+
+  - platform: template
+    name: "Herbs Time Remaining"
+    id: time_remaining_herbs
+    unit_of_measurement: seconds
+  - platform: template
+    name: "Lavender Time Remaining"
+    id: time_remaining_lavender
+    unit_of_measurement: seconds
+  - platform: template
+    name: "Upper Lawn Time Remaining"
+    id: time_remaining_upper_lawn
+    unit_of_measurement: seconds
+  - platform: template
+    name: "Lower Lawn Time Remaining"
+    id: time_remaining_lower_lawn
+    unit_of_measurement: seconds
+
+switch:
+  - platform: gpio
+    pin:
+      number: GPIO33
+    id: herbs
+    name: "Herbs"
+    restore_mode: ALWAYS_OFF
+    on_turn_on:
+      - script.execute: countdown_herbs
+      - delay: !lambda "return id(herbs_watering_duration).state * 60 * 1000;"
+      - switch.turn_off: herbs
+    on_turn_off:
+      - script.stop: countdown_herbs
+      - sensor.template.publish:
+          id: time_remaining_herbs
+          state: 0
+  
+  - platform: gpio
+    pin:
+      number: GPIO32
+    id: lavender
+    name: "Lavender"
+    restore_mode: ALWAYS_OFF
+    on_turn_on:
+      - script.execute: countdown_lavender
+      - delay: !lambda "return id(lavender_watering_duration).state * 60 * 1000;"
+      - switch.turn_off: lavender
+    on_turn_off:
+      - script.stop: countdown_lavender
+      - sensor.template.publish:
+          id: time_remaining_lavender
+          state: 0
+  
+  - platform: gpio
+    pin:
+      number: GPIO13
+    id: upper_lawn
+    name: "Upper Lawn"
+    restore_mode: ALWAYS_OFF
+    on_turn_on:
+      - script.execute: countdown_upper_lawn
+      - delay: !lambda "return id(upper_lawn_watering_duration).state * 60 * 1000;"
+      - switch.turn_off: upper_lawn
+    on_turn_off:
+      - script.stop: countdown_upper_lawn
+      - sensor.template.publish:
+          id: time_remaining_upper_lawn
+          state: 0
+  
+  - platform: gpio
+    pin:
+      number: GPIO12
+    id: lower_lawn
+    name: "Lower Lawn"
+    restore_mode: ALWAYS_OFF
+    on_turn_on:
+      - script.execute: countdown_lower_lawn
+      - delay: !lambda "return id(lower_lawn_watering_duration).state * 60 * 1000;"
+      - switch.turn_off: lower_lawn
+    on_turn_off:
+      - script.stop: countdown_lower_lawn
+      - sensor.template.publish:
+          id: time_remaining_lower_lawn
+          state: 0
+
+number:
+  - platform: template
+    name: "Herbs Watering Duration"
+    id: 'herbs_watering_duration'
+    optimistic: true
+    min_value: 5
+    max_value: 30
+    restore_value: true
+    initial_value: 10
+    step: 1
+  - platform: template
+    name: "Lavender Watering Duration"
+    id: 'lavender_watering_duration'
+    optimistic: true
+    min_value: 5
+    max_value: 30
+    restore_value: true
+    initial_value: 10
+    step: 1 
+  - platform: template
+    name: "Upper Lawn Watering Duration"
+    id: 'upper_lawn_watering_duration'
+    optimistic: true
+    min_value: 5
+    max_value: 30
+    restore_value: true
+    initial_value: 10
+    step: 1 
+  - platform: template
+    name: "Lower Lawn Watering Duration"
+    id: 'lower_lawn_watering_duration'
+    optimistic: true
+    min_value: 5
+    max_value: 30
+    restore_value: true
+    initial_value: 10
+    step: 1 
+
+globals:
+  - id: herbs_time_remaining
+    type: int
+    restore_value: no
+    initial_value: '0'
+  - id: lavender_time_remaining
+    type: int
+    restore_value: no
+    initial_value: '0'
+  - id: upper_lawn_time_remaining
+    type: int
+    restore_value: no
+    initial_value: '0'
+  - id: lower_lawn_time_remaining
+    type: int
+    restore_value: no
+    initial_value: '0'
+
+script:
+  - id: countdown_herbs
+    then:
+      - lambda: 'id(herbs_time_remaining) = id(herbs_watering_duration).state * 60;'
+      - while:
+          condition:
+            lambda: "return id(herbs_time_remaining) > 0;"
+          then:
+            - sensor.template.publish:
+                id: time_remaining_herbs
+                state: !lambda 'return id(herbs_time_remaining);'
+            - delay: 5 seconds
+            - lambda: "id(herbs_time_remaining) -= 5;"
+  - id: countdown_lavender
+    then:
+      - lambda: 'id(lavender_time_remaining) = id(lavender_watering_duration).state * 60;'
+      - while:
+          condition:
+            lambda: "return id(lavender_time_remaining) > 0;"
+          then:
+            - sensor.template.publish:
+                id: time_remaining_lavender
+                state: !lambda 'return id(lavender_time_remaining);'
+            - delay: 5 seconds
+            - lambda: "id(lavender_time_remaining) -= 5;"
+  - id: countdown_upper_lawn
+    then:
+      - lambda: 'id(upper_lawn_time_remaining) = id(upper_lawn_watering_duration).state * 60;'
+      - while:
+          condition:
+            lambda: "return id(upper_lawn_time_remaining) > 0;"
+          then:
+            - sensor.template.publish:
+                id: time_remaining_upper_lawn
+                state: !lambda 'return id(upper_lawn_time_remaining);'
+            - delay: 5 seconds
+            - lambda: "id(upper_lawn_time_remaining) -= 5;"
+  - id: countdown_lower_lawn
+    then:
+      - lambda: 'id(lower_lawn_time_remaining) = id(lower_lawn_watering_duration).state * 60;'
+      - while:
+          condition:
+            lambda: "return id(lower_lawn_time_remaining) > 0;"
+          then:
+            - sensor.template.publish:
+                id: time_remaining_lower_lawn
+                state: !lambda 'return id(lower_lawn_time_remaining);'
+            - delay: 5 seconds
+            - lambda: "id(lower_lawn_time_remaining) -= 5;"
