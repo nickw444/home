@@ -7,7 +7,7 @@ description: >-
 trigger:
   - device_id: e824e2b2a4ff4dea9b16fd7f6234dfc1
     domain: binary_sensor
-    entity_id: binary_sensor.front_door
+    entity_id: binary_sensor.front_door_contact
     platform: device
     type: opened
 condition:

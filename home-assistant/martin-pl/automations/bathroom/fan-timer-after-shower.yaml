@@ -1,0 +1,40 @@
+id: "1722076188774"
+alias: "bathroom: fan timer after shower"
+description: ""
+trigger:
+  - platform: state
+    entity_id:
+      - switch.bathroom_fan
+    from: "off"
+    to: "on"
+    for:
+      hours: 0
+      minutes: 1
+      seconds: 0
+condition:
+  - condition: numeric_state
+    entity_id: sensor.bathroom_climate_humidity
+    above: 90
+action:
+  - wait_for_trigger:
+      - platform: state
+        entity_id:
+          - switch.bathroom_fan
+        from: "on"
+        to: "off"
+      - platform: numeric_state
+        entity_id:
+          - sensor.bathroom_climate_humidity
+        below: 80
+    timeout:
+      hours: 0
+      minutes: 30
+      seconds: 0
+      milliseconds: 0
+    continue_on_timeout: true
+  - service: fan.turn_off
+    metadata: {}
+    data: {}
+    target:
+      entity_id: fan.bathroom
+mode: single

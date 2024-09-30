@@ -31,6 +31,8 @@ homekit:
       - script.osmo_clean_bedrooms
       - script.osmo_clean_living_area
 
+      - script.tesla_precondition_car
+
       - cover.living_left_blockout
       - cover.living_side_blockout
       - cover.living_right_blockout
@@ -69,6 +71,9 @@ homekit:
       name: "Clean Bedrooms"
     script.osmo_clean_living_area:
       name: "Clean Living"
+
+    script.tesla_precondition_car:
+      name: "Precondition Car"
 
     switch.back_drippers: &sprinkler
       type: sprinkler

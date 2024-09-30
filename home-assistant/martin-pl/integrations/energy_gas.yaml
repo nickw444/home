@@ -1,0 +1,84 @@
+automation:
+  - id: "1719053789067"
+    alias: "gas: increment counter on impulse"
+    description: ""
+    trigger:
+      - platform: state
+        entity_id:
+          - binary_sensor.gas_impulse_contact
+        from: "on"
+        to: "off"
+    condition: []
+    action:
+      - service: counter.increment
+        metadata: {}
+        data: {}
+        target:
+          entity_id: counter.gas_impulse
+    mode: single
+
+utility_meter:
+  gas_consumed_quarterly:
+    unique_id: energy_gas__gas_consumed_quarterly
+    source: sensor.gas_usage_energy
+    cycle: quarterly
+    always_available: true
+  gas_consumed_weekly:
+    unique_id: energy_gas__gas_consumed_weekly
+    source: sensor.gas_usage_energy
+    cycle: weekly
+    always_available: true
+  gas_consumed_daily:
+    unique_id: energy_gas__gas_consumed_daily
+    source: sensor.gas_usage_energy
+    cycle: daily
+    always_available: true
+
+sensor:
+  - platform: derivative
+    name: "Gas Usage Rate 5m"
+    source: sensor.gas_energy
+    unit_time: h
+    time_window: "00:05:00"
+  - platform: derivative
+    name: "Gas Usage Rate 10m"
+    source: sensor.gas_energy
+    unit_time: h
+    time_window: "00:10:00"
+  - platform: derivative
+    name: "Gas Usage Rate 30m"
+    source: sensor.gas_energy
+    unit_time: h
+    time_window: "00:30:00"
+  - platform: derivative
+    name: "Gas Usage Rate 1h"
+    source: sensor.gas_energy
+    unit_time: h
+    time_window: "01:00:00"
+
+  - platform: template
+    sensors:
+      gas_instantaneous_cost:
+        friendly_name: "Gas Instantaneous Cost"
+        unit_of_measurement: c/h
+        value_template: "{{ (3.48 * states('sensor.gas_usage_rate_5m')|float) | round(2) }}"
+        unique_id: energy_gas__gas_instantaneous_cost
+      gas_consumed_daily_cost:
+        friendly_name: "Gas Cost Today"
+        unit_of_measurement: $
+        value_template: "{{ (0.6893 + states('sensor.gas_consumed_daily')|float * 0.0348) | round(2) }}"
+        unique_id: energy_gas__gas_daily_cost
+      gas_consumed_weekly_cost:
+        friendly_name: "Gas Cost This Week"
+        unit_of_measurement: $
+        value_template: >-
+          {{ (((now() - strptime(state_attr('sensor.gas_consumed_weekly', 'last_reset'), '%Y-%m-%dT%H:%M:%S.%f%z')).days + 1) * 0.6893
+          + states('sensor.gas_consumed_weekly')|float * 0.0348) | round(2) }}
+        unique_id: energy_gas__gas_weekly_cost
+      gas_consumed_quarterly_cost:
+        friendly_name: "Gas Cost This Quarter"
+        unit_of_measurement: $
+        value_template: >-
+          {{ (((now() - strptime(state_attr('sensor.gas_consumed_quarterly', 'last_reset'), '%Y-%m-%dT%H:%M:%S.%f%z')).days + 1) * 0.6893
+          + states('sensor.gas_consumed_quarterly')|float * 0.0348) | round(2) }}
+        unique_id: energy_gas__gas_quarterly_cost

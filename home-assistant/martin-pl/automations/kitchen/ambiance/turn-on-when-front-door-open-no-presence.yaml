@@ -3,7 +3,7 @@ alias: "kitchen ambiance: turn on when front door opens and no presence"
 description: ""
 trigger:
   - platform: state
-    entity_id: binary_sensor.front_door
+    entity_id: binary_sensor.front_door_contact
     from: "off"
     to: "on"
 condition:
@@ -29,7 +29,7 @@ action:
   # on due to SetOption20
   - service: light.turn_on
     data:
-      brightness_pct: 60
+      brightness_pct: 10
     target:
       entity_id:
         - light.kitchen_strip

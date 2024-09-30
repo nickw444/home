@@ -16,15 +16,17 @@ condition:
   - condition: state
     entity_id: input_boolean.away_mode
     state: "off"
-  - condition: state
-    entity_id: light.kitchen
-    state: "off"
+  - condition: not
+    conditions:
+      - condition: state
+        entity_id: light.kitchen
+        state: "on"
 action:
   # We must pre-set brightness with a separate call, then turn the light
   # on due to SetOption20
   - service: light.turn_on
     data:
-      brightness_pct: 60
+      brightness_pct: 10
     target:
       entity_id:
         - light.kitchen_strip

@@ -1,7 +1,7 @@
 recorder:
   purge_keep_days: 14
   exclude:
-     entities: sensor.samsung_m283x_series_uptime
+      entities: sensor.samsung_m283x_series_uptime
   
 automation:
   - id: '1585649979000'

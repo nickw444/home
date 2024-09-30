@@ -1,0 +1,20 @@
+id: "1722076269686"
+alias: "bathroom: turn on fan on shower humidity"
+description: ""
+trigger:
+  - platform: numeric_state
+    entity_id:
+      - sensor.bathroom_climate_humidity
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 30
+    above: 90
+condition: []
+action:
+  - service: fan.turn_on
+    metadata: {}
+    data: {}
+    target:
+      entity_id: fan.bathroom
+mode: single

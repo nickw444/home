@@ -1,0 +1,39 @@
+esphome:
+  name: hallway-ir
+  friendly_name: hallway-ir
+
+esp32:
+  board: esp32dev
+  framework:
+    type: arduino
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  encryption:
+    key: !secret hallway_ir_enryption_key
+
+ota:
+  - platform: esphome
+    password: !secret hallway_ir_ota_password
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Hallway-Ir Fallback Hotspot"
+    password: !secret wifi_fallback_password
+
+captive_portal:
+
+remote_transmitter:
+  pin: GPIO5
+  carrier_duty_percent: 50%
+
+climate:
+  - platform: fujitsu_general
+    name: "Hallway"

@@ -1,0 +1,9 @@
+transportnsw:
+  api_key: !secret transport_nsw_api_key
+  trips:
+    - name: "Mortdale to Central"
+      stop_id: "222310"
+      destination_stop_id: "200060"
+      num_journeys: 3
+      modes_of_transport:
+        - train

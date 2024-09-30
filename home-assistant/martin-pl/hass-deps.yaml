@@ -16,6 +16,7 @@ dependencies:
   root_is_custom_components: true
   include:
   - calibrated_light
+  - transportnsw
 - https://github.com/thomasloven/lovelace-card-mod
 - https://github.com/nickw444/tuya-home-assistant.git
 - source: https://github.com/matejdro/login_control.git
@@ -28,3 +29,8 @@ dependencies:
 - https://github.com/thomasloven/hass-browser_mod.git
 - https://github.com/dummylabs/thewatchman.git
 - https://github.com/thomasloven/lovelace-layout-card.git
+- https://github.com/rospogrigio/localtuya.git
+- https://github.com/greghesp/ha-bambulab.git
+- https://github.com/frenck/spook.git
+- https://github.com/alandtse/tesla.git
+- https://github.com/Tasshack/dreame-vacuum.git

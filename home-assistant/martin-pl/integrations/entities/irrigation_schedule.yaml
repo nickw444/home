@@ -1,0 +1,183 @@
+input_boolean:
+  front_herbs_mon:
+  front_herbs_tue:
+  front_herbs_wed:
+  front_herbs_thu:
+  front_herbs_fri:
+  front_herbs_sat:
+  front_herbs_sun:
+
+  front_lawn_mon:
+  front_lawn_tue:
+  front_lawn_wed:
+  front_lawn_thu:
+  front_lawn_fri:
+  front_lawn_sat:
+  front_lawn_sun:
+
+  front_drippers_mon:
+  front_drippers_tue:
+  front_drippers_wed:
+  front_drippers_thu:
+  front_drippers_fri:
+  front_drippers_sat:
+  front_drippers_sun:
+
+  back_herbs_mon:
+  back_herbs_tue:
+  back_herbs_wed:
+  back_herbs_thu:
+  back_herbs_fri:
+  back_herbs_sat:
+  back_herbs_sun:
+
+  back_lawn_mon:
+  back_lawn_tue:
+  back_lawn_wed:
+  back_lawn_thu:
+  back_lawn_fri:
+  back_lawn_sat:
+  back_lawn_sun:
+
+  back_drippers_mon:
+  back_drippers_tue:
+  back_drippers_wed:
+  back_drippers_thu:
+  back_drippers_fri:
+  back_drippers_sat:
+  back_drippers_sun:
+
+input_select:
+  front_herbs_timer_mode:
+    options:
+      - "Sunrise"
+      - "Sunset"
+      - "Fixed Time"
+  front_lawn_timer_mode:
+    options:
+      - "Sunrise"
+      - "Sunset"
+      - "Fixed Time"
+  front_drippers_timer_mode:
+    options:
+      - "Sunrise"
+      - "Sunset"
+      - "Fixed Time"
+  back_herbs_timer_mode:
+    options:
+      - "Sunrise"
+      - "Sunset"
+      - "Fixed Time"
+  back_lawn_timer_mode:
+    options:
+      - "Sunrise"
+      - "Sunset"
+      - "Fixed Time"
+  back_drippers_timer_mode:
+    options:
+      - "Sunrise"
+      - "Sunset"
+      - "Fixed Time"
+
+input_datetime:
+  front_herbs_time:
+    has_time: true
+  front_lawn_time:
+    has_time: true
+  front_drippers_time:
+    has_time: true
+  back_herbs_time:
+    has_time: true
+  back_lawn_time:
+    has_time: true
+  back_drippers_time:
+    has_time: true
+
+automation:
+  - id: "irrigation_auto_timer_front_herbs"
+    alias: "irrigation: auto timer: front_herbs"
+    description: ""
+    use_blueprint:
+      path: irrigation_auto_timer.yaml
+      input:
+        fixed_time: input_datetime.front_herbs_time
+        timer_mode: input_select.front_herbs_timer_mode
+        valve: switch.front_herbs
+        valve_slug: front_herbs
+  - id: "irrigation_auto_timer_front_lawn"
+    alias: "irrigation: auto timer: front_lawn"
+    description: ""
+    use_blueprint:
+      path: irrigation_auto_timer.yaml
+      input:
+        fixed_time: input_datetime.front_lawn_time
+        timer_mode: input_select.front_lawn_timer_mode
+        valve: switch.front_lawn
+        valve_slug: front_lawn
+  - id: "irrigation_auto_timer_front_drippers"
+    alias: "irrigation: auto timer: front_drippers"
+    description: ""
+    use_blueprint:
+      path: irrigation_auto_timer.yaml
+      input:
+        fixed_time: input_datetime.front_drippers_time
+        timer_mode: input_select.front_drippers_timer_mode
+        valve: switch.front_drippers
+        valve_slug: front_drippers
+  - id: "irrigation_auto_timer_back_herbs"
+    alias: "irrigation: auto timer: back_herbs"
+    description: ""
+    use_blueprint:
+      path: irrigation_auto_timer.yaml
+      input:
+        fixed_time: input_datetime.back_herbs_time
+        timer_mode: input_select.back_herbs_timer_mode
+        valve: switch.back_herbs
+        valve_slug: back_herbs
+  - id: "irrigation_auto_timer_back_lawn"
+    alias: "irrigation: auto timer: back_lawn"
+    description: ""
+    use_blueprint:
+      path: irrigation_auto_timer.yaml
+      input:
+        fixed_time: input_datetime.back_lawn_time
+        timer_mode: input_select.back_lawn_timer_mode
+        valve: switch.back_lawn
+        valve_slug: back_lawn
+  - id: "irrigation_auto_timer_back_drippers"
+    alias: "irrigation: auto timer: back_drippers"
+    description: ""
+    use_blueprint:
+      path: irrigation_auto_timer.yaml
+      input:
+        fixed_time: input_datetime.back_drippers_time
+        timer_mode: input_select.back_drippers_timer_mode
+        valve: switch.back_drippers
+        valve_slug: back_drippers
+
+template:
+  - binary_sensor:
+      - name: "Rain Today"
+        unique_id: "rain_today"
+        icon: "mdi:weather-rainy"
+        state: |-
+          {{ states('sensor.fo79_rain_daily')|float >= 2 or states('sensor.oatley_rain_amount_min_0')|float >= 3 }}
+
+  # - alias: "less than 2mm rain today"
+  #   condition: numeric_state
+  #   entity_id: sensor.fo79_rain_daily
+  #   below: 2
+  # - condition: or
+  #   conditions:
+  #     - alias: "moisture sensor unavailable"
+  #       condition: state
+  #       entity_id: sensor.back_herbs_moisture
+  #       state: "unavailable"
+  #     - alias: "moisture less than 60%"
+  #       condition: numeric_state
+  #       entity_id: sensor.back_herbs_moisture
+  #       below: 60
+  # - alias: "less than 3mm rain forecast"
+  #   condition: numeric_state
+  #   entity_id: sensor.oatley_rain_amount_min_0
+  #   below: 3

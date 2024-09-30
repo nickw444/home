@@ -1,0 +1,59 @@
+alias: "siren: set siren"
+icon: mdi:shield-lock
+mode: parallel
+max: 20
+fields:
+  siren_entity:
+    selector:
+      entity:
+        domain: switch
+  melody_entity:
+    selector:
+      entity:
+        domain: select
+  melody:
+    selector:
+      select:
+        options:
+          - "6" # Siren
+          - "8" # Pending Beep
+          - "18" # Doorbell Chime
+  volume_entity:
+    selector:
+      entity:
+        domain: select
+  volume:
+    selector:
+      select:
+        options:
+          - "low"
+          - "medium"
+          - "high"
+  duration_entity:
+    selector:
+      entity:
+        domain: number
+  duration:
+    selector:
+      number:
+        min: 0
+        max: 1800
+sequence:
+  - service: select.select_option
+    data:
+      option: "{{ volume }}"
+    target:
+      entity_id: "{{ volume_entity }}"
+  - service: number.set_value
+    data:
+      value: "{{ duration}}"
+    target:
+      entity_id: "{{ duration_entity }}"
+  - service: select.select_option
+    data:
+      option: "{{ melody }}"
+    target:
+      entity_id: "{{ melody_entity }}"
+  - service: switch.turn_on
+    target:
+      entity_id: "{{ siren_entity }}"

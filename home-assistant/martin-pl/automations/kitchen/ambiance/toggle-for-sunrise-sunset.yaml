@@ -36,7 +36,7 @@ action:
           # on due to SetOption20
           - service: light.turn_on
             data:
-              brightness_pct: 60
+              brightness_pct: 10
             target:
               entity_id:
                 - light.kitchen_strip

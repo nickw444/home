@@ -1,0 +1,45 @@
+id: "40589432094583908"
+alias: "bedroom: turn off electric blanket after 1 hour"
+description: ""
+trigger:
+  - platform: state
+    entity_id:
+      - switch.electric_blanket
+    from: "off"
+    to: "on"
+condition: []
+action:
+  - service: notify.everyone
+    data:
+      title: Electric Blanket
+      message: Turning on the electric blanket. It will turn off at {{ (now() + timedelta(hours=1)).strftime('%I:%M%p')}}
+      data:
+        tag: electric-blanket
+  - wait_for_trigger:
+      - platform: state
+        entity_id:
+          - switch.electric_blanket
+        from: "on"
+        to: "off"
+    timeout:
+      hours: 1
+      minutes: 0
+      seconds: 0
+      milliseconds: 0
+    continue_on_timeout: true
+    continue_on_error: true
+  - if:
+      - condition: state
+        entity_id: switch.electric_blanket
+        state: "on"
+    then:
+      - service: switch.turn_off
+        data: {}
+        target:
+          entity_id: switch.electric_blanket
+  - service: notify.everyone
+    data:
+      title: Electric Blanket
+      message: The electric blanket was turned off
+      data:
+        tag: electric-blanket

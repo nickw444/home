@@ -5,6 +5,8 @@ alarm_control_panel:
     trigger_time: 120
     armed_night:
       delay_time: 15
+    code: !secret alarm_code
+    code_arm_required: false
 
 automation:
   - id: "1601034054491"
@@ -13,8 +15,8 @@ automation:
     trigger:
       - platform: state
         entity_id:
-          - binary_sensor.back_door
-          - binary_sensor.front_door
+          - binary_sensor.back_door_contact
+          - binary_sensor.front_door_contact
         to: "on"
     condition:
       - condition: or
@@ -77,7 +79,7 @@ automation:
           data:
             group: alarm-status
             url: "/lovelace/security"
-            entity_id: camera.living_room
+            entity_id: camera.front_door_high
             actions:
               - action: "DISARM_ALARM"
                 title: "Disarm"
@@ -131,11 +133,15 @@ automation:
           message: The alarm was pending at {{ now().strftime('%I:%M %p') }}
           data:
             url: "/lovelace/security"
-            entity_id: camera.living_room
+            entity_id: camera.front_door_high
             group: alarm-status
             tag: alarm-status
-            push:
-              category: alarm
+            actions:
+              - action: "DISARM_ALARM"
+                title: "Disarm"
+                authenticationRequired: true
+                destructive: true
+
     mode: single
 
   - id: "1601035065291"
@@ -156,8 +162,11 @@ automation:
           data:
             group: alarm-status
             tag: alarm-status
-            push:
-              category: alarm
+            actions:
+              - action: "DISARM_ALARM"
+                title: "Disarm"
+                authenticationRequired: true
+                destructive: true
     mode: single
 
   - id: "1601035419737"
@@ -175,7 +184,8 @@ automation:
             state: armed_night
     action:
       - service: alarm_control_panel.alarm_disarm
-        data: {}
+        data:
+          code: !secret alarm_code
         entity_id: alarm_control_panel.ha_alarm
     mode: single
 
@@ -210,7 +220,8 @@ automation:
     condition: []
     action:
       - service: alarm_control_panel.alarm_disarm
-        data: {}
+        data:
+          code: !secret alarm_code
         entity_id: alarm_control_panel.ha_alarm
     mode: single
 
@@ -224,8 +235,8 @@ automation:
           - binary_sensor.hallway_motion_occupancy
           - binary_sensor.study_motion_occupancy
           - binary_sensor.laundry_motion_occupancy
-          - binary_sensor.front_door
-          - binary_sensor.back_door
+          - binary_sensor.front_door_contact
+          - binary_sensor.back_door_contact
         to:
           - "on"
           - "off"
@@ -280,7 +291,8 @@ automation:
         state: armed_night
     action:
       - service: alarm_control_panel.alarm_disarm
-        data: {}
+        data:
+          code: !secret alarm_code
         entity_id: alarm_control_panel.ha_alarm
     mode: single
 
@@ -302,61 +314,37 @@ automation:
                 entity_id: alarm_control_panel.ha_alarm
                 state: pending
             sequence:
-              - service: media_player.turn_on
-                data: {}
-                target:
-                  entity_id:
-                    - media_player.living_room_homepod
-                    - media_player.bedroom_homepod
-              - service: media_player.volume_set
-                entity_id:
-                  - media_player.living_room_homepod
-                  - media_player.bedroom_homepod
+              - service: script.set_siren
                 data:
-                  volume_level: 0.5
-              - service: media_player.play_media
-                data:
-                  media_content_type: music
-                  media_content_id: https://hass.mpl.nickwhyte.com/local/audio/alarm_pending_beep.mp3
-                target:
-                  entity_id:
-                    - media_player.living_room_homepod
-                    - media_player.bedroom_homepod
+                  siren_entity: switch.study_siren_alarm
+                  melody_entity: select.study_siren_melody
+                  melody: "8"
+                  volume_entity: select.study_siren_volume
+                  volume: medium
+                  duration_entity: number.study_siren_duration
+                  duration: 1800
           - conditions:
               - condition: state
                 entity_id: alarm_control_panel.ha_alarm
                 state: triggered
             sequence:
-              - service: media_player.turn_on
-                data: {}
-                target:
-                  entity_id:
-                    - media_player.living_room_homepod
-                    - media_player.bedroom_homepod
-              - service: media_player.volume_set
-                entity_id:
-                  - media_player.living_room_homepod
-                  - media_player.bedroom_homepod
+              - service: script.set_siren
                 data:
-                  volume_level: 0.5
-              - service: media_player.play_media
-                data:
-                  media_content_type: music
-                  media_content_id: https://hass.mpl.nickwhyte.com/local/audio/alarm_triggered_siren.mp3
-                target:
-                  entity_id:
-                    - media_player.living_room_homepod
-                    - media_player.bedroom_homepod
+                  siren_entity: switch.study_siren_alarm
+                  melody_entity: select.study_siren_melody
+                  melody: "6"
+                  volume_entity: select.study_siren_volume
+                  volume: high
+                  duration_entity: number.study_siren_duration
+                  duration: 1800
         default: []
       - delay: 00:00:02
       - wait_template: >-
           {{ states('alarm_control_panel.ha_alarm') not in ('pending', 'triggered') }}
         continue_on_timeout: false
-      - service: media_player.media_stop
-        data: {}
-        entity_id:
-          - media_player.living_room_homepod
-          - media_player.bedroom_homepod
+      - service: switch.turn_off
+        target:
+          entity_id: switch.study_siren_alarm
     mode: restart
 
   # Other Ideas:

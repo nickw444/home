@@ -4,7 +4,7 @@ description: Used to trigger camera to record until presence detection kicks in
   (also good to catch any intrusion whilst home)
 trigger:
   - platform: state
-    entity_id: binary_sensor.front_door
+    entity_id: binary_sensor.front_door_contact
     to: "on"
 condition: []
 action:

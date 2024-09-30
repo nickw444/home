@@ -1,0 +1,27 @@
+id: "1719278605008"
+alias: "X1C: Toggle power on button press"
+description: ""
+trigger:
+  - platform: state
+    entity_id:
+      - sensor.3d_printer_button_action
+    to: single
+condition:
+  - condition: or
+    conditions:
+      - condition: state
+        entity_id: sensor.x1c_print_status
+        state: idle
+      - condition: state
+        entity_id: sensor.x1c_print_status
+        state: finish
+      - condition: state
+        entity_id: switch.3d_printer
+        state: "off"
+action:
+  - service: switch.toggle
+    target:
+      entity_id:
+        - switch.3d_printer
+    data: {}
+mode: single

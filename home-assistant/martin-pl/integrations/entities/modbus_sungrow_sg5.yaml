@@ -1,0 +1,518 @@
+modbus:
+  - name: Sungrow SG5.0RS
+    type: tcp
+    host: !secret sungrow_modbus_host_ip
+    port: !secret sungrow_modbus_port
+    sensors:
+      - name: Inverter Device Type Code
+        unique_id: inverter_device_type_code
+        device_address: !secret sungrow_modbus_slave
+        address: 4999 # reg 5000
+        input_type: input
+        data_type: uint16
+        scan_interval: 1200
+
+      - name: Inverter Nominal Active Power
+        unique_id: inverter_nominal_active_power
+        device_address: !secret sungrow_modbus_slave
+        address: 5000 # reg 5001
+        input_type: input
+        data_type: uint16
+        precision: 1
+        unit_of_measurement: kW
+        device_class: power
+        state_class: measurement
+        scale: 0.1
+        scan_interval: 1200
+
+      - name: Inverter Work State Code
+        unique_id: inverter_work_state_code
+        device_address: !secret sungrow_modbus_slave
+        address: 5037 # reg 5038
+        input_type: input
+        data_type: uint16
+        scan_interval: 60
+
+      - name: Inverter Daily Power Yield # << Use this for production tracking (60s precision)
+        unique_id: inverter_daily_power_yield
+        device_address: !secret sungrow_modbus_slave
+        address: 5002 # reg 5003
+        input_type: input
+        data_type: uint16
+        precision: 1
+        unit_of_measurement: kWh
+        device_class: energy
+        state_class: total_increasing
+        scale: 0.1
+        scan_interval: 60
+
+      - name: Inverter Total Power Yield
+        unique_id: inverter_total_power_yield
+        device_address: !secret sungrow_modbus_slave
+        address: 5003 # reg 5004-5005
+        input_type: input
+        data_type: uint32
+        swap: word
+        unit_of_measurement: kWh
+        precision: 1
+        device_class: energy
+        state_class: total_increasing
+        scale: 1
+        scan_interval: 600
+
+      ## Disabled: Gives same as 5004-5005, but with additional precision - risk overflow after large yields.
+      # - name: Inverter Total Power Yield (85)
+      #   unique_id: inverter_total_power_yield_85
+      #   device_address: !secret sungrow_modbus_slave
+      #   address: 5143 # reg 5144-5145
+      #   input_type: input
+      #   data_type: uint32
+      #   swap: word
+      #   unit_of_measurement: kWh
+      #   precision: 1
+      #   device_class: energy
+      #   state_class: total_increasing
+      #   scale: 0.1
+      #   scan_interval: 600
+
+      - name: Inverter temperature
+        unique_id: inverter_inverter_temperature
+        device_address: !secret sungrow_modbus_slave
+        address: 5007 # reg 5008
+        input_type: input
+        data_type: int16
+        precision: 1
+        unit_of_measurement: °C
+        device_class: temperature
+        state_class: measurement
+        scale: 0.1
+        scan_interval: 600
+
+      - name: Inverter Total Running Time
+        unique_id: inverter_total_running_time
+        device_address: !secret sungrow_modbus_slave
+        address: 5005 # reg 5006-5007
+        input_type: input
+        data_type: uint32
+        swap: word
+        precision: 0
+        unit_of_measurement: h
+        device_class: duration
+        state_class: measurement
+        scale: 1
+        scan_interval: 600
+
+      - name: Inverter Daily Running Time
+        unique_id: inverter_daily_running_time
+        device_address: !secret sungrow_modbus_slave
+        address: 5112 # reg 5113
+        input_type: input
+        data_type: uint16
+        precision: 0
+        unit_of_measurement: min
+        device_class: duration
+        state_class: measurement
+        scan_interval: 600
+
+        ## === MPPTs / DC Power ===
+
+      - name: Inverter MPPT1 voltage
+        unique_id: inverter_mppt1_voltage
+        device_address: !secret sungrow_modbus_slave
+        address: 5010 # reg 5011
+        input_type: input
+        data_type: uint16
+        precision: 1
+        unit_of_measurement: V
+        device_class: voltage
+        state_class: measurement
+        scale: 0.1
+        scan_interval: 15
+
+      - name: Inverter MPPT1 current
+        unique_id: inverter_mppt1_current
+        device_address: !secret sungrow_modbus_slave
+        address: 5011 # reg 5012
+        input_type: input
+        data_type: uint16
+        precision: 2
+        unit_of_measurement: A
+        device_class: current
+        state_class: measurement
+        scale: 0.1
+        scan_interval: 15
+
+      - name: Inverter MPPT2 voltage
+        unique_id: inverter_mppt2_voltage
+        device_address: !secret sungrow_modbus_slave
+        address: 5012 # reg 5013
+        input_type: input
+        data_type: uint16
+        precision: 1
+        unit_of_measurement: V
+        device_class: voltage
+        state_class: measurement
+        scale: 0.1
+        scan_interval: 15
+
+      - name: Inverter MPPT2 current
+        unique_id: inverter_mppt2_current
+        device_address: !secret sungrow_modbus_slave
+        address: 5013 # reg 5014
+        input_type: input
+        data_type: uint16
+        precision: 2
+        unit_of_measurement: A
+        device_class: current
+        state_class: measurement
+        scale: 0.1
+        scan_interval: 15
+
+      - name: Inverter Total DC power
+        unique_id: inverter_total_dc_power
+        device_address: !secret sungrow_modbus_slave
+        address: 5016 # reg 5017-5018
+        input_type: input
+        data_type: uint32
+        swap: word
+        precision: 0
+        unit_of_measurement: W
+        device_class: power
+        state_class: measurement
+        scale: 1
+        scan_interval: 5
+
+      ## === End MPPTs / DC Power  ===
+      ## === Apparent Power  ===
+
+      - name: Inverter Total Apparent Power
+        unique_id: inverter_total_apparent_power
+        device_address: !secret sungrow_modbus_slave
+        address: 5008 # reg 5009-5010
+        input_type: input
+        data_type: uint32
+        swap: word
+        unit_of_measurement: VA
+        precision: 0
+        device_class: apparent_power
+        state_class: measurement
+        scale: 1
+        scan_interval: 60
+
+      - name: Inverter Total Active Power
+        unique_id: inverter_total_active_power
+        device_address: !secret sungrow_modbus_slave
+        address: 5030 # reg 5031-5032
+        input_type: input
+        data_type: uint32
+        swap: word
+        unit_of_measurement: W
+        precision: 0
+        device_class: power
+        state_class: measurement
+        scale: 1
+        scan_interval: 5
+
+      - name: Inverter Total Reactive Power
+        unique_id: inverter_total_reactive_power
+        device_address: !secret sungrow_modbus_slave
+        address: 5032 # reg 5033-5034
+        input_type: input
+        data_type: int32
+        swap: word
+        unit_of_measurement: Var
+        precision: 0
+        device_class: reactive_power
+        state_class: measurement
+        scale: 1
+        scan_interval: 60
+
+      - name: Inverter Power Factor
+        unique_id: inverter_power_factor
+        device_address: !secret sungrow_modbus_slave
+        address: 5034 # reg 5035
+        input_type: input
+        data_type: int16
+        unit_of_measurement: "%"
+        precision: 3
+        device_class: power_factor
+        state_class: measurement
+        scale: 0.001
+        scan_interval: 60
+
+      ## Disabled: Same as 5148 - but 5148 has additional precision.
+      # - name: Inverter Grid frequency
+      #   unique_id: inverter_grid_frequency
+      #   device_address: !secret sungrow_modbus_slave
+      #   address: 5035 # reg 5036
+      #   input_type: input
+      #   data_type: uint16
+      #   unit_of_measurement: "Hz"
+      #   precision: 2
+      #   device_class: frequency
+      #   state_class: measurement
+      #   scale: 0.1
+      #   scan_interval: 600
+
+      - name: Inverter Grid frequency
+        unique_id: inverter_grid_frequency
+        device_address: !secret sungrow_modbus_slave
+        address: 5147 # reg 5148
+        input_type: input
+        data_type: uint16
+        unit_of_measurement: "Hz"
+        precision: 2
+        device_class: frequency
+        state_class: measurement
+        scale: 0.01
+        scan_interval: 60
+
+      ## === End Apparent Power  ===
+
+      ## === Consumption Meter ===
+      ## Disabled: Seems to always read at 0
+      # - name: Inverter Daily Exported Energy ## Note: Seems to always read at 0
+      #   unique_id: inverter_daily_exported_energy
+      #   device_address: !secret sungrow_modbus_slave
+      #   address: 5092 # reg 5093-5094
+      #   input_type: input
+      #   data_type: uint32
+      #   swap: word
+      #   precision: 1
+      #   unit_of_measurement: kWh
+      #   device_class: energy
+      #   state_class: total_increasing
+      #   scale: 0.1
+      #   scan_interval: 600
+
+      - name: Inverter Total Exported Energy
+        unique_id: inverter_total_exported_energy
+        device_address: !secret sungrow_modbus_slave
+        address: 5094 # reg 5095-5096
+        input_type: input
+        data_type: uint32
+        swap: word
+        precision: 1
+        unit_of_measurement: kWh
+        device_class: energy
+        state_class: total_increasing
+        scale: 0.1
+        scan_interval: 60
+
+      ## Disabled: Seems to always read at 0
+      # - name: Inverter Daily Imported Energy
+      #   unique_id: inverter_daily_imported_energy
+      #   device_address: !secret sungrow_modbus_slave
+      #   address: 5096 # reg 5097-5098
+      #   input_type: input
+      #   data_type: uint32
+      #   swap: word
+      #   precision: 1
+      #   unit_of_measurement: kWh
+      #   device_class: energy
+      #   state_class: total_increasing
+      #   scale: 0.1
+      #   scan_interval: 600
+
+      - name: Inverter Total Imported Energy
+        unique_id: inverter_total_imported_energy
+        device_address: !secret sungrow_modbus_slave
+        address: 5098 # reg 5099-5100
+        input_type: input
+        data_type: uint32
+        swap: word
+        precision: 1
+        unit_of_measurement: kWh
+        device_class: energy
+        state_class: total_increasing
+        scale: 0.1
+        scan_interval: 60
+
+      ## Disabled: Seems to always read at 0
+      # - name: Inverter Daily Direct Consumption Energy ## Note: Seems to always read at 0
+      #   unique_id: inverter_daily_direct_consumption_energy
+      #   device_address: !secret sungrow_modbus_slave
+      #   address: 5100 # reg 5101-5102
+      #   input_type: input
+      #   data_type: uint32
+      #   swap: word
+      #   precision: 1
+      #   unit_of_measurement: kWh
+      #   device_class: energy
+      #   state_class: total_increasing
+      #   scale: 0.1
+      #   scan_interval: 600
+
+      ## Disabled: Seems to always read at 0
+      # - name: Inverter Total Direct Consumption Energy ## Note: Seems to always read at 0
+      #   unique_id: inverter_total_direct_consumption_energy
+      #   device_address: !secret sungrow_modbus_slave
+      #   address: 5102 # reg 5103-5104
+      #   input_type: input
+      #   data_type: uint32
+      #   swap: word
+      #   precision: 1
+      #   unit_of_measurement: kWh
+      #   device_class: energy
+      #   state_class: total_increasing
+      #   scale: 0.1
+      #   scan_interval: 600
+
+      - name: Inverter Meter Power (Raw)
+        unique_id: inverter_meter_power_raw
+        device_address: !secret sungrow_modbus_slave
+        address: 5082 # reg 5083-5084
+        input_type: input
+        data_type: int32
+        swap: word
+        precision: 0
+        unit_of_measurement: W
+        device_class: power
+        state_class: measurement
+        scale: 1
+        scan_interval: 5
+
+      ## Disabled: Seems to always read at 0
+      # - name: Inverter Load Power
+      #   unique_id: inverter_load_power
+      #   device_address: !secret sungrow_modbus_slave
+      #   address: 5090 # reg 5091-5092
+      #   input_type: input
+      #   data_type: int32
+      #   swap: word
+      #   precision: 0
+      #   unit_of_measurement: W
+      #   device_class: power
+      #   state_class: measurement
+      #   scale: 1
+      #   scan_interval: 600
+
+      # Disabled: Same as Reg 5083-5084.
+      # - name: Inverter Meter Power (undocumented)
+      #   unique_id: inverter_meter_power_undocumented_1
+      #   device_address: !secret sungrow_modbus_slave
+      #   address: 5600 # reg 5601-5602
+      #   input_type: input
+      #   data_type: int32
+      #   swap: word
+      #   precision: 0
+      #   unit_of_measurement: W
+      #   device_class: power
+      #   state_class: measurement
+      #   scale: 1
+      #   scan_interval: 5
+
+template:
+  - sensor:
+      - name: Inverter MPPT1 Power
+        unique_id: inverter_mppt1_power
+        unit_of_measurement: W
+        device_class: power
+        state_class: measurement
+        availability: >-
+          {{
+          not is_state('sensor.inverter_mppt1_voltage', 'unavailable')
+          and not is_state('sensor.inverter_mppt1_current', 'unavailable')
+          }}
+        state: "{{ (states('sensor.inverter_mppt1_voltage') | float * states('sensor.inverter_mppt1_current') | float) |int }}"
+
+      - name: Inverter MPPT2 Power
+        unique_id: inverter_mppt2_power
+        unit_of_measurement: W
+        device_class: power
+        state_class: measurement
+        availability: >-
+          {{
+          not is_state('sensor.inverter_mppt2_voltage', 'unavailable')
+          and not is_state('sensor.inverter_mppt2_current', 'unavailable')
+          }}
+        state: "{{ (states('sensor.inverter_mppt2_voltage') | float * states('sensor.inverter_mppt2_current') | float) |int }}"
+
+      - name: Inverter Meter Power
+        unique_id: inverter_meter_power
+        unit_of_measurement: W
+        device_class: power
+        state_class: measurement
+        availability: >-
+          {{
+          not is_state('sensor.inverter_meter_power_raw', 'unavailable')
+          and states('sensor.inverter_meter_power_raw')|int != 0x7FFFFFFF
+          }}
+        state: "{{ states('sensor.inverter_meter_power_raw') }}"
+
+      - name: Inverter Load Power
+        unique_id: inverter_load_power
+        availability: "{{ not is_state('sensor.inverter_meter_power', 'unavailable') and not is_state('sensor.inverter_total_active_power', 'unavailable') }}"
+        unit_of_measurement: W
+        device_class: power
+        state_class: measurement
+        state: "{{ states('sensor.inverter_total_active_power')|float + states('sensor.inverter_meter_power')|float }}"
+
+      - name: Inverter MPPT1 Power Per Panel
+        unique_id: inverter_mppt1_power_per_panel
+        availability: "{{ not is_state('sensor.inverter_mppt1_power', 'unavailable') }}"
+        unit_of_measurement: W
+        device_class: power
+        state_class: measurement
+        state: "{{ (states('sensor.inverter_mppt1_power')|float/5) | round(1) }}"
+
+      - name: Inverter MPPT2 Power Per Panel
+        unique_id: inverter_mppt2_power_per_panel
+        availability: "{{ not is_state('sensor.inverter_mppt2_power', 'unavailable') }}"
+        unit_of_measurement: W
+        device_class: power
+        state_class: measurement
+        state: "{{ (states('sensor.inverter_mppt2_power')|float/9) | round(1) }}"
+
+      - name: Inverter Work State
+        unique_id: inverter_work_state
+        device_class: enum
+        availability: "{{ not is_state('sensor.inverter_work_state_code', 'unavailable') }}"
+        state: >-
+          {% if ((states('sensor.inverter_work_state_code') | int(default=0)) == 0x0) %}
+            Run
+          {% elif ((states('sensor.inverter_work_state_code') | int(default=0)) == 0x8000) %}
+            Stop
+          {% elif ((states('sensor.inverter_work_state_code') | int(default=0)) == 0x1300) %}
+            Key Stop
+          {% elif ((states('sensor.inverter_work_state_code') | int(default=0)) == 0x1500) %}
+            Emergency Stop
+          {% elif ((states('sensor.inverter_work_state_code') | int(default=0)) == 0x1400) %}
+            Standby
+          {% elif ((states('sensor.inverter_work_state_code') | int(default=0)) == 0x1200) %}
+            Initial Standby
+          {% elif ((states('sensor.inverter_work_state_code') | int(default=0)) == 0x1600) %}
+            Starting
+          {% elif ((states('sensor.inverter_work_state_code') | int(default=0)) == 0x9100) %}
+            Alarm Run
+          {% elif ((states('sensor.inverter_work_state_code') | int(default=0)) == 0x8100) %}
+            Derating Run
+          {% elif ((states('sensor.inverter_work_state_code') | int(default=0)) == 0x8200) %}
+            Dispatch Run
+          {% elif ((states('sensor.inverter_work_state_code') | int(default=0)) == 0x5500) %}
+            Fault
+          {% elif ((states('sensor.inverter_work_state_code') | int(default=0)) == 0x2500) %}
+            Communicate Fault
+          {% else %}
+            Unhandled State
+          {% endif %}
+
+      - name: Inverter Device Type
+        unique_id: inverter_device_type
+        availability: "{{ not is_state('sensor.inverter_device_type_code', 'unavailable') }}"
+        device_class: enum
+        state: >-
+          {% if ((states('sensor.inverter_device_type_code') | int(default=0))  == 0x260F) %}
+            SG5.0RS
+          {% else %}
+            Unknown device code: {{ '%0x' % (states('sensor.sungrow_device_type_code') | int(default=0))  }}
+          {% endif %}
+
+utility_meter:
+  inverter_daily_imported_energy:
+    source: sensor.inverter_total_imported_energy
+    cycle: daily
+
+  inverter_daily_exported_energy:
+    source: sensor.inverter_total_exported_energy
+    cycle: daily

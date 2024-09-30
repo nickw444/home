@@ -1,0 +1,15 @@
+id: "16681301334584"
+alias: Wake iPad on Hallway Motion
+description: ""
+trigger:
+  - platform: state
+    entity_id:
+      - binary_sensor.hallway_motion_occupancy
+    from: "off"
+    to: "on"
+condition: []
+action:
+  - service: notify.mobile_app_kates_ipad
+    data:
+      message: Wake Up
+mode: single

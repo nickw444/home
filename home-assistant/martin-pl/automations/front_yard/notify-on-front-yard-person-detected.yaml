@@ -1,0 +1,22 @@
+id: "1661737134825"
+alias: "front door: notify on person detected"
+description: ""
+trigger:
+  - platform: state
+    entity_id:
+      - binary_sensor.front_door_person_detected
+    to: person
+condition:
+  - condition: state
+    entity_id: group.all_people
+    state: not_home
+action:
+  - service: notify.notify
+    data:
+      message: Motion Detected
+      title: A person was detected in the front yard
+      data:
+        url: /lovelace/security
+        entity_id: camera.front_door_high
+  - delay: 00:03:00
+mode: single

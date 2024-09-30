@@ -1,0 +1,42 @@
+template:
+  - sensor:
+      - name: Electricity Daily Charge
+        unique_id: electricity_daily_charge
+        unit_of_measurement: $
+        device_class: monetary
+        state_class: total
+        state: >
+          {{ ((now() - strptime(state_attr('sensor.electricity_daily_charge_quarterly', 'last_reset'), '%Y-%m-%dT%H:%M:%S.%f%z')).days + 1) * 0.8423 }}
+      - name: Electricity Daily Charge (Usage)
+        unique_id: electricity_daily_charge_usage
+        unit_of_measurement: kWh
+        device_class: energy
+        state_class: total_increasing
+        state: >
+          0
+
+utility_meter:
+  electricity_daily_charge_quarterly:
+    unique_id: electricity_tariff__electricity_daily_charge_quarterly
+    source: sensor.electricity_daily_charge_usage
+    cycle: quarterly
+    always_available: true
+
+sensor:
+  - platform: template
+    sensors:
+      consumption_tariff:
+        friendly_name: Consumption Tariff
+        unit_of_measurement: AUD/kWh
+        value_template: >
+          {% set tariff = { "EV": 0.08, "GU": 0.3016 } %}
+          {% if 0 <= now().hour < 6 %}
+            {{ tariff.EV }}
+          {% else %}
+            {{ tariff.GU }}
+          {% endif %}
+      feed_in_tariff:
+        friendly_name: Feed In Tariff
+        unit_of_measurement: AUD/kWh
+        value_template: >
+          0.07

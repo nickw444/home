@@ -1,0 +1,79 @@
+automation:
+  - id: "1720332159033"
+    alias: "water: increment counter on impulse"
+    description: ""
+    trigger:
+      - platform: state
+        entity_id:
+          - binary_sensor.water_impulse_contact
+        from: "off"
+        to: "on"
+    condition: []
+    action:
+      - service: counter.increment
+        metadata: {}
+        data: {}
+        target:
+          entity_id: counter.water_impulse
+    mode: single
+
+utility_meter:
+  water_consumed_quarterly:
+    unique_id: water__water_consumed_quarterly
+    source: sensor.water_usage
+    cycle: quarterly
+    always_available: true
+  water_consumed_weekly:
+    unique_id: water__water_consumed_weekly
+    source: sensor.water_usage
+    cycle: weekly
+    always_available: true
+  water_consumed_daily:
+    unique_id: water__water_consumed_daily
+    source: sensor.water_usage
+    cycle: daily
+    always_available: true
+
+sensor:
+  - platform: derivative
+    name: "Water Usage Rate 5m"
+    source: sensor.water
+    unit_time: h
+    time_window: "00:05:00"
+  - platform: derivative
+    name: "Water Usage Rate 10m"
+    source: sensor.water
+    unit_time: h
+    time_window: "00:10:00"
+  - platform: derivative
+    name: "Water Usage Rate 30m"
+    source: sensor.water
+    unit_time: h
+    time_window: "00:30:00"
+  - platform: derivative
+    name: "Water Usage Rate 1h"
+    source: sensor.water
+    unit_time: h
+    time_window: "01:00:00"
+
+  - platform: template
+    sensors:
+      water_consumed_daily_cost:
+        friendly_name: "Water Cost Today"
+        unit_of_measurement: $
+        value_template: "{{ (1.90 + states('sensor.water_consumed_daily')|float * 0.00267) | round(2) }}"
+        unique_id: water__water_daily_cost
+      water_consumed_weekly_cost:
+        friendly_name: "Water Cost This Week"
+        unit_of_measurement: $
+        value_template: >-
+          {{ (((now() - strptime(state_attr('sensor.water_consumed_weekly', 'last_reset'), '%Y-%m-%dT%H:%M:%S.%f%z')).days + 1) * 1.90
+          + states('sensor.water_consumed_weekly')|float * 0.00267) | round(2) }}
+        unique_id: water__water_weekly_cost
+      water_consumed_quarterly_cost:
+        friendly_name: "Water Cost This Quarter"
+        unit_of_measurement: $
+        value_template: >-
+          {{ (((now() - strptime(state_attr('sensor.water_consumed_quarterly', 'last_reset'), '%Y-%m-%dT%H:%M:%S.%f%z')).days + 1) * 1.90
+          + states('sensor.water_consumed_quarterly')|float * 0.00267) | round(2) }}
+        unique_id: water__water_quarterly_cost

@@ -47,11 +47,11 @@ cover:
     open_action:
       - servo.write:
           id: servo1
-          level: .30
+          level: .40
     close_action:
       - servo.write:
           id: servo1
-          level: -.56
+          level: -.50
       - delay: 10s
       - servo.detach:
           id: servo1

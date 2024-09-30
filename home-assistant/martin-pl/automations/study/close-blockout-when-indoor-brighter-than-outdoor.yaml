@@ -1,0 +1,51 @@
+id: "1720421869518"
+alias: "study: close blockout when indoor brighter than outdoor"
+description: ""
+trigger:
+  - platform: numeric_state
+    entity_id:
+      - sensor.study_shelves_illuminance_illuminance_lux
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 15
+    above: 35
+  - platform: numeric_state
+    entity_id:
+      - sensor.fo79_weather_lux
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 30
+    below: 1000
+condition:
+  - condition: numeric_state
+    entity_id: sensor.study_shelves_illuminance_illuminance_lux
+    above: 35
+  - condition: or
+    conditions:
+      - condition: numeric_state
+        entity_id: sensor.fo79_weather_lux
+        below: 1000
+      - condition: and
+        conditions:
+          - condition: state
+            entity_id: sensor.fo79_weather_lux
+            state:
+              - unavailable
+              - unknown
+          - condition: sun
+            after: sunset
+            after_offset: -01:00:00
+action:
+  - action: cover.close_cover
+    metadata: {}
+    data: {}
+    target:
+      entity_id: cover.study_blockout
+  - delay:
+      hours: 1
+      minutes: 0
+      seconds: 0
+      milliseconds: 0
+mode: single

@@ -1,0 +1,63 @@
+id: "1680575875557"
+alias: "osmo: clean living areas before bed"
+description: ""
+trigger:
+  - platform: time
+    at: "22:15:00"
+condition:
+  - condition: state
+    entity_id: group.all_people
+    state: home
+  - condition: not
+    conditions:
+      - condition: state
+        entity_id: vacuum.crystal
+        state: cleaning
+  - condition: or
+    conditions:
+      - condition: state
+        entity_id: media_player.samsung_smart_tv
+        state: "on"
+      - condition: state
+        entity_id: binary_sensor.some_lights_on
+        state: "on"
+action:
+  - if:
+      - condition: state
+        entity_id: binary_sensor.lounge_occupancy_presence
+        state: "on"
+    then:
+      - wait_for_trigger:
+          - platform: state
+            entity_id:
+              - binary_sensor.lounge_occupancy_presence
+            to: "off"
+            for:
+              hours: 0
+              minutes: 1
+              seconds: 0
+        continue_on_timeout: false
+        timeout:
+          hours: 1
+          minutes: 0
+          seconds: 0
+          milliseconds: 0
+  - choose:
+      - conditions:
+          - condition: time
+            weekday:
+              - sun
+              - wed
+        sequence:
+          - action: button.press
+            metadata: {}
+            data: {}
+            target:
+              entity_id: button.x40_ultra_shortcut_5
+    default:
+      - action: button.press
+        metadata: {}
+        data: {}
+        target:
+          entity_id: button.x40_ultra_shortcut_2
+mode: single

@@ -4,10 +4,3 @@ light:
     entities:
       - light.kates_bedside
       - light.nicks_bedside
-
-  - platform: group
-    name: Living Room Downlights
-    entities:
-      - light.living_room
-      - light.kitchen
-      - light.dining_table

@@ -96,12 +96,12 @@ switch:
     restore_mode: ALWAYS_OFF
   - platform: gpio
     pin:
-      number: GPIO33
+      number: GPIO13
     id: back_lawn_power
     restore_mode: ALWAYS_OFF
   - platform: gpio
     pin:
-      number: GPIO13
+      number: GPIO33
     id: back_drippers_power
     restore_mode: ALWAYS_OFF
   
@@ -208,7 +208,7 @@ number:
     name: "Front Herbs Watering Duration"
     id: 'front_herbs_watering_duration'
     optimistic: true
-    min_value: 5
+    min_value: 1
     max_value: 30
     restore_value: true
     initial_value: 10
@@ -235,7 +235,7 @@ number:
     name: "Back Herbs Watering Duration"
     id: 'back_herbs_watering_duration'
     optimistic: true
-    min_value: 5
+    min_value: 1
     max_value: 30
     restore_value: true
     initial_value: 10

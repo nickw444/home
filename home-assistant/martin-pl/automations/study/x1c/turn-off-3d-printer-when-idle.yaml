@@ -1,0 +1,28 @@
+id: "1718231422772"
+alias: "X1C: turn off 3d printer when idle"
+description: ""
+trigger:
+  - platform: state
+    entity_id:
+      - sensor.x1c_print_status
+    to: finish
+    for:
+      hours: 0
+      minutes: 60
+      seconds: 0
+condition:
+  - condition: state
+    entity_id: sensor.x1c_print_status
+    state: finish
+action:
+  - service: switch.turn_off
+    metadata: {}
+    data: {}
+    target:
+      entity_id: switch.3d_printer
+  - service: notify.mobile_app_nicks_iphone
+    metadata: {}
+    data:
+      message: X1C was turned off due to idle timeout
+      title: X1C Status
+mode: single

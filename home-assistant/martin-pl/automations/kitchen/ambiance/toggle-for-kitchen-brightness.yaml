@@ -1,15 +1,19 @@
-id: "98437594832563"
-alias: "kitchen ambiance: toggle for downlights state"
-description: ""
+id: "348573498568"
+alias: "kitchen ambiance: toggle for kitchen brightness"
+description: >
+  A temporary (approximation) automation to toggle the kitchen LED strip brightness
+  based on room brightness as measured by kitchen motion sensor. Not the best, slow 
+  response time since lux is only sent when new motion is detected, so this will lag
+  behind room ambient light levels but will do until kitchen downlights are automated
 trigger:
-  - platform: state
-    entity_id: light.kitchen
-    to: "on"
-    id: "lights_on"
-  - platform: state
-    entity_id: light.kitchen
-    to: "off"
-    id: "lights_off"
+  - platform: numeric_state
+    entity_id: sensor.kitchen_motion_illuminance_lux
+    above: 60
+    id: lights_on
+  - platform: numeric_state
+    entity_id: sensor.kitchen_motion_illuminance_lux
+    below: 30
+    id: lights_off
 condition:
   - condition: or
     conditions:
@@ -27,7 +31,7 @@ action:
   - choose:
       - conditions:
           - condition: trigger
-            id: "lights_off"
+            id: lights_off
         sequence:
           - service: "light.turn_on"
             data:

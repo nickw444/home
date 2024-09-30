@@ -12,6 +12,16 @@ condition:
   - condition: state
     entity_id: binary_sensor.in_bed
     state: "off"
+  # Only turn on if the TV is on or some lights are on
+  # TODO(NW): Remove in favour of making above in_bed sensor better.
+  - condition: or
+    conditions:
+      - condition: state
+        entity_id: media_player.samsung_smart_tv
+        state: "on"
+      - condition: state
+        entity_id: binary_sensor.some_lights_on
+        state: "on"
 action:
   - service: light.turn_on
     data: {}

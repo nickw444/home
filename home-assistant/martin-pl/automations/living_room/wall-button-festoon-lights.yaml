@@ -1,0 +1,12 @@
+id: "945498834797387393"
+alias: "living room: toggle festoon lights on button double press"
+description: ""
+trigger:
+  - platform: state
+    entity_id: sensor.living_room_button_click
+    to: double
+condition: []
+action:
+  - service: light.toggle
+    entity_id: light.festoon_lights
+mode: single

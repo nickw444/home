@@ -1,0 +1,41 @@
+id: "1680575754656"
+alias: "osmo: clean bedrooms on weekday afternoons"
+description: ""
+trigger:
+  - platform: time
+    at: "17:15:00"
+condition:
+  - condition: state
+    entity_id: input_boolean.away_mode
+    state: "off"
+  - condition: not
+    conditions:
+      - condition: state
+        entity_id: vacuum.crystal
+        state: cleaning
+  - condition: time
+    weekday:
+      - mon
+      - tue
+      - wed
+      - thu
+      - fri
+action:
+  - choose:
+      - conditions:
+          - condition: time
+            weekday:
+              - wed
+        sequence:
+          - action: button.press
+            metadata: {}
+            data: {}
+            target:
+              entity_id: button.x40_ultra_shortcut_4
+    default:
+      - action: button.press
+        metadata: {}
+        data: {}
+        target:
+          entity_id: button.x40_ultra_shortcut_1
+mode: single
