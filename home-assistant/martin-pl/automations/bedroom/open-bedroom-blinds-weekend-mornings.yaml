@@ -35,6 +35,5 @@ action:
     data: {}
     entity_id:
       # Only open blockout
-      - cover.bedroom_door_blockout
-      - cover.bedroom_window_blockout
+      - cover.bedroom_blockout
 mode: single
