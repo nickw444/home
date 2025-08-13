@@ -1,6 +1,6 @@
-id: '1584944760804'
-alias: 'living_room: turn on lamp at sunset when people home'
-description: ''
+id: "1584944760804"
+alias: "living_room: turn on lamp at sunset when people home"
+description: ""
 trigger:
   - event: sunset
     offset: -00:30:00
@@ -13,3 +13,13 @@ action:
   - service: light.turn_on
     data: {}
     entity_id: light.living_room_lamp
+  - if:
+      - condition: state
+        entity_id: light.stitch_lamp
+        state: "off"
+    then:
+      - service: light.turn_on
+        data:
+          brightness_pct: 30
+        entity_id:
+          - light.stitch_lamp
