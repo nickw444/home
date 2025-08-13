@@ -1,0 +1,92 @@
+esphome:
+  name: "study-aq"
+  friendly_name: "Study AQ"
+
+esp32:
+  board: esp32-c3-devkitm-1
+  framework:
+    type: esp-idf
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  encryption:
+    key: !secret study_aq_api_encryption_key
+
+ota:
+  - platform: esphome
+    password: !secret study_aq_ota_password
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Study AQ Fallback Hotspot"
+    password: !secret wifi_fallback_password
+
+captive_portal:
+
+i2c:
+  sda: GPIO8
+  scl: GPIO9
+  scan: true
+  id: bus_a
+
+sensor:
+  - platform: scd4x
+    address: 0x62
+    co2:
+      name: "CO2"
+    temperature:
+      name: "Temperature"
+      id: scd41_temperature
+    humidity:
+      name: "Humidity"
+      id: scd41_humidity
+
+  # SGP30 (TVOC & 'equivalent' eCO2) with humidity compensation
+  - platform: sgp30
+    address: 0x58
+    tvoc:
+      name: "TVOC"
+    eco2:
+      name: "eCO2"
+    compensation:
+      # Use SCD41 for better compensation:
+      # ESPHome will compute absolute humidity from temp+RH
+      temperature_source: scd41_temperature
+      humidity_source: scd41_humidity
+
+  - platform: wifi_signal # Reports the WiFi signal strength/RSSI in dB
+    name: "WiFi Signal dB"
+    id: wifi_signal_db
+    update_interval: 60s
+    entity_category: "diagnostic"
+
+  - platform: copy # Reports the WiFi signal strength in %
+    source_id: wifi_signal_db
+    name: "WiFi Signal Percent"
+    filters:
+      - lambda: return min(max(2 * (x + 100.0), 0.0), 100.0);
+    unit_of_measurement: "%"
+    entity_category: "diagnostic"
+    device_class: ""
+
+  - platform: uptime
+    type: seconds
+    name: Uptime Sensor
+    entity_category: "diagnostic"
+
+esp32_ble_tracker:
+  scan_parameters:
+    interval: 1100ms
+    window: 1100ms
+    active: true
+
+bluetooth_proxy:
+  active: true
+  connection_slots: 3

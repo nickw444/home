@@ -1,11 +1,11 @@
 esphome:
   name: hallway-ir
-  friendly_name: hallway-ir
+  friendly_name: Hallway IR
 
 esp32:
   board: esp32dev
   framework:
-    type: arduino
+    type: esp-idf
 
 # Enable logging
 logger:
@@ -13,7 +13,7 @@ logger:
 # Enable Home Assistant API
 api:
   encryption:
-    key: !secret hallway_ir_enryption_key
+    key: !secret hallway_ir_api_enryption_key
 
 ota:
   - platform: esphome
@@ -36,4 +36,21 @@ remote_transmitter:
 
 climate:
   - platform: fujitsu_general
+    sensor: ac_return_climate_temperature
     name: "Hallway"
+
+sensor:
+  - platform: homeassistant
+    id: "ac_return_climate_temperature"
+    name: "ac_return_climate_temperature"
+    entity_id: sensor.ac_return_climate_temperature
+
+esp32_ble_tracker:
+  scan_parameters:
+    interval: 1100ms
+    window: 1100ms
+    active: true
+
+bluetooth_proxy:
+  active: true
+  connection_slots: 3

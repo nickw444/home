@@ -1,25 +1,48 @@
 esphome:
   name: irrigation
+  friendly_name: "Irrigation"
+  area: "Yard"  # Default area for the controller
+
+  areas:
+    - id: front_yard
+      name: "Front Yard"
+    - id: back_yard
+      name: "Back Yard"
+
+  devices:
+    - id: front_herbs
+      name: "Front Herbs"
+      area_id: front_yard
+    - id: front_lawn
+      name: "Front Lawn"
+      area_id: front_yard
+    - id: front_drippers
+      name: "Front Drippers"
+      area_id: front_yard
+    - id: back_herbs
+      name: "Back Herbs"
+      area_id: back_yard
+    - id: back_lawn
+      name: "Back Lawn"
+      area_id: back_yard
+    - id: back_drippers
+      name: "Back Drippers"
+      area_id: back_yard
 
 esp32:
   board: esp32dev
   framework:
-    type: arduino
+    type: esp-idf
 
-# Enable logging
 logger:
-
-# Enable Home Assistant API
 api:
-
 ota:
-  password: !secret ota_password
+  - platform: esphome
+    password: !secret ota_password
 
 wifi:
   ssid: !secret wifi_ssid
   password: !secret wifi_password
-
-  # Enable fallback hotspot (captive portal) in case wifi connection fails
   ap:
     ssid: "Irrigation Fallback Hotspot"
     password: !secret wifi_fallback_password
@@ -37,7 +60,6 @@ text_sensor:
     mac_address:
       name: Sprinkle Mac Wifi Address
 
-
 binary_sensor:
   - platform: status
     name: Sprinkle Status
@@ -48,165 +70,186 @@ sensor:
   - platform: wifi_signal
     name: Irrigation WiFi Signal
     update_interval: 60s
+
+  # Time remaining sensors
   - platform: template
     name: "Front Herbs Time Remaining"
     id: time_remaining_front_herbs
+    device_id: front_herbs
     unit_of_measurement: seconds
   - platform: template
     name: "Front Lawn Time Remaining"
     id: time_remaining_front_lawn
+    device_id: front_lawn
     unit_of_measurement: seconds
   - platform: template
     name: "Front Drippers Time Remaining"
     id: time_remaining_front_drippers
+    device_id: front_drippers
     unit_of_measurement: seconds
   - platform: template
     name: "Back Herbs Time Remaining"
     id: time_remaining_back_herbs
+    device_id: back_herbs
     unit_of_measurement: seconds
   - platform: template
     name: "Back Lawn Time Remaining"
     id: time_remaining_back_lawn
+    device_id: back_lawn
     unit_of_measurement: seconds
   - platform: template
     name: "Back Drippers Time Remaining"
     id: time_remaining_back_drippers
+    device_id: back_drippers
     unit_of_measurement: seconds
 
 switch:
+  # Physical relays
   - platform: gpio
-    pin:
-      number: GPIO12
+    pin: GPIO12
     id: front_herbs_power
+    device_id: front_herbs
     restore_mode: ALWAYS_OFF
   - platform: gpio
-    pin:
-      number: GPIO21
+    pin: GPIO21
     id: front_lawn_power
+    device_id: front_lawn
     restore_mode: ALWAYS_OFF
   - platform: gpio
-    pin:
-      number: GPIO19
+    pin: GPIO19
     id: front_drippers_power
+    device_id: front_drippers
     restore_mode: ALWAYS_OFF
   - platform: gpio
-    pin:
-      number: GPIO32
+    pin: GPIO32
     id: back_herbs_power
+    device_id: back_herbs
     restore_mode: ALWAYS_OFF
   - platform: gpio
-    pin:
-      number: GPIO13
+    pin: GPIO13
     id: back_lawn_power
+    device_id: back_lawn
     restore_mode: ALWAYS_OFF
   - platform: gpio
-    pin:
-      number: GPIO33
+    pin: GPIO33
     id: back_drippers_power
+    device_id: back_drippers
     restore_mode: ALWAYS_OFF
-  
+
+  # Template switches with timers
   - platform: template
     name: "Front Herbs"
+    device_id: front_herbs
     icon: "mdi:water"
     lambda: "return id(front_herbs_power).state;"
     turn_on_action:
-    - switch.turn_on: front_herbs_power
-    - script.execute: countdown_front_herbs
-    - delay: !lambda "return id(front_herbs_watering_duration).state * 60 * 1000;"
-    - switch.turn_off: front_herbs_power
+      - switch.turn_on: front_herbs_power
+      - script.execute: countdown_front_herbs
+      - delay: !lambda "return id(front_herbs_watering_duration).state * 60 * 1000;"
+      - switch.turn_off: front_herbs_power
     turn_off_action:
-    - switch.turn_off: front_herbs_power
+      - switch.turn_off: front_herbs_power
     on_turn_off:
-    - script.stop: countdown_front_herbs
-    - sensor.template.publish:
-        id: time_remaining_front_herbs
-        state: 0
+      - script.stop: countdown_front_herbs
+      - sensor.template.publish:
+          id: time_remaining_front_herbs
+          state: 0
+
   - platform: template
     name: "Front Lawn"
+    device_id: front_lawn
     icon: "mdi:water"
     lambda: "return id(front_lawn_power).state;"
     turn_on_action:
-    - switch.turn_on: front_lawn_power
-    - script.execute: countdown_front_lawn
-    - delay: !lambda "return id(front_lawn_watering_duration).state * 60 * 1000;"
-    - switch.turn_off: front_lawn_power
+      - switch.turn_on: front_lawn_power
+      - script.execute: countdown_front_lawn
+      - delay: !lambda "return id(front_lawn_watering_duration).state * 60 * 1000;"
+      - switch.turn_off: front_lawn_power
     turn_off_action:
-    - switch.turn_off: front_lawn_power
+      - switch.turn_off: front_lawn_power
     on_turn_off:
-    - script.stop: countdown_front_lawn
-    - sensor.template.publish:
-        id: time_remaining_front_lawn
-        state: 0
+      - script.stop: countdown_front_lawn
+      - sensor.template.publish:
+          id: time_remaining_front_lawn
+          state: 0
+
   - platform: template
     name: "Front Drippers"
+    device_id: front_drippers
     icon: "mdi:water"
     lambda: "return id(front_drippers_power).state;"
     turn_on_action:
-    - switch.turn_on: front_drippers_power
-    - script.execute: countdown_front_drippers
-    - delay: !lambda "return id(front_drippers_watering_duration).state * 60 * 1000;"
-    - switch.turn_off: front_drippers_power
+      - switch.turn_on: front_drippers_power
+      - script.execute: countdown_front_drippers
+      - delay: !lambda "return id(front_drippers_watering_duration).state * 60 * 1000;"
+      - switch.turn_off: front_drippers_power
     turn_off_action:
-    - switch.turn_off: front_drippers_power
+      - switch.turn_off: front_drippers_power
     on_turn_off:
-    - script.stop: countdown_front_drippers
-    - sensor.template.publish:
-        id: time_remaining_front_drippers
-        state: 0
+      - script.stop: countdown_front_drippers
+      - sensor.template.publish:
+          id: time_remaining_front_drippers
+          state: 0
 
   - platform: template
     name: "Back Herbs"
+    device_id: back_herbs
     icon: "mdi:water"
     lambda: "return id(back_herbs_power).state;"
     turn_on_action:
-    - switch.turn_on: back_herbs_power
-    - script.execute: countdown_back_herbs
-    - delay: !lambda "return id(back_herbs_watering_duration).state * 60 * 1000;"
-    - switch.turn_off: back_herbs_power
+      - switch.turn_on: back_herbs_power
+      - script.execute: countdown_back_herbs
+      - delay: !lambda "return id(back_herbs_watering_duration).state * 60 * 1000;"
+      - switch.turn_off: back_herbs_power
     turn_off_action:
-    - switch.turn_off: back_herbs_power
+      - switch.turn_off: back_herbs_power
     on_turn_off:
-    - script.stop: countdown_back_herbs
-    - sensor.template.publish:
-        id: time_remaining_back_herbs
-        state: 0
+      - script.stop: countdown_back_herbs
+      - sensor.template.publish:
+          id: time_remaining_back_herbs
+          state: 0
+
   - platform: template
     name: "Back Lawn"
+    device_id: back_lawn
     icon: "mdi:water"
     lambda: "return id(back_lawn_power).state;"
     turn_on_action:
-    - switch.turn_on: back_lawn_power
-    - script.execute: countdown_back_lawn
-    - delay: !lambda "return id(back_lawn_watering_duration).state * 60 * 1000;"
-    - switch.turn_off: back_lawn_power
+      - switch.turn_on: back_lawn_power
+      - script.execute: countdown_back_lawn
+      - delay: !lambda "return id(back_lawn_watering_duration).state * 60 * 1000;"
+      - switch.turn_off: back_lawn_power
     turn_off_action:
-    - switch.turn_off: back_lawn_power
+      - switch.turn_off: back_lawn_power
     on_turn_off:
-    - script.stop: countdown_back_lawn
-    - sensor.template.publish:
-        id: time_remaining_back_lawn
-        state: 0
+      - script.stop: countdown_back_lawn
+      - sensor.template.publish:
+          id: time_remaining_back_lawn
+          state: 0
+
   - platform: template
     name: "Back Drippers"
+    device_id: back_drippers
     icon: "mdi:water"
     lambda: "return id(back_drippers_power).state;"
     turn_on_action:
-    - switch.turn_on: back_drippers_power
-    - script.execute: countdown_back_drippers
-    - delay: !lambda "return id(back_drippers_watering_duration).state * 60 * 1000;"
-    - switch.turn_off: back_drippers_power
+      - switch.turn_on: back_drippers_power
+      - script.execute: countdown_back_drippers
+      - delay: !lambda "return id(back_drippers_watering_duration).state * 60 * 1000;"
+      - switch.turn_off: back_drippers_power
     turn_off_action:
-    - switch.turn_off: back_drippers_power
+      - switch.turn_off: back_drippers_power
     on_turn_off:
-    - script.stop: countdown_back_drippers
-    - sensor.template.publish:
-        id: time_remaining_back_drippers
-        state: 0
+      - script.stop: countdown_back_drippers
+      - sensor.template.publish:
+          id: time_remaining_back_drippers
+          state: 0
 
 number:
   - platform: template
     name: "Front Herbs Watering Duration"
-    id: 'front_herbs_watering_duration'
+    id: front_herbs_watering_duration
+    device_id: front_herbs
     optimistic: true
     min_value: 1
     max_value: 30
@@ -215,7 +258,8 @@ number:
     step: 1
   - platform: template
     name: "Front Lawn Watering Duration"
-    id: 'front_lawn_watering_duration'
+    id: front_lawn_watering_duration
+    device_id: front_lawn
     optimistic: true
     min_value: 10
     max_value: 45
@@ -224,7 +268,8 @@ number:
     step: 1
   - platform: template
     name: "Front Drippers Watering Duration"
-    id: 'front_drippers_watering_duration'
+    id: front_drippers_watering_duration
+    device_id: front_drippers
     optimistic: true
     min_value: 10
     max_value: 60
@@ -233,7 +278,8 @@ number:
     step: 1
   - platform: template
     name: "Back Herbs Watering Duration"
-    id: 'back_herbs_watering_duration'
+    id: back_herbs_watering_duration
+    device_id: back_herbs
     optimistic: true
     min_value: 1
     max_value: 30
@@ -242,7 +288,8 @@ number:
     step: 1
   - platform: template
     name: "Back Lawn Watering Duration"
-    id: 'back_lawn_watering_duration'
+    id: back_lawn_watering_duration
+    device_id: back_lawn
     optimistic: true
     min_value: 10
     max_value: 45
@@ -251,7 +298,8 @@ number:
     step: 1
   - platform: template
     name: "Back Drippers Watering Duration"
-    id: 'back_drippers_watering_duration'
+    id: back_drippers_watering_duration
+    device_id: back_drippers
     optimistic: true
     min_value: 10
     max_value: 60
@@ -285,9 +333,7 @@ globals:
     restore_value: no
     initial_value: '0'
 
-
 script:
-
   - id: countdown_front_herbs
     then:
       - lambda: 'id(front_herbs_time_remaining) = id(front_herbs_watering_duration).state * 60;'
@@ -300,6 +346,7 @@ script:
                 state: !lambda 'return id(front_herbs_time_remaining);'
             - delay: 5 seconds
             - lambda: "id(front_herbs_time_remaining) -= 5;"
+
   - id: countdown_front_lawn
     then:
       - lambda: 'id(front_lawn_time_remaining) = id(front_lawn_watering_duration).state * 60;'
@@ -312,6 +359,7 @@ script:
                 state: !lambda 'return id(front_lawn_time_remaining);'
             - delay: 5 seconds
             - lambda: "id(front_lawn_time_remaining) -= 5;"
+
   - id: countdown_front_drippers
     then:
       - lambda: 'id(front_drippers_time_remaining) = id(front_drippers_watering_duration).state * 60;'
@@ -324,6 +372,7 @@ script:
                 state: !lambda 'return id(front_drippers_time_remaining);'
             - delay: 5 seconds
             - lambda: "id(front_drippers_time_remaining) -= 5;"
+
   - id: countdown_back_herbs
     then:
       - lambda: 'id(back_herbs_time_remaining) = id(back_herbs_watering_duration).state * 60;'
@@ -336,6 +385,7 @@ script:
                 state: !lambda 'return id(back_herbs_time_remaining);'
             - delay: 5 seconds
             - lambda: "id(back_herbs_time_remaining) -= 5;"
+
   - id: countdown_back_lawn
     then:
       - lambda: 'id(back_lawn_time_remaining) = id(back_lawn_watering_duration).state * 60;'
@@ -348,6 +398,7 @@ script:
                 state: !lambda 'return id(back_lawn_time_remaining);'
             - delay: 5 seconds
             - lambda: "id(back_lawn_time_remaining) -= 5;"
+
   - id: countdown_back_drippers
     then:
       - lambda: 'id(back_drippers_time_remaining) = id(back_drippers_watering_duration).state * 60;'
@@ -360,3 +411,14 @@ script:
                 state: !lambda 'return id(back_drippers_time_remaining);'
             - delay: 5 seconds
             - lambda: "id(back_drippers_time_remaining) -= 5;"
+
+# BLE tracking & proxy
+esp32_ble_tracker:
+  scan_parameters:
+    interval: 1100ms
+    window: 1100ms
+    active: true
+
+bluetooth_proxy:
+  active: true
+  connection_slots: 3

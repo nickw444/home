@@ -1,0 +1,401 @@
+esphome:
+  name: "kitchen-stat-display"
+  friendly_name: "Kitchen Stat Display"
+
+esp32:
+  board: esp32dev
+
+psram:
+  mode: quad
+  speed: 80MHz
+
+logger:
+
+api:
+  encryption:
+    key: !secret kitchen_stat_display_api_encryption_key
+
+ota:
+  - platform: esphome
+    password: !secret kitchen_stat_display_ota_password
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+  ap:
+    ssid: "Touchscreen-Demo"
+    password: !secret wifi_fallback_password
+
+captive_portal:
+
+
+time:
+  - platform: homeassistant
+    timezone: "Australia/Melbourne"
+    id: esptime
+
+web_server:
+
+spi:
+  mosi_pin: GPIO15
+  clk_pin: GPIO14
+
+i2c:
+  sda: GPIO21
+  scl: GPIO22
+
+output:
+  - platform: ledc
+    pin: GPIO32
+    id: backlight_pwm
+light:
+  - platform: monochromatic
+    output: backlight_pwm
+    name: "Display Backlight"
+    id: back_light
+    restore_mode: ALWAYS_ON
+
+binary_sensor:
+  - platform: gpio
+    pin: 
+      number: GPIO18
+      mode:
+        input: true
+        pullup: true
+      inverted: true
+    name: "Bottom Button"
+    on_press: 
+      then:
+        - light.toggle:
+            id: back_light
+
+display:
+  - platform: ili9xxx
+    model: gc9a01a
+    id: round_disp
+    cs_pin: GPIO5
+    dc_pin: GPIO27
+    reset_pin: GPIO33
+    rotation: 0
+    invert_colors: true
+    color_palette: 8BIT
+    auto_clear_enabled: false
+    update_interval: never
+
+sensor:
+    - platform: homeassistant
+      id: ha_inverter_meter_power
+      entity_id: sensor.inverter_meter_power
+      on_value:
+        then:
+          - lvgl.indicator.update:
+              id: indicator_battery_power
+              value: !lambda "return x;"
+          - lvgl.image.update:
+              id: img_inverter_meter_power
+              src: !lambda "return x >= 0 ? id(mdi_home_import_outline) : id(mdi_home_export_outline);"
+          - if:
+              condition:
+                lambda: 'return x > 1000;'
+              then:
+                - lvgl.label.update:
+                    id: label_inverter_meter_power
+                    text:
+                      format: "%.02fkW"  
+                      args: ['x/1000']
+              else:
+                - lvgl.label.update:
+                    id: label_inverter_meter_power
+                    text:
+                      format: "%.0fW"  
+                      args: ['x']
+    - platform: homeassistant
+      id: ha_inverter_total_active_power
+      entity_id: sensor.inverter_total_active_power
+      on_value:
+        then:
+          - if:
+              condition:
+                lambda: 'return x > 1000;'
+              then:
+                - lvgl.label.update:
+                    id: label_inverter_total_active_power
+                    text:
+                      format: "%.02fkW"  
+                      args: ['x/1000']
+              else:
+                - lvgl.label.update:
+                    id: label_inverter_total_active_power
+                    text:
+                      format: "%.0fW"  
+                      args: ['x']
+    - platform: homeassistant
+      id: ha_inverter_load_power
+      entity_id: sensor.inverter_load_power
+      on_value:
+        then:
+          - if:
+              condition:
+                lambda: 'return x > 1000;'
+              then:
+                - lvgl.label.update:
+                    id: label_inverter_load_power
+                    text:
+                      format: "%.02fkW"  
+                      args: ['x/1000']
+              else:
+                - lvgl.label.update:
+                    id: label_inverter_load_power
+                    text:
+                      format: "%.0fW"  
+                      args: ['x']
+touchscreen:
+  id: touch
+  platform: cst816
+  interrupt_pin: GPIO19
+  # on_touch:
+  #   - lambda: |-
+  #       ESP_LOGI("cal", "x=%d, y=%d, x_raw=%d, y_raw=%0d",
+  #           touch.x,
+  #           touch.y,
+  #           touch.x_raw,
+  #           touch.y_raw
+  #       );
+  #   - component.update: watchface
+  #   - delay: 5s
+  #   - component.update: watchface
+  # on_update:
+  #   - lambda: |-
+  #         for (auto touch: touches)  {
+  #             if (touch.state <= 2) {
+  #                ESP_LOGI("Touch points:", "id=%d x=%d, y=%d", touch.id, touch.x, touch.y);
+  #             }
+  #         }
+
+image:
+  - file: mdi:home-lightning-bolt-outline
+    type: GRAYSCALE
+    id: mdi_home_lightning_bolt_outlint
+    resize: 35x35
+  - file: mdi:home-export-outline
+    type: GRAYSCALE
+    id: mdi_home_export_outline
+    resize: 35x35
+  - file: mdi:home-import-outline
+    type: GRAYSCALE
+    id: mdi_home_import_outline
+    resize: 35x35
+  - file: mdi:solar-power-variant-outline
+    type: GRAYSCALE
+    id: mdi_solar_power_variant_outline
+    resize: 35x35
+
+lvgl:
+    bg_color: 0
+    border_width: 0
+    outline_width: 0
+    #shadow_width: 0
+    text_font: unscii_16
+    align: center
+    style_definitions:
+      - id: font_style
+        text_font: MONTSERRAT_28
+        #text_font: unscii_16
+        align: center
+        text_color: 0xFFFFFF
+        #bg_opa: cover
+        bg_opa: TRANSP
+        bg_color: 0
+        radius: 4
+        pad_all: 2 
+      - id: details_style
+        text_font: MONTSERRAT_16
+        align: center
+        text_color: 0xFFFFFF
+        #bg_opa: cover
+        bg_opa: TRANSP
+        bg_color: 0
+        radius: 4
+        pad_all: 2 
+    page_wrap: true
+    pages:
+      - id: main_page
+        widgets:
+          - obj: # Meter
+              height: 240 # needed to be explicitily defined for my round display to not have weird border line overlapping gauge
+              width: 240
+              align: center
+              bg_color: 0
+              #bg_opa: TRANSP
+              border_width: 0
+              outline_width: 0
+              #shadow_width: 0
+              pad_all: 0
+              scrollbar_mode: "OFF"
+              clip_corner: true
+              radius: 120
+              widgets:
+                - meter: # Gradient color  arc
+                    height: 100%
+                    width: 100%
+                    border_width: 0
+                    outline_width: 0
+                    align: center
+                    bg_color: 0
+                    ignore_layout: true
+                    #bg_opa: TRANSP
+                    scales:
+                      angle_range: 180 # sets the total angle to 180 = starts mid left and ends mid right
+                      range_from: -5000
+                      range_to: 5000
+                      ticks:
+                        count: 0
+                      indicators:
+                        - line:
+                            id: indicator_battery_power
+                            width: 8
+                            color: 0xFFFFFF
+                            r_mod: 20 #increase radius to maximize screen utilization
+                            value: 0 # initial value
+                        #- img:
+                        #    src: icon_house #doesnt seem to be fully implemented yet
+                        #    id: indicator_battery_power
+                        #    value: 0 # initial value
+                        - arc:
+                            color: 0x00bb2c
+                            r_mod: 20 #increase radius to maximize screen utilization
+                            width: 26
+                            start_value: -5000
+                            end_value: -3000
+                        - arc:
+                            color: 0x00a2bb
+                            r_mod: 20 #increase radius to maximize screen utilization
+                            width: 26
+                            start_value: -3000
+                            end_value: -500
+                        - arc:
+                            color: 0xa8a5a5
+                            r_mod: 20 #increase radius to maximize screen utilization
+                            width: 26
+                            start_value: -500
+                            end_value: 0
+                        - arc:
+                            color: 0x9da3a5
+                            r_mod: 20
+                            width: 26
+                            start_value: 0
+                            end_value: 500
+                        - arc:
+                            color: 0xc17a00
+                            r_mod: 20
+                            width: 26
+                            start_value: 500
+                            end_value: 2000
+                        - arc:
+                            color: 0xc11000
+                            r_mod: 20
+                            width: 26
+                            start_value: 2000
+                            end_value: 5000
+                - obj: # to erase middle part of meter indicator line
+                    height: 180
+                    width: 180
+                    radius: 90 #should be half of the height, width to make a circle
+                    align: center
+                    border_width: 0
+                    pad_all: 0
+                    bg_color: 0
+                    ignore_layout: true
+                - label: # gauge lower and higher range indicators
+                    styles: font_style
+                    text_font: MONTSERRAT_16 # override font size
+                    y: 10 #positive = lower
+                    x: -98
+                    text: "-5kW"
+                    ignore_layout: true
+                - label:
+                    styles: font_style
+                    text_font: MONTSERRAT_16 # override font size
+                    y: 10
+                    x: 98
+                    text: "5kW"
+                    ignore_layout: true
+
+                - obj:
+                    x: 0
+                    y: 0
+                    width: SIZE_CONTENT
+                    height: SIZE_CONTENT
+                    align: center
+                    bg_opa: TRANSP
+                    border_width: 0
+                    outline_width: 0
+                    scrollable: false
+                    scrollbar_mode: "OFF"
+                    layout:
+                      type: grid
+                      # grid_row_align: end
+                      grid_rows: [CONTENT, CONTENT, CONTENT,CONTENT]
+                      grid_columns: [CONTENT,CONTENT]
+                      grid_column_align: CENTER
+                      pad_row: 6px
+                      pad_column: 0
+                    widgets:
+                      - image:
+                          src: mdi_home_import_outline
+                          align: center
+                          image_recolor: 0xffffff
+                          image_recolor_opa: 100% #opacity defaults to 0% = must set this for recolor to take effect
+                          grid_cell_row_pos: 0
+                          grid_cell_column_pos: 0
+                          id: img_inverter_meter_power
+                      - label:
+                          styles: font_style
+                          id: label_inverter_meter_power
+                          text_color: 0xffffff
+                          grid_cell_row_pos: 0
+                          grid_cell_column_pos: 1
+                          grid_cell_x_align: CENTER
+                          text: ""
+                      - obj: # Divider
+                          height: 1px
+                          width: 100%
+                          bg_opa: TRANSP
+                          border_width: 0
+                          outline_width: 0
+                          grid_cell_row_pos: 1
+                          grid_cell_column_pos: 0
+                          grid_cell_column_span: 2
+                      - image:
+                          src: mdi_home_lightning_bolt_outlint
+                          align: center
+                          image_recolor: 0xffffff
+                          image_recolor_opa: 100% #opacity defaults to 0% = must set this for recolor to take effect
+                          grid_cell_row_pos: 2
+                          grid_cell_column_pos: 0
+                      - label:
+                          styles: font_style
+                          text_font: MONTSERRAT_22
+                          id: label_inverter_load_power
+                          text_color: 0xffffff
+                          grid_cell_row_pos: 2
+                          grid_cell_column_pos: 1
+                          grid_cell_x_align: CENTER
+                          text: ""
+                      - image:
+                          src: mdi_solar_power_variant_outline
+                          align: center
+                          image_recolor: 0xffd000
+                          image_recolor_opa: 100% #opacity defaults to 0% = must set this for recolor to take effect
+                          grid_cell_row_pos: 3
+                          grid_cell_column_pos: 0
+                      - label:
+                          styles: font_style
+                          text_font: MONTSERRAT_22
+                          id: label_inverter_total_active_power
+                          text_color: 0xffd000
+                          grid_cell_row_pos: 3
+                          grid_cell_column_pos: 1
+                          grid_cell_x_align: CENTER
+                          text: ""
