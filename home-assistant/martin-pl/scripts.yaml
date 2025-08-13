@@ -1,0 +1,26 @@
+dog_door_unlock_for_15_min:
+  sequence:
+    - choose:
+        - conditions:
+            - condition: state
+              entity_id: lock.backyard_locked_in
+              state: locked
+          sequence:
+            - action: lock.unlock
+              metadata: {}
+              data: {}
+              target:
+                entity_id: lock.backyard_locked_in
+            - delay:
+                hours: 0
+                minutes: 15
+                seconds: 0
+                milliseconds: 0
+    - action: lock.lock
+      metadata: {}
+      data: {}
+      target:
+        entity_id: lock.backyard_locked_in
+  alias: "dog door: toggle and unlock for 15 min"
+  description: ""
+  mode: restart
