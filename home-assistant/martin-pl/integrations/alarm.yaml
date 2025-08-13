@@ -19,7 +19,6 @@ input_select:
       - armed_night
       - armed_away
       - armed_custom_bypass
-    initial: "armed_away"
 
 automation:
   - id: "1601034054491"
