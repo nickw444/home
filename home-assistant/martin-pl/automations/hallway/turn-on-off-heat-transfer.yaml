@@ -1,0 +1,46 @@
+id: "1753008304907"
+alias: "ac: turn on/off heat transfer"
+description: ""
+triggers:
+  - trigger: state
+    entity_id:
+      - binary_sensor.heat_transfer_fan_desired_state
+    to: "on"
+    for:
+      hours: 0
+      minutes: 1
+      seconds: 0
+    id: turn_on
+  - trigger: state
+    entity_id:
+      - binary_sensor.heat_transfer_fan_desired_state
+    to: "off"
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 30
+    id: turn_off
+conditions: []
+actions:
+  - choose:
+      - conditions:
+          - condition: trigger
+            id:
+              - turn_on
+        sequence:
+          - action: switch.turn_on
+            metadata: {}
+            data: {}
+            target:
+              entity_id: switch.heat_transfer
+      - conditions:
+          - condition: trigger
+            id:
+              - turn_off
+        sequence:
+          - action: switch.turn_off
+            metadata: {}
+            data: {}
+            target:
+              entity_id: switch.heat_transfer
+mode: single

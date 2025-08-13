@@ -1,7 +1,15 @@
 binary_sensor:
   - platform: template
     sensors:
-      air_conditioner_power:
-        friendly_name: "Air Conditioner Power"
+      heat_transfer_fan_desired_state:
+        friendly_name: "Heat Transfer Fan Desired State"
         value_template: |
-          {{ states('sensor.air_conditioning_power')|float >= 25 }}
+          {{ 
+            (is_state('binary_sensor.study_door_contact', 'on') or is_state('binary_sensor.kates_study_door_contact', 'on'))
+            and 
+            (is_state('climate.hallway', 'heat') or 
+            is_state('climate.hallway', 'cool') or
+            is_state('climate.hallway', 'heat_cool') or 
+            is_state('climate.hallway', 'dry') or
+            is_state('climate.hallway', 'fan_only'))
+          }}
