@@ -1,0 +1,55 @@
+id: "1747046547565"
+alias: "shed: motion lights"
+description: ""
+triggers:
+  - trigger: state
+    entity_id:
+      - binary_sensor.shed_motion_occupancy
+    from: "off"
+    to: "on"
+  - trigger: state
+    entity_id:
+      - binary_sensor.shed_door_contact
+    from: "off"
+    to: "on"
+  # - trigger: state
+  #   entity_id:
+  #     - binary_sensor.shed_fp2_presence_sensor_shed
+  #   from: "off"
+  #   to: "on"
+conditions:
+  - condition: state
+    entity_id: group.all_people
+    state: home
+  - condition: state
+    entity_id: sun.sun
+    state: below_horizon
+actions:
+  - action: light.turn_on
+    metadata: {}
+    data: {}
+    target:
+      entity_id: light.shed
+  - wait_for_trigger:
+      - trigger: template
+        value_template: >
+          {{
+          (is_state('binary_sensor.shed_motion_occupancy', 'off') or is_state('binary_sensor.shed_motion_occupancy', 'unavailable')) and
+          (is_state('binary_sensor.shed_fp2_presence_sensor_shed', 'off') or is_state('binary_sensor.shed_fp2_presence_sensor_shed', 'unavailable'))
+          }}
+        for:
+          hours: 0
+          minutes: 5
+          seconds: 0
+    timeout:
+      hours: 1
+      minutes: 0
+      seconds: 0
+      milliseconds: 0
+    continue_on_timeout: true
+  - action: light.turn_off
+    metadata: {}
+    data: {}
+    target:
+      entity_id: light.shed
+mode: single
