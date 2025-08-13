@@ -1,0 +1,47 @@
+id: "1735967523621"
+alias: Dishwasher Status
+description: ""
+triggers:
+  - trigger: state
+    entity_id:
+      - binary_sensor.dishwasher_standby
+    from: "on"
+    to: "off"
+    id: Dishwasher Off
+  - trigger: state
+    entity_id:
+      - binary_sensor.dishwasher_standby
+    from: "off"
+    to: "on"
+    id: Dishwasher Dirty
+  - trigger: state
+    entity_id:
+      - binary_sensor.dishwasher_running
+    from: "off"
+    to: "on"
+    id: Dishwasher Running
+  - trigger: state
+    entity_id:
+      - binary_sensor.dishwasher_running
+    from: "on"
+    to: "off"
+    id: Dishwasher Clean
+conditions: []
+actions:
+  - if:
+      - condition: state
+        entity_id: light.dishwasher_main
+        state: "on"
+    then:
+      - action: select.select_option
+        metadata: {}
+        data:
+          option: "{{ trigger.id }}"
+        target:
+          entity_id: select.dishwasher_preset
+  - action: input_select.select_option
+    data:
+      option: "{{ trigger.id }}"
+    target:
+      entity_id: input_select.dishwasher_previous_preset_state
+mode: single

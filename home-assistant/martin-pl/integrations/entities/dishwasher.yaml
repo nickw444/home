@@ -1,0 +1,32 @@
+template:
+  binary_sensor:
+    - name: "Dishwasher Running"
+      unique_id: dishwasher_running
+      delay_on:
+        seconds: 10
+      delay_off:
+        minutes: 5
+      state: >-
+        {{ states('sensor.dishwasher_current_consumption')|float > 3 }}
+      icon: "mdi:dishwasher"
+      availability: >-
+        {{ has_value('switch.dishwasher') }}
+    - name: "Dishwasher Standby"
+      unique_id: dishwasher_standby
+      delay_on:
+        seconds: 10
+      delay_off: 0
+      state: >-
+        {{ states('sensor.dishwasher_current_consumption')|float > 0.5 }}
+      icon: "mdi:dishwasher"
+      availability: >-
+        {{ has_value('switch.dishwasher') }}
+
+input_select:
+  dishwasher_previous_preset_state:
+    name: "dishwasher previous preset state"
+    options:
+      - Dishwasher Off
+      - Dishwasher Dirty
+      - Dishwasher Clean
+      - Dishwasher Running
