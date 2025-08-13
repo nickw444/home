@@ -1,0 +1,44 @@
+id: "1750157723171"
+alias: "hallway ac: timer 1"
+description: ""
+triggers:
+  - trigger: state
+    entity_id:
+      - binary_sensor.hallway_ac_timer_1
+    to: "on"
+    id: "on"
+  - trigger: state
+    entity_id:
+      - binary_sensor.hallway_ac_timer_1
+    to: "off"
+    id: "off"
+conditions: []
+actions:
+  - choose:
+      - conditions:
+          - condition: trigger
+            id:
+              - "on"
+        sequence:
+          - action: scene.create
+            metadata: {}
+            data:
+              scene_id: hallway_ac_before_state
+              snapshot_entities:
+                - climate.hallway
+          - action: scene.turn_on
+            metadata: {}
+            data: {}
+            target:
+              entity_id: scene.hallway_ac_timer_1_preset
+      - conditions:
+          - condition: trigger
+            id:
+              - "off"
+        sequence:
+          - action: scene.turn_on
+            metadata: {}
+            data: {}
+            target:
+              entity_id: scene.hallway_ac_before_state
+mode: single
