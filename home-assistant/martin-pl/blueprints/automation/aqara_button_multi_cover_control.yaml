@@ -30,7 +30,7 @@ blueprint:
         entity:
           domain: cover
 
-trigger:
+triggers:
   - platform: state
     entity_id: !input button_action
     to: single
@@ -48,7 +48,7 @@ trigger:
 # |          |        | After Sunset: Close Both    |
 # | Open     | Closed | Open Both                   |
 # | Closed   | Closed | Open Blockout               |
-action:
+actions:
   - choose:
       - conditions:
           - condition: trigger

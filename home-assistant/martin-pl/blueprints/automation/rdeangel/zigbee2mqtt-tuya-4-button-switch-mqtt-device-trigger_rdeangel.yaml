@@ -1,0 +1,229 @@
+blueprint:
+  name: Zigbee2MQTT - Tuya 4-Button Switch (MQTT Device Trigger) - rdeangel
+  description: "Blueprint Version: 11-01-25\n Blueprint Name: Zigbee2MQTT - Tuya 4-Button
+    Switch (MQTT Device Trigger) - rdeangel\n\n This blueprint uses MQTT `device`
+    based triggers and it will be triggered only when the selected Device MQTT messages
+    are received."
+  domain: automation
+  input:
+    mode:
+      name: Automation Modes
+      description: https://www.home-assistant.io/docs/automation/modes/
+      default: parallel
+      selector:
+        select:
+          mode: dropdown
+          options:
+          - single
+          - restart
+          - queued
+          - parallel
+          sort: false
+          custom_value: false
+          multiple: false
+    zigbee_device:
+      name: Zigbee Device - Tuya TS0044 4 Buttons (and alike)
+      description: Select the correct Zigbee device to use.
+      selector:
+        device:
+          integration: mqtt
+          multiple: false
+    button_one_short_press:
+      name: Single Press - Button 1
+      description: Action to run on Button 1 - Single Press
+      default: []
+      selector:
+        action: {}
+    button_one_double_press:
+      name: Double Press - Button 1
+      description: Action to run on Button 1 - Double Press
+      default: []
+      selector:
+        action: {}
+    button_one_long_press:
+      name: Long Press - Button 1
+      description: Action to run on Button 1 - Long Press
+      default: []
+      selector:
+        action: {}
+    button_two_short_press:
+      name: Single Press - Button 2
+      description: Action to run on Button 2 - Single Press
+      default: []
+      selector:
+        action: {}
+    button_two_double_press:
+      name: Double Press - Button 2
+      description: Action to run on Button 2 - Double Press
+      default: []
+      selector:
+        action: {}
+    button_two_long_press:
+      name: Long Press - Button 2
+      description: Action to run on Button 2 - Long Press
+      default: []
+      selector:
+        action: {}
+    button_three_short_press:
+      name: Single Press - Button 3
+      description: Action to run on Button 3 - Single Press
+      default: []
+      selector:
+        action: {}
+    button_three_double_press:
+      name: Double Press - Button 3
+      description: Action to run on Button 3 - Double Press
+      default: []
+      selector:
+        action: {}
+    button_three_long_press:
+      name: Long Press - Button 3
+      description: Action to run on Button 3 - Long Press
+      default: []
+      selector:
+        action: {}
+    button_four_short_press:
+      name: Single Press - Button 4
+      description: Action to run on Button 4 - Single Press
+      default: []
+      selector:
+        action: {}
+    button_four_double_press:
+      name: Double Press - Button 4
+      description: Action to run on Button 4 - Double Press
+      default: []
+      selector:
+        action: {}
+    button_four_long_press:
+      name: Long Press - Button 4
+      description: Action to run on Button 4 - Long Press
+      default: []
+      selector:
+        action: {}
+  source_url: https://gist.github.com/rdeangel/0362181f03cbce58b883eeaf2baa0863
+mode: !input mode
+max_exceeded: silent
+trigger:
+- platform: device
+  device_id: !input zigbee_device
+  domain: mqtt
+  type: action
+  subtype: 1_single
+  id: button_one_short_press
+- platform: device
+  device_id: !input zigbee_device
+  domain: mqtt
+  type: action
+  subtype: 1_double
+  id: button_one_double_press
+- platform: device
+  device_id: !input zigbee_device
+  domain: mqtt
+  type: action
+  subtype: 1_hold
+  id: button_one_long_press
+- platform: device
+  device_id: !input zigbee_device
+  domain: mqtt
+  type: action
+  subtype: 2_single
+  id: button_two_short_press
+- platform: device
+  device_id: !input zigbee_device
+  domain: mqtt
+  type: action
+  subtype: 2_double
+  id: button_two_double_press
+- platform: device
+  device_id: !input zigbee_device
+  domain: mqtt
+  type: action
+  subtype: 2_hold
+  id: button_two_long_press
+- platform: device
+  device_id: !input zigbee_device
+  domain: mqtt
+  type: action
+  subtype: 3_single
+  id: button_three_short_press
+- platform: device
+  device_id: !input zigbee_device
+  domain: mqtt
+  type: action
+  subtype: 3_double
+  id: button_three_double_press
+- platform: device
+  device_id: !input zigbee_device
+  domain: mqtt
+  type: action
+  subtype: 3_hold
+  id: button_three_long_press
+- platform: device
+  device_id: !input zigbee_device
+  domain: mqtt
+  type: action
+  subtype: 4_single
+  id: button_four_short_press
+- platform: device
+  device_id: !input zigbee_device
+  domain: mqtt
+  type: action
+  subtype: 4_double
+  id: button_four_double_press
+- platform: device
+  device_id: !input zigbee_device
+  domain: mqtt
+  type: action
+  subtype: 4_hold
+  id: button_four_long_press
+condition: []
+action:
+- choose:
+  - conditions:
+    - condition: trigger
+      id: button_one_short_press
+    sequence: !input button_one_short_press
+  - conditions:
+    - condition: trigger
+      id: button_one_double_press
+    sequence: !input button_one_double_press
+  - conditions:
+    - condition: trigger
+      id: button_one_long_press
+    sequence: !input button_one_long_press
+  - conditions:
+    - condition: trigger
+      id: button_two_short_press
+    sequence: !input button_two_short_press
+  - conditions:
+    - condition: trigger
+      id: button_two_double_press
+    sequence: !input button_two_double_press
+  - conditions:
+    - condition: trigger
+      id: button_two_long_press
+    sequence: !input button_two_long_press
+  - conditions:
+    - condition: trigger
+      id: button_three_short_press
+    sequence: !input button_three_short_press
+  - conditions:
+    - condition: trigger
+      id: button_three_double_press
+    sequence: !input button_three_double_press
+  - conditions:
+    - condition: trigger
+      id: button_three_long_press
+    sequence: !input button_three_long_press
+  - conditions:
+    - condition: trigger
+      id: button_four_short_press
+    sequence: !input button_four_short_press
+  - conditions:
+    - condition: trigger
+      id: button_four_double_press
+    sequence: !input button_four_double_press
+  - conditions:
+    - condition: trigger
+      id: button_four_long_press
+    sequence: !input button_four_long_press
