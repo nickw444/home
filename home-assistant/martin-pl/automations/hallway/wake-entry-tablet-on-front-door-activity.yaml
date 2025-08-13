@@ -1,0 +1,44 @@
+id: "1668130130306"
+alias: Wake entry tablet on Front Door Activity
+description: ""
+trigger:
+  - platform: state
+    entity_id:
+      - binary_sensor.front_door_doorbell
+    from: "off"
+    to: "on"
+  - platform: state
+    entity_id:
+      - binary_sensor.front_door_person_detected
+    from: "off"
+    to: "on"
+condition: []
+action:
+  - service: notify.mobile_app_entry_tablet
+    data:
+      message: command_screen_on
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 2
+      milliseconds: 0
+  - service: browser_mod.popup
+    data:
+      size: wide
+      timeout: 180000
+      title: Front Door
+      content:
+        show_state: false
+        show_name: false
+        camera_view: live
+        type: picture-entity
+        entity: camera.front_door_high
+        name: Front Door
+        camera_image: camera.front_door_high
+        tap_action:
+          action: none
+        hold_action:
+          action: none
+    target:
+      device_id: entry-tablet
+mode: single

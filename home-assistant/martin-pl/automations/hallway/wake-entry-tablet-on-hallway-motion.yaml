@@ -1,0 +1,15 @@
+id: "16681301334584"
+alias: Wake entry tablet on Hallway Motion
+description: ""
+trigger:
+  - platform: state
+    entity_id:
+      - binary_sensor.hallway_motion_occupancy
+    from: "off"
+    to: "on"
+condition: []
+action:
+  - service: notify.mobile_app_entry_tablet
+    data:
+      message: command_screen_on
+mode: single
