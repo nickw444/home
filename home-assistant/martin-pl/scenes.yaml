@@ -1,0 +1,70 @@
+- id: '1750157152445'
+  name: Hallway AC Timer 1 Preset
+  entities:
+    climate.hallway:
+      hvac_modes:
+      - 'off'
+      - heat_cool
+      - cool
+      - heat
+      - fan_only
+      - dry
+      min_temp: 16
+      max_temp: 30
+      target_temp_step: 1
+      fan_modes:
+      - auto
+      - low
+      - medium
+      - high
+      - quiet
+      swing_modes:
+      - 'off'
+      - both
+      - vertical
+      - horizontal
+      current_temperature: 21
+      temperature: 30
+      fan_mode: medium
+      swing_mode: both
+      friendly_name: Hallway AC
+      supported_features: 425
+      state: heat
+  metadata:
+    climate.hallway:
+      entity_only: true
+- id: '1750157193614'
+  name: Hallway AC Timer Previous State
+  entities:
+    climate.hallway:
+      hvac_modes:
+      - 'off'
+      - heat_cool
+      - cool
+      - heat
+      - fan_only
+      - dry
+      min_temp: 16
+      max_temp: 30
+      target_temp_step: 1
+      fan_modes:
+      - auto
+      - low
+      - medium
+      - high
+      - quiet
+      swing_modes:
+      - 'off'
+      - both
+      - vertical
+      - horizontal
+      current_temperature: 21
+      temperature: 29
+      fan_mode: medium
+      swing_mode: both
+      friendly_name: Hallway AC
+      supported_features: 425
+      state: 'off'
+  metadata:
+    climate.hallway:
+      entity_only: true
