@@ -1,0 +1,60 @@
+automation:
+  - id: "1720332159033"
+    alias: "water: increment counter on impulse"
+    description: ""
+    trigger:
+      - platform: state
+        entity_id:
+          - binary_sensor.water_impulse_contact
+        from: "off"
+        to: "on"
+    condition: []
+    action:
+      - service: counter.increment
+        metadata: {}
+        data: {}
+        target:
+          entity_id: counter.water_impulse
+    mode: single
+
+counter:
+  water_impulse:
+    name: "Water Impulse"
+    icon: "mdi:water"
+    step: 1
+
+template:
+  - sensor:
+      - name: "Water Usage"
+        unique_id: water_usage
+        unit_of_measurement: L
+        device_class: water
+        state_class: total_increasing
+        state: >
+          {{ states('counter.water_impulse')|float / 2 }}
+
+sensor:
+  - platform: derivative
+    name: "Water Usage Rate 5m"
+    source: sensor.water_usage
+    unit_time: h
+    time_window: "00:05:00"
+    max_sub_interval: "00:00:15"
+  - platform: derivative
+    name: "Water Usage Rate 10m"
+    source: sensor.water_usage
+    unit_time: h
+    time_window: "00:10:00"
+    max_sub_interval: "00:00:30"
+  - platform: derivative
+    name: "Water Usage Rate 30m"
+    source: sensor.water_usage
+    unit_time: h
+    time_window: "00:30:00"
+    max_sub_interval: "00:01:00"
+  - platform: derivative
+    name: "Water Usage Rate 1h"
+    source: sensor.water_usage
+    unit_time: h
+    time_window: "01:00:00"
+    max_sub_interval: "00:01:00"

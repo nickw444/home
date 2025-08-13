@@ -1,42 +1,137 @@
 template:
+  ### -------------
+  ###  Electricity
+  ### -------------
   - sensor:
-      - name: Electricity Daily Charge
-        unique_id: electricity_daily_charge
+      - name: Electricity Feed In Tariff
+        unique_id: electricity_feed_in_tariff
+        unit_of_measurement: AUD/kWh
+        state: >
+          0.04
+      - name: Electricity Supply Tariff
+        unique_id: electricity_supply_tariff
+        unit_of_measurement: AUD
+        state: >
+          0.9724
+      - name: Electricity Consumption GU Tariff
+        unique_id: electricity_consumption_gu_tariff
+        unit_of_measurement: AUD/kWh
+        state: >
+          0.3512
+      - name: Electricity Consumption EV Tariff
+        unique_id: electricity_consumption_ev_tariff
+        unit_of_measurement: AUD/kWh
+        state: >
+          0.08
+      - name: Electricity Consumption Tariff
+        unique_id: electricity_consumption_tariff
+        unit_of_measurement: AUD/kWh
+        state: >
+          {% if 0 <= now().hour < 6 %}
+            {{ states('sensor.electricity_consumption_ev_tariff') }}
+          {% else %}
+            {{ states('sensor.electricity_consumption_gu_tariff') }}
+          {% endif %}
+
+      - name: Electricity Cumulative Supply Charge
+        unique_id: electricity_cumulative_supply_charge
         unit_of_measurement: $
         device_class: monetary
         state_class: total
         state: >
-          {{ ((now() - strptime(state_attr('sensor.electricity_daily_charge_quarterly', 'last_reset'), '%Y-%m-%dT%H:%M:%S.%f%z')).days + 1) * 0.8423 }}
-      - name: Electricity Daily Charge (Usage)
-        unique_id: electricity_daily_charge_usage
+          {% set days = (now() - strptime('2025-07-01T00:00:00.000+10:00', '%Y-%m-%dT%H:%M:%S.%f%z')).days + 1 %}
+          {{ states('sensor.electricity_supply_tariff')|float * days }}
+      # Special _hack_ sensor to report daily charge to energy dashboard, report 0
+      # usage, but apply "Use an entity tracking the total costs" with cumulative supply
+      # charge entity above.
+      - name: Electricity Supply Charge (Usage)
+        unique_id: electricity_supply_charge_usage
         unit_of_measurement: kWh
         device_class: energy
         state_class: total_increasing
         state: >
           0
 
-utility_meter:
-  electricity_daily_charge_quarterly:
-    unique_id: electricity_tariff__electricity_daily_charge_quarterly
-    source: sensor.electricity_daily_charge_usage
-    cycle: quarterly
-    always_available: true
+  ### -------------
+  ###  Gas
+  ### -------------
 
-sensor:
-  - platform: template
-    sensors:
-      consumption_tariff:
-        friendly_name: Consumption Tariff
-        unit_of_measurement: AUD/kWh
-        value_template: >
-          {% set tariff = { "EV": 0.08, "GU": 0.3016 } %}
-          {% if 0 <= now().hour < 6 %}
-            {{ tariff.EV }}
-          {% else %}
-            {{ tariff.GU }}
-          {% endif %}
-      feed_in_tariff:
-        friendly_name: Feed In Tariff
-        unit_of_measurement: AUD/kWh
-        value_template: >
-          0.07
+  - sensor:
+      - name: Gas Consumption Tariff
+        unique_id: gas_consumption_tariff
+        unit_of_measurement: c/MJ
+        # Naive calculation, AGL do sliding scale pricing, but this will be close enough
+        # for our minimal monthly usage.
+        state: >
+          0.0387
+      - name: Gas Consumption Tariff m³
+        unique_id: gas_consumption_tariff_m3
+        unit_of_measurement: c/m³
+        #  1 m³ of natural gas ≈ 38 MJ (Australian average)
+        state: >
+          {{ states('sensor.gas_consumption_tariff')|float * 38  }}
+      - name: Gas Supply Tariff
+        unique_id: gas_supply_tariff
+        unit_of_measurement: AUD
+        state: >
+          0.5831
+
+      - name: Gas Cumulative Supply Charge
+        unique_id: gas_cumulative_supply_charge
+        unit_of_measurement: $
+        device_class: monetary
+        state_class: total
+        state: >
+          {% set days = (now() - strptime('2025-07-01T00:00:00.000+10:00', '%Y-%m-%dT%H:%M:%S.%f%z')).days + 1 %}
+          {{ states('sensor.gas_supply_tariff')|float * days }}
+      # Special _hack_ sensor to report daily charge to energy dashboard, report 0
+      # usage, but apply "Use an entity tracking the total costs" with cumulative supply
+      # charge entity above.
+      - name: Gas Supply Charge (Usage)
+        unique_id: gas_supply_charge_usage
+        unit_of_measurement: MJ
+        device_class: energy
+        state_class: total_increasing
+        state: >
+          0
+  ### -------------
+  ###  Water
+  ### -------------
+  - sensor:
+      - name: Water Consumption Tariff
+        unique_id: water_consumption_tariff
+        unit_of_measurement: c/kL
+        state: >
+          2.6700
+      - name: Water Consumption Tariff (per L)
+        unique_id: water_consumption_tariff_per_litre
+        unit_of_measurement: c/L
+        state: >
+          {{ states('sensor.water_consumption_tariff')|float / 1000}}
+      - name: Water Supply Tariff
+        unique_id: water_supply_tariff
+        unit_of_measurement: AUD
+        # Fixed Charges 1 Apr 25 - 30 Jun 25
+        # - Water Service: 16.71
+        # - Wastewater Service: 154.19
+        state: >
+          1.8988
+
+      - name: Water Cumulative Supply Charge
+        unique_id: water_cumulative_supply_charge
+        unit_of_measurement: $
+        device_class: monetary
+        state_class: total
+        state: >
+          {% set days = (now() - strptime('2025-07-01T00:00:00.000+10:00', '%Y-%m-%dT%H:%M:%S.%f%z')).days + 1 %}
+          {{ states('sensor.water_supply_tariff')|float * days }}
+      # Special _hack_ sensor to report daily charge to energy dashboard, report 0
+      # usage, but apply "Use an entity tracking the total costs" with cumulative supply
+      # charge entity above.
+      - name: Water Supply Charge (Usage)
+        unique_id: water_supply_charge_usage
+        unit_of_measurement: L
+        device_class: water
+        state_class: total_increasing
+        state: >
+          0
