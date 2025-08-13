@@ -1,0 +1,26 @@
+id: "1753869550189"
+alias: living room 4-button switch
+description: ""
+use_blueprint:
+  path: rdeangel/zigbee2mqtt-tuya-4-button-switch-mqtt-device-trigger_rdeangel.yaml
+  input:
+    mode: parallel
+    zigbee_device: 5762bbacc552f66b50bd9f832a6de41b
+    button_one_short_press:
+      - action: light.toggle
+        metadata: {}
+        data: {}
+        target:
+          entity_id: light.back_yard_ambiance
+    button_two_short_press:
+      - action: light.toggle
+        metadata: {}
+        data: {}
+        target:
+          entity_id: light.shed
+    button_three_short_press:
+      - action: light.toggle
+        metadata: {}
+        data: {}
+        target:
+          entity_id: light.vege_patch
