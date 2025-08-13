@@ -1,0 +1,38 @@
+id: "1753869972667"
+alias: "backyard: vege patch slave to pergola light"
+description: ""
+triggers:
+  - trigger: state
+    entity_id:
+      - light.pergola
+    to: "on"
+    id: "on"
+  - trigger: state
+    entity_id:
+      - light.pergola
+    to: "off"
+    id: "off"
+conditions: []
+actions:
+  - choose:
+      - conditions:
+          - condition: trigger
+            id:
+              - "on"
+        sequence:
+          - action: light.turn_on
+            metadata: {}
+            data: {}
+            target:
+              entity_id: light.vege_patch
+      - conditions:
+          - condition: trigger
+            id:
+              - "off"
+        sequence:
+          - action: light.turn_off
+            metadata: {}
+            data: {}
+            target:
+              entity_id: light.vege_patch
+mode: single
