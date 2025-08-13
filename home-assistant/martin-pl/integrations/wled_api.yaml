@@ -1,0 +1,16 @@
+rest_command:
+  wled_set_colors:
+    #set brightness to full, speed to half, intensity to half, primary color as red, secondary as blue and tertiary as white and set pallet to default
+    # http://192.168.2.138/win&SS=0&SB=255&SX=128&IX=128&CL=Hff0000&C2=Haa0000&C3=H000000&FP=0
+    # http://192.168.2.138/win&
+    #  SS=0 segment id
+    #  SB=255 brightness
+    #  SX=128 speed
+    #  IX=128 intensity
+    #  FX= effect index
+    #  CL=Hff0000 color 1
+    #  C2=Haa0000 color 2
+    #  C3=H000000 color 3
+    #  FP=0 palette (default = 0)
+    url: |
+      http://{{wled_host}}/win&SS={{segment}}&SB={{brightness}}&SX={{speed}}&IX={{intensity}}&CL=H{{color1}}&C2=H{{color2}}&C3=H{{color3}}&RV={{reverse}}&FP=0&FX={{effect}}
