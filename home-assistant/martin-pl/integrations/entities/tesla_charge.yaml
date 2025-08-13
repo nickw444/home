@@ -1,0 +1,119 @@
+input_number:
+  tesla_overnight_charge_limit_default:
+    name: "Overnight Charge Limit Default"
+    icon: "mdi:ev-station"
+    unit_of_measurement: "%"
+    min: 20
+    max: 100
+    step: 5
+  tesla_overnight_charge_limit:
+    name: "Overnight Charge Limit"
+    icon: "mdi:ev-station"
+    unit_of_measurement: "%"
+    min: 20
+    max: 100
+    step: 5
+  tesla_daytime_charge_limit_default:
+    name: "Daytime Charge Limit Default"
+    icon: "mdi:ev-station"
+    unit_of_measurement: "%"
+    min: 20
+    max: 100
+    step: 5
+  tesla_daytime_charge_limit:
+    name: "Daytime Charge Limit"
+    icon: "mdi:ev-station"
+    unit_of_measurement: "%"
+    min: 20
+    max: 100
+    step: 5
+
+automation:
+  - id: "1725332898491"
+    alias: "tesla charger: reset charging amps at midnight"
+    description: ""
+    trigger:
+      - platform: time_pattern
+        hours: "23"
+        minutes: "59"
+        seconds: "00"
+      - platform: time_pattern
+        hours: "0"
+        minutes: "05"
+        seconds: "00"
+    condition: []
+    action:
+      - action: number.set_value
+        metadata: {}
+        data:
+          value: "32"
+        target:
+          entity_id: number.tessie_charging_amps
+    mode: single
+  - id: "1753855873546"
+    alias: "tesla charger: set/reset charge limit"
+    description: ""
+    triggers:
+      - trigger: time
+        at: "23:55:00"
+        id: overnight
+      - trigger: time
+        at: 06:00:00
+        id: daytime
+    conditions: []
+    actions:
+      - choose:
+          - conditions:
+              - condition: trigger
+                id:
+                  - daytime
+            sequence:
+              - action: number.set_value
+                metadata: {}
+                data:
+                  value: "{{ states('input_number.tesla_daytime_charge_limit')}}"
+                target:
+                  entity_id: number.tessie_charge_limit
+              - action: input_number.set_value
+                metadata: {}
+                data:
+                  value: "{{ states('input_number.tesla_daytime_charge_limit_default')}}"
+                target:
+                  entity_id: input_number.tesla_daytime_charge_limit
+          - conditions:
+              - condition: trigger
+                id:
+                  - overnight
+            sequence:
+              - action: number.set_value
+                metadata: {}
+                data:
+                  value: "{{ states('input_number.tesla_overnight_charge_limit')}}"
+                target:
+                  entity_id: number.tessie_charge_limit
+              - action: input_number.set_value
+                metadata: {}
+                data:
+                  value: "{{ states('input_number.tesla_overnight_charge_limit_default')}}"
+                target:
+                  entity_id: input_number.tesla_overnight_charge_limit
+    mode: single
+
+script:
+  tesla_precondition_car:
+    alias: "tesla: precondition car"
+    sequence:
+      - if:
+          - condition: not
+            conditions:
+              - condition: state
+                entity_id: device_tracker.tessie
+                state: home
+        then:
+          - stop: Tesla is not at Home.
+      - action: climate.set_hvac_mode
+        target:
+          entity_id: climate.tessie_hvac_climate_system
+        data:
+          hvac_mode: heat_cool
+    description: ""

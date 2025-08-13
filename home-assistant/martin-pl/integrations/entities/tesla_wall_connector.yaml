@@ -1,0 +1,18 @@
+template:
+  - sensor:
+      - name: "Tesla Wall Connector Power"
+        unique_id: "tesla_wall_connector_power"
+        unit_of_measurement: "W"
+        device_class: "power"
+        availability: >-
+          {{ has_value('sensor.tesla_wall_connector_phase_a_voltage') 
+            or has_value('sensor.tesla_wall_connector_grid_voltage') }}
+        state: >-
+          {% set phase_a_voltage = states('sensor.tesla_wall_connector_phase_a_voltage')|float %}
+          {% set grid_voltage = states('sensor.tesla_wall_connector_grid_voltage')|float %}
+          {% set voltage = phase_a_voltage or grid_voltage %}
+          {% if is_state('sensor.tesla_wall_connector_status', 'charging') or is_state('sensor.tesla_wall_connector_status', 'charging_reduced') %}
+            {{ states('sensor.tesla_wall_connector_phase_a_current')|float * voltage }}
+          {% else %}
+            0
+          {% endif %}
