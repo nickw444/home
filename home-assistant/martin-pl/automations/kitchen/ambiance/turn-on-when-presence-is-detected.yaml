@@ -7,12 +7,9 @@ trigger:
     from: not_home
     to: home
 condition:
-  - condition: or
-    conditions:
-      - condition: sun
-        before: sunrise
-      - condition: sun
-        after: sunset
+  - after: sunset
+    after_offset: -00:60:00
+    condition: sun
   - condition: state
     entity_id: input_boolean.away_mode
     state: "off"
