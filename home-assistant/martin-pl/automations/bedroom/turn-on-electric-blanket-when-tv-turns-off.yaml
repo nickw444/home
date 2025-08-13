@@ -3,7 +3,7 @@ alias: "bedroom: turn on electric blanket when tv turns off after 10:00pm"
 description: ""
 trigger:
   - platform: state
-    entity_id: media_player.samsung_smart_tv
+    entity_id: media_player.living_room_tv
     from: "on"
     to: "off"
     for: 00:00:30
