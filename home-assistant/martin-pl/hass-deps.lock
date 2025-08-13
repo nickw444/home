@@ -1,5 +1,5 @@
 https://github.com/thomasloven/lovelace-auto-entities.git:
-  version: 843e84b
+  version: 360722d
   type: lovelace
 https://github.com/maxwroc/battery-state-card.git:
   version: v3.2.1
@@ -8,124 +8,145 @@ https://github.com/maxwroc/battery-state-card.git:
 https://github.com/thomasloven/lovelace-card-tools.git:
   version: 477f3d4
   type: lovelace
-https://github.com/AitorDB/home-assistant-sun-card.git:
-  version: v0.1.4
-  type: lovelace
-  is_release: true
 https://github.com/kalkih/mini-graph-card.git:
-  version: v0.12.1
+  version: v0.13.0
   type: lovelace
   is_release: true
 https://github.com/custom-cards/secondaryinfo-entity-row.git:
   version: 2ea0f5d
   type: lovelace
-https://github.com/custom-cards/spotify-card.git:
-  version: '4297715'
-  type: lovelace
 https://github.com/azuwis/zigbee2mqtt-networkmap.git:
-  version: v0.9.0
+  version: v0.10.0
   type: lovelace
   is_release: true
-https://github.com/fondberg/spotcast.git:
-  version: '6345116'
-  type: core
-  components:
-  - spotcast
-https://github.com/jaruba/ha-samsungtv-tizen.git:
-  version: 6a5c82c
-  type: core
-  components:
-  - samsungtv_tizen
-https://github.com/shenxn/ha-dyson.git:
-  version: 43d5a1a
-  type: core
-  components:
-  - dyson_local
-https://github.com/nickw444/deebot-t8-hass.git:
-  version: dcc3d10
-  type: core
-  components:
-  - deebot_t8
 https://github.com/kalkih/mini-media-player.git:
   version: v1.16.9
   type: lovelace
   is_release: true
 https://github.com/thomasloven/lovelace-card-mod:
-  version: f59abc7
+  version: e29e341
   type: lovelace
-https://github.com/nickw444/tuya-home-assistant.git:
-  version: v1.4.1-71-gacdd69f
-  type: core
-  components:
-  - tuya_v2
-https://github.com/nickw444/hass-custom-components:
-  version: 4691a2c
-  type: core
-  components:
-  - transportnsw
-  - calibrated_light
 https://github.com/matejdro/login_control.git:
-  version: ffec632
+  version: b15f725
   type: core
   components:
   - login_control
 https://github.com/iMicknl/ha-nest-protect.git:
-  version: 812f51a
+  version: d44e482
   type: core
   components:
   - nest_protect
 https://github.com/thomasloven/lovelace-fold-entity-row.git:
-  version: 419ec48
+  version: ec6d99e
   type: lovelace
-https://github.com/DeebotUniverse/Deebot-4-Home-Assistant.git:
-  version: '2e91821'
-  type: core
-  components:
-  - deebot
 https://github.com/denysdovhan/vacuum-card.git:
-  version: v2.10.0
+  version: v2.11.0
   type: lovelace
   is_release: true
 https://github.com/bremor/bureau_of_meteorology.git:
-  version: 047f571
+  version: cf9ae3a
   type: core
   components:
   - bureau_of_meteorology
 https://github.com/thomasloven/hass-browser_mod.git:
-  version: '9174138'
+  version: cb7a9bf
   type: core
   components:
   - browser_mod
 https://github.com/dummylabs/thewatchman.git:
-  version: 023cac8
+  version: c9ccb0d
   type: core
   components:
   - watchman
-https://github.com/thomasloven/lovelace-layout-card.git:
-  version: 2.2.3-27-g16d834f
-  type: lovelace
-https://github.com/rospogrigio/localtuya.git:
-  version: v.1.0.1-672-gd2fa4dc
-  type: core
-  components:
-  - localtuya
 https://github.com/greghesp/ha-bambulab.git:
-  version: a92d167
+  version: ac29089
   type: core
   components:
   - bambu_lab
 https://github.com/frenck/spook.git:
-  version: caa3552
+  version: 1e1e957
   type: core
   components:
   - spook
 https://github.com/alandtse/tesla.git:
-  version: v3.24.0
+  version: v3.25.0-1-gc6c6156
   type: core
   components:
   - tesla_custom
 https://github.com/Tasshack/dreame-vacuum.git:
-  version: afdad7e
+  version: v2.0.0b19
   type: core
   components:
   - dreame_vacuum
+https://github.com/libdyson-wg/ha-dyson.git:
+  version: dd12993
+  type: core
+  components:
+  - dyson_local
+https://github.com/Aleks130699/ha-fpp.git:
+  version: bc374c3
+  type: core
+  components:
+  - falcon_pi_player
+https://github.com/simbaja/ha_gehome.git:
+  version: 6528af6
+  type: core
+  components:
+  - ge_home
+https://github.com/flixlix/power-flow-card-plus.git:
+  version: v0.2.5
+  type: lovelace
+  is_release: true
+https://github.com/antontanderup/mediocre-hass-media-player-cards.git:
+  version: v0.22.0
+  type: lovelace
+  is_release: true
+https://github.com/BJReplay/ha-solcast-solar.git:
+  version: f442520
+  type: core
+  components:
+  - solcast_solar
+https://github.com/Digital-Alchemy-TS/synapse-extension.git:
+  version: v24.12.1-1-gf6a700b
+  type: core
+  components:
+  - synapse
+https://github.com/piitaya/lovelace-mushroom.git:
+  version: v4.5.0
+  type: lovelace
+  is_release: true
+https://github.com/modrzew/lovelace-temperature-map.git:
+  version: v1.0.8
+  type: lovelace
+  is_release: true
+https://github.com/AlexxIT/WebRTC.git:
+  version: de1ccf0
+  type: core
+  components:
+  - webrtc
+https://github.com/andystewart999/ha_transportnsw.git:
+  version: f0a1970
+  type: core
+  components:
+  - ha_transportnsw
+https://github.com/aukedejong/lovelace-windrose-card.git:
+  version: v1.25.1
+  type: lovelace
+  is_release: true
+https://github.com/alexpfau/calendar-card-pro.git:
+  version: v3.1.0
+  type: lovelace
+  is_release: true
+https://github.com/NemesisRE/kiosk-mode.git:
+  version: v7.1.0-8-gf0ce340
+  type: lovelace
+https://github.com/bitnimble/hass-amber-electric.git:
+  version: c446ab3
+  type: core
+  components:
+  - amberelectric
+https://github.com/agittins/bermuda.git:
+  version: 0c4b0ca
+  type: core
+  components:
+  - bermuda

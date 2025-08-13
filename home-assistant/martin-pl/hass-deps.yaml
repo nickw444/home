@@ -2,35 +2,36 @@ dependencies:
 - https://github.com/thomasloven/lovelace-auto-entities.git
 - https://github.com/maxwroc/battery-state-card.git
 - https://github.com/thomasloven/lovelace-card-tools.git
-- https://github.com/AitorDB/home-assistant-sun-card.git
 - https://github.com/kalkih/mini-graph-card.git
 - https://github.com/custom-cards/secondaryinfo-entity-row.git
-- https://github.com/custom-cards/spotify-card.git
 - https://github.com/azuwis/zigbee2mqtt-networkmap.git
-- https://github.com/fondberg/spotcast.git
-- https://github.com/jaruba/ha-samsungtv-tizen.git
-- https://github.com/shenxn/ha-dyson.git
-- https://github.com/nickw444/deebot-t8-hass.git
 - https://github.com/kalkih/mini-media-player.git
-- source: https://github.com/nickw444/hass-custom-components
-  root_is_custom_components: true
-  include:
-  - calibrated_light
-  - transportnsw
 - https://github.com/thomasloven/lovelace-card-mod
-- https://github.com/nickw444/tuya-home-assistant.git
 - source: https://github.com/matejdro/login_control.git
   root_is_custom_components: true
 - https://github.com/iMicknl/ha-nest-protect.git
 - https://github.com/thomasloven/lovelace-fold-entity-row.git
-- https://github.com/DeebotUniverse/Deebot-4-Home-Assistant.git
 - https://github.com/denysdovhan/vacuum-card.git
 - https://github.com/bremor/bureau_of_meteorology.git
 - https://github.com/thomasloven/hass-browser_mod.git
 - https://github.com/dummylabs/thewatchman.git
-- https://github.com/thomasloven/lovelace-layout-card.git
-- https://github.com/rospogrigio/localtuya.git
 - https://github.com/greghesp/ha-bambulab.git
 - https://github.com/frenck/spook.git
 - https://github.com/alandtse/tesla.git
 - https://github.com/Tasshack/dreame-vacuum.git
+- https://github.com/libdyson-wg/ha-dyson.git
+- https://github.com/Aleks130699/ha-fpp.git
+- https://github.com/simbaja/ha_gehome.git
+- https://github.com/flixlix/power-flow-card-plus.git
+- https://github.com/antontanderup/mediocre-hass-media-player-cards.git
+- https://github.com/BJReplay/ha-solcast-solar.git
+- https://github.com/Digital-Alchemy-TS/synapse-extension.git
+- https://github.com/piitaya/lovelace-mushroom.git
+- https://github.com/modrzew/lovelace-temperature-map.git
+- https://github.com/AlexxIT/WebRTC.git
+- https://github.com/andystewart999/ha_transportnsw.git
+- https://github.com/aukedejong/lovelace-windrose-card.git
+- https://github.com/alexpfau/calendar-card-pro.git
+- https://github.com/NemesisRE/kiosk-mode.git
+- https://github.com/bitnimble/hass-amber-electric.git
+- https://github.com/agittins/bermuda.git
