@@ -3,7 +3,7 @@ alias: "Study Wall button: toggle study shelves fairy lights on button double pr
 description: ""
 trigger:
   - platform: state
-    entity_id: sensor.study_wall_button_click
+    entity_id: sensor.study_wall_button_action
     to: double
 condition: []
 action:

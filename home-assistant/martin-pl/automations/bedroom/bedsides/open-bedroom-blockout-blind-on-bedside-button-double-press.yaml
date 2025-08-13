@@ -3,10 +3,10 @@ alias: "bedroom button: toggle blockout blind on bedside button double press"
 description: ""
 trigger:
   - platform: state
-    entity_id: sensor.kates_bedside_button_click
+    entity_id: sensor.kates_bedside_button_action
     to: double
   - platform: state
-    entity_id: sensor.nicks_bedside_button_click
+    entity_id: sensor.nicks_bedside_button_action
     to: double
 condition: []
 action:

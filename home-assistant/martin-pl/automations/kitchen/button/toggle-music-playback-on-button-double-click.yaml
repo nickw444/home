@@ -3,7 +3,7 @@ alias: "kitchen window button: toggle music playback on button double click"
 description: ""
 trigger:
   - platform: state
-    entity_id: sensor.kitchen_window_button_click
+    entity_id: sensor.kitchen_window_button_action
     to: double
 condition: []
 action:

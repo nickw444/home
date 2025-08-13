@@ -3,11 +3,11 @@ alias: "bedroom: toggle bedsides on bedside button press"
 description: ""
 trigger:
   - platform: state
-    entity_id: sensor.nicks_bedside_button_click
+    entity_id: sensor.nicks_bedside_button_action
     to: single
     id: nick
   - platform: state
-    entity_id: sensor.kates_bedside_button_click
+    entity_id: sensor.kates_bedside_button_action
     to: single
     id: kate
 condition: []

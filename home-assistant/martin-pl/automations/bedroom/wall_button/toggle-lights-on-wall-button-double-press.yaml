@@ -3,7 +3,7 @@ alias: "Bedroom Wall button: toggle bedroom lights on button double press"
 description: ""
 trigger:
   - platform: state
-    entity_id: sensor.bedroom_wall_button_click
+    entity_id: sensor.bedroom_wall_button_action
     to: double
 condition: []
 action:
