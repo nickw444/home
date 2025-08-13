@@ -1,0 +1,4 @@
+media_player:
+  - platform: falcon_pi_player
+    name: Falcon Player
+    host: 192.168.2.183
