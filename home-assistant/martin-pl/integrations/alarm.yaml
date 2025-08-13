@@ -1,12 +1,25 @@
 alarm_control_panel:
   - platform: manual
+    arming_states:
+      - armed_away
+      - armed_night
+      - armed_custom_bypass # Dogs at Home / Vacuuming
     delay_time: 60
     arming_time: 60
     trigger_time: 120
     armed_night:
-      delay_time: 15
+      delay_time: 10
     code: !secret alarm_code
     code_arm_required: false
+
+input_select:
+  alarm_state_before_trigger:
+    name: "alarm: state before trigger"
+    options:
+      - armed_night
+      - armed_away
+      - armed_custom_bypass
+    initial: "armed_away"
 
 automation:
   - id: "1601034054491"
@@ -17,6 +30,9 @@ automation:
         entity_id:
           - binary_sensor.back_door_contact
           - binary_sensor.front_door_contact
+          - binary_sensor.shed_door_contact
+          # Not a door, but want to trigger during armed_night/armed_custom_bypass
+          - binary_sensor.shed_motion_occupancy
         to: "on"
     condition:
       - condition: or
@@ -27,11 +43,13 @@ automation:
           - condition: state
             entity_id: alarm_control_panel.ha_alarm
             state: armed_night
+          - condition: state
+            entity_id: alarm_control_panel.ha_alarm
+            state: armed_custom_bypass
     action:
       - service: alarm_control_panel.alarm_trigger
         entity_id: alarm_control_panel.ha_alarm
     mode: single
-
   - id: "1601034054492"
     alias: "alarm: trigger when motion detected whilst armed_away"
     description: ""
@@ -54,7 +72,45 @@ automation:
       - service: alarm_control_panel.alarm_trigger
         entity_id: alarm_control_panel.ha_alarm
     mode: single
-
+  - id: "160103405444873"
+    alias: "alarm: trigger when motion detected whilst armed_custom_bypass"
+    description: ""
+    trigger:
+      - platform: state
+        entity_id:
+          # Subset of sensors for zones the dogs cannot visit.
+          - binary_sensor.study_motion_occupancy
+          - binary_sensor.spare_room_motion_occupancy
+        to: "on"
+    condition:
+      - condition: state
+        entity_id: alarm_control_panel.ha_alarm
+        state: armed_custom_bypass
+    action:
+      - service: alarm_control_panel.alarm_trigger
+        entity_id: alarm_control_panel.ha_alarm
+    mode: single
+  - id: "83294732987"
+    alias: "alarm: save state before trigger"
+    description: ""
+    mode: single
+    triggers:
+      - trigger: state
+        entity_id:
+          - alarm_control_panel.ha_alarm
+        from:
+          - "armed_night"
+          - "armed_away"
+          - "armed_custom_bypass"
+        to: pending
+    conditions: []
+    actions:
+      - action: input_select.select_option
+        metadata: {}
+        data:
+          option: "{{ trigger.from_state.state }}"
+        target:
+          entity_id: input_select.alarm_state_before_trigger
   - id: "1601034697138"
     alias: "alarm: send notification when triggered"
     description: ""
@@ -62,24 +118,16 @@ automation:
       - platform: state
         entity_id: alarm_control_panel.ha_alarm
         to: triggered
-    condition:
-      condition: not
-      conditions:
-        - condition: state
-          entity_id: vacuum.osmo
-          state: cleaning
-        - condition: state
-          entity_id: vacuum.osmo
-          state: returning
+    conditions: []
     action:
       - service: notify.everyone
         data:
           title: Alarm Triggered
-          message: The alarm was triggered at {{ now().strftime('%I:%M %p') }}
+          message: The alarm was triggered at {{ now().strftime('%I:%M %p') }}{% if states('sensor.recently_triggered_sensors') %} by {{ states('sensor.recently_triggered_sensors') }}{% endif %}
           data:
             group: alarm-status
             url: "/lovelace/security"
-            entity_id: camera.front_door_high
+            entity_id: camera.front_yard_high
             actions:
               - action: "DISARM_ALARM"
                 title: "Disarm"
@@ -89,7 +137,12 @@ automation:
               sound:
                 name: default
                 critical: 1
-                volume: 0
+                volume: >-
+                  {%- if is_state('input_select.alarm_state_before_trigger', 'armed_night') -%}
+                  0.5
+                  {%- else -%}
+                  0
+                  {%- endif -%}
     mode: single
 
   - id: "1601035010807"
@@ -130,10 +183,10 @@ automation:
       - service: notify.everyone
         data:
           title: Alarm Pending
-          message: The alarm was pending at {{ now().strftime('%I:%M %p') }}
+          message: The alarm was pending at {{ now().strftime('%I:%M %p') }}{% if states('sensor.recently_triggered_sensors') %} by {{ states('sensor.recently_triggered_sensors') }}{% endif %}
           data:
             url: "/lovelace/security"
-            entity_id: camera.front_door_high
+            entity_id: camera.front_yard_high
             group: alarm-status
             tag: alarm-status
             actions:
@@ -153,12 +206,16 @@ automation:
         to:
           - armed_away
           - armed_night
+          - armed_custom_bypass
     condition: []
     action:
       - service: notify.everyone
         data:
           title: Alarm Armed
-          message: The alarm was {{ trigger.to_state.state }} at {{ now().strftime('%I:%M %p') }}
+          message: >
+            {% set state = trigger.to_state.state %}
+            {% set state_names = {'armed_away': 'armed for Away', 'armed_night': 'armed for Night', 'armed_custom_bypass': 'armed for Doors and Shed'} %}
+            The alarm was {{ state_names[state] }} at {{ now().strftime('%I:%M %p') }}
           data:
             group: alarm-status
             tag: alarm-status
@@ -204,9 +261,19 @@ automation:
         entity_id: input_boolean.guest_mode
         state: "off"
     action:
-      - service: alarm_control_panel.alarm_arm_away
-        data: {}
-        entity_id: alarm_control_panel.ha_alarm
+      # If dogs are home, then arm with custom_bypass.
+      - if:
+          - condition: state
+            entity_id: binary_sensor.internal_motion_expected
+            state: "on"
+        then:
+          - action: alarm_control_panel.alarm_arm_custom_bypass
+            data: {}
+            entity_id: alarm_control_panel.ha_alarm
+        else:
+          - action: alarm_control_panel.alarm_arm_away
+            data: {}
+            entity_id: alarm_control_panel.ha_alarm
     mode: single
 
   - id: "1601036735034"
@@ -297,7 +364,7 @@ automation:
     mode: single
 
   - id: "1601104910978"
-    alias: "alarm: play sound on pending/triggered"
+    alias: "alarm: play sound on pending/triggered (armed_away)"
     description: ""
     trigger:
       - platform: state
@@ -306,7 +373,10 @@ automation:
       - platform: state
         entity_id: alarm_control_panel.ha_alarm
         to: triggered
-    condition: []
+    condition:
+      - condition: state
+        entity_id: input_select.alarm_state_before_trigger
+        state: armed_away
     action:
       - choose:
           - conditions:
@@ -346,6 +416,204 @@ automation:
         target:
           entity_id: switch.study_siren_alarm
     mode: restart
+  - id: "16011049109782"
+    alias: "alarm: play sound on pending/triggered (armed_night)"
+    description: ""
+    trigger:
+      - platform: state
+        entity_id: alarm_control_panel.ha_alarm
+        to: pending
+      - platform: state
+        entity_id: alarm_control_panel.ha_alarm
+        to: triggered
+    condition:
+      - condition: state
+        entity_id: input_select.alarm_state_before_trigger
+        state: armed_night
+    action:
+      - choose:
+          - conditions:
+              - condition: state
+                entity_id: alarm_control_panel.ha_alarm
+                state: pending
+            sequence:
+              - service: script.set_siren
+                data:
+                  siren_entity: switch.study_siren_alarm
+                  melody_entity: select.study_siren_melody
+                  melody: "8"
+                  volume_entity: select.study_siren_volume
+                  volume: medium
+                  duration_entity: number.study_siren_duration
+                  duration: 1800
+          - conditions:
+              - condition: state
+                entity_id: alarm_control_panel.ha_alarm
+                state: triggered
+            sequence:
+              - service: script.set_siren
+                data:
+                  siren_entity: switch.study_siren_alarm
+                  melody_entity: select.study_siren_melody
+                  melody: "6"
+                  volume_entity: select.study_siren_volume
+                  volume: high
+                  duration_entity: number.study_siren_duration
+                  duration: 1800
+        default: []
+      - delay: 00:00:02
+      - wait_template: >-
+          {{ states('alarm_control_panel.ha_alarm') not in ('pending', 'triggered') }}
+        continue_on_timeout: false
+      - service: switch.turn_off
+        target:
+          entity_id: switch.study_siren_alarm
+    mode: restart
+
+  - id: "1753839651513"
+    alias: "alarm: rearm with custom bypass when internal motion expected"
+    description: ""
+    triggers:
+      - trigger: state
+        entity_id:
+          - binary_sensor.internal_motion_expected
+        to: "on"
+    conditions:
+      - condition: state
+        entity_id: alarm_control_panel.ha_alarm
+        state:
+          - pending
+          - triggered
+          - armed_away
+    actions:
+      - action: alarm_control_panel.alarm_arm_custom_bypass
+        metadata: {}
+        data: {}
+        target:
+          entity_id: alarm_control_panel.ha_alarm
+    mode: single
+
+  - id: "1753839651577"
+    alias: "alarm: rearm with armed_away when internal motion not expected"
+    description: ""
+    triggers:
+      - trigger: state
+        entity_id:
+          - binary_sensor.internal_motion_expected
+        to: "off"
+    conditions:
+      - condition: state
+        entity_id: alarm_control_panel.ha_alarm
+        state:
+          - pending
+          - triggered
+          - armed_custom_bypass
+    actions:
+      - action: alarm_control_panel.alarm_arm_away
+        metadata: {}
+        data: {}
+        target:
+          entity_id: alarm_control_panel.ha_alarm
+    mode: single
+
+template:
+  - binary_sensor:
+      - name: "Living Room Recent"
+        availability: "{{ has_value('binary_sensor.living_room_motion_occupancy') }}"
+        state: "{{ states('binary_sensor.living_room_motion_occupancy') }}"
+        delay_off: "00:02:00"
+
+      - name: "Hallway Recent"
+        availability: "{{ has_value('binary_sensor.hallway_motion_occupancy') }}"
+        state: "{{ states('binary_sensor.hallway_motion_occupancy') }}"
+        delay_off: "00:02:00"
+
+      - name: "Kitchen Recent"
+        availability: "{{ has_value('binary_sensor.kitchen_motion_occupancy') }}"
+        state: "{{ states('binary_sensor.kitchen_motion_occupancy') }}"
+        delay_off: "00:02:00"
+
+      - name: "Bedroom Recent"
+        availability: "{{ has_value('binary_sensor.bedroom_motion_occupancy') }}"
+        state: "{{ states('binary_sensor.bedroom_motion_occupancy') }}"
+        delay_off: "00:02:00"
+
+      - name: "Study Recent"
+        availability: "{{ has_value('binary_sensor.study_motion_occupancy') }}"
+        state: "{{ states('binary_sensor.study_motion_occupancy') }}"
+        delay_off: "00:02:00"
+
+      - name: "Spare Room Recent"
+        availability: "{{ has_value('binary_sensor.spare_room_motion_occupancy') }}"
+        state: "{{ states('binary_sensor.spare_room_motion_occupancy') }}"
+        delay_off: "00:02:00"
+
+      - name: "Laundry Recent"
+        availability: "{{ has_value('binary_sensor.laundry_motion_occupancy') }}"
+        state: "{{ states('binary_sensor.laundry_motion_occupancy') }}"
+        delay_off: "00:02:00"
+
+      - name: "Shed Recent"
+        availability: "{{ has_value('binary_sensor.shed_motion_occupancy') }}"
+        state: "{{ states('binary_sensor.shed_motion_occupancy') }}"
+        delay_off: "00:02:00"
+
+      - name: "Front Door Recent"
+        availability: "{{ has_value('binary_sensor.front_door_contact') }}"
+        state: "{{ states('binary_sensor.front_door_contact') }}"
+        delay_off: "00:02:00"
+
+      - name: "Back Door Recent"
+        availability: "{{ has_value('binary_sensor.back_door_contact') }}"
+        state: "{{ states('binary_sensor.back_door_contact') }}"
+        delay_off: "00:02:00"
+
+      - name: "Shed Door Recent"
+        availability: "{{ has_value('binary_sensor.shed_door_contact') }}"
+        state: "{{ states('binary_sensor.shed_door_contact') }}"
+        delay_off: "00:02:00"
+
+      - name: "Living Room Animal Recent"
+        availability: "{{ has_value('binary_sensor.living_room_animal_detected') }}"
+        state: "{{ states('binary_sensor.living_room_animal_detected') }}"
+        delay_off: "00:02:00"
+
+      - name: "Vacuum in Motion"
+        unique_id: "alarm_vacuum_in_motion"
+        availability: "{{ has_value('vacuum.crystal') }}"
+        state: >
+          {{ is_state('vacuum.crystal', 'cleaning') or is_state('vacuum.crystal', 'returning') }}
+
+      - name: "Internal Motion Expected"
+        unique_id: "alarm_internal_motion_expected"
+        availability: "{{ has_value('binary_sensor.vacuum_in_motion') or has_value('group.all_animals') }}"
+        state: >
+          {{ is_state('binary_sensor.vacuum_in_motion', 'on') or is_state('group.all_animals', 'home') }}
+        delay_off: "00:00:30"
+
+  - sensor:
+      - name: "Recently Triggered Sensors"
+        state: >
+          {% set sensors = [
+            'binary_sensor.living_room_recent',
+            'binary_sensor.hallway_recent',
+            'binary_sensor.kitchen_recent',
+            'binary_sensor.bedroom_recent',
+            'binary_sensor.study_recent',
+            'binary_sensor.spare_room_recent',
+            'binary_sensor.laundry_recent',
+            'binary_sensor.shed_recent',
+            'binary_sensor.front_door_recent',
+            'binary_sensor.back_door_recent',
+            'binary_sensor.shed_door_recent',
+          ]%}
+          {% set recent = namespace(s=[]) %}
+          {% for entity in sensors %}
+            {% if is_state(entity, 'on') %}
+              {% set recent.s = recent.s + [state_attr(entity, 'friendly_name')[:-7]] %}
+            {% endif %}
+          {% endfor %}
+          {{ recent.s | join(', ') if recent.s else '' }}
 
   # Other Ideas:
   # Baesean sensor for in-bed?
