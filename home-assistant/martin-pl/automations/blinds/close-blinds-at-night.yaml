@@ -4,8 +4,8 @@ description: ""
 trigger:
   # Wait until outdor luminance is low
   - platform: numeric_state
-    entity_id: sensor.fo79_weather_lux
-    below: 100
+    entity_id: sensor.ecowitt_hub_solar_lux
+    below: 500
     for: "00:05:00"
   # Fallback: Re-trigger after sunset
   - platform: sun
@@ -14,7 +14,7 @@ trigger:
 condition:
   # Only run once per day
   - condition: template
-    value_template: "{{ state_attr('automation.blinds_close_all_blinds_at_sunset_2', 'last_triggered') == None or state_attr('automation.blinds_close_all_blinds_at_sunset_2', 'last_triggered') < now().replace(hour=3, minute=0, second=0) }}"
+    value_template: "{{ state_attr('automation.blinds_close_all_blinds_at_sunset', 'last_triggered') == None or state_attr('automation.blinds_close_all_blinds_at_sunset', 'last_triggered') < now().replace(hour=3, minute=0, second=0) }}"
   # Only run when near sunset time (sunset - 1:00:00 < time < sunset + 1:30:00)
   - condition: sun
     after: sunset
@@ -39,7 +39,6 @@ action:
       - cover.bedroom_blockout
       - cover.bedroom_screen
       - cover.study_blockout
-      - cover.study_screen
       - cover.kitchen_blockout
       - cover.kitchen_screen
 mode: single

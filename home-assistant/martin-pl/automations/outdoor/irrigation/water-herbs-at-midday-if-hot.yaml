@@ -20,7 +20,7 @@ condition:
     below: 5
   - alias: "today max temperature greater than 27"
     condition: numeric_state
-    entity_id: sensor.fo79_temperature_max_8h
+    entity_id: sensor.outdoor_temperature_max_8h
     above: 27
 
 action:

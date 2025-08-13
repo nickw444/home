@@ -18,8 +18,8 @@ condition:
       - condition: sun
         after: sunset
       - condition: numeric_state
-        entity_id: sensor.fo79_weather_lux
-        below: 100
+        entity_id: sensor.ecowitt_hub_solar_lux
+        below: 500
   - condition: state
     entity_id: group.all_people
     state: "home"

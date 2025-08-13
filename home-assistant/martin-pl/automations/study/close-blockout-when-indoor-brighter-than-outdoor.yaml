@@ -4,7 +4,7 @@ description: ""
 trigger:
   - platform: numeric_state
     entity_id:
-      - sensor.study_shelves_illuminance_illuminance_lux
+      - sensor.study_shelves_illuminance_illuminance
     for:
       hours: 0
       minutes: 0
@@ -12,7 +12,7 @@ trigger:
     above: 35
   - platform: numeric_state
     entity_id:
-      - sensor.fo79_weather_lux
+      - sensor.ecowitt_hub_solar_lux
     for:
       hours: 0
       minutes: 0
@@ -20,17 +20,17 @@ trigger:
     below: 1000
 condition:
   - condition: numeric_state
-    entity_id: sensor.study_shelves_illuminance_illuminance_lux
+    entity_id: sensor.study_shelves_illuminance_illuminance
     above: 35
   - condition: or
     conditions:
       - condition: numeric_state
-        entity_id: sensor.fo79_weather_lux
+        entity_id: sensor.ecowitt_hub_solar_lux
         below: 1000
       - condition: and
         conditions:
           - condition: state
-            entity_id: sensor.fo79_weather_lux
+            entity_id: sensor.ecowitt_hub_solar_lux
             state:
               - unavailable
               - unknown
