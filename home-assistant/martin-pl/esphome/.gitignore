@@ -8,4 +8,5 @@
 **/src/
 **/platformio.ini
 /secrets.yaml
-*/*
+**/__pycache__/**
+archive/**

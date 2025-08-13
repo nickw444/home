@@ -1,9 +1,25 @@
 esphome:
   name: rf-controller
-  platform: ESP8266
+  friendly_name: "RF Controller"
+
+  devices:
+    - id: bedroom_screen
+      name: "Bedroom Screen"
+    - id: bedroom_blockout
+      name: "Bedroom Blockout"
+    - id: study_blockout
+      name: "Study Blockout"
+    - id: living_right_screen
+      name: "Living Right Screen"
+    - id: living_right_blockout
+      name: "Living Right Blockout"
+    - id: living_left_blockout
+      name: "Living Left Blockout"
+    - id: living_side_blockout
+      name: "Living Side Blockout"
+
+esp8266:
   board: esp01_1m
-  includes:
-    - raex_blind_tx.h
 
 wifi:
   ssid: !secret smart_wifi_ssid
@@ -23,12 +39,77 @@ logger:
 api:
 
 ota:
+  platform: 'esphome'
 
-custom_component:
-  - lambda: |-
-      auto raex_blind_transmit = new RaexBlindTransmitComponent();
-      return {raex_blind_transmit};
+external_components:
+  - source:
+      type: local
+      path: custom_components
+
+raex_blind_tx:
+  id: raex_tx
 
 binary_sensor:
   - platform: status
     name: "RF Controller Status"
+
+# Define all blinds
+packages:
+  # Bedroom blinds
+  bedroom_screen: !include
+    file: packages/blind.yaml
+    vars:
+      name: "Bedroom Screen"
+      remote_id: "40"
+      channel_id: "1"
+      device_id: bedroom_screen
+      
+  bedroom_blockout: !include
+    file: packages/blind.yaml
+    vars:
+      name: "Bedroom Blockout"
+      remote_id: "40"
+      channel_id: "2"
+      device_id: bedroom_blockout
+
+  # Study blinds
+  study_blockout: !include
+    file: packages/blind.yaml
+    vars:
+      name: "Study Blockout"
+      remote_id: "40"
+      channel_id: "4"
+      device_id: study_blockout
+
+  # Living room blinds
+  living_right_screen: !include
+    file: packages/blind.yaml
+    vars:
+      name: "Living Right Screen"
+      remote_id: "41"
+      channel_id: "1"
+      device_id: living_right_screen
+
+  living_right_blockout: !include
+    file: packages/blind.yaml
+    vars:
+      name: "Living Right Blockout"
+      remote_id: "41"
+      channel_id: "2"
+      device_id: living_right_blockout
+
+  living_left_blockout: !include
+    file: packages/blind.yaml
+    vars:
+      name: "Living Left Blockout"
+      remote_id: "40"
+      channel_id: "8"
+      device_id: living_left_blockout
+
+  living_side_blockout: !include
+    file: packages/blind.yaml
+    vars:
+      name: "Living Side Blockout"
+      remote_id: "40"
+      channel_id: "5"
+      device_id: living_side_blockout

@@ -1,0 +1,27 @@
+# Template for a blind and its pairing button
+# Required variables:
+# - name: The name of the blind (e.g. "Bedroom Screen")
+# - id: The ID prefix to use (e.g. "bedroomScreen")
+# - remote_id: The remote ID for this blind
+# - channel_id: The channel ID for this blind
+# Note: The ID will be automatically derived from the package name
+api:
+  custom_services: true
+
+cover:
+  - platform: raex_blind_tx
+    name: "${name}"
+    device_class: blind
+    raex_parent: raex_tx
+    remote_id: ${remote_id}
+    channel_id: ${channel_id}
+    device_id: ${device_id}
+
+button:
+  - platform: raex_blind_tx
+    name: "${name} Pairing"
+    entity_category: "config"
+    raex_parent: raex_tx
+    remote_id: ${remote_id}
+    channel_id: ${channel_id}
+    device_id: ${device_id}

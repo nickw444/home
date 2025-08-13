@@ -1,4 +1,11 @@
+#pragma once
+
 #include "esphome.h"
+#include "esphome/core/component.h"
+#include "esphome/core/log.h"
+#include "esphome/components/cover/cover.h"
+#include "esphome/components/button/button.h"
+#include "esphome/components/api/custom_api_device.h"
 
 // Goals
 //  - Eventual consistency; retry over a longer period of time.
@@ -15,7 +22,10 @@
 #define CLOCK_WIDTH 360
 #define LOCKOUT_DELAY_MS 200
 
-static const char *TAG = "raex_blind_tx";
+namespace esphome {
+namespace raex_blind_tx {
+
+static const char *const TAG = "raex_blind_tx";
 
 enum _raex_action {
   TX_RAEX_ACTION_UP = 254,
@@ -63,7 +73,7 @@ RaexMessage::RaexMessage(
   action_id(action_id) {};
 
 
-class RaexBlindTransmitComponent : public Component, public CustomAPIDevice {
+class RaexBlindTX : public Component, public api::CustomAPIDevice {
   private:
     std::map<uint32_t, RaexMessage*> pending_messages;
     int lockout_until = 0;
@@ -75,9 +85,9 @@ class RaexBlindTransmitComponent : public Component, public CustomAPIDevice {
       // think of it as the setup() call in Arduino
       pinMode(3, OUTPUT);
 
-      register_service(&RaexBlindTransmitComponent::transmit, "transmit",
+      register_service(&RaexBlindTX::transmit, "transmit",
                       {"remote_id", "channel_id", "action"});
-      register_service(&RaexBlindTransmitComponent::transmit_custom, "transmit_custom",
+      register_service(&RaexBlindTX::transmit_custom, "transmit_custom",
                       {"remote_id", "channel_id", "action", "blocks", "retries"});
     }
 
@@ -256,3 +266,126 @@ class RaexBlindTransmitComponent : public Component, public CustomAPIDevice {
     }
 };
 
+class RaexBlindCover : public cover::Cover, public Component {
+ public:
+  void setup() override {
+    // Load saved state from preferences
+    float saved_position;
+    if (this->pref_position_.load(&saved_position)) {
+      this->position = saved_position;
+    } else {
+      // Default to open if no saved state
+      this->position = cover::COVER_OPEN;
+    }
+    
+    uint8_t saved_operation;
+    if (this->pref_operation_.load(&saved_operation)) {
+      this->current_operation = static_cast<cover::CoverOperation>(saved_operation);
+    } else {
+      this->current_operation = cover::COVER_OPERATION_IDLE;
+    }
+    
+    this->publish_state();
+  }
+
+  void loop() override {
+    // Check if we need to update state after movement
+    if (this->state_change_time != 0) {
+      const uint32_t now = millis();
+      if (now - this->state_change_time >= 5000) {  // 5 second delay
+        this->state_change_time = 0;
+        
+        if (this->current_operation == cover::COVER_OPERATION_OPENING) {
+          this->current_operation = cover::COVER_OPERATION_IDLE;
+          this->position = cover::COVER_OPEN;
+        } else if (this->current_operation == cover::COVER_OPERATION_CLOSING) {
+          this->current_operation = cover::COVER_OPERATION_IDLE;
+          this->position = cover::COVER_CLOSED;
+        }
+        
+        // Save state when it changes
+        this->save_state_();
+        this->publish_state();
+      }
+    }
+  }
+
+  void set_parent(RaexBlindTX *parent) { parent_ = parent; }
+  void set_remote_id(uint16_t remote_id) { 
+    remote_id_ = remote_id;
+    // Initialize preferences with unique keys based on remote_id and channel_id
+    this->pref_position_ = global_preferences->make_preference<float>(remote_id_ << 8 | channel_id_);
+    this->pref_operation_ = global_preferences->make_preference<uint8_t>((remote_id_ << 8 | channel_id_) + 1);
+  }
+  void set_channel_id(uint8_t channel_id) { 
+    channel_id_ = channel_id;
+    // Re-initialize preferences with updated IDs
+    this->pref_position_ = global_preferences->make_preference<float>(remote_id_ << 8 | channel_id_);
+    this->pref_operation_ = global_preferences->make_preference<uint8_t>((remote_id_ << 8 | channel_id_) + 1);
+  }
+
+  cover::CoverTraits get_traits() override {
+    auto traits = cover::CoverTraits();
+    traits.set_is_assumed_state(true);
+    traits.set_supports_position(false);
+    traits.set_supports_tilt(false);
+    traits.set_supports_stop(true);  // Enable stop button
+    return traits;
+  }
+
+ protected:
+  void control(const cover::CoverCall &call) override {
+    if (call.get_stop()) {
+      // Handle stop command
+      this->parent_->transmit(remote_id_, channel_id_, "STOP");
+      this->current_operation = cover::COVER_OPERATION_IDLE;
+      this->state_change_time = 0;
+      this->save_state_();
+      this->publish_state();
+    } else if (call.get_position().has_value()) {
+      auto pos = *call.get_position();
+      if (pos == cover::COVER_OPEN) {
+        this->parent_->transmit(remote_id_, channel_id_, "OPEN");
+        this->current_operation = cover::COVER_OPERATION_OPENING;
+        this->state_change_time = millis();
+      } else if (pos == cover::COVER_CLOSED) {
+        this->parent_->transmit(remote_id_, channel_id_, "CLOSE");
+        this->current_operation = cover::COVER_OPERATION_CLOSING;
+        this->state_change_time = millis();
+      }
+      this->publish_state();
+    }
+  }
+
+  void save_state_() {
+    this->pref_position_.save(&this->position);
+    uint8_t operation = static_cast<uint8_t>(this->current_operation);
+    this->pref_operation_.save(&operation);
+  }
+
+  RaexBlindTX *parent_;
+  uint16_t remote_id_{0};
+  uint8_t channel_id_{0};
+  uint32_t state_change_time{0};  // Tracks when state changes for delayed updates
+  ESPPreferenceObject pref_position_;
+  ESPPreferenceObject pref_operation_;
+};
+
+class RaexBlindPairButton : public button::Button, public Component {
+ public:
+  void set_parent(RaexBlindTX *parent) { parent_ = parent; }
+  void set_remote_id(uint16_t remote_id) { remote_id_ = remote_id; }
+  void set_channel_id(uint8_t channel_id) { channel_id_ = channel_id; }
+
+ protected:
+  void press_action() override {
+    this->parent_->transmit(remote_id_, channel_id_, "PAIR");
+  }
+
+  RaexBlindTX *parent_;
+  uint16_t remote_id_{0};
+  uint8_t channel_id_{0};
+};
+
+}  // namespace raex_blind_tx
+}  // namespace esphome
