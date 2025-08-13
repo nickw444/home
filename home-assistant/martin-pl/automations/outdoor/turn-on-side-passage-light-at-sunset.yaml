@@ -1,0 +1,15 @@
+id: "1739261808471"
+alias: turn on side passage light at sunset
+description: ""
+triggers:
+  - trigger: sun
+    event: sunset
+    offset: 0
+conditions: []
+actions:
+  - action: light.turn_on
+    metadata: {}
+    data: {}
+    target:
+      entity_id: light.side_passage
+mode: single
