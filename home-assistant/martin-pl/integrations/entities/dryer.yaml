@@ -2,10 +2,12 @@ template:
   binary_sensor:
     - name: "Dryer"
       unique_id: dryer
-      delay_on: 2
-      delay_off: 5
+      delay_on:
+        minutes: 2
+      delay_off:
+        minutes: 5
       state: >-
-        {{ states('sensor.dryer_current_consumption')|float > 2 }}
+        {{ states('sensor.dryer_current_consumption')|float > 5 }}
       icon: "mdi:tumble-dryer"
       availability: >-
-        {{ not is_state('switch.dryer', 'unavailable') }}
+        {{ has_value('switch.dryer') }}

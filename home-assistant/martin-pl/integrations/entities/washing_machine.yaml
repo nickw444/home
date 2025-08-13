@@ -2,10 +2,12 @@ template:
   binary_sensor:
     - name: "Washing Machine"
       unique_id: washing_machine
-      delay_on: 2
-      delay_off: 5
+      delay_on:
+        minutes: 2
+      delay_off:
+        minutes: 5
       state: >-
         {{ states('sensor.washing_machine_current_consumption')|float > 2 }}
       icon: "mdi:washing-machine"
       availability: >-
-        {{ not is_state('switch.washing_machine', 'unavailable') }}
+        {{ has_value('switch.washing_machine') }}

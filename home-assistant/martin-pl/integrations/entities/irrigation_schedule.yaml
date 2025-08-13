@@ -161,11 +161,11 @@ template:
         unique_id: "rain_today"
         icon: "mdi:weather-rainy"
         state: |-
-          {{ states('sensor.fo79_rain_daily')|float >= 2 or states('sensor.oatley_rain_amount_min_0')|float >= 3 }}
+          {{ states('sensor.rain_daily')|float >= 2 or states('sensor.oatley_rain_amount_min_0')|float >= 3 }}
 
   # - alias: "less than 2mm rain today"
   #   condition: numeric_state
-  #   entity_id: sensor.fo79_rain_daily
+  #   entity_id: sensor.rain_daily
   #   below: 2
   # - condition: or
   #   conditions:

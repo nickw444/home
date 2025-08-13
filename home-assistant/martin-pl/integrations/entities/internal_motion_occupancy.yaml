@@ -16,5 +16,11 @@ sensor:
     entity_id: binary_sensor.internal_motion_occupancy
     state: "on"
     type: count
-    start: "{{ state_attr('sun.sun', 'next_dawn') | as_datetime | as_local - timedelta(days=1) }}"
+    # Conditional hack to avoid boot race condition when next_dawn is None...
+    start: >
+      {% if state_attr('sun.sun', 'next_dawn') %}
+      {{ state_attr('sun.sun', 'next_dawn') | as_datetime | as_local - timedelta(days=1) }}
+      {% else %}
+      {{ now() }}
+      {% endif %}
     end: "{{ now() }}"

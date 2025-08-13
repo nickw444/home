@@ -1,0 +1,125 @@
+wake_on_lan:
+
+automation:
+  - id: "5E947BA516A3"
+    alias: "Turn On Living Room TV with WakeOnLan"
+    triggers:
+      - trigger: samsungtv.turn_on
+        entity_id: media_player.living_room_tv
+    actions:
+      - action: wake_on_lan.send_magic_packet
+        data:
+          mac: !secret samsung_smart_tv_mac
+
+  - id: "682B367539FB"
+    alias: "homekit remote: media key arrow_up"
+    description: ""
+    trigger:
+      - event_type: homekit_tv_remote_key_pressed
+        platform: event
+        event_data:
+          entity_id: media_player.living_room_tv
+          key_name: arrow_up
+    condition: []
+    action:
+      - action: remote.send_command
+        data:
+          command: KEY_UP
+        target:
+          entity_id: remote.living_room_tv
+  - id: "B07D24A1E86E"
+    alias: "homekit remote: media key arrow_down"
+    description: ""
+    trigger:
+      - event_type: homekit_tv_remote_key_pressed
+        platform: event
+        event_data:
+          entity_id: media_player.living_room_tv
+          key_name: arrow_down
+    condition: []
+    action:
+      - action: remote.send_command
+        data:
+          command: KEY_DOWN
+        target:
+          entity_id: remote.living_room_tv
+  - id: "C89C74C0D202"
+    alias: "homekit remote: media key arrow_left"
+    description: ""
+    trigger:
+      - event_type: homekit_tv_remote_key_pressed
+        platform: event
+        event_data:
+          entity_id: media_player.living_room_tv
+          key_name: arrow_left
+    condition: []
+    action:
+      - action: remote.send_command
+        data:
+          command: KEY_LEFT
+        target:
+          entity_id: remote.living_room_tv
+  - id: "940199676C17"
+    alias: "homekit remote: media key arrow_right"
+    description: ""
+    trigger:
+      - event_type: homekit_tv_remote_key_pressed
+        platform: event
+        event_data:
+          entity_id: media_player.living_room_tv
+          key_name: arrow_right
+    condition: []
+    action:
+      - action: remote.send_command
+        data:
+          command: KEY_RIGHT
+        target:
+          entity_id: remote.living_room_tv
+  - id: "8E9E5B27D4BE"
+    alias: "homekit remote: media key back"
+    description: ""
+    trigger:
+      - event_type: homekit_tv_remote_key_pressed
+        platform: event
+        event_data:
+          entity_id: media_player.living_room_tv
+          key_name: back
+    condition: []
+    action:
+      - action: remote.send_command
+        data:
+          command: KEY_RETURN
+        target:
+          entity_id: remote.living_room_tv
+  - id: "25B3FEE288AD"
+    alias: "homekit remote: media key select"
+    description: ""
+    trigger:
+      - event_type: homekit_tv_remote_key_pressed
+        platform: event
+        event_data:
+          entity_id: media_player.living_room_tv
+          key_name: select
+    condition: []
+    action:
+      - action: remote.send_command
+        data:
+          command: KEY_ENTER
+        target:
+          entity_id: remote.living_room_tv
+  - id: "4AD260B62D6D"
+    alias: "homekit remote: media key information"
+    description: ""
+    trigger:
+      - event_type: homekit_tv_remote_key_pressed
+        platform: event
+        event_data:
+          entity_id: media_player.living_room_tv
+          key_name: information
+    condition: []
+    action:
+      - action: remote.send_command
+        data:
+          command: KEY_HOME
+        target:
+          entity_id: remote.living_room_tv
