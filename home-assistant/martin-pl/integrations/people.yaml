@@ -3,3 +3,8 @@ group:
     entities:
       - device_tracker.nicks_iphone
       - device_tracker.kates_iphone
+
+  all_animals:
+    entities:
+      - person.evie
+      - person.inara
