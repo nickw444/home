@@ -13,4 +13,4 @@ action:
     data:
       message: clear_notification
       data:
-        tag: osmo-no-one-home
+        tag: robovac-no-one-home

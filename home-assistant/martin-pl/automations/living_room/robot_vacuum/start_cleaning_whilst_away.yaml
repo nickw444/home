@@ -10,13 +10,8 @@ trigger:
     for: "00:05:00"
     id: "zone_dog_park"
   - platform: numeric_state
-    entity_id: proximity.home_nick
-    above: "2"
-    for: "00:05:00"
-    id: proximity
-  - platform: numeric_state
-    entity_id: proximity.home_kate
-    above: "2"
+    entity_id: sensor.home_nearest_distance
+    above: "100"
     for: "00:05:00"
     id: proximity
 condition:
@@ -36,6 +31,10 @@ condition:
   - condition: state
     entity_id: input_boolean.away_mode
     state: "off"
+  # Don't clean if dogs are home
+  - condition: state
+    entity_id: group.all_animals
+    state: "not_home"
 action:
   # Don't clean if there is presence, wait for 15 minutes for not-home
   # state (or continue immediately if already not home)
@@ -59,12 +58,12 @@ action:
       action_start_now_auto: "{{ 'START_NOW_AUTO_' ~ context.id }}"
       action_start_now_deep: "{{ 'START_NOW_DEEP_' ~ context.id }}"
       action_start_now_mop: "{{ 'START_NOW_MOP_' ~ context.id }}"
-  - service: notify.everyone
+  - service: notify.mobile_app_nicks_iphone
     data:
-      title: Crystal
+      title: Automated Cleaning
       message: Starting automated cleaning in 5 minutes
       data:
-        tag: crystal-no-one-home
+        tag: robovac-no-one-home
         actions:
           - action: "{{ action_cancel }}"
             title: Cancel
@@ -94,21 +93,15 @@ action:
           action: "{{ action_start_now_mop }}"
     timeout: "00:05:00"
   - choose:
-      - conditions:
-          - condition: template
-            value_template: "{{ wait.trigger.event.data.action == action_cancel }}"
+      - conditions: "{{ wait.trigger.event.data.action == action_cancel }}"
         sequence: []
-      - conditions:
-          - condition: template
-            value_template: "{{ wait.trigger.event.data.action == action_start_now_deep }}"
+      - conditions: "{{ wait.trigger.event.data.action == action_start_now_deep }}"
         sequence:
           - action: button.press
             target:
               entity_id: button.x40_ultra_shortcut_8
             data: {}
-      - conditions:
-          - condition: template
-            value_template: "{{ wait.trigger.event.data.action == action_start_now_mop }}"
+      - conditions: "{{ wait.trigger.event.data.action == action_start_now_mop }}"
         sequence:
           - action: button.press
             target:

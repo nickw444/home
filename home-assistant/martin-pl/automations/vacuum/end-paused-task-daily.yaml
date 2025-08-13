@@ -1,0 +1,22 @@
+id: "1747478414303"
+alias: "robovac: End paused task at 9am."
+description: ""
+triggers:
+  - trigger: time
+    at: 09:00:00
+conditions:
+  - condition: or
+    conditions:
+      - condition: state
+        entity_id: vacuum.crystal
+        state: paused
+      - condition: state
+        state: idle
+        entity_id: vacuum.crystal
+actions:
+  - action: vacuum.stop
+    metadata: {}
+    data: {}
+    target:
+      entity_id: vacuum.crystal
+mode: single
