@@ -4,7 +4,8 @@ sequence:
     target:
       entity_id: automation.kitchen_ambiance_toggle_for_downlights_state
   - service: light.turn_off
-    entity_id: all
+    target:
+      entity_id: all
   - service: automation.turn_on
     target:
       entity_id: automation.kitchen_ambiance_toggle_for_downlights_state
