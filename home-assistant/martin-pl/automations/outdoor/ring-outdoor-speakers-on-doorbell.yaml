@@ -1,0 +1,34 @@
+id: "1747479567384"
+alias: "doorbell: ring outdoor speakers"
+description: ""
+triggers:
+  - trigger: state
+    entity_id:
+      - binary_sensor.front_door_doorbell
+    from: "off"
+    to: "on"
+conditions:
+  - condition: state
+    entity_id: group.all_people
+    state: home
+  - condition: or
+    conditions:
+      - condition: state
+        entity_id: binary_sensor.back_yard_person_detected_last_hour
+        state: "on"
+      - condition: state
+        entity_id: binary_sensor.shed_motion_detected_last_30m
+        state: "on"
+      - condition: state
+        entity_id: binary_sensor.shed_fp2_occupancy_detected_last_30m
+        state: "on"
+actions:
+  - action: music_assistant.play_announcement
+    metadata: {}
+    data:
+      announce_volume: 30
+      url: https://hass.nickwhyte.com/local/audio/doorbell.mp3
+    target:
+      entity_id:
+        - media_player.backyard
+mode: single
