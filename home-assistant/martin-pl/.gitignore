@@ -18,9 +18,7 @@ tts
 ip_bans.yaml
 image
 frigate.yml
-owntone/music
 zigbee2mqtt
 
 # Managed by hass-deps (see hass-deps.yaml)
-custom_components/*
 www/community/*
