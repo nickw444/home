@@ -13,7 +13,6 @@ cover:
     name: "Study"
     entities:
       - cover.study_blockout
-      - cover.study_screen
   - platform: group
     name: "Living"
     entities:
@@ -31,7 +30,6 @@ cover:
       - cover.kitchen_blockout
       - cover.kitchen_screen
       - cover.study_blockout
-      - cover.study_screen
       - cover.bedroom_blockout
       - cover.bedroom_screen
       - cover.living_side_blockout
