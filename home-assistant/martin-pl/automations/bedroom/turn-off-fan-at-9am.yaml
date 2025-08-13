@@ -1,0 +1,17 @@
+id: "1733053898376"
+alias: Turn off fan at 9am
+description: ""
+triggers:
+  - trigger: time
+    at: 09:00:00
+conditions:
+  - condition: state
+    entity_id: fan.bedroom_fan
+    state: "on"
+actions:
+  - action: fan.turn_off
+    metadata: {}
+    data: {}
+    target:
+      entity_id: fan.bedroom_fan
+mode: single
