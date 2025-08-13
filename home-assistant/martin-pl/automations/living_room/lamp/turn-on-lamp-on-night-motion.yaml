@@ -1,13 +1,13 @@
 id: "1605957739472"
-alias: "living_room: turn on lamp on hallway motion detected at night"
+alias: "living_room: turn on lamp on living motion detected at night"
 description: ""
 trigger:
   - platform: state
     entity_id:
-      - binary_sensor.hallway_motion_occupancy
       - binary_sensor.living_room_motion_occupancy
     from: "off"
     to: "on"
+    id: "living_room"
 condition:
   - condition: or
     conditions:
@@ -21,6 +21,10 @@ condition:
   - condition: state
     entity_id: input_boolean.guest_mode
     state: "off"
+  # Don't perform action if trigger is living_room && robot running
+  - condition: template
+    value_template: >
+      {{ trigger.id != 'living_room' or states('vacuum.crystal') not in ['cleaning', 'returning'] }}
 action:
   - service: light.turn_on
     entity_id: light.living_room_lamp

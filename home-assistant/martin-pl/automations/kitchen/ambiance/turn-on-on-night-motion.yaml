@@ -10,6 +10,7 @@ trigger:
     entity_id: binary_sensor.kitchen_motion_occupancy
     from: "off"
     to: "on"
+    id: "kitchen"
 condition:
   - condition: or
     conditions:
@@ -34,6 +35,11 @@ condition:
   - condition: state
     entity_id: group.all_people
     state: home
+  # Don't perform action if trigger is kitchen && robot running
+  - condition: template
+    value_template: >
+      {{ trigger.id != 'kitchen' or states('vacuum.crystal') not in ['cleaning', 'returning'] }}
+
 action:
   # We must pre-set brightness with a separate call, then turn the light
   # on due to SetOption20
