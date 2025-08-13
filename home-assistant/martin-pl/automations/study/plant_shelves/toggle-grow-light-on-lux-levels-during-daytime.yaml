@@ -3,7 +3,7 @@ alias: "study: toggle grow light on lux levels during daytime"
 description: ""
 trigger:
   - platform: numeric_state
-    entity_id: sensor.study_shelves_illuminance_illuminance_lux
+    entity_id: sensor.study_shelves_illuminance_illuminance
     for:
       hours: 0
       minutes: 0
@@ -11,7 +11,7 @@ trigger:
     id: bright
     above: "1000"
   - platform: numeric_state
-    entity_id: sensor.study_shelves_illuminance_illuminance_lux
+    entity_id: sensor.study_shelves_illuminance_illuminance
     for:
       hours: 0
       minutes: 5

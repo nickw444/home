@@ -7,7 +7,7 @@ trigger:
     offset: 0
 condition:
   - condition: numeric_state
-    entity_id: sensor.study_shelves_illuminance_illuminance_lux
+    entity_id: sensor.study_shelves_illuminance_illuminance
     below: "500"
 action:
   - service: light.turn_on
