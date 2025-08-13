@@ -38,5 +38,14 @@ action:
     data: {}
     entity_id:
       - cover.bedroom_blockout
-      - cover.bedroom_screen
+  - if:
+      # Disable opening whilst Christmas star decoration is up
+      - condition: state
+        entity_id: light.bedroom_star
+        state: unavailable
+    then:
+      - service: cover.open_cover
+        data: {}
+        entity_id:
+          - cover.bedroom_screen
 mode: single
