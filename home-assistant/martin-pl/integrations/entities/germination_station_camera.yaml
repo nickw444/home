@@ -1,5 +1,5 @@
 ffmpeg:
 camera:
   - platform: ffmpeg
-    name: Living Room
+    name: Germination Station
     input: rtsp://192.168.2.91:554/live0

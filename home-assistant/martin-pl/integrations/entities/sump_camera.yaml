@@ -1,5 +1,5 @@
 ffmpeg:
 camera:
   - platform: ffmpeg
-    name: Bedroom
+    name: Sump
     input: rtsp://192.168.2.82:554/live0
