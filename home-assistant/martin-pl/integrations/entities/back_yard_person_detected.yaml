@@ -1,0 +1,25 @@
+template:
+  - binary_sensor:
+      - name: "Back Yard Person Detected Last Hour"
+        unique_id: "back_yard_person_detected_last_hour"
+        availability: >
+          {{ has_value('binary_sensor.back_yard_person_detected') }}
+        state: >
+          {{ states('binary_sensor.back_yard_person_detected')}}
+        delay_off: "01:00:00"
+  - binary_sensor:
+      - name: "Shed Motion Detected Last 30m"
+        unique_id: "shed_motion_detected_last_hour"
+        availability: >
+          {{ has_value('binary_sensor.shed_motion_occupancy') }}
+        state: >
+          {{ states('binary_sensor.shed_motion_occupancy')}}
+        delay_off: "00:30:00"
+  - binary_sensor:
+      - name: "Shed FP2 Occupancy Detected Last 30m"
+        unique_id: "shed_fp2_occupancy_detected_last_hour"
+        availability: >
+          {{ has_value('binary_sensor.shed_fp2_presence_sensor_all_zones') }}
+        state: >
+          {{ states('binary_sensor.shed_fp2_presence_sensor_all_zones')}}
+        delay_off: "00:30:00"
