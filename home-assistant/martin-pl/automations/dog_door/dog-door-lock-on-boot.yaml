@@ -1,0 +1,29 @@
+id: "1742708013692"
+alias: "dog door: lock on boot + when open for long time"
+description: ""
+triggers:
+  - trigger: state
+    entity_id:
+      - lock.backyard_locked_in
+    to: unlocked
+    for:
+      hours: 2
+      minutes: 0
+      seconds: 0
+  - trigger: homeassistant
+    event: start
+    alias: When Home Assistant is started (e.g. power is restored)
+conditions: []
+actions:
+  - delay:
+      hours: 0
+      minutes: 5
+      seconds: 0
+      milliseconds: 0
+    alias: Wait for dog door to reconnect
+  - action: lock.lock
+    metadata: {}
+    data: {}
+    target:
+      entity_id: lock.backyard_locked_in
+mode: single
