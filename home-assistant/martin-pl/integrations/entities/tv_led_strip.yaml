@@ -1,6 +1,0 @@
-light:
-  - platform: calibrated_light
-    name: "TV LED Strip"
-    entity_id: light.tv_led_strip
-    # "White" @ 255, 199, 159
-    calibration_rgb: [0, -56, -96]

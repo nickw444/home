@@ -1,8 +1,0 @@
-input_number:
-  energy_car_charge_power_headroom:
-    name: Car Charge Power Headroom
-    unit_of_measurement: "W"
-    initial: 600
-    min: 200
-    max: 2000
-    step: 25

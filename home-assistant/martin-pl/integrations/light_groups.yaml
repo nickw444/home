@@ -1,6 +1,0 @@
-light:
-  - platform: group
-    name: Bedroom Lamps
-    entities:
-      - light.kates_bedside
-      - light.nicks_bedside

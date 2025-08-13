@@ -1,4 +1,0 @@
-light:
-  - platform: switch
-    name: Living Room Lamp
-    entity_id: switch.living_room_lamp
