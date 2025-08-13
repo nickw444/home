@@ -1,0 +1,259 @@
+- id: '1753871589158'
+  alias: vacuum 4 way button switch
+  description: ''
+  use_blueprint:
+    path: rdeangel/zigbee2mqtt-tuya-4-button-switch-mqtt-device-trigger_rdeangel.yaml
+    input:
+      zigbee_device: 27af488873a369503ad82cc03d2dd6c5
+      button_one_short_press:
+      - action: button.press
+        metadata: {}
+        data: {}
+        target:
+          entity_id: button.x40_ultra_shortcut_6
+      button_one_double_press:
+      - action: button.press
+        metadata: {}
+        data: {}
+        target:
+          entity_id: button.x40_ultra_shortcut_8
+      button_one_long_press:
+      - action: button.press
+        metadata: {}
+        data: {}
+        target:
+          entity_id: button.x40_ultra_shortcut_7
+      button_two_short_press:
+      - action: button.press
+        metadata: {}
+        data: {}
+        target:
+          entity_id:
+          - button.x40_ultra_shortcut_3
+      button_two_long_press:
+      - action: button.press
+        metadata: {}
+        data: {}
+        target:
+          entity_id:
+          - button.x40_ultra_shortcut_3
+      button_three_short_press:
+      - action: button.press
+        metadata: {}
+        data: {}
+        target:
+          entity_id: button.x40_ultra_shortcut_1
+      button_three_long_press:
+      - action: button.press
+        metadata: {}
+        data: {}
+        target:
+          entity_id: button.x40_ultra_shortcut_4
+      button_four_short_press:
+      - action: button.press
+        metadata: {}
+        data: {}
+        target:
+          entity_id: button.x40_ultra_shortcut_2
+      button_four_long_press:
+      - action: button.press
+        metadata: {}
+        data: {}
+        target:
+          entity_id: button.x40_ultra_shortcut_5
+- id: '1754297735451'
+  alias: 'backyard: turn on fountain on person detected'
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id:
+    - binary_sensor.shed_fp2_presence_sensor_deck
+    to: 'on'
+    for:
+      hours: 0
+      minutes: 2
+      seconds: 0
+  conditions:
+  - condition: state
+    entity_id: binary_sensor.back_yard_person_detected_last_hour
+    state: 'on'
+  - condition: state
+    entity_id: group.all_people
+    state: home
+  - condition: sun
+    after: sunrise
+  - condition: time
+    before: '21:00:00'
+  - condition: state
+    entity_id: switch.front_garden_fountain
+    state: 'off'
+  actions:
+  - action: switch.turn_on
+    metadata: {}
+    data: {}
+    target:
+      entity_id: switch.front_garden_fountain
+  - wait_for_trigger:
+    - trigger: state
+      entity_id:
+      - binary_sensor.back_yard_person_detected
+      to: 'off'
+      for:
+        hours: 0
+        minutes: 30
+        seconds: 0
+    timeout:
+      hours: 2
+      minutes: 0
+      seconds: 0
+      milliseconds: 0
+  - action: switch.turn_off
+    metadata: {}
+    data: {}
+    target:
+      entity_id: switch.front_garden_fountain
+  mode: single
+- id: '1754298218488'
+  alias: 'backyard: turn on ambiance on door open'
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id:
+    - binary_sensor.back_door_contact
+    to: 'on'
+  conditions:
+  - condition: numeric_state
+    entity_id: sensor.ecowitt_hub_solar_lux
+    below: 500
+  - condition: time
+    before: '23:59:00'
+  - condition: state
+    entity_id: light.back_yard_ambiance
+    state: 'off'
+  actions:
+  - action: light.turn_on
+    metadata: {}
+    data: {}
+    target:
+      entity_id: light.back_yard_ambiance
+  - wait_for_trigger:
+    - trigger: state
+      entity_id:
+      - binary_sensor.back_yard_person_detected
+      to: 'off'
+      for:
+        hours: 0
+        minutes: 15
+        seconds: 0
+    - trigger: state
+      entity_id:
+      - light.back_yard_ambiance
+      to: 'off'
+    timeout:
+      hours: 1
+      minutes: 0
+      seconds: 0
+      milliseconds: 0
+  - action: light.turn_off
+    metadata: {}
+    data: {}
+    target:
+      entity_id: light.back_yard_ambiance
+  mode: restart
+- id: '1754298435531'
+  alias: 'backyard: turn on ambiance on person detection'
+  description: ''
+  triggers:
+  - trigger: numeric_state
+    entity_id:
+    - sensor.ecowitt_hub_solar_lux
+    for:
+      hours: 0
+      minutes: 5
+      seconds: 0
+    below: 500
+  - trigger: state
+    entity_id:
+    - binary_sensor.back_yard_person_detected
+    to: 'on'
+  conditions:
+  - condition: time
+    before: '23:59:00'
+  - condition: numeric_state
+    entity_id: sensor.ecowitt_hub_solar_lux
+    below: 500
+  - condition: state
+    entity_id: binary_sensor.back_yard_person_detected_last_hour
+    state: 'on'
+  - condition: state
+    entity_id: light.back_yard_ambiance
+    state: 'off'
+  actions:
+  - action: light.turn_on
+    metadata: {}
+    data: {}
+    target:
+      entity_id: light.back_yard_ambiance
+  - wait_for_trigger:
+    - trigger: state
+      entity_id:
+      - binary_sensor.back_yard_person_detected
+      to: 'off'
+      for:
+        hours: 0
+        minutes: 15
+        seconds: 0
+    - trigger: state
+      entity_id:
+      - light.back_yard_ambiance
+      to: 'off'
+    timeout:
+      hours: 1
+      minutes: 0
+      seconds: 0
+      milliseconds: 0
+  - action: light.turn_off
+    metadata: {}
+    data: {}
+    target:
+      entity_id: light.back_yard_ambiance
+  mode: single
+- id: '1754299925764'
+  alias: 'front door: lock front door after 15m unlock timeout with door closed'
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id:
+    - binary_sensor.front_door_contact
+    to: 'off'
+    for:
+      hours: 0
+      minutes: 15
+      seconds: 0
+  - trigger: state
+    entity_id:
+    - lock.front_door
+    to: unlocked
+    for:
+      hours: 0
+      minutes: 15
+      seconds: 0
+  conditions:
+  - condition: state
+    entity_id: lock.front_door
+    state: unlocked
+  - condition: state
+    entity_id: binary_sensor.front_door_contact
+    state: 'off'
+  actions:
+  - action: lock.lock
+    metadata: {}
+    data: {}
+    target:
+      entity_id: lock.front_door
+  - action: notify.mobile_app_nicks_iphone
+    metadata: {}
+    data:
+      title: Front Door
+      message: Front door was locked after timeout
+  mode: single
