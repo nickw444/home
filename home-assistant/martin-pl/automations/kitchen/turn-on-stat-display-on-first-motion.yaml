@@ -1,0 +1,25 @@
+id: "160077462353445"
+alias: "kitchen stat display: turn on on first motion detected, once per day, after sunrise"
+description: ""
+trigger:
+  - platform: time
+    at: "11:00:00"
+  - platform: state
+    entity_id: binary_sensor.internal_motion_occupancy
+    to: "on"
+condition:
+  - condition: template
+    value_template:
+      "{{ state_attr('automation.kitchen_stat_display_turn_on_on_first_motion_detected_once_per_day_after_sunrise', 'last_triggered')
+      < now().replace(hour=3, minute=0, second=0) }}"
+  - condition: state
+    entity_id: group.all_people
+    state: home
+  - condition: sun
+    after: sunrise
+action:
+  - service: light.turn_on
+    data: {}
+    entity_id:
+      - light.kitchen_stat_display_display_backlight
+mode: single
