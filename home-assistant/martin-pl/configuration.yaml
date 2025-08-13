@@ -1,26 +1,8 @@
 # Configure a default setup of Home Assistant (frontend, api, etc)
 default_config:
 homeassistant:
+  name: "Home"
   auth_providers:
-    - type: trusted_networks
-      trusted_networks:
-        # LAN
-        - 192.168.2.0/24
-        # VPN
-        - 192.168.90.0/24
-        # Guest
-        - 192.168.60.0/24
-      trusted_users:
-        192.168.2.0/24:
-          - deb570a932bc44f09855a3e8ef83e190 # Nick
-          - 7c2269c75dcd4321bec4084876ae0e18 # Kate
-          - e2f92fb2af8745b2a16fed0101eec985 # Guest
-        192.168.90.0/24:
-          - deb570a932bc44f09855a3e8ef83e190 # Nick
-          - 7c2269c75dcd4321bec4084876ae0e18 # Kate
-          - e2f92fb2af8745b2a16fed0101eec985 # Guest
-        192.168.60.0/24: e2f92fb2af8745b2a16fed0101eec985 # Guest
-      allow_bypass_login: true
     - type: homeassistant
   packages: !include_dir_named integrations
   internal_url: !secret http_base_url_internal
@@ -34,6 +16,7 @@ homeassistant:
 
 automation: !include automations.yaml
 script: !include scripts.yaml
+scene: !include scenes.yaml
 logger:
   default: info
   logs:
