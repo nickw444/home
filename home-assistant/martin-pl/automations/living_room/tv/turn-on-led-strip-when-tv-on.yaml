@@ -2,18 +2,13 @@ id: "1584944974594"
 alias: "living_room: turn on the LED strip when the TV turns on or source changes"
 description: ""
 trigger:
-  - entity_id: media_player.samsung_smart_tv
+  - entity_id: media_player.living_room_tv
     from: "off"
     platform: state
     to: "on"
-    # Appdaemon Spotify color script overrides the color, so force it to re-set
-    # when changing source from Spotify.
-  - entity_id: sensor.samsung_smart_tv_source
-    from: Spotify
-    platform: state
 condition:
   - condition: state
-    entity_id: media_player.samsung_smart_tv
+    entity_id: media_player.living_room_tv
     state: "on"
 action:
   - service: select.select_option
@@ -22,8 +17,8 @@ action:
     target:
       entity_id: "select.tv_led_strip_color_palette"
   - data:
-      rgb_color: [255, 231, 211]
+      rgb_color: [255, 170, 102]
       brightness: 128
       effect: Solid
-    entity_id: light.tv_led_strip_calibrated
+    entity_id: light.tv_led_strip
     service: light.turn_on

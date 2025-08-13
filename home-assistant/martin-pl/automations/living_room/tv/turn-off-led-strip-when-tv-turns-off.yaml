@@ -2,11 +2,11 @@ id: "1584945101124"
 alias: "living_room: turn off LED strip when the TV turns off"
 description: ""
 trigger:
-  - entity_id: media_player.samsung_smart_tv
+  - entity_id: media_player.living_room_tv
     from: "on"
     platform: state
     to: "off"
 condition: []
 action:
   - service: light.turn_off
-    entity_id: light.tv_led_strip_calibrated
+    entity_id: light.tv_led_strip
