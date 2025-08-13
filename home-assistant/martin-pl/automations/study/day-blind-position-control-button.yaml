@@ -1,5 +1,5 @@
 id: "1647313038555"
-alias: "study: Set day blind position with up down button"
+alias: "study: Set blind position with up down button"
 description: ""
 trigger:
   - platform: state
@@ -28,7 +28,7 @@ action:
           - service: cover.open_cover
             data: {}
             target:
-              entity_id: cover.study_screen
+              entity_id: cover.study_blockout
       - conditions:
           - condition: trigger
             id: move_down
@@ -36,10 +36,10 @@ action:
           - service: cover.close_cover
             data: {}
             target:
-              entity_id: cover.study_screen
+              entity_id: cover.study_blockout
     default:
       - service: cover.stop_cover
         data: {}
         target:
-          entity_id: cover.study_screen
+          entity_id: cover.study_blockout
 mode: single

@@ -5,6 +5,6 @@ use_blueprint:
   path: aqara_button_multi_cover_control.yaml
   input:
     button_action: sensor.study_wall_button_action
-    screen_blinds: cover.study_screen
+    screen_blinds: cover.study_blockout ## There are no screen blinds control.
     blockout_blinds: cover.study_blockout
     all_blinds: cover.study
