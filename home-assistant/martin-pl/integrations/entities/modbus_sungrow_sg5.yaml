@@ -33,8 +33,8 @@ modbus:
         data_type: uint16
         scan_interval: 60
 
-      - name: Inverter Daily Power Yield # << Use this for production tracking (60s precision)
-        unique_id: inverter_daily_power_yield
+      - name: Inverter Daily Power Yield (Raw) # << Use this for production tracking (60s precision)
+        unique_id: inverter_daily_power_yield_raw
         device_address: !secret sungrow_modbus_slave
         address: 5002 # reg 5003
         input_type: input
@@ -220,7 +220,7 @@ modbus:
         input_type: input
         data_type: int32
         swap: word
-        unit_of_measurement: Var
+        unit_of_measurement: var
         precision: 0
         device_class: reactive_power
         state_class: measurement
@@ -285,8 +285,8 @@ modbus:
       #   scale: 0.1
       #   scan_interval: 600
 
-      - name: Inverter Total Exported Energy
-        unique_id: inverter_total_exported_energy
+      - name: Inverter Total Exported Energy Raw
+        unique_id: inverter_total_exported_energy_raw
         device_address: !secret sungrow_modbus_slave
         address: 5094 # reg 5095-5096
         input_type: input
@@ -314,8 +314,8 @@ modbus:
       #   scale: 0.1
       #   scan_interval: 600
 
-      - name: Inverter Total Imported Energy
-        unique_id: inverter_total_imported_energy
+      - name: Inverter Total Imported Energy Raw
+        unique_id: inverter_total_imported_energy_raw
         device_address: !secret sungrow_modbus_slave
         address: 5098 # reg 5099-5100
         input_type: input
@@ -404,6 +404,51 @@ modbus:
 
 template:
   - sensor:
+      # Occasionally this sensor will spike, but with no specific pattern (maybe one bit flip?)
+      # Because of this, we use a mean sensor to check for spikes and report unavailable.
+      # The sensor reports every 60s. If the house is consuming at the highest rate possible (63A, ~15kW),
+      # then the 3h mean would be ~22.5kW behind the current reading.
+      # We use 40 as a buffer based on historical metrics.
+      - name: Inverter Total Imported Energy
+        unique_id: inverter_total_imported_energy
+        unit_of_measurement: kWh
+        device_class: energy
+        state_class: total_increasing
+        availability: >-
+          {{
+          has_value('sensor.inverter_total_imported_energy_raw')
+          and states('sensor.inverter_total_imported_energy_raw')|int(0) != 0
+          and states('sensor.inverter_total_imported_energy_raw')|int(0) < states('sensor.inverter_total_imported_energy_mean_3h')|int(0) + 40
+          }}
+        state: "{{ states('sensor.inverter_total_imported_energy_raw') }}"
+      - name: Inverter Total Exported Energy
+        unique_id: inverter_total_exported_energy
+        unit_of_measurement: kWh
+        device_class: energy
+        state_class: total_increasing
+        availability: >-
+          {{
+          has_value('sensor.inverter_total_exported_energy_raw')
+          and states('sensor.inverter_total_exported_energy_raw')|int != 0
+          }}
+        state: "{{ states('sensor.inverter_total_exported_energy_raw') }}"
+
+      # Occasionally this register reports 512 and other large values, causing
+      # it to throw the energy dashboard completely off. Omit 512 explicitly, and
+      # any value greater than the theoretical daily yield (~50kWh)
+      - name: Inverter Daily Power Yield
+        unique_id: inverter_daily_power_yield
+        unit_of_measurement: kWh
+        device_class: energy
+        state_class: total_increasing
+        availability: >-
+          {{
+          has_value('sensor.inverter_daily_power_yield_raw')
+          and states('sensor.inverter_daily_power_yield_raw')|int != 512
+          and states('sensor.inverter_daily_power_yield_raw')|int < 60
+          }}
+        state: "{{ states('sensor.inverter_daily_power_yield_raw') }}"
+
       - name: Inverter MPPT1 Power
         unique_id: inverter_mppt1_power
         unit_of_measurement: W
@@ -411,8 +456,8 @@ template:
         state_class: measurement
         availability: >-
           {{
-          not is_state('sensor.inverter_mppt1_voltage', 'unavailable')
-          and not is_state('sensor.inverter_mppt1_current', 'unavailable')
+          has_value('sensor.inverter_mppt1_voltage')
+          and has_value('sensor.inverter_mppt1_current')
           }}
         state: "{{ (states('sensor.inverter_mppt1_voltage') | float * states('sensor.inverter_mppt1_current') | float) |int }}"
 
@@ -423,8 +468,8 @@ template:
         state_class: measurement
         availability: >-
           {{
-          not is_state('sensor.inverter_mppt2_voltage', 'unavailable')
-          and not is_state('sensor.inverter_mppt2_current', 'unavailable')
+          has_value('sensor.inverter_mppt2_voltage')
+          and has_value('sensor.inverter_mppt2_current')
           }}
         state: "{{ (states('sensor.inverter_mppt2_voltage') | float * states('sensor.inverter_mppt2_current') | float) |int }}"
 
@@ -435,22 +480,24 @@ template:
         state_class: measurement
         availability: >-
           {{
-          not is_state('sensor.inverter_meter_power_raw', 'unavailable')
+          has_value('sensor.inverter_meter_power_raw')
           and states('sensor.inverter_meter_power_raw')|int != 0x7FFFFFFF
           }}
         state: "{{ states('sensor.inverter_meter_power_raw') }}"
 
       - name: Inverter Load Power
         unique_id: inverter_load_power
-        availability: "{{ not is_state('sensor.inverter_meter_power', 'unavailable') and not is_state('sensor.inverter_total_active_power', 'unavailable') }}"
         unit_of_measurement: W
         device_class: power
         state_class: measurement
+        availability: >
+          {{ has_value('sensor.inverter_total_active_power')
+            and has_value('sensor.inverter_meter_power') }}
         state: "{{ states('sensor.inverter_total_active_power')|float + states('sensor.inverter_meter_power')|float }}"
 
       - name: Inverter MPPT1 Power Per Panel
         unique_id: inverter_mppt1_power_per_panel
-        availability: "{{ not is_state('sensor.inverter_mppt1_power', 'unavailable') }}"
+        availability: "{{ has_value('sensor.inverter_mppt1_power') }}"
         unit_of_measurement: W
         device_class: power
         state_class: measurement
@@ -458,7 +505,7 @@ template:
 
       - name: Inverter MPPT2 Power Per Panel
         unique_id: inverter_mppt2_power_per_panel
-        availability: "{{ not is_state('sensor.inverter_mppt2_power', 'unavailable') }}"
+        availability: "{{ has_value('sensor.inverter_mppt2_power') }}"
         unit_of_measurement: W
         device_class: power
         state_class: measurement
@@ -467,7 +514,7 @@ template:
       - name: Inverter Work State
         unique_id: inverter_work_state
         device_class: enum
-        availability: "{{ not is_state('sensor.inverter_work_state_code', 'unavailable') }}"
+        availability: "{{ has_value('sensor.inverter_work_state_code') }}"
         state: >-
           {% if ((states('sensor.inverter_work_state_code') | int(default=0)) == 0x0) %}
             Run
@@ -499,7 +546,7 @@ template:
 
       - name: Inverter Device Type
         unique_id: inverter_device_type
-        availability: "{{ not is_state('sensor.inverter_device_type_code', 'unavailable') }}"
+        availability: "{{ has_value('sensor.inverter_device_type_code') }}"
         device_class: enum
         state: >-
           {% if ((states('sensor.inverter_device_type_code') | int(default=0))  == 0x260F) %}
@@ -516,3 +563,80 @@ utility_meter:
   inverter_daily_exported_energy:
     source: sensor.inverter_total_exported_energy
     cycle: daily
+
+sensor:
+  ## Used for filtering outliers.
+  - platform: statistics
+    name: "Inverter Total Imported Energy Mean 3h"
+    entity_id: sensor.inverter_total_imported_energy_raw
+    state_characteristic: mean
+    max_age:
+      hours: 3
+
+  ## Mean sensors
+  - platform: statistics
+    name: "Inverter Total Active Power (mean 1m)"
+    entity_id: sensor.inverter_total_active_power
+    state_characteristic: mean
+    max_age:
+      minutes: 1
+  - platform: statistics
+    name: "Inverter Meter Power (mean 1m)"
+    entity_id: sensor.inverter_meter_power
+    state_characteristic: mean
+    max_age:
+      minutes: 1
+
+  ## Testing: Filter sensors
+  - platform: filter
+    name: "Inverter Total Imported Energy (Filtered SMA)"
+    entity_id: sensor.inverter_total_imported_energy
+    filters:
+      - filter: time_simple_moving_average
+        window_size: "00:05:00"
+        precision: 2
+  - platform: filter
+    name: "Inverter Total Imported Energy (Filtered Lowpass)"
+    entity_id: sensor.inverter_total_imported_energy
+    filters:
+      - filter: lowpass
+        time_constant: 10
+  - platform: filter
+    name: "Inverter Total exported Energy (Filtered SMA)"
+    entity_id: sensor.inverter_total_exported_energy
+    filters:
+      - filter: time_simple_moving_average
+        window_size: "00:05:00"
+        precision: 2
+  - platform: filter
+    name: "Inverter Total exported Energy (Filtered Lowpass)"
+    entity_id: sensor.inverter_total_exported_energy
+    filters:
+      - filter: lowpass
+        time_constant: 10
+  - platform: filter
+    name: "Inverter Daily Power Yield (Filtered Range)"
+    entity_id: sensor.inverter_daily_power_yield
+    filters:
+      - filter: range
+        lower_bound: 0
+        upper_bound: 60
+  - platform: filter
+    name: "Inverter Daily Power Yield (Filtered SMA)"
+    entity_id: sensor.inverter_daily_power_yield
+    filters:
+      - filter: range
+        lower_bound: 0
+        upper_bound: 60
+      - filter: time_simple_moving_average
+        window_size: "00:05:00"
+        precision: 2
+  - platform: filter
+    name: "Inverter Daily Power Yield (Filtered Lowpass)"
+    entity_id: sensor.inverter_daily_power_yield
+    filters:
+      - filter: range
+        lower_bound: 0
+        upper_bound: 60
+      - filter: lowpass
+        time_constant: 10
