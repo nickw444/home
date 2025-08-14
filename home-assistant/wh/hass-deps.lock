@@ -1,15 +1,15 @@
 https://github.com/thomasloven/lovelace-auto-entities.git:
-  version: 9961ee0
+  version: 360722d
   type: lovelace
 https://github.com/kalkih/mini-graph-card.git:
-  version: v0.10.0
+  version: v0.13.0
   type: lovelace
   is_release: true
 https://github.com/thomasloven/lovelace-card-tools.git:
   version: 477f3d4
   type: lovelace
 https://github.com/kalkih/mini-media-player.git:
-  version: v1.12.1
+  version: v1.16.9
   type: lovelace
   is_release: true
 https://github.com/custom-cards/secondaryinfo-entity-row.git:
@@ -21,3 +21,18 @@ https://github.com/gurbyz/power-wheel-card.git:
 https://github.com/thomasloven/lovelace-fold-entity-row.git:
   version: 419ec48
   type: lovelace
+https://github.com/MoritzBuetzer/homeassistant-vzug.git:
+  version: 375467f
+  type: core
+  components:
+  - vzug
+https://github.com/thomasloven/hass-browser_mod.git:
+  version: baac02d
+  type: core
+  components:
+  - browser_mod
+https://github.com/Apoc182/local_daikin.git:
+  version: c69f72d
+  type: core
+  components:
+  - local_daikin

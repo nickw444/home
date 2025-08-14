@@ -1,0 +1,52 @@
+template:
+  - sensor:
+      - name: Shelly 3EM Net Current
+        unique_id: shelly_3em_net_current
+        unit_of_measurement: A
+        device_class: current
+        state_class: measurement
+        availability: "{{ not is_state('sensor.shelly_3em_channel_a_current', 'unavailable') }}"
+        state: >
+          {{ states('sensor.shelly_3em_channel_a_current')|float + states('sensor.shelly_3em_channel_b_current')|float + states('sensor.shelly_3em_channel_c_current')|float  }}
+      - name: Shelly 3EM Net Energy
+        unique_id: shelly_3em_net_energy
+        unit_of_measurement: kWh
+        device_class: energy
+        state_class: total_increasing
+        availability: "{{ not is_state('sensor.shelly_3em_channel_a_energy', 'unavailable') }}"
+        state: >
+          {{ states('sensor.shelly_3em_channel_a_energy')|float + states('sensor.shelly_3em_channel_b_energy')|float + states('sensor.shelly_3em_channel_c_energy')|float  }}
+      - name: Shelly 3EM Net Energy Returned
+        unique_id: shelly_3em_net_energy_returned
+        unit_of_measurement: kWh
+        device_class: energy
+        state_class: total_increasing
+        availability: "{{ not is_state('sensor.shelly_3em_channel_a_energy_returned', 'unavailable') }}"
+        state: >
+          {{ states('sensor.shelly_3em_channel_a_energy_returned')|float + states('sensor.shelly_3em_channel_b_energy_returned')|float + states('sensor.shelly_3em_channel_c_energy_returned')|float  }}
+      - name: Shelly 3EM Net Power
+        unique_id: shelly_3em_net_power
+        unit_of_measurement: W
+        device_class: power
+        state_class: measurement
+        availability: "{{ not is_state('sensor.shelly_3em_channel_a_power', 'unavailable') }}"
+        state: >
+          {{ states('sensor.shelly_3em_channel_a_power')|float + states('sensor.shelly_3em_channel_b_power')|float + states('sensor.shelly_3em_channel_c_power')|float  }}
+      - name: Home Load Power
+        unique_id: home_load_power
+        unit_of_measurement: W
+        device_class: power
+        state_class: measurement
+        availability: "{{ not is_state('sensor.shelly_3em_net_power', 'unavailable') and not is_state('sensor.inverter_total_active_power', 'unavailable')  }}"
+        state: >
+          {{ states('sensor.shelly_3em_net_power')|float + states('sensor.inverter_total_active_power')|float }}
+
+sensor:
+  - platform: integration
+    source: sensor.air_conditioning_power
+    unique_id: air_conditioning_energy_integral
+    name: "Air Conditioning Energy (integral)"
+    unit_prefix: k
+    round: 2
+    max_sub_interval:
+      minutes: 5

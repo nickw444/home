@@ -1,5 +1,5 @@
 ness_alarm:
-  host: 192.168.8.30
+  host: 192.168.8.196
   port: 8234
   zones:
     - name: Garage x2
@@ -41,8 +41,8 @@ automation:
     action:
       - service: notify.admins
         data:
-          title: Alarm Triggered
-          message: The alarm was triggered at {{ now().strftime('%I:%M %p') }}
+          title: 313A Alarm Triggered
+          message: The alarm was triggered at {{ now().strftime('%I:%M %p') }}{% if states('sensor.recently_triggered_sensors') %} by {{ states('sensor.recently_triggered_sensors') }}{% endif %}
           data:
             group: alarm-status
             url: "/lovelace/security"
@@ -56,6 +56,7 @@ automation:
               sound:
                 name: default
                 critical: 1
+                volume: 0
     mode: single
 
   - id: "1601035010803"
@@ -68,7 +69,7 @@ automation:
     action:
       - service: notify.admins
         data:
-          title: Alarm Disarmed
+          title: 313A Alarm Disarmed
           message: The alarm was disarmed at {{ now().strftime('%I:%M %p') }}
           data:
             group: alarm-status
@@ -94,7 +95,7 @@ automation:
     action:
       - service: notify.admins
         data:
-          title: Alarm Disarmed
+          title: 313A Alarm Disarmed
           message: The alarm was disarmed at {{ now().strftime('%I:%M %p') }}
           data:
             group: alarm-status
@@ -112,7 +113,7 @@ automation:
     action:
       - service: notify.admins
         data:
-          title: Alarm Pending
+          title: 313A Alarm Pending
           message: The alarm was pending at {{ now().strftime('%I:%M %p') }}
           data:
             url: "/lovelace/security"
@@ -141,7 +142,7 @@ automation:
     action:
       - service: notify.admins
         data:
-          title: Alarm Armed
+          title: 313A Alarm Armed
           message: The alarm was armed at {{ now().strftime('%I:%M %p') }}
           data:
             group: alarm-status
@@ -194,3 +195,62 @@ automation:
       - data: {}
         entity_id: input_boolean.alarm_auto_arm_schedule
         service: input_boolean.turn_on
+
+template:
+  - binary_sensor:
+      - name: "Front Entrance Recent"
+        state: "{{ is_state('binary_sensor.front_entrance', 'on') }}"
+        delay_off: "00:02:00"
+
+      - name: "Garage x2 Recent"
+        state: "{{ is_state('binary_sensor.garage_x2', 'on') }}"
+        delay_off: "00:02:00"
+
+      - name: "Joes Bedroom Recent"
+        state: "{{ is_state('binary_sensor.joes_bedroom', 'on') }}"
+        delay_off: "00:02:00"
+
+      - name: "Kitchen Recent"
+        state: "{{ is_state('binary_sensor.kitchen', 'on') }}"
+        delay_off: "00:02:00"
+
+      - name: "Master Bedroom Recent"
+        state: "{{ is_state('binary_sensor.master_bedroom', 'on') }}"
+        delay_off: "00:02:00"
+
+      - name: "Quiet Room Recent"
+        state: "{{ is_state('binary_sensor.quiet_room', 'on') }}"
+        delay_off: "00:02:00"
+
+      - name: "Storeroom Recent"
+        state: "{{ is_state('binary_sensor.storeroom', 'on') }}"
+        delay_off: "00:02:00"
+
+      - name: "Toy Room Recent"
+        state: "{{ is_state('binary_sensor.toy_room', 'on') }}"
+        delay_off: "00:02:00"
+
+      - name: "Upstairs Hall Recent"
+        state: "{{ is_state('binary_sensor.upstairs_hall', 'on') }}"
+        delay_off: "00:02:00"
+  - sensor:
+      - name: "Recently Triggered Sensors"
+        state: >
+          {% set sensors = {
+            'Front Entrance': 'binary_sensor.front_entrance_recent',
+            'Garage x2': 'binary_sensor.garage_x2_recent',
+            "Joe's Bedroom": 'binary_sensor.joes_bedroom_recent',
+            'Kitchen': 'binary_sensor.kitchen_recent',
+            'Master Bedroom': 'binary_sensor.master_bedroom_recent',
+            'Quiet Room': 'binary_sensor.quiet_room_recent',
+            'Storeroom': 'binary_sensor.storeroom_recent',
+            'Toy Room': 'binary_sensor.toy_room_recent',
+            'Upstairs Hall': 'binary_sensor.upstairs_hall_recent'
+          } %}
+          {% set recent = namespace(s=[]) %}
+          {% for name, entity in sensors.items() %}
+            {% if is_state(entity, 'on') %}
+              {% set recent.s = recent.s + [name] %}
+            {% endif %}
+          {% endfor %}
+          {{ recent.s | join(', ') if recent.s else 'None' }}

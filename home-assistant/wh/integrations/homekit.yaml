@@ -5,7 +5,3 @@ homekit:
       - alarm_control_panel.alarm_panel
       - cover.kitchen_front
       - cover.kitchen_back
-      - cover.quiet_room
-      - light.quiet_room_center
-      - light.quiet_room_mid
-      - light.quiet_room_outer

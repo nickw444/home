@@ -86,14 +86,6 @@ sensor:
             states('sensor.quarterly_energy_off_peak')|float * 0.1686
           ) | round(2) }}
 
-binary_sensor:
-  # Use workday sensor to determine whether tariff falls into
-  # "Weekends & public holidays" charge
-  # "off" if Sat, Sun or Pub Holiday
-  - platform: workday
-    country: AU
-    province: NSW
-
 utility_meter:
   daily_energy:
     # energy_consumed_2: Yearly energy consumed counter.

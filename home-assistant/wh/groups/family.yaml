@@ -8,7 +8,5 @@ family:
     - device_tracker.joes_iphone
     - device_tracker.charlottes_iphone
     - device_tracker.kates_iphone
-    - device_tracker.millies_iphone
     - device_tracker.kikis_iphone
     - device_tracker.yvonnes_iphone
-    - device_tracker.nashs_iphone

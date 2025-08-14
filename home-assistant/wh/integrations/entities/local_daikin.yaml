@@ -1,0 +1,3 @@
+climate:
+  - platform: local_daikin
+    ip_address: 192.168.8.189

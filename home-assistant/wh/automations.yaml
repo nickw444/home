@@ -1,0 +1,608 @@
+- id: "1603453318878"
+  alias: "quiet room: When motion detected, turn on lights"
+  description: ""
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.quiet_room
+      to: "on"
+  condition:
+    - condition: or
+      conditions:
+        - condition: sun
+          after: sunset
+        - condition: sun
+          before: sunrise
+  action:
+    - service: switch.turn_on
+      data: {}
+      entity_id: switch.quiet_room_outer_downlights
+  mode: single
+- id: "1611580465377"
+  alias: "blinds: open master bedroom at 8am"
+  description: ""
+  trigger:
+    - platform: time
+      at: 08:00
+  condition: []
+  action:
+    - service: cover.open_cover
+      entity_id:
+        - cover.master_front_left
+        - cover.master_front_right
+  mode: single
+- id: "1611580492959"
+  alias: "blinds: close master bedroom at 9pm"
+  description: ""
+  trigger:
+    - platform: time
+      at: "21:00"
+  condition: []
+  action:
+    - service: cover.close_cover
+      entity_id:
+        - cover.master_front_left
+        - cover.master_front_right
+  mode: single
+- id: "1611580574575"
+  alias: "blinds: open upstairs hall blockout at 7:30am"
+  description: ""
+  trigger:
+    - platform: time
+      at: 07:30
+  condition: []
+  action:
+    - service: cover.open_cover
+      entity_id: cover.upstairs_hall_blockout
+  mode: single
+- id: "1611580607667"
+  alias: "blinds: close all living room blinds at 11pm"
+  description: ""
+  trigger:
+    - platform: time
+      at: "23:00"
+  condition: []
+  action:
+    - service: cover.close_cover
+      entity_id:
+        - cover.kitchen_front
+        - cover.kitchen_back
+  mode: single
+- id: "1611580737523"
+  alias: "blinds: partially close all living room blinds at 8:30pm"
+  description: ""
+  trigger:
+    - platform: time
+      at: "20:30"
+  condition: []
+  action:
+    - service: cover.close_cover
+      entity_id:
+        - cover.kitchen_front_4_right
+        - cover.kitchen_front_2_door_left
+        - cover.kitchen_front_1_left
+        - cover.kitchen_back_left
+  mode: single
+- id: "1611580808700"
+  alias: "blinds: open all living room blinds at 6:15am"
+  description: ""
+  trigger:
+    - platform: time
+      at: 06:15
+  condition: []
+  action:
+    - service: cover.open_cover
+      entity_id:
+        - cover.kitchen_back
+        - cover.kitchen_front
+  mode: single
+- id: "1611580953317"
+  alias: "blinds: close upstairs hall blockout at 7:30pm"
+  description: ""
+  trigger:
+    - platform: time
+      at: "19:30"
+  condition: []
+  action:
+    - service: cover.close_cover
+      entity_id: cover.upstairs_hall_blockout
+  mode: single
+- id: "1612665437904"
+  alias: "living_room: play kiis fm on living room button press"
+  description: ""
+  trigger:
+    - platform: state
+      entity_id: sensor.living_room_button_action
+      to: single
+  condition: []
+  action:
+    - service: script.living_room_play_kiss_radio
+      data: {}
+  mode: single
+- id: "1637747873673"
+  alias: Close both front right blinds at 8am every day
+  description: ""
+  trigger:
+    - platform: time
+      at: 08:00:00
+  condition: []
+  action:
+    - service: cover.close_cover
+      target:
+        entity_id:
+          - cover.kitchen_front_4_translucent_right
+          - cover.kitchen_front_4_right
+  mode: single
+- id: "1717924745218"
+  alias: Atrium lamp on
+  description: ""
+  trigger:
+    - platform: sun
+      event: sunset
+      offset: 0
+  condition: []
+  action:
+    - service: light.turn_on
+      metadata: {}
+      data: {}
+      target:
+        entity_id: light.atrium_lamp
+  mode: single
+- id: "1717924835029"
+  alias: Atrium lamp off
+  description: ""
+  trigger:
+    - platform: time
+      at: "23:00:00"
+  condition: []
+  action:
+    - service: light.turn_off
+      metadata: {}
+      data: {}
+      target:
+        entity_id: light.atrium_lamp
+  mode: single
+- id: "1717924924310"
+  alias: Hall lamp on
+  description: ""
+  trigger:
+    - platform: sun
+      event: sunset
+      offset: 0
+  condition: []
+  action:
+    - service: light.turn_on
+      metadata: {}
+      data: {}
+      target:
+        entity_id: light.hall_table_lamp
+  mode: single
+- id: "1717932808159"
+  alias: Kitchen lamp on 2
+  description: ""
+  trigger:
+    - platform: sun
+      event: sunset
+      offset: 0
+  condition: []
+  action:
+    - service: light.turn_on
+      metadata: {}
+      data: {}
+      target:
+        entity_id:
+          - light.kitchen_lamp_1
+          - light.kitchen_lamp_2
+          - light.kitchen_lamp_3
+  mode: single
+- id: "1718108414355"
+  alias: Hall table lamp off
+  description: ""
+  trigger:
+    - platform: time
+      at: "23:00:00"
+  condition: []
+  action:
+    - service: light.turn_off
+      metadata: {}
+      data: {}
+      target:
+        entity_id: light.hall_table_lamp
+  mode: single
+- id: "1718108551150"
+  alias: Kitchen lamp off
+  description: ""
+  trigger:
+    - platform: time
+      at: "23:00:00"
+  condition: []
+  action:
+    - service: light.turn_off
+      metadata: {}
+      data: {}
+      target:
+        entity_id:
+          - light.kitchen_lamp_1
+          - light.kitchen_lamp_2
+          - light.kitchen_lamp_3
+  mode: single
+- id: "1718416955542"
+  alias: "quiet room: toggle nook light on detatched switch press"
+  description: ""
+  trigger:
+    - platform: state
+      entity_id:
+        - binary_sensor.quiet_room_nook_ds_contact
+      from: "on"
+      to: "off"
+    - platform: state
+      entity_id:
+        - binary_sensor.quiet_room_nook_ds_contact
+      from: "off"
+      to: "on"
+  condition: []
+  action:
+    - service: light.toggle
+      metadata: {}
+      data: {}
+      target:
+        entity_id: light.quiet_room_nook
+  mode: single
+- id: "1719138364452"
+  alias: "kitchen: toggle splashback LED light on detatched switch press"
+  description: ""
+  trigger:
+    - platform: state
+      entity_id:
+        - binary_sensor.kitchen_splashback_ds_contact
+      from: "on"
+      to: "off"
+    - platform: state
+      entity_id:
+        - binary_sensor.kitchen_splashback_ds_contact
+      from: "off"
+      to: "on"
+  condition: []
+  action:
+    - service: light.toggle
+      metadata: {}
+      data: {}
+      target:
+        entity_id: light.kitchen_splashback
+  mode: single
+- id: "1719138430696"
+  alias: "living room: toggle curtains LED on detatched switch press"
+  description: ""
+  trigger:
+    - platform: state
+      entity_id:
+        - binary_sensor.living_room_curtains_ds_contact
+      from: "on"
+      to: "off"
+    - platform: state
+      entity_id:
+        - binary_sensor.living_room_curtains_ds_contact
+      from: "off"
+      to: "on"
+  condition: []
+  action:
+    - service: light.toggle
+      metadata: {}
+      data: {}
+      target:
+        entity_id: light.living_room_curtains
+  mode: single
+- id: "1719205569333"
+  alias: Wake iPad on Doorbell Activity
+  description: ""
+  trigger:
+    - platform: state
+      entity_id:
+        - binary_sensor.front_door_doorbell
+      from: "off"
+      to: "on"
+      id: front_door
+    - platform: state
+      entity_id:
+        - binary_sensor.front_door_person_detected
+      from: "off"
+      to: "on"
+      id: front_door
+    - platform: state
+      entity_id:
+        - binary_sensor.top_driveway_doorbell
+      from: "off"
+      to: "on"
+      id: top_driveway
+    - platform: state
+      entity_id:
+        - binary_sensor.top_driveway_person_detected
+      from: "off"
+      to: "on"
+      id: top_driveway
+  condition: []
+  action:
+    - service: notify.mobile_app_ipad
+      data:
+        message: Wake Up
+    - delay:
+        hours: 0
+        minutes: 0
+        seconds: 1
+        milliseconds: 0
+    - choose:
+        - conditions:
+            - condition: trigger
+              id:
+                - front_door
+          sequence:
+            - service: browser_mod.popup
+              data:
+                size: wide
+                timeout: 180000
+                title: Front Door
+                content:
+                  show_state: false
+                  show_name: false
+                  camera_view: live
+                  type: picture-entity
+                  entity: camera.front_door_doorbell
+                  name: Front Door
+                  camera_image: camera.front_door_doorbell
+                  tap_action:
+                    action: none
+                  hold_action:
+                    action: none
+              target:
+                device_id: 1acf5949-ec3bb89d
+        - conditions:
+            - condition: trigger
+              id:
+                - top_driveway
+          sequence:
+            - service: browser_mod.popup
+              data:
+                size: wide
+                timeout: 180000
+                title: Top Driveway
+                content:
+                  show_state: false
+                  show_name: false
+                  camera_view: live
+                  type: picture-entity
+                  entity: camera.top_driveway_doorbell
+                  name: Front Door
+                  camera_image: camera.top_driveway_doorbell
+                  tap_action:
+                    action: none
+                  hold_action:
+                    action: none
+              target:
+                device_id: 1acf5949-ec3bb89d
+  mode: single
+- id: "1719205834583"
+  alias: Wake iPad on Hallway Motion
+  description: ""
+  trigger:
+    - platform: state
+      entity_id:
+        - binary_sensor.front_entrance
+      from: "off"
+      to: "on"
+  condition: []
+  action:
+    - service: notify.mobile_app_ipad
+      data:
+        message: Wake Up
+  mode: single
+- id: "1719207062194"
+  alias: Play doorbell sound on doorbell ring
+  description: ""
+  trigger:
+    - platform: state
+      entity_id:
+        - binary_sensor.front_door_doorbell
+      from: "off"
+      to: "on"
+    - platform: state
+      entity_id:
+        - binary_sensor.top_driveway_doorbell
+      from: "off"
+      to: "on"
+  condition: []
+  action:
+    - service: media_player.play_media
+      data:
+        media_content_id: media-source://media_source/local/doorbell.mp3
+        media_content_type: audio/mpeg
+      target:
+        entity_id:
+          - media_player.1acf5949-ec3bb89d
+          - media_player.nesthub2422
+          - media_player.peter_smart_clock
+          - media_player.ensuite_radio
+  mode: single
+- id: "1719570258724"
+  alias: Upstairs hall lamp on
+  description: ""
+  trigger:
+    - platform: sun
+      event: sunset
+      offset: 0
+  condition: []
+  action:
+    - service: light.turn_on
+      metadata: {}
+      data: {}
+      target:
+        entity_id: light.upstairs_hall_lamp
+  mode: single
+- id: "1719570321533"
+  alias: Upstairs hall lamp off
+  description: ""
+  trigger:
+    - platform: time
+      at: "23:55:00"
+  condition: []
+  action:
+    - service: light.turn_off
+      metadata: {}
+      data: {}
+      target:
+        entity_id: light.upstairs_hall_lamp
+  mode: single
+- id: "1720260537045"
+  alias: Curtain pelmet1
+  description: ""
+  trigger:
+    - platform: state
+      entity_id:
+        - binary_sensor.0xa4c138240080206f_contact
+      from: "on"
+      to: "off"
+    - platform: state
+      entity_id:
+        - binary_sensor.0xa4c138240080206f_contact
+      from: "off"
+      to: "on"
+  condition: []
+  action:
+    - service: light.toggle
+      metadata: {}
+      data: {}
+      target:
+        entity_id: light.living_room_curtains
+  mode: single
+- id: "1720343078056"
+  alias: "play door chime on doorbell ring "
+  description: ""
+  trigger:
+    - platform: state
+      entity_id:
+        - binary_sensor.top_driveway_doorbell
+        - binary_sensor.front_door_doorbell
+      from: "off"
+      to: "on"
+  condition: []
+  action:
+    - service: select.select_option
+      metadata: {}
+      data:
+        option: "18"
+      target:
+        entity_id:
+          - select.upstairs_door_chime_melody
+          - select.downstairs_door_chime_melody
+    - service: select.select_option
+      metadata: {}
+      data:
+        option: medium
+      target:
+        entity_id:
+          - select.upstairs_door_chime_volume
+          - select.downstairs_door_chime_volume
+    - service: number.set_value
+      metadata: {}
+      data:
+        value: "6"
+      target:
+        entity_id:
+          - number.upstairs_door_chime_duration
+          - number.downstairs_door_chime_duration
+    - service: switch.turn_on
+      target:
+        entity_id:
+          - switch.downstairs_door_chime_alarm
+          - switch.upstairs_door_chime_alarm
+      data: {}
+  mode: single
+- id: "1748692801528"
+  alias: "alarm: arm on away"
+  description: ""
+  triggers:
+    - entity_id: binary_sensor.family_is_home
+      to: "off"
+      trigger: state
+    - entity_id: input_boolean.alarm_auto_arm_schedule
+      to: "on"
+      trigger: state
+    - entity_id: input_boolean.alarm_auto_arm_override
+      to: "on"
+      trigger: state
+  conditions:
+    - condition: state
+      entity_id: alarm_control_panel.alarm_panel
+      state: disarmed
+    - condition: state
+      entity_id: binary_sensor.family_is_home
+      state: "off"
+    - condition: state
+      entity_id: input_boolean.alarm_auto_arm_schedule
+      state: "on"
+    - condition: state
+      entity_id: input_boolean.alarm_auto_arm_override
+      state: "on"
+  actions:
+    - target:
+        entity_id: alarm_control_panel.alarm_panel
+      action: alarm_control_panel.alarm_arm_away
+      data:
+        code: "157896"
+    - event: auto_arm_armed
+    - data:
+        name: Alarm Auto Arm
+        message: Automatic arm
+      action: logbook.log
+- id: "1748693013044"
+  alias: "alarm: Disarm Alarm (Override OFF)"
+  description: ""
+  triggers:
+    - entity_id: input_boolean.alarm_auto_arm_override
+      to: "off"
+      trigger: state
+  conditions:
+    - condition: not
+      conditions:
+        - condition: state
+          entity_id: alarm_control_panel.alarm_panel
+          state: disarmed
+  actions:
+    - target:
+        entity_id: alarm_control_panel.alarm_panel
+      data:
+        code: "157896"
+      action: alarm_control_panel.alarm_disarm
+    - event: auto_arm_disarmed
+    - data:
+        name: Alarm Auto Arm
+        message: Automatic disarm (override off)
+      action: logbook.log
+- id: "1748693080761"
+  alias: "alarm: Auto Disarm Alarm (Presence/Schedule)"
+  description: ""
+  triggers:
+    - entity_id: binary_sensor.family_is_home
+      to: "on"
+      trigger: state
+    - entity_id: input_boolean.alarm_auto_arm_schedule
+      to: "off"
+      trigger: state
+  conditions:
+    - condition: not
+      conditions:
+        - condition: state
+          entity_id: alarm_control_panel.alarm_panel
+          state: disarmed
+    - condition: state
+      entity_id: input_boolean.alarm_auto_arm_override
+      state: "on"
+  actions:
+    - target:
+        entity_id: alarm_control_panel.alarm_panel
+      data:
+        code: "157896"
+      action: alarm_control_panel.alarm_disarm
+    - event: auto_arm_disarmed
+    - data:
+        name: Alarm Auto Arm
+        message: Automatic disarm
+      action: logbook.log

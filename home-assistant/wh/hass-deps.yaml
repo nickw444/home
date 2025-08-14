@@ -8,3 +8,6 @@ dependencies:
   assets:
   - power-wheel-card.js
 - https://github.com/thomasloven/lovelace-fold-entity-row.git
+- https://github.com/MoritzBuetzer/homeassistant-vzug.git
+- https://github.com/thomasloven/hass-browser_mod.git
+- https://github.com/Apoc182/local_daikin.git
