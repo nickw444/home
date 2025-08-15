@@ -14,9 +14,9 @@ trigger:
     to: "on"
 condition: []
 action:
-  - service: notify.mobile_app_entry_tablet
-    data:
-      message: command_screen_on
+  - service: light.turn_on
+    target:
+      entity_id: light.hallway_tablet_fully_screen
   - delay:
       hours: 0
       minutes: 0
