@@ -112,4 +112,23 @@ action:
         target:
           entity_id: button.x40_ultra_shortcut_6
         data: {}
+  - alias: Wait for cleaning to finish or someone approaches home
+    wait_for_trigger:
+      - platform: state
+        entity_id: vacuum.crystal
+        to: docked
+        id: finished
+      - platform: template
+        value_template: >-
+          {{ state_attr('sensor.home_nearest_distance', 'dir_of_travel') == 'towards' and
+             (states('sensor.home_nearest_distance') | float(99)) < 2 }}
+        id: proximity
+  - choose:
+      - conditions: "{{ wait.trigger.id == 'proximity' }}"
+        sequence:
+          - service: vacuum.return_to_base
+            target:
+              entity_id: vacuum.crystal
+            data: {}
+    default: []
 mode: single
