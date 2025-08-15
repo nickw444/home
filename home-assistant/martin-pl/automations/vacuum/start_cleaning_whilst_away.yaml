@@ -11,7 +11,7 @@ trigger:
     id: "zone_dog_park"
   - platform: numeric_state
     entity_id: sensor.home_nearest_distance
-    above: "100"
+    above: "500"
     for: "00:05:00"
     id: proximity
 condition:
@@ -58,7 +58,7 @@ action:
       action_start_now_auto: "{{ 'START_NOW_AUTO_' ~ context.id }}"
       action_start_now_deep: "{{ 'START_NOW_DEEP_' ~ context.id }}"
       action_start_now_mop: "{{ 'START_NOW_MOP_' ~ context.id }}"
-  - service: notify.mobile_app_nicks_iphone
+  - service: notify.everyone
     data:
       title: Automated Cleaning
       message: Starting automated cleaning in 5 minutes
@@ -92,6 +92,12 @@ action:
         event_data:
           action: "{{ action_start_now_mop }}"
     timeout: "00:05:00"
+  - service: notify.everyone
+    data:
+      title: Automated Cleaning
+      message: Starting automated cleaning
+      data:
+        tag: robovac-no-one-home
   - choose:
       - conditions: "{{ wait.trigger.event.data.action == action_cancel }}"
         sequence: []
@@ -112,4 +118,31 @@ action:
         target:
           entity_id: button.x40_ultra_shortcut_6
         data: {}
+  - alias: Wait for cleaning to finish or someone approaches home
+    wait_for_trigger:
+      - entity_id: vacuum.crystal
+        to: docked
+        id: finished
+        trigger: state
+      - value_template: |-
+          {{ states('sensor.home_nearest_direction_of_travel') == 'towards' and
+              states('sensor.home_nearest_distance') | float < 500 }}
+        id: proximity
+        trigger: template
+  - choose:
+      - conditions:
+          - condition: template
+            value_template: "{{ wait.trigger.id == 'proximity' }}"
+        sequence:
+          - service: notify.everyone
+            data:
+              title: Automated Cleaning
+              message: Proximity detected, ending task.
+              data:
+                tag: robovac-no-one-home
+          - target:
+              entity_id: vacuum.crystal
+            data: {}
+            action: vacuum.return_to_base
+    default: []
 mode: single
