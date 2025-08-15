@@ -1,0 +1,28 @@
+template:
+  - trigger:
+      - platform: homeassistant
+        event: start
+      - platform: time_pattern
+        minutes: "/10" # evaluate every 10 minutes
+    sensor:
+      - name: Low Battery Count
+        unique_id: low_battery_count
+        unit_of_measurement: entities
+        state_class: measurement
+        icon: "mdi:battery-alert"
+        state: >
+          {% set excluded = label_entities('battery-state-hidden') | list %}
+          {% set count = namespace(val=0) %}
+          {% for s in states
+              if (s.entity_id not in excluded)
+              and (not is_hidden_entity(s.entity_id)) %}
+            {% set bl = state_attr(s.entity_id, 'battery_level') %}
+            {% if bl is number and bl <= 5 %}
+              {% set count.val = count.val + 1 %}
+            {% elif state_attr(s.entity_id, 'device_class') == 'battery'
+                and s.state not in ['unknown','unavailable']
+                and (s.state | float(9999)) <= 5 %}
+              {% set count.val = count.val + 1 %}
+            {% endif %}
+          {% endfor %}
+          {{ count.val }}
