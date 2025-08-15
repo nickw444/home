@@ -1,0 +1,20 @@
+id: "1780000000000"
+alias: "robot_vacuum: return when someone is approaching home"
+description: ""
+trigger:
+  - platform: numeric_state
+    entity_id: proximity.home
+    below: 2
+condition:
+  - condition: state
+    entity_id: proximity.home
+    attribute: dir_of_travel
+    state: towards
+  - condition: state
+    entity_id: vacuum.crystal
+    state: cleaning
+action:
+  - service: vacuum.return_to_base
+    target:
+      entity_id: vacuum.crystal
+mode: single
