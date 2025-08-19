@@ -1,0 +1,79 @@
+# Template for an irrigation zone
+# Required variables:
+#  - name: Friendly name for the zone (e.g. "Front Herbs")
+#  - device_id: ID used for entities (e.g. "front_herbs")
+#  - area_id: Area where the zone resides
+#  - relay_pin: GPIO pin controlling the relay
+#  - min_duration: Minimum watering duration in minutes
+#  - max_duration: Maximum watering duration in minutes
+#  - initial_duration: Default watering duration in minutes
+
+esphome:
+  devices:
+    - id: ${device_id}
+      name: "${name}"
+      area_id: ${area_id}
+
+switch:
+  - platform: gpio
+    pin: ${relay_pin}
+    id: ${device_id}_power
+    device_id: ${device_id}
+    restore_mode: ALWAYS_OFF
+  - platform: template
+    name: "${name}"
+    device_id: ${device_id}
+    icon: "mdi:water"
+    lambda: "return id(${device_id}_power).state;"
+    turn_on_action:
+      - switch.turn_on: ${device_id}_power
+      - script.execute: countdown_${device_id}
+      - delay: !lambda "return id(${device_id}_watering_duration).state * 60 * 1000;"
+      - switch.turn_off: ${device_id}_power
+    turn_off_action:
+      - switch.turn_off: ${device_id}_power
+    on_turn_off:
+      - script.stop: countdown_${device_id}
+      - sensor.template.publish:
+          id: time_remaining_${device_id}
+          state: 0
+
+sensor:
+  - platform: template
+    name: "${name} Time Remaining"
+    id: time_remaining_${device_id}
+    device_id: ${device_id}
+    unit_of_measurement: seconds
+
+number:
+  - platform: template
+    name: "${name} Watering Duration"
+    id: ${device_id}_watering_duration
+    device_id: ${device_id}
+    optimistic: true
+    min_value: ${min_duration}
+    max_value: ${max_duration}
+    restore_value: true
+    initial_value: ${initial_duration}
+    step: 1
+
+globals:
+  - id: ${device_id}_time_remaining
+    type: int
+    restore_value: no
+    initial_value: '0'
+
+script:
+  - id: countdown_${device_id}
+    then:
+      - lambda: 'id(${device_id}_time_remaining) = id(${device_id}_watering_duration).state * 60;'
+      - while:
+          condition:
+            lambda: "return id(${device_id}_time_remaining) > 0;"
+          then:
+            - sensor.template.publish:
+                id: time_remaining_${device_id}
+                state: !lambda 'return id(${device_id}_time_remaining);'
+            - delay: 5 seconds
+            - lambda: "id(${device_id}_time_remaining) -= 5;"
+
