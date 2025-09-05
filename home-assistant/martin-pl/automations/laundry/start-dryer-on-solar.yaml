@@ -8,37 +8,62 @@ triggers:
     to: "on"
 conditions: []
 actions:
-  - data:
-      title: Dryer Remote Start
-      message:
-        Dryer remote start was activated. Waiting for excess solar energy before
-        starting
-      data:
-        group: laundry-appliance
-    action: notify.everyone
-  - wait_for_trigger:
-      - trigger: numeric_state
-        entity_id:
-          - sensor.inverter_meter_power
-        for:
-          hours: 0
-          minutes: 5
+  - choose:
+      # If we are already exporting above the threshold, start immediately
+      - conditions:
+          - condition: numeric_state
+            entity_id: sensor.inverter_meter_power
+            below: -1000
+        sequence:
+          - data:
+              title: Dryer Remote Start
+              message: Excess solar available now. Starting the dryer.
+              data:
+                group: laundry-appliance
+            action: notify.everyone
+          - action: button.press
+            metadata: {}
+            data: {}
+            target:
+              entity_id: button.dryer_start_cycle
+          - data:
+              title: Dryer Remote Start
+              message: Dryer started due to excess solar export
+              data:
+                group: laundry-appliance
+            action: notify.everyone
+    default:
+      - data:
+          title: Dryer Remote Start
+          message:
+            Dryer remote start was activated. Waiting for excess solar energy
+            before starting
+          data:
+            group: laundry-appliance
+        action: notify.everyone
+      - wait_for_trigger:
+          - trigger: numeric_state
+            entity_id:
+              - sensor.inverter_meter_power
+            for:
+              hours: 0
+              minutes: 5
+              seconds: 0
+            below: -1000
+        timeout:
+          hours: 3
+          minutes: 0
           seconds: 0
-        below: -1000
-    timeout:
-      hours: 3
-      minutes: 0
-      seconds: 0
-      milliseconds: 0
-  - action: button.press
-    metadata: {}
-    data: {}
-    target:
-      entity_id: button.dryer_start_cycle
-  - data:
-      title: Dryer Remote Start
-      message: Dryer started due to excess solar export
-      data:
-        group: laundry-appliance
-    action: notify.everyone
+          milliseconds: 0
+      - action: button.press
+        metadata: {}
+        data: {}
+        target:
+          entity_id: button.dryer_start_cycle
+      - data:
+          title: Dryer Remote Start
+          message: Dryer started due to excess solar export
+          data:
+            group: laundry-appliance
+        action: notify.everyone
 mode: single
