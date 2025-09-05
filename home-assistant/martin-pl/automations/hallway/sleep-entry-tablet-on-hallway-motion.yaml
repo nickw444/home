@@ -1,0 +1,19 @@
+id: "166813013345888"
+alias: Sleep entry tablet on Hallway Motion
+description: ""
+trigger:
+  - platform: state
+    entity_id:
+      - binary_sensor.hallway_motion_occupancy
+    from: "on"
+    to: "off"
+    for:
+      hours: 0
+      minutes: 1
+      seconds: 0
+condition: []
+action:
+  - service: light.turn_off
+    target:
+      entity_id: light.hallway_tablet_fully_screen
+mode: single
