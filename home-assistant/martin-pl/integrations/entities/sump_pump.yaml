@@ -1,0 +1,149 @@
+template:
+  - binary_sensor:
+      - name: Sump Pump Pumping
+        unique_id: sump_pump_is_pumping
+        device_class: running
+        icon: mdi:water-pump
+        delay_on:
+          seconds: 1
+        delay_off:
+          seconds: 2
+        state: >-
+          {{ states('sensor.sump_pump_current_consumption') | float(0) > 5 }}
+        availability: >-
+          {{ states('sensor.sump_pump_current_consumption') not in ['unknown','unavailable','none',''] }}
+        attributes:
+          friendly_name: Sump Pump is Pumping
+          current_consumption: >-
+            {{ states('sensor.sump_pump_current_consumption') | float(0) }}
+          threshold_watts: 5
+
+  - trigger:
+      - platform: state
+        entity_id: binary_sensor.sump_pump_is_pumping
+        from: "on"
+        to: "off"
+    sensor:
+      - name: Sump pump last cycle duration
+        unique_id: sump_pump_last_cycle_duration
+        unit_of_measurement: s
+        device_class: duration
+        state_class: measurement
+        icon: mdi:timer
+        # Seconds between the ON transition and the OFF transition
+        state: >-
+          {{ (as_timestamp(trigger.to_state.last_changed)
+            - as_timestamp(trigger.from_state.last_changed)) | int }}
+
+  - trigger:
+      - platform: state
+        entity_id: binary_sensor.sump_pump_is_pumping
+        from: "off"
+        to: "on"
+    sensor:
+      - name: Sump Pump Last Off Duration
+        unique_id: sump_pump_last_off_duration
+        unit_of_measurement: s
+        device_class: duration
+        state_class: measurement
+        icon: mdi:timer-off
+        # Seconds between the OFF transition and the next ON transition
+        state: >-
+          {{ (as_timestamp(trigger.to_state.last_changed)
+            - as_timestamp(trigger.from_state.last_changed)) | int }}
+
+sensor:
+  # Hours the pump has been ON since local midnight
+  - platform: history_stats
+    name: Sump Pump Time Pumping Today
+    entity_id: binary_sensor.sump_pump_is_pumping
+    state: "on"
+    type: time
+    start: "{{ now().replace(hour=0, minute=0, second=0, microsecond=0) }}"
+    end: "{{ now() }}"
+
+  # Hours the pump has been ON in the last 24 hours
+  - platform: history_stats
+    name: Sump Pump Time Pumping Last 24h
+    entity_id: binary_sensor.sump_pump_is_pumping
+    state: "on"
+    type: time
+    start: "{{ now() - timedelta(hours=24) }}"
+    end: "{{ now() }}"
+
+  # Hours the pump has been ON in the last 7 days
+  - platform: history_stats
+    name: Sump Pump Time Pumping Last 7d
+    entity_id: binary_sensor.sump_pump_is_pumping
+    state: "on"
+    type: time
+    start: "{{ now() - timedelta(days=7) }}"
+    end: "{{ now() }}"
+
+  - platform: statistics
+    name: Sump Pump Average Cycle Time (Last 24h)
+    entity_id: sensor.sump_pump_last_cycle_duration
+    state_characteristic: mean
+    max_age:
+      hours: 24
+    sampling_size: 500
+
+  - platform: statistics
+    name: Sump Pump Average Cycle Time (Last 7d)
+    entity_id: sensor.sump_pump_last_cycle_duration
+    state_characteristic: mean
+    max_age:
+      days: 7
+    sampling_size: 500
+
+  - platform: statistics
+    name: Sump Pump Average Off Time (Last 24h)
+    entity_id: sensor.sump_pump_last_off_duration
+    state_characteristic: mean
+    max_age:
+      hours: 24
+    sampling_size: 500
+
+  - platform: statistics
+    name: Sump Pump Average Off Time (Last 7d)
+    entity_id: sensor.sump_pump_last_off_duration
+    state_characteristic: mean
+    max_age:
+      days: 7
+    sampling_size: 500
+
+  # Duty cycle = % of time ON since local midnight
+  - platform: history_stats
+    name: Sump Pump Duty Cycle Today
+    entity_id: binary_sensor.sump_pump_is_pumping
+    state: "on"
+    type: ratio
+    start: "{{ now().replace(hour=0, minute=0, second=0, microsecond=0) }}"
+    end: "{{ now() }}"
+
+  # Duty cycle = % of time ON in the last 1 hour
+  - platform: history_stats
+    name: Sump Pump Duty Cycle Last 1h
+    entity_id: binary_sensor.sump_pump_is_pumping
+    state: "on"
+    type: ratio
+    start: "{{ now() - timedelta(hours=1) }}"
+    end: "{{ now() }}"
+
+  # Duty cycle = % of time ON in the last 24 hours
+  - platform: history_stats
+    name: Sump Pump Duty Cycle Last 24h
+    entity_id: binary_sensor.sump_pump_is_pumping
+    state: "on"
+    type: ratio
+    start: "{{ now() - timedelta(hours=24) }}"
+    end: "{{ now() }}"
+
+  # Duty cycle = % of time ON in the last 7 days
+  - platform: history_stats
+    name: Sump Pump Duty Cycle Last 7d
+    entity_id: binary_sensor.sump_pump_is_pumping
+    state: "on"
+    type: ratio
+    start: "{{ now() - timedelta(days=7) }}"
+    end: "{{ now() }}"
