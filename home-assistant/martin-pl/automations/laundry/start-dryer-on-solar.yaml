@@ -12,7 +12,7 @@ actions:
       # If we are already exporting above the threshold, start immediately
       - conditions:
           - condition: numeric_state
-            entity_id: sensor.inverter_meter_power
+            entity_id: sensor.inverter_grid_meter_power
             below: -1000
         sequence:
           - data:
@@ -44,7 +44,7 @@ actions:
       - wait_for_trigger:
           - trigger: numeric_state
             entity_id:
-              - sensor.inverter_meter_power
+              - sensor.inverter_grid_meter_power
             for:
               hours: 0
               minutes: 5

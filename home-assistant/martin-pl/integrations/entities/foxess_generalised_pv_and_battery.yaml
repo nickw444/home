@@ -1,0 +1,329 @@
+## This file provides a generalised configuration for sensors related to the household 
+## PV and battery, enabling easy ability to swap out the underlying sensors used if we
+## change the integration, entity names, or device. 
+## For consumption meters, this assures that we retain historical data.
+
+template:
+  - sensor:
+      ## ------------------
+      ## Inverter
+      ## ------------------
+      - name: Inverter Temperature
+        unique_id: inverter_temperature
+        unit_of_measurement: '°C'
+        device_class: temperature
+        state_class: measurement
+        availability: >-
+          {{
+          has_value('sensor.inverter_modbus_invtemp')
+          }}
+        state: "{{ states('sensor.inverter_modbus_invtemp') }}"
+      
+      ## ------------------
+      ## Solar Array
+      ## ------------------
+      
+      # Legacy name/id kept to retain historical data. This sensor is for PV production.
+      - name: Inverter Daily Power Yield
+        unique_id: inverter_daily_power_yield
+        unit_of_measurement: kWh
+        device_class: energy
+        state_class: total_increasing
+        availability: >-
+          {{
+          has_value('sensor.inverter_modbus_solar_energy_today')
+          }}
+        state: "{{ states('sensor.inverter_modbus_solar_energy_today') }}"
+
+      - name: Inverter PV Total Power
+        unique_id: inverter_pv_total_power
+        unit_of_measurement: W
+        device_class: power
+        state_class: measurement
+        availability: >-
+          {{
+          has_value('sensor.inverter_modbus_pv3_power') or
+          has_value('sensor.inverter_modbus_pv4_power')
+          }}
+        state: >-
+          {% set pv3 = states('sensor.inverter_modbus_pv3_power') | float(0) %}
+          {% set pv4 = states('sensor.inverter_modbus_pv4_power') | float(0) %}
+          {{ (pv3 + pv4) * 1000 }}
+      
+      # Legacy alias of the new inverter_pv_total_power sensor to maintain compatibility
+      # throughout
+      - name: Inverter Total Active Power
+        unique_id: inverter_total_active_power
+        unit_of_measurement: W
+        device_class: power
+        state_class: measurement
+        availability: >-
+          {{
+          has_value('sensor.inverter_pv_total_power')
+          }}
+        state: "{{ states('sensor.inverter_pv_total_power') }}"
+
+      - name: Inverter PV Array North Power
+        unique_id: inverter_pv_array_north_power
+        unit_of_measurement: W
+        device_class: power
+        state_class: measurement
+        availability: >-
+          {{
+          has_value('sensor.inverter_modbus_pv3_power')
+          }}
+        state: "{{ (states('sensor.inverter_modbus_pv3_power') | float(0)) * 1000 }}"
+        attributes:
+          num_panels: 5
+
+      - name: Inverter PV Array North Energy
+        unique_id: inverter_pv_array_north_energy
+        unit_of_measurement: kWh
+        device_class: energy
+        state_class: total_increasing
+        availability: >-
+          {{
+          has_value('sensor.inverter_modbus_pv3_energy_total')
+          }}
+        state: "{{ states('sensor.inverter_modbus_pv3_energy_total') }}"
+     
+      - name: Inverter PV Array North Power Per Panel
+        unique_id: inverter_pv_array_north_power_per_panel
+        availability: "{{ has_value('sensor.inverter_pv_array_north_power') }}"
+        unit_of_measurement: W
+        device_class: power
+        state_class: measurement
+        state: "{{ (states('sensor.inverter_pv_array_north_power')|float/state_attr('sensor.inverter_pv_array_north_power', 'num_panels')|int) | round(1) }}"
+      
+      - name: Inverter PV Array West Power
+        unique_id: inverter_pv_array_west_power
+        unit_of_measurement: W
+        device_class: power
+        state_class: measurement
+        availability: >-
+          {{
+          has_value('sensor.inverter_modbus_pv4_power')
+          }}
+        state: "{{ (states('sensor.inverter_modbus_pv4_power') | float(0)) * 1000 }}"
+        attributes:
+          num_panels: 9
+
+      - name: Inverter PV Array West Energy
+        unique_id: inverter_pv_array_west_energy
+        unit_of_measurement: kWh
+        device_class: energy
+        state_class: total_increasing
+        availability: >-
+          {{
+          has_value('sensor.inverter_modbus_pv4_energy_total')
+          }}
+        state: "{{ states('sensor.inverter_modbus_pv4_energy_total') }}"
+
+      - name: Inverter PV Array West Power Per Panel
+        unique_id: inverter_pv_array_west_power_per_panel
+        availability: "{{ has_value('sensor.inverter_pv_array_west_power') }}"
+        unit_of_measurement: W
+        device_class: power
+        state_class: measurement
+        state: "{{ (states('sensor.inverter_pv_array_west_power')|float/state_attr('sensor.inverter_pv_array_west_power', 'num_panels')|int) | round(1) }}"
+    
+    ## ------------------
+    ## Battery
+    ## ------------------
+      - name: Inverter Battery SoC
+        unique_id: inverter_battery_soc
+        unit_of_measurement: '%'
+        device_class: battery
+        state_class: measurement
+        availability: >-
+          {{
+          has_value('sensor.inverter_modbus_battery_soc')
+          }}
+        state: "{{ states('sensor.inverter_modbus_battery_soc') }}"
+
+      - name: Inverter Battery Temperature
+        unique_id: inverter_battery_temperature
+        unit_of_measurement: '°C'
+        device_class: temperature
+        state_class: measurement
+        availability: >-
+          {{
+          has_value('sensor.inverter_modbus_battery_temp')
+          }}
+        state: "{{ states('sensor.inverter_modbus_battery_temp') }}"
+
+      - name: Inverter Battery SoH
+        unique_id: inverter_battery_soh
+        unit_of_measurement: '%'
+        device_class: battery
+        state_class: measurement
+        availability: >-
+          {{
+          has_value('sensor.inverter_modbus_battery_soh')
+          }}
+        state: "{{ states('sensor.inverter_modbus_battery_soh') }}"
+
+      - name: Inverter Battery Charge Energy
+        unique_id: inverter_battery_charge_energy
+        unit_of_measurement: kWh
+        device_class: energy
+        state_class: total_increasing
+        availability: >-
+          {{
+          has_value('sensor.inverter_modbus_battery_charge_today')
+          }}
+        state: "{{ states('sensor.inverter_modbus_battery_charge_today') }}"
+
+      - name: Inverter Battery Discharge Energy
+        unique_id: inverter_battery_discharge_energy
+        unit_of_measurement: kWh
+        device_class: energy
+        state_class: total_increasing
+        availability: >-
+          {{
+          has_value('sensor.inverter_modbus_battery_discharge_today')
+          }}
+        state: "{{ states('sensor.inverter_modbus_battery_discharge_today') }}"
+
+      - name: Inverter Battery Power
+        unique_id: inverter_battery_power
+        unit_of_measurement: W
+        device_class: power
+        state_class: measurement
+        availability: >-
+          {{
+          has_value('sensor.inverter_modbus_invbatpower')
+          }}
+        state: "{{ (states('sensor.inverter_modbus_invbatpower') | float(0)) * 1000 }}"
+      
+      - name: Inverter Battery Stored Energy
+        unique_id: inverter_battery_stored_energy
+        unit_of_measurement: kWh
+        device_class: energy
+        state_class: measurement
+        availability: >-
+          {{
+          has_value('sensor.inverter_battery_soc')
+          }}
+        state: "{{ states('sensor.inverter_battery_soc')|float/100 * 41.93 }}"
+
+      - name: Inverter Battery Available Storage Capacity
+        unique_id: inverter_battery_available_storage_capacity
+        unit_of_measurement: kWh
+        device_class: energy
+        state_class: measurement
+        availability: >-
+          {{
+          has_value('sensor.inverter_battery_soc')
+          }}
+        state: "{{ (1 - states('sensor.inverter_battery_soc')|float/100) * 41.93 }}"
+
+
+    ## ------------------
+    ## Grid Import/Export/Load
+    ## ------------------
+      # Legacy name/id kept to retain historical data. This sensor is for grid consumption.
+      - name: Inverter Total Imported Energy
+        unique_id: inverter_total_imported_energy
+        unit_of_measurement: kWh
+        device_class: energy
+        state_class: total_increasing
+        availability: >-
+          {{
+          has_value('sensor.inverter_modbus_grid_consumption_energy_today')
+          }}
+        state: "{{ states('sensor.inverter_modbus_grid_consumption_energy_today') }}"
+      # Legacy name/id kept to retain historical data. This sensor is for grid feed-in.
+      - name: Inverter Total Exported Energy
+        unique_id: inverter_total_exported_energy
+        unit_of_measurement: kWh
+        device_class: energy
+        state_class: total_increasing
+        availability: >-
+          {{
+          has_value('sensor.inverter_modbus_feed_in_energy_today')
+          }}
+        state: "{{ states('sensor.inverter_modbus_feed_in_energy_today') }}"
+      
+      - name: Inverter Load Energy
+        unique_id: inverter_load_energy
+        unit_of_measurement: kWh
+        device_class: energy
+        state_class: total_increasing
+        availability: >-
+          {{
+          has_value('sensor.inverter_modbus_load_energy_today')
+          }}
+        state: "{{ states('sensor.inverter_modbus_load_energy_today') }}"
+
+      - name: Inverter Grid Meter Power
+        unique_id: inverter_grid_meter_power
+        unit_of_measurement: W
+        device_class: power
+        state_class: measurement
+        availability: >-
+          {{
+          has_value('sensor.inverter_modbus_grid_ct')
+          }}
+        state: "{{ (states('sensor.inverter_modbus_grid_ct') | float(0)) * -1000 }}"
+
+      # Legacy alias of the new inverter_grid_meter_power sensor to maintain compatibility
+      # throughout
+      - name: Inverter Meter Power
+        unique_id: inverter_meter_power
+        unit_of_measurement: W
+        device_class: power
+        state_class: measurement
+        availability: >-
+          {{
+          has_value('sensor.inverter_grid_meter_power')
+          }}
+        state: "{{ states('sensor.inverter_grid_meter_power') }}"
+
+      - name: Inverter Load Power
+        unique_id: inverter_load_power
+        unit_of_measurement: W
+        device_class: power
+        state_class: measurement
+        availability: >-
+          {{
+          has_value('sensor.inverter_modbus_load_power')
+          }}
+        state: "{{ (states('sensor.inverter_modbus_load_power') | float(0)) * 1000 }}"
+
+      # Presumably the sum of PV generation + battery discharge
+      - name: Inverter Total Generation Power
+        unique_id: inverter_total_generation_power
+        unit_of_measurement: W
+        device_class: power
+        state_class: measurement
+        availability: >-
+          {{
+          has_value('sensor.inverter_modbus_rpower')
+          }}
+        state: "{{ (states('sensor.inverter_modbus_rpower') | float(0)) * 1000 }}"
+
+sensor:
+  - platform: statistics
+    name: Inverter PV Total Power Mean 1m
+    unique_id: inverter_pv_total_power_mean_1m
+    entity_id: sensor.inverter_pv_total_power
+    state_characteristic: mean
+    max_age:
+      minutes: 1
+
+  - platform: statistics
+    name: Inverter PV Total Power Mean 5m
+    unique_id: inverter_pv_total_power_mean_5m
+    entity_id: sensor.inverter_pv_total_power
+    state_characteristic: mean
+    max_age:
+      minutes: 5
+
+  - platform: statistics
+    name: Inverter PV Total Power Mean 15m
+    unique_id: inverter_pv_total_power_mean_15m
+    entity_id: sensor.inverter_pv_total_power
+    state_characteristic: mean
+    max_age:
+      minutes: 15

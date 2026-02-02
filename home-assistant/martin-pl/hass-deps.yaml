@@ -33,5 +33,11 @@ dependencies:
 - https://github.com/aukedejong/lovelace-windrose-card.git
 - https://github.com/alexpfau/calendar-card-pro.git
 - https://github.com/NemesisRE/kiosk-mode.git
-- https://github.com/bitnimble/hass-amber-electric.git
 - https://github.com/agittins/bermuda.git
+- https://github.com/kcoffau/AUS_BOM_Space_Weather_Alert_System.git
+- https://github.com/mystardious/foxess_modbus.git
+- https://github.com/RomRider/apexcharts-card.git
+- https://github.com/nickw444/ha-foxess-cloud.git
+- https://github.com/smartHomeHub/SmartIR.git
+- https://github.com/Patrick762/hassio-bluetti-bt.git
+- https://github.com/cabberley/HA_AemoNemData

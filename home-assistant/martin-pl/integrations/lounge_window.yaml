@@ -1,0 +1,36 @@
+template:
+  - sensor:
+      - name: "Living Room Window Brightness"
+        unit_of_measurement: "%"
+        state: >
+          {% set sun_az = state_attr('sun.sun', 'azimuth') | float %}
+          {% set sun_el = state_attr('sun.sun', 'elevation') | float %}
+
+          {% set window_az = 242 %}
+          {% set fov = 70 %}
+          {% set min_el = 5 %}
+          {% set max_el = 60 %}
+
+          {% set window_h = 1.8 %}
+          {% set overhang_d = 0.3 %}
+
+          {% set delta = ((sun_az - window_az + 180) % 360) - 180 %}
+          {% set abs_delta = delta | abs %}
+
+          {% if sun_el <= min_el or abs_delta >= fov %}
+            0
+          {% else %}
+            {% set az_factor = cos( (abs_delta / fov) * pi / 2 ) %}
+
+            {% set el_rad = sun_el * pi / 180 %}
+            {% set delta_rad = delta * pi / 180 %}
+            {% set proj_el = atan( tan(el_rad) / cos(delta_rad) ) %}
+
+            {% set shadow = overhang_d * tan(proj_el) %}
+            {% set coverage = [shadow / window_h, 1] | min %}
+            {% set awning_factor = 1 - coverage %}
+
+            {% set strength = [sun_el / max_el, 1] | min %}
+
+            {{ (az_factor * awning_factor * strength * 100) | round(1) }}
+          {% endif %}

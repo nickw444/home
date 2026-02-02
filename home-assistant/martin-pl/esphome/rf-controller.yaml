@@ -53,6 +53,10 @@ binary_sensor:
   - platform: status
     name: "RF Controller Status"
 
+switch:
+  - platform: restart
+    name: "RF Controller Restart"
+
 # Define all blinds
 packages:
   # Bedroom blinds

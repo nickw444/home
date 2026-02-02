@@ -31,11 +31,11 @@ action:
             metadata: {}
             data: {}
             target:
-              entity_id: button.x40_ultra_shortcut_4
+              entity_id: button.x40_ultra_shortcut_vac_and_mop_bedrooms
     default:
       - action: button.press
         metadata: {}
         data: {}
         target:
-          entity_id: button.x40_ultra_shortcut_1
+          entity_id: button.x40_ultra_shortcut_vac_bedrooms
 mode: single

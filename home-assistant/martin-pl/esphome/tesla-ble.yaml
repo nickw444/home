@@ -1,0 +1,44 @@
+substitutions:
+  # Note substitutions in your yaml will override those here
+  friendly_name: Tesla BLE
+  device_name: tesla-ble
+  device_description: Tesla BLE
+  ble_mac_address: !secret ble_mac_address
+  tesla_vin: !secret tesla_vin
+  charging_amps_max: "32"
+
+# The following shows the default board and variant settings. 
+# Uncomment and changing them is only needed if they are not appropriate for your board (see read.me documentation for support):
+esp32:
+  board: esp32-c3-devkitm-1
+  variant: ESP32C3
+
+api:
+  encryption:
+    key: !secret tesla_ble_api_encryption_key
+
+packages:
+  base:  'github://PedroKTFC/esphome-tesla-ble/packages/base.yml'
+  common: 'github://PedroKTFC/esphome-tesla-ble/packages/common.yml'
+  project: 'github://PedroKTFC/esphome-tesla-ble/packages/project.yml'
+  client: 'github://PedroKTFC/esphome-tesla-ble/packages/client.yml'
+  # listener: github://PedroKTFC/esphome-tesla-ble/packages/listener.yml # Uncomment this to scan find your VIN BLE MAC address
+  # language: github://PedroKTFC/esphome-tesla-ble/packages/language_hu.yml # Uncomment this to translate the entity names to your language. If yours is missing, submit a PR here!
+
+# The following shows how to change the name of a sensor and how to change any of the parameters.
+# tesla_ble_vehicle: # THIS LINE MUST BE UNCOMMENTED IF ANY OF THE CHANGES BELOW ARE WANTED
+
+# You can change any sensor name in Home Assistant. However you can also change them here if it is more convenient for you.
+# For a list of all sensors etc, see the file client.yml in the packages directory.
+#  odometer: # miles by default, edit the entity in home assistant if you need km
+#    name: "Odometro" # Rename if desired
+# End of renaming
+
+# At the time of writing, these are set to the default values. If you require a different value, uncomment and edit the value
+#  update_interval: 10s # Base polling interval, used for VCSEC sensors
+#  post_wake_poll_time: 300 # How long to poll for data after car awakes at poll_data_period speed (s)
+#  poll_data_period: 60 # Polling interval after awakening during post_wake_poll_time interval (s)
+#  poll_charging_period: 10 # Period to poll for data when charging (s)
+#  poll_asleep_period: 60 # Period to poll for data when asleep (s)
+#  ble_disconnected_min_time: 300 # Minimum time BLE must be disconnected before sensors are Unknown (s)
+#  fast_poll_if_unlocked: 1 # if != 0, fast polls are enabled when unlocked

@@ -1,0 +1,807 @@
+esphome:
+  name: "kitchen-stat"
+  friendly_name: Kitchen Stat
+
+esp32:
+  board: esp32dev
+
+psram:
+  mode: quad
+  speed: 80MHz
+
+logger:
+
+globals:
+  - id: flow_phase
+    type: float
+    restore_value: no
+    initial_value: '0'
+
+api:
+  encryption:
+    key: !secret screen_spare_api_encryption_key
+
+ota:
+  - platform: esphome
+    password: !secret ota_password
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+  ap:
+    ssid: "Touchscreen-Demo"
+    password: !secret wifi_fallback_password
+
+captive_portal:
+
+spi:
+  mosi_pin: GPIO15
+  clk_pin: GPIO14
+
+i2c:
+  sda: GPIO21
+  scl: GPIO22
+
+output:
+  - platform: ledc
+    pin: GPIO32
+    id: backlight_pwm
+light:
+  - platform: monochromatic
+    output: backlight_pwm
+    name: "Display Backlight"
+    id: back_light
+    restore_mode: ALWAYS_ON
+
+binary_sensor:
+  - platform: gpio
+    pin: 
+      number: GPIO18
+      mode:
+        input: true
+        pullup: true
+      inverted: true
+    name: "Bottom Button"
+    on_press: 
+      then:
+        - light.toggle:
+            id: back_light
+
+display:
+  - platform: ili9xxx
+    model: gc9a01a
+    id: round_disp
+    cs_pin: GPIO5
+    dc_pin: GPIO27
+    reset_pin: GPIO33
+    rotation: 0
+    invert_colors: true
+    color_palette: 8BIT
+    auto_clear_enabled: false
+    update_interval: never
+
+sensor:
+    - platform: homeassistant
+      id: ha_inverter_meter_power
+      entity_id: sensor.inverter_meter_power
+      on_value:
+        then:
+          - lvgl.image.update:
+              id: img_inverter_meter_power
+              src: !lambda "return x >= 0 ? id(mdi_home_import_outline) : id(mdi_home_export_outline);"
+          - if:
+              condition:
+                lambda: 'return fabsf(x) > 1000;'
+              then:
+                - lvgl.label.update:
+                    id: label_inverter_meter_power
+                    text:
+                      format: "%.1f"  
+                      args: ['x/1000']
+              else:
+                - lvgl.label.update:
+                    id: label_inverter_meter_power
+                    text:
+                      format: "%.0f"  
+                      args: ['(fabsf(x) < 0.5f) ? 0 : x']
+          - lvgl.label.update:
+              id: label_inverter_meter_power_unit
+              text: !lambda |-
+                return std::string(fabsf(x) > 1000.0f ? "kW" : "W");
+          - lvgl.label.update:
+              id: label_grid_price
+              text: !lambda |-
+                float price = x >= 0
+                  ? id(ha_amber_general_price_non_estimate).state
+                  : id(ha_amber_feed_in_price_non_estimate).state;
+                char buf[16];
+                snprintf(buf, sizeof(buf), "%.2f", price);
+                return std::string(buf);
+    - platform: homeassistant
+      id: ha_inverter_total_active_power
+      entity_id: sensor.inverter_total_active_power
+      on_value:
+        then:
+          - if:
+              condition:
+                lambda: 'return fabsf(x) > 1000;'
+              then:
+                - lvgl.label.update:
+                    id: label_inverter_total_active_power
+                    text:
+                      format: "%.1f"  
+                      args: ['x/1000']
+              else:
+                - lvgl.label.update:
+                    id: label_inverter_total_active_power
+                    text:
+                      format: "%.0f"  
+                      args: ['x']
+          - lvgl.label.update:
+              id: label_inverter_total_active_power_unit
+              text: !lambda |-
+                return std::string(fabsf(x) > 1000.0f ? "kW" : "W");
+    - platform: homeassistant
+      id: ha_inverter_load_power
+      entity_id: sensor.inverter_load_power
+      on_value:
+        then:
+          - if:
+              condition:
+                lambda: 'return fabsf(x) > 1000;'
+              then:
+                - lvgl.label.update:
+                    id: label_inverter_load_power
+                    text:
+                      format: "%.1f"  
+                      args: ['x/1000']
+              else:
+                - lvgl.label.update:
+                    id: label_inverter_load_power
+                    text:
+                      format: "%.0f"  
+                      args: ['x']
+          - lvgl.label.update:
+              id: label_inverter_load_power_unit
+              text: !lambda |-
+                return std::string(fabsf(x) > 1000.0f ? "kW" : "W");
+    - platform: homeassistant
+      id: ha_inverter_battery_power
+      entity_id: sensor.inverter_battery_power
+      on_value:
+        then:
+          - lvgl.image.update:
+              id: img_inverter_battery
+              src: !lambda "return x >= 0 ? id(mdi_battery_minus) : id(mdi_battery_plus);"
+          - lvgl.label.update:
+              id: label_inverter_battery
+              text: !lambda |-
+                float p = x;
+                float ap = fabsf(p);
+                char buf[16];
+                if (ap >= 1000.0f) {
+                  snprintf(buf, sizeof(buf), "%.1f", ap / 1000.0f);
+                } else {
+                  snprintf(buf, sizeof(buf), "%.0f", ap);
+                }
+                return std::string(buf);
+          - lvgl.label.update:
+              id: label_inverter_battery_unit
+              text: !lambda |-
+                return std::string(fabsf(x) >= 1000.0f ? "kW" : "W");
+          - lvgl.label.update:
+              id: label_inverter_battery_soc
+              text: !lambda |-
+                char buf[8];
+                snprintf(buf, sizeof(buf), "%.0f%%", id(ha_inverter_battery_soc).state);
+                return std::string(buf);
+    - platform: homeassistant
+      id: ha_inverter_battery_soc
+      entity_id: sensor.inverter_battery_soc
+      on_value:
+        then:
+          - lvgl.label.update:
+              id: label_inverter_battery_soc
+              text: !lambda |-
+                char buf[8];
+                snprintf(buf, sizeof(buf), "%.0f%%", x);
+                return std::string(buf);
+    - platform: homeassistant
+      id: ha_amber_general_price_non_estimate
+      entity_id: sensor.amber_general_price_non_estimate
+      on_value:
+        then:
+          - lvgl.label.update:
+              id: label_grid_price
+              text: !lambda |-
+                if (id(ha_inverter_meter_power).state < 0) {
+                  return std::string("");
+                }
+                char buf[16];
+                snprintf(buf, sizeof(buf), "%.2f", x);
+                return std::string(buf);
+    - platform: homeassistant
+      id: ha_amber_feed_in_price_non_estimate
+      entity_id: sensor.amber_feed_in_price_non_estimate
+      on_value:
+        then:
+          - lvgl.label.update:
+              id: label_grid_price
+              text: !lambda |-
+                if (id(ha_inverter_meter_power).state >= 0) {
+                  return std::string("");
+                }
+                char buf[16];
+                snprintf(buf, sizeof(buf), "%.2f", x);
+                return std::string(buf);
+interval:
+  - interval: 150ms
+    then:
+      - lambda: |-
+          id(flow_phase) += 0.06f;
+          if (id(flow_phase) > 1.0f) {
+            id(flow_phase) -= 1.0f;
+          }
+      - lvgl.obj.update:
+          id: dot_solar
+          hidden: !lambda "return fabsf(id(ha_inverter_total_active_power).state) < 10;"
+          x: !lambda |-
+            float t = id(flow_phase);
+            if (id(ha_inverter_total_active_power).state < 0) t = 1.0f - t;
+            float d = t * 50.0f;
+            float x;
+            if (d < 20.0f) {
+              x = 128.0f;
+            } else {
+              x = 128.0f + (d - 20.0f);
+            }
+            return (int)(x - 3.0f);
+          y: !lambda |-
+            float t = id(flow_phase);
+            if (id(ha_inverter_total_active_power).state < 0) t = 1.0f - t;
+            float d = t * 50.0f;
+            float y;
+            if (d < 20.0f) {
+              y = 92.0f + d;
+            } else {
+              y = 112.0f;
+            }
+            return (int)(y - 3.0f);
+      - lvgl.obj.update:
+          id: dot_grid
+          hidden: !lambda "return fabsf(id(ha_inverter_meter_power).state) < 10;"
+          bg_color: !lambda |-
+            float grid = id(ha_inverter_meter_power).state;
+            float batt = id(ha_inverter_battery_power).state;
+            if (grid < 0) {
+              return batt > 0 ? lv_color_hex(0xff80ab) : lv_color_hex(0xffc400);
+            }
+            return lv_color_hex(0x6ec6ff);
+          x: !lambda |-
+            float grid = id(ha_inverter_meter_power).state;
+            float batt = id(ha_inverter_battery_power).state;
+            float t = id(flow_phase);
+            float x = 82.0f;
+            if (grid >= 0) {
+              float d = t * 76.0f;
+              x = 82.0f + d;
+            } else if (batt > 0) {
+              float d = t * 48.0f;
+              if (d < 18.0f) {
+                x = 112.0f;
+              } else {
+                x = 112.0f - (d - 18.0f);
+              }
+            } else {
+              float d = t * 50.0f;
+              if (d < 20.0f) {
+                x = 112.0f;
+              } else {
+                x = 112.0f - (d - 20.0f);
+              }
+            }
+            return (int)(x - 3.0f);
+          y: !lambda |-
+            float grid = id(ha_inverter_meter_power).state;
+            float batt = id(ha_inverter_battery_power).state;
+            float t = id(flow_phase);
+            float y = 120.0f;
+            if (grid >= 0) {
+              y = 120.0f;
+            } else if (batt > 0) {
+              float d = t * 48.0f;
+              if (d < 18.0f) {
+                y = 146.0f - d;
+              } else {
+                y = 128.0f;
+              }
+            } else {
+              float d = t * 50.0f;
+              if (d < 20.0f) {
+                y = 92.0f + d;
+              } else {
+                y = 112.0f;
+              }
+            }
+            return (int)(y - 3.0f);
+      - lvgl.obj.update:
+          id: dot_battery
+          hidden: !lambda "return fabsf(id(ha_inverter_battery_power).state) < 10;"
+          x: !lambda |-
+            float t = id(flow_phase);
+            if (id(ha_inverter_battery_power).state < 0) t = 1.0f - t;
+            float d = t * 48.0f;
+            float x;
+            if (d < 18.0f) {
+              x = 128.0f;
+            } else {
+              x = 128.0f + (d - 18.0f);
+            }
+            return (int)(x - 3.0f);
+          y: !lambda |-
+            float t = id(flow_phase);
+            if (id(ha_inverter_battery_power).state < 0) t = 1.0f - t;
+            float d = t * 48.0f;
+            float y;
+            if (d < 18.0f) {
+              y = 146.0f - d;
+            } else {
+              y = 128.0f;
+            }
+            return (int)(y - 3.0f);
+
+touchscreen:
+  id: touch
+  platform: cst816
+  interrupt_pin: GPIO19
+  # on_touch:
+  #   - lambda: |-
+  #       ESP_LOGI("cal", "x=%d, y=%d, x_raw=%d, y_raw=%0d",
+  #           touch.x,
+  #           touch.y,
+  #           touch.x_raw,
+  #           touch.y_raw
+  #       );
+  #   - component.update: watchface
+  #   - delay: 5s
+  #   - component.update: watchface
+  # on_update:
+  #   - lambda: |-
+  #         for (auto touch: touches)  {
+  #             if (touch.state <= 2) {
+  #                ESP_LOGI("Touch points:", "id=%d x=%d, y=%d", touch.id, touch.x, touch.y);
+  #             }
+  #         }
+
+image:
+  - file: mdi:home-lightning-bolt-outline
+    type: GRAYSCALE
+    id: mdi_home_lightning_bolt_outlint
+    resize: 24x24
+  - file: mdi:home-export-outline
+    type: GRAYSCALE
+    id: mdi_home_export_outline
+    resize: 24x24
+  - file: mdi:home-import-outline
+    type: GRAYSCALE
+    id: mdi_home_import_outline
+    resize: 24x24
+  - file: mdi:solar-power-variant-outline
+    type: GRAYSCALE
+    id: mdi_solar_power_variant_outline
+    resize: 24x24
+  - file: mdi:battery-plus
+    type: GRAYSCALE
+    id: mdi_battery_plus
+    resize: 20x20
+  - file: mdi:battery-minus
+    type: GRAYSCALE
+    id: mdi_battery_minus
+    resize: 20x20
+
+lvgl:
+    bg_color: 0
+    border_width: 0
+    outline_width: 0
+    #shadow_width: 0
+    text_font: unscii_16
+    align: center
+    style_definitions:
+      - id: font_style
+        text_font: MONTSERRAT_16
+        #text_font: unscii_16
+        align: center
+        text_color: 0xFFFFFF
+        #bg_opa: cover
+        bg_opa: TRANSP
+        bg_color: 0
+        radius: 4
+        pad_all: 2 
+      - id: power_style
+        text_font: MONTSERRAT_24
+        align: center
+        text_color: 0xFFFFFF
+        bg_opa: TRANSP
+        bg_color: 0
+        radius: 4
+        pad_all: 2 
+      - id: unit_style
+        text_font: MONTSERRAT_12
+        align: center
+        text_color: 0xFFFFFF
+        bg_opa: TRANSP
+        bg_color: 0
+        radius: 4
+        pad_all: 0
+      - id: details_style
+        text_font: MONTSERRAT_16
+        align: center
+        text_color: 0xFFFFFF
+        #bg_opa: cover
+        bg_opa: TRANSP
+        bg_color: 0
+        radius: 4
+        pad_all: 2 
+    page_wrap: true
+    pages:
+      - id: main_page
+        widgets:
+          - obj: # Round canvas
+              height: 240 # needed to be explicitily defined for my round display to not have weird border line overlapping
+              width: 240
+              align: center
+              bg_color: 0
+              border_width: 0
+              outline_width: 0
+              pad_all: 0
+              scrollbar_mode: "OFF"
+              clip_corner: true
+              radius: 120
+              widgets:
+                - line: # PV center (vertical to battery)
+                    id: line_pv_batt
+                    points:
+                      - 120,72
+                      - 120,166
+                    line_width: 2
+                    line_color: 0xffc400
+                - line: # PV left stub
+                    id: line_pv_stub_left
+                    points:
+                      - 112,72
+                      - 112,92
+                    line_width: 2
+                    line_color: 0xffc400
+                - line: # PV right stub
+                    id: line_pv_stub_right
+                    points:
+                      - 128,72
+                      - 128,92
+                    line_width: 2
+                    line_color: 0xffc400
+                - line: # PV -> Grid (right angle)
+                    id: line_pv_grid
+                    points:
+                      - 112,92
+                      - 112,112
+                      - 82,112
+                    line_width: 2
+                    line_color: 0xffc400
+                - line: # PV -> Load (right angle)
+                    id: line_pv_house
+                    points:
+                      - 128,92
+                      - 128,112
+                      - 158,112
+                    line_width: 2
+                    line_color: 0xffc400
+                - line: # Battery left stub
+                    id: line_batt_stub_left
+                    points:
+                      - 112,166
+                      - 112,146
+                    line_width: 2
+                    line_color: 0xff80ab
+                - line: # Battery right stub
+                    id: line_batt_stub_right
+                    points:
+                      - 128,166
+                      - 128,146
+                    line_width: 2
+                    line_color: 0xff80ab
+                - line: # Battery -> Grid (right angle)
+                    id: line_batt_grid
+                    points:
+                      - 112,146
+                      - 112,128
+                      - 82,128
+                    line_width: 2
+                    line_color: 0xff80ab
+                - line: # Battery -> Load (right angle)
+                    id: line_batt_house
+                    points:
+                      - 128,146
+                      - 128,128
+                      - 158,128
+                    line_width: 2
+                    line_color: 0xff80ab
+                - line: # Grid -> Load (straight)
+                    id: line_grid_house
+                    points:
+                      - 82,120
+                      - 158,120
+                    line_width: 2
+                    line_color: 0x6ec6ff
+                - obj: # Solar flow dot
+                    id: dot_solar
+                    width: 6
+                    height: 6
+                    radius: 3
+                    x: 117
+                    y: 92
+                    bg_color: 0xffc400
+                    bg_opa: COVER
+                    border_width: 0
+                    hidden: true
+                - obj: # Grid flow dot
+                    id: dot_grid
+                    width: 6
+                    height: 6
+                    radius: 3
+                    x: 90
+                    y: 117
+                    bg_color: 0x6ec6ff
+                    bg_opa: COVER
+                    border_width: 0
+                    hidden: true
+                - obj: # Battery flow dot
+                    id: dot_battery
+                    width: 6
+                    height: 6
+                    radius: 3
+                    x: 117
+                    y: 148
+                    bg_color: 0xff80ab
+                    bg_opa: COVER
+                    border_width: 0
+                    hidden: true
+                - obj: # House (center)
+                    width: 72
+                    height: 72
+                    radius: 36
+                    align: center
+                    x: 74
+                    y: 0
+                    bg_opa: TRANSP
+                    border_width: 0
+                    pad_all: 1
+                    scrollable: false
+                    layout:
+                      type: grid
+                      grid_rows: [CONTENT, CONTENT]
+                      grid_columns: [CONTENT]
+                      grid_row_align: CENTER
+                      grid_column_align: CENTER
+                      pad_row: 0px
+                    widgets:
+                      - image:
+                          src: mdi_home_lightning_bolt_outlint
+                          width: 24
+                          height: 24
+                          align: center
+                          grid_cell_x_align: CENTER
+                          grid_cell_y_align: CENTER
+                          image_recolor: 0x4dd0e1
+                          image_recolor_opa: 100%
+                      - obj:
+                          align: center
+                          grid_cell_x_align: CENTER
+                          grid_cell_y_align: CENTER
+                          bg_opa: TRANSP
+                          border_width: 0
+                          pad_all: 0
+                          scrollable: false
+                          layout:
+                            type: flex
+                            flex_flow: ROW
+                            flex_align_main: CENTER
+                            flex_align_cross: CENTER
+                            flex_align_track: CENTER
+                          widgets:
+                            - label:
+                                styles: power_style
+                                id: label_inverter_load_power
+                                text_color: 0xffffff
+                                align: center
+                                text: ""
+                            - label:
+                                styles: unit_style
+                                id: label_inverter_load_power_unit
+                                text_color: 0xffffff
+                                align: center
+                                text: ""
+                - obj: # Solar (top)
+                    width: 72
+                    height: 72
+                    radius: 36
+                    align: center
+                    x: 0
+                    y: -80
+                    bg_opa: TRANSP
+                    border_width: 0
+                    pad_all: 1
+                    scrollable: false
+                    layout:
+                      type: grid
+                      grid_rows: [CONTENT, CONTENT]
+                      grid_columns: [CONTENT]
+                      grid_row_align: CENTER
+                      grid_column_align: CENTER
+                      pad_row: 0px
+                    widgets:
+                      - image:
+                          src: mdi_solar_power_variant_outline
+                          width: 24
+                          height: 24
+                          align: center
+                          grid_cell_x_align: CENTER
+                          grid_cell_y_align: CENTER
+                          image_recolor: 0xffc400
+                          image_recolor_opa: 100%
+                      - obj:
+                          align: center
+                          grid_cell_x_align: CENTER
+                          grid_cell_y_align: CENTER
+                          bg_opa: TRANSP
+                          border_width: 0
+                          pad_all: 0
+                          scrollable: false
+                          layout:
+                            type: flex
+                            flex_flow: ROW
+                            flex_align_main: CENTER
+                            flex_align_cross: CENTER
+                            flex_align_track: CENTER
+                          widgets:
+                            - label:
+                                styles: power_style
+                                id: label_inverter_total_active_power
+                                text_color: 0xffffff
+                                align: center
+                                text: ""
+                            - label:
+                                styles: unit_style
+                                id: label_inverter_total_active_power_unit
+                                text_color: 0xffffff
+                                align: center
+                                text: ""
+                - obj: # Grid (left)
+                    width: 72
+                    height: 72
+                    radius: 36
+                    align: center
+                    x: -74
+                    y: 0
+                    bg_opa: TRANSP
+                    border_width: 0
+                    pad_all: 1
+                    scrollable: false
+                    layout:
+                      type: grid
+                      grid_rows: [CONTENT, CONTENT, CONTENT]
+                      grid_columns: [CONTENT]
+                      grid_row_align: CENTER
+                      grid_column_align: CENTER
+                      pad_row: 0px
+                    widgets:
+                      - image:
+                          src: mdi_home_import_outline
+                          width: 24
+                          height: 24
+                          align: center
+                          grid_cell_x_align: CENTER
+                          grid_cell_y_align: CENTER
+                          image_recolor: 0x6ec6ff
+                          image_recolor_opa: 100%
+                          id: img_inverter_meter_power
+                      - obj:
+                          align: center
+                          grid_cell_x_align: CENTER
+                          grid_cell_y_align: CENTER
+                          bg_opa: TRANSP
+                          border_width: 0
+                          pad_all: 0
+                          scrollable: false
+                          layout:
+                            type: flex
+                            flex_flow: ROW
+                            flex_align_main: CENTER
+                            flex_align_cross: CENTER
+                            flex_align_track: CENTER
+                          widgets:
+                            - label:
+                                styles: power_style
+                                id: label_inverter_meter_power
+                                text_color: 0xffffff
+                                align: center
+                                text: ""
+                            - label:
+                                styles: unit_style
+                                id: label_inverter_meter_power_unit
+                                text_color: 0xffffff
+                                align: center
+                                text: ""
+                      - label:
+                          styles: font_style
+                          id: label_grid_price
+                          text_color: 0xffffff
+                          align: center
+                          grid_cell_x_align: CENTER
+                          grid_cell_y_align: CENTER
+                          text: ""
+                - obj: # Battery (bottom)
+                    width: 72
+                    height: 72
+                    radius: 36
+                    align: center
+                    x: 0
+                    y: 80
+                    bg_opa: TRANSP
+                    border_width: 0
+                    pad_all: 1
+                    pad_top: 2
+                    scrollable: false
+                    layout:
+                      type: grid
+                      grid_rows: [CONTENT, CONTENT, CONTENT]
+                      grid_columns: [CONTENT]
+                      grid_row_align: CENTER
+                      grid_column_align: CENTER
+                      pad_row: 0px
+                    widgets:
+                      - image:
+                          src: mdi_battery_plus
+                          width: 20
+                          height: 20
+                          align: center
+                          grid_cell_x_align: CENTER
+                          grid_cell_y_align: CENTER
+                          image_recolor: 0xff80ab
+                          image_recolor_opa: 100%
+                          id: img_inverter_battery
+                      - obj:
+                          align: center
+                          grid_cell_x_align: CENTER
+                          grid_cell_y_align: CENTER
+                          bg_opa: TRANSP
+                          border_width: 0
+                          pad_all: 0
+                          scrollable: false
+                          layout:
+                            type: flex
+                            flex_flow: ROW
+                            flex_align_main: CENTER
+                            flex_align_cross: CENTER
+                            flex_align_track: CENTER
+                          widgets:
+                            - label:
+                                styles: power_style
+                                id: label_inverter_battery
+                                text_color: 0xffffff
+                                align: center
+                                text: ""
+                            - label:
+                                styles: unit_style
+                                id: label_inverter_battery_unit
+                                text_color: 0xffffff
+                                align: center
+                                text: ""
+                      - label:
+                          styles: font_style
+                          id: label_inverter_battery_soc
+                          text_color: 0xffffff
+                          align: center
+                          grid_cell_x_align: CENTER
+                          grid_cell_y_align: CENTER
+                          text: ""

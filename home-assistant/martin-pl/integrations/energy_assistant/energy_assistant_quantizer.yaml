@@ -1,0 +1,237 @@
+automation:
+  - alias: "EMS: Apply Primary Inverter (t0) w/ fallback"
+    id: "ems_apply_primary_inverter_t0_w_fallback"
+    mode: single
+    trigger:
+      - platform: state
+        entity_id:
+          - sensor.hass_energy_plan_updated
+          - sensor.hass_energy_plan_status
+      - platform: time_pattern
+        minutes: "/1"
+    variables:
+      max_age_s: 300
+      eps: 0.15
+      max_charge_kw: 10.0
+      max_discharge_kw: 10.0
+      export_limit_normal_kw: 10.0
+      battery_full_pct: 99.0
+
+      plan_age_s: >-
+        {{ (as_timestamp(now()) - as_timestamp(states('sensor.hass_energy_plan_updated'), default=0)) | int }}
+      plan_ok: >-
+        {{ states('sensor.hass_energy_plan_status') == 'Optimal' and plan_age_s < max_age_s }}
+
+      ac_net_kw: "{{ states('sensor.inverter_primary_inverter_net_power')|float(0) }}"
+      charge_kw: "{{ states('sensor.inverter_primary_battery_charge_power')|float(0) }}"
+      discharge_kw: "{{ states('sensor.inverter_primary_battery_discharge_power')|float(0) }}"
+      grid_export_kw: "{{ states('sensor.hass_energy_grid_export_power')|float(0) }}"
+      grid_import_kw: "{{ states('sensor.hass_energy_grid_import_power')|float(0) }}"
+      price_export: "{{ states('sensor.hass_energy_price_export')|float(0) }}"
+      no_export: "{{ price_export < 0 }}"
+      export_limit_current_kw: "{{ states('number.inverter_modbus_export_limit')|float(0) }}"
+      battery_soc_pct: "{{ states('sensor.inverter_primary_battery_soc') | float(0) }}"
+      battery_full: "{{ battery_soc_pct >= battery_full_pct }}"
+
+      mode_desired: >-
+        {% if discharge_kw <= eps and grid_import_kw > eps and ac_net_kw >= -eps -%}
+        Back-up
+        {%- elif no_export -%}
+        {%- if ac_net_kw < -eps -%}
+        Force Charge
+        {%- else -%}
+        Self Use
+        {%- endif -%}
+        {%- elif ac_net_kw < -eps -%}
+        Force Charge
+        {%- elif discharge_kw > eps and grid_export_kw > eps -%}
+        Force Discharge
+        {%- elif grid_export_kw > eps and discharge_kw <= eps -%}
+        {%- if battery_full -%}
+        Self Use
+        {%- else -%}
+        Feed-in First
+        {%- endif -%}
+        {%- else -%}
+        Self Use
+        {%- endif %}
+
+      export_limit_target_kw: >-
+        {% if no_export -%}
+        {{ 0 | round(1) }}
+        {%- elif mode_desired == 'Force Discharge' -%}
+        {%- if ac_net_kw >= (max_discharge_kw - eps) -%}
+        {{ export_limit_normal_kw | round(1) }}
+        {%- else -%}
+        {{ ([0, [grid_export_kw, export_limit_normal_kw] | min] | max) | round(1) }}
+        {%- endif -%}
+        {%- else -%}
+        {{ export_limit_normal_kw | round(1) }}
+        {%- endif %}
+
+      fc_kw: >-
+        {{ [[charge_kw, max_charge_kw] | min, 0] | max | round(2) }}
+      fd_kw: "{{ max_discharge_kw }}"
+
+    action:
+      - if:
+          - condition: template
+            value_template: >-
+              {{ (export_limit_current_kw - export_limit_target_kw)|abs > 0.05 }}
+        then:
+          - service: number.set_value
+            target:
+              entity_id: number.inverter_modbus_export_limit
+            data:
+              value: "{{ export_limit_target_kw }}"
+
+      - choose:
+          - conditions:
+              - condition: template
+                value_template: "{{ plan_ok | bool }}"
+            sequence:
+              - choose:
+                  - conditions:
+                      - condition: template
+                        value_template: "{{ mode_desired == 'Force Charge' }}"
+                    sequence:
+                      - if:
+                          - condition: template
+                            value_template: >-
+                              {{ (states('number.inverter_modbus_force_charge_power')|float(0) - fc_kw)|abs > 0.05 }}
+                        then:
+                          - service: number.set_value
+                            target:
+                              entity_id: number.inverter_modbus_force_charge_power
+                            data:
+                              value: "{{ fc_kw }}"
+                      - if:
+                          - condition: template
+                            value_template: "{{ states('select.inverter_modbus_work_mode') != mode_desired }}"
+                        then:
+                          - service: select.select_option
+                            target:
+                              entity_id: select.inverter_modbus_work_mode
+                            data:
+                              option: "{{ mode_desired }}"
+
+                  - conditions:
+                      - condition: template
+                        value_template: "{{ mode_desired == 'Force Discharge' }}"
+                    sequence:
+                      - if:
+                          - condition: template
+                            value_template: >-
+                              {{ (states('number.inverter_modbus_force_discharge_power')|float(0) - fd_kw)|abs > 0.05 }}
+                        then:
+                          - service: number.set_value
+                            target:
+                              entity_id: number.inverter_modbus_force_discharge_power
+                            data:
+                              value: "{{ fd_kw }}"
+                      - if:
+                          - condition: template
+                            value_template: "{{ states('select.inverter_modbus_work_mode') != mode_desired }}"
+                        then:
+                          - service: select.select_option
+                            target:
+                              entity_id: select.inverter_modbus_work_mode
+                            data:
+                              option: "{{ mode_desired }}"
+
+                default:
+                  - if:
+                      - condition: template
+                        value_template: "{{ states('select.inverter_modbus_work_mode') != mode_desired }}"
+                    then:
+                      - service: select.select_option
+                        target:
+                          entity_id: select.inverter_modbus_work_mode
+                        data:
+                          option: "{{ mode_desired }}"
+
+        default:
+          - if:
+              - condition: template
+                value_template: "{{ not (plan_ok | bool) and states('select.inverter_modbus_work_mode') != 'Self Use' }}"
+            then:
+              - service: select.select_option
+                target:
+                  entity_id: select.inverter_modbus_work_mode
+                data:
+                  option: "Self Use"
+
+  - alias: "EMS: Apply EV (t0) w/ fallback"
+    id: "ems_apply_ev_t0_w_fallback"
+    mode: single
+    trigger:
+      - platform: state
+        entity_id:
+          - sensor.hass_energy_plan_updated
+          - sensor.hass_energy_plan_status
+      - platform: time_pattern
+        minutes: "/1"
+    variables:
+      max_age_s: 300
+      eps: 0.15
+      volts: 240
+      phases: 1
+      min_amps: 6
+      max_amps: 32
+
+      plan_age_s: >-
+        {{ (as_timestamp(now()) - as_timestamp(states('sensor.hass_energy_plan_updated'), default=0)) | int }}
+      plan_ok: >-
+        {{ states('sensor.hass_energy_plan_status') == 'Optimal' and plan_age_s < max_age_s }}
+
+      ev_kw: "{{ states('sensor.load_tessie_charge_power')|float(0) }}"
+      amps_raw: "{{ (ev_kw * 1000 / (volts * phases)) if ev_kw > eps else 0 }}"
+      amps: >-
+        {% set a = amps_raw|round(0)|int %}
+        {% if a < min_amps %}0{% elif a > max_amps %}{{ max_amps }}{% else %}{{ a }}{% endif %}
+      ev_on: "{{ amps|int >= min_amps }}"
+
+    action:
+      - choose:
+          - conditions:
+              - condition: template
+                value_template: "{{ plan_ok | bool and ev_on }}"
+            sequence:
+              - if:
+                  - condition: template
+                    value_template: >-
+                      {{ (states('number.tesla_ble_972a00_charging_amps')|float(0) - amps)|abs > 0.5 }}
+                then:
+                  - service: number.set_value
+                    target:
+                      entity_id: number.tesla_ble_972a00_charging_amps
+                    data:
+                      value: "{{ amps }}"
+              - if:
+                  - condition: template
+                    value_template: "{{ not is_state('switch.tesla_ble_charger', 'on') }}"
+                then:
+                  - service: switch.turn_on
+                    target:
+                      entity_id: switch.tesla_ble_charger
+
+          - conditions:
+              - condition: template
+                value_template: "{{ plan_ok | bool and (not ev_on) }}"
+            sequence:
+              - if:
+                  - condition: template
+                    value_template: "{{ is_state('switch.tesla_ble_charger', 'on') }}"
+                then:
+                  - service: switch.turn_off
+                    target:
+                      entity_id: switch.tesla_ble_charger
+
+        default:
+          - if:
+              - condition: template
+                value_template: "{{ not (plan_ok | bool) and is_state('switch.tesla_ble_charger', 'on') }}"
+            then:
+              - service: switch.turn_off
+                target:
+                  entity_id: switch.tesla_ble_charger

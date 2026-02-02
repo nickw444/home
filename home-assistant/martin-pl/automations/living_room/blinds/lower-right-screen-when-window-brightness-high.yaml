@@ -1,0 +1,12 @@
+id: "1741592004000"
+alias: "living_room: lower right screen when window brightness high"
+description: ""
+trigger:
+  - platform: numeric_state
+    entity_id: sensor.living_room_window_brightness
+    above: "20"
+action:
+  - service: cover.close_cover
+    data: {}
+    entity_id: cover.living_right_screen
+mode: single

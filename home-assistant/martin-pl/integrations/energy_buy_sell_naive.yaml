@@ -1,0 +1,132 @@
+input_number:
+  energy_buy_sell_naive_buy_price_threshold:
+    name: "EBSN Buy Price Threshold"
+    icon: mdi:cash-minus
+    min: 0
+    max: 0.2
+    step: 0.01
+    mode: box
+    unit_of_measurement: "$/kWh"
+  energy_buy_sell_naive_sell_price_threshold:
+    name: "EBSN Sell Price Threshold"
+    icon: mdi:cash-plus
+    min: 0
+    max: 1
+    step: 0.01
+    mode: box
+    unit_of_measurement: "$/kWh"
+  energy_buy_sell_naive_max_buy_soc:
+    name: "EBSN Max Buy SoC"
+    icon: mdi:battery-charging-90
+    unit_of_measurement: "%"
+    min: 0
+    max: 100
+    step: 1
+    mode: slider
+  energy_buy_sell_naive_min_sell_soc:
+    name: "EBSN Min Sell SoC"
+    icon: mdi:battery-arrow-down
+    unit_of_measurement: "%"
+    min: 0
+    max: 100
+    step: 1
+    mode: slider
+
+template:
+  - binary_sensor:
+      - name: "EBSN Demand Window"
+        unique_id: ebsn_demand_window
+        state: >-
+          {{ now() >= today_at("14:55") and now() < today_at("21:05") }}
+
+automation:
+  - id: energy_buy_sell_naive_manage_buy_sell
+    alias: "EBSN: manage buy/sell by price and soc"
+    mode: restart
+    triggers:
+      - trigger: state
+        entity_id:
+          - sensor.amber_general_price_non_estimate
+          - sensor.amber_feed_in_price_non_estimate
+          - sensor.inverter_battery_soc
+          - binary_sensor.ebsn_demand_window
+      - trigger: state
+        entity_id:
+          - input_number.energy_buy_sell_naive_buy_price_threshold
+          - input_number.energy_buy_sell_naive_sell_price_threshold
+          - input_number.energy_buy_sell_naive_max_buy_soc
+          - input_number.energy_buy_sell_naive_min_sell_soc
+    actions:
+      - choose:
+          - conditions:
+              - condition: numeric_state
+                entity_id: sensor.amber_feed_in_price_non_estimate
+                above: input_number.energy_buy_sell_naive_sell_price_threshold
+              - condition: numeric_state
+                entity_id: sensor.inverter_battery_soc
+                above: input_number.energy_buy_sell_naive_min_sell_soc
+            sequence:
+              - action: number.set_value
+                target:
+                  entity_id: number.inverter_modbus_force_discharge_power
+                data:
+                  value: 10
+              - action: select.select_option
+                target:
+                  entity_id: select.inverter_modbus_work_mode
+                data:
+                  option: Force Discharge
+          - conditions:
+              - condition: numeric_state
+                entity_id: sensor.amber_general_price_non_estimate
+                below: input_number.energy_buy_sell_naive_buy_price_threshold
+              - condition: numeric_state
+                entity_id: sensor.inverter_battery_soc
+                below: input_number.energy_buy_sell_naive_max_buy_soc
+              - condition: state
+                entity_id: binary_sensor.ebsn_demand_window
+                state: "off"
+            sequence:
+              - action: number.set_value
+                target:
+                  entity_id: number.inverter_modbus_force_charge_power
+                data:
+                  value: 10
+              - action: select.select_option
+                target:
+                  entity_id: select.inverter_modbus_work_mode
+                data:
+                  option: Force Charge
+        default:
+          - action: select.select_option
+            target:
+              entity_id: select.inverter_modbus_work_mode
+            data:
+              option: "Self Use"
+
+  - id: energy_buy_sell_naive_manage_curtailment
+    alias: "EBSN: manage curtailment"
+    mode: restart
+    triggers:
+      - trigger: state
+        entity_id:
+          - sensor.amber_feed_in_price_non_estimate
+        for: "00:00:10"
+    actions:
+      - choose:
+          - conditions:
+              - condition: numeric_state
+                entity_id: sensor.amber_feed_in_price_non_estimate
+                below: 0
+            sequence:
+              - action: number.set_value
+                target:
+                  entity_id: number.inverter_modbus_export_limit
+                data:
+                  value: 0
+        default:
+          - action: number.set_value
+            target:
+              entity_id: number.inverter_modbus_export_limit
+            data:
+              value: 10

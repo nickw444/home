@@ -105,18 +105,18 @@ action:
         sequence:
           - action: button.press
             target:
-              entity_id: button.x40_ultra_shortcut_8
+              entity_id: button.x40_ultra_shortcut_deep_clean_all
             data: {}
       - conditions: "{{ wait.trigger.event.data.action == action_start_now_mop }}"
         sequence:
           - action: button.press
             target:
-              entity_id: button.x40_ultra_shortcut_7
+              entity_id: button.x40_ultra_shortcut_vac_and_mop_all
             data: {}
     default:
       - action: button.press
         target:
-          entity_id: button.x40_ultra_shortcut_6
+          entity_id: button.x40_ultra_shortcut_quick_cleaning
         data: {}
   - alias: Wait for cleaning to finish or someone approaches home
     wait_for_trigger:

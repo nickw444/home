@@ -1,0 +1,3 @@
+frontend:
+  extra_module_url:
+    - /local/community/lovelace-card-mod/card-mod.js

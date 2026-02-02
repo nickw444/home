@@ -71,20 +71,42 @@ automation:
       - service: alarm_control_panel.alarm_trigger
         entity_id: alarm_control_panel.ha_alarm
     mode: single
-  - id: "160103405444873"
-    alias: "alarm: trigger when motion detected whilst armed_custom_bypass"
+  - id: "1601034054448732"
+    alias: "alarm: trigger when study motion detected whilst armed_custom_bypass"
     description: ""
     trigger:
       - platform: state
         entity_id:
-          # Subset of sensors for zones the dogs cannot visit.
           - binary_sensor.study_motion_occupancy
+        to: "on"
+    condition:
+      - condition: state
+        entity_id: alarm_control_panel.ha_alarm
+        state: armed_custom_bypass
+      # Study door is closed (so robot cannot enter - unexpected motion)
+      - condition: state
+        entity_id: binary_sensor.study_door_contact
+        state: "off"
+    action:
+      - service: alarm_control_panel.alarm_trigger
+        entity_id: alarm_control_panel.ha_alarm
+    mode: single
+  - id: "1601034054448733"
+    alias: "alarm: trigger when kates study motion detected whilst armed_custom_bypass"
+    description: ""
+    trigger:
+      - platform: state
+        entity_id:
           - binary_sensor.spare_room_motion_occupancy
         to: "on"
     condition:
       - condition: state
         entity_id: alarm_control_panel.ha_alarm
         state: armed_custom_bypass
+      # Kate's study door is closed (so robot cannot enter - unexpected motion)
+      - condition: state
+        entity_id: binary_sensor.kates_study_door_contact
+        state: "off"
     action:
       - service: alarm_control_panel.alarm_trigger
         entity_id: alarm_control_panel.ha_alarm

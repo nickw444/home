@@ -1,0 +1,27 @@
+
+template:
+  - sensor:
+      - name: "Tessie Stored Energy"
+        unique_id: "tessie_stored_energy"
+        unit_of_measurement: "kWh"
+        device_class: "energy"
+        state_class: "measurement"
+        availability: >-
+          {{ has_value('sensor.tessie_battery') }}
+        state: >-
+          {% set capacity = 75.8 %}
+          {% set soc = states('sensor.tessie_battery')|float %}
+          {{ ((soc / 100) * capacity) | round(2) }}
+      - name: "Tessie Available Energy Storage Capacity"
+        unique_id: "tessie_available_energy_storage_capacity"
+        unit_of_measurement: "kWh"
+        device_class: "energy"
+        state_class: "measurement"
+        availability: >-
+          {{ has_value('sensor.tessie_battery') and has_value('number.tessie_charge_limit') }}
+        state: >-
+          {% set capacity = 75.8 %}
+          {% set charge_limit = states('number.tessie_charge_limit')|float %}
+          {% set soc = states('sensor.tessie_battery')|float %}
+          {% set delta = max(0, charge_limit - soc) %}
+          {{ ((delta / 100) * capacity) | round(2) }}

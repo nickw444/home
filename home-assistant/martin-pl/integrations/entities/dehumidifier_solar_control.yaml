@@ -1,0 +1,72 @@
+input_boolean:
+  dehumidifier_solar_enable:
+    name: Dehumidifier Solar Control
+    icon: mdi:solar-power
+    initial: off
+
+input_number:
+  dehumidifier_target_humidity:
+    name: Dehumidifier Target Humidity
+    min: 40
+    max: 80
+    step: 5
+    unit_of_measurement: "%"
+    mode: slider
+    icon: mdi:water-percent
+
+automation:
+  - id: dehumidifier_solar_run
+    alias: "dehumidifier: run on excess solar"
+    description: >-
+      Turn the dehumidifier on when solar export exceeds 1500W for 10 minutes;
+      turn it off when export is less than 300W for 30 minutes. Only runs when
+      daytime load management sensor is unavailable and the helper boolean is on.
+    mode: single
+    triggers:
+      - id: turn_on
+        trigger: numeric_state
+        entity_id: sensor.inverter_meter_power
+        for: "00:10:00"
+        below: -1500
+      - id: turn_off
+        trigger: numeric_state
+        entity_id: sensor.inverter_meter_power
+        for: "00:30:00"
+        above: -300
+    conditions:
+      - condition: state
+        entity_id: input_boolean.dehumidifier_solar_enable
+        state: "on"
+      - condition: template
+        value_template: >-
+          {{ states('binary_sensor.daytime_load_management_active') == 'unavailable' }}
+      - condition: template
+        value_template: >-
+          {{ states('humidifier.kogan_smart_dehumidifier') not in ['unavailable', 'unknown'] }}
+    actions:
+      - choose:
+          - conditions:
+              - condition: trigger
+                id: turn_on
+            sequence:
+              - condition: state
+                entity_id: humidifier.kogan_smart_dehumidifier
+                state: "off"
+              - action: humidifier.set_humidity
+                target:
+                  entity_id: humidifier.kogan_smart_dehumidifier
+                data:
+                  humidity: "{{ states('input_number.dehumidifier_target_humidity')|int }}"
+              - action: humidifier.turn_on
+                target:
+                  entity_id: humidifier.kogan_smart_dehumidifier
+          - conditions:
+              - condition: trigger
+                id: turn_off
+            sequence:
+              - condition: state
+                entity_id: humidifier.kogan_smart_dehumidifier
+                state: "on"
+              - action: humidifier.turn_off
+                target:
+                  entity_id: humidifier.kogan_smart_dehumidifier

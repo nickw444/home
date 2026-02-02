@@ -53,11 +53,11 @@ action:
             metadata: {}
             data: {}
             target:
-              entity_id: button.x40_ultra_shortcut_5
+              entity_id: button.x40_ultra_shortcut_vac_and_mop_living
     default:
       - action: button.press
         metadata: {}
         data: {}
         target:
-          entity_id: button.x40_ultra_shortcut_2
+          entity_id: button.x40_ultra_shortcut_vac_living
 mode: single

@@ -1,0 +1,146 @@
+# HASS Energy sensors for smoothing and controlled-load calculations.
+template:
+  - binary_sensor:
+      - name: "HASS Energy Tessie Can Connect"
+        unique_id: hass_energy_tessie_can_connect
+        device_class: presence
+        icon: mdi:car
+        state: >-
+          {{
+            is_state('device_tracker.tessie', 'home')
+            and is_state('group.all_people', 'home')
+          }}
+      - name: "HASS Energy Tessie Connected at Home"
+        unique_id: hass_energy_tessie_connected_at_home
+        device_class: connectivity
+        icon: mdi:ev-station
+        state: >-
+          {{
+            is_state('device_tracker.tessie', 'home')
+            and is_state('binary_sensor.tesla_wall_connector_vehicle_connected', 'on')
+          }}
+  - sensor:
+      - name: "hass_energy_controlled_loads_power"
+        unique_id: hass_energy_controlled_loads_power
+        device_class: power
+        unit_of_measurement: W
+        state_class: measurement
+        availability: >-
+          {{ states('sensor.tesla_wall_connector_power') not in ['unknown', 'unavailable', 'none'] }}
+        state: >-
+          {% set ev_power = states('sensor.tesla_wall_connector_power') | float(0) %}
+          {{ ev_power }}
+      - name: "hass_energy_load_power_uncontrolled"
+        unique_id: hass_energy_load_power_uncontrolled
+        device_class: power
+        unit_of_measurement: W
+        state_class: measurement
+        availability: >-
+          {{
+            states('sensor.inverter_load_power') not in ['unknown', 'unavailable', 'none']
+            and states('sensor.hass_energy_controlled_loads_power') not in ['unknown', 'unavailable', 'none']
+          }}
+        state: >-
+          {% set total = states('sensor.inverter_load_power') | float(0) %}
+          {% set controlled = states('sensor.hass_energy_controlled_loads_power') | float(0) %}
+          {{ [total - controlled, 0] | max }}
+
+sensor:
+  - platform: filter
+    name: "hass_energy_grid_power_smoothed_15m"
+    unique_id: "hass_energy_grid_power_smoothed_15m"
+    entity_id: sensor.inverter_grid_meter_power
+    filters:
+      - filter: time_simple_moving_average
+        window_size: "00:15"
+        precision: 2
+
+  - platform: filter
+    name: "hass_energy_load_power_smoothed_1m"
+    unique_id: "hass_energy_load_power_smoothed_1m"
+    entity_id: sensor.inverter_load_power
+    filters:
+      - filter: time_simple_moving_average
+        window_size: "00:01"
+        precision: 2
+
+  - platform: filter
+    name: "hass_energy_load_power_smoothed_5m"
+    unique_id: "hass_energy_load_power_smoothed_5m"
+    entity_id: sensor.inverter_load_power
+    filters:
+      - filter: time_simple_moving_average
+        window_size: "00:05"
+        precision: 2
+
+  - platform: filter
+    name: "hass_energy_load_power_smoothed_15m"
+    unique_id: "hass_energy_load_power_smoothed_15m"
+    entity_id: sensor.inverter_load_power
+    filters:
+      - filter: time_simple_moving_average
+        window_size: "00:15"
+        precision: 2
+
+  - platform: filter
+    name: "hass_energy_load_power_uncontrolled_smoothed_15m"
+    unique_id: "hass_energy_load_power_uncontrolled_smoothed_15m"
+    entity_id: sensor.hass_energy_load_power_uncontrolled
+    filters:
+      - filter: time_simple_moving_average
+        window_size: "00:15"
+        precision: 2
+  
+  - platform: filter
+    name: "hass_energy_load_power_uncontrolled_smoothed_1m"
+    unique_id: "hass_energy_load_power_uncontrolled_smoothed_1m"
+    entity_id: sensor.hass_energy_load_power_uncontrolled
+    filters:
+      - filter: time_simple_moving_average
+        window_size: "00:01"
+        precision: 2
+
+  - platform: filter
+    name: "hass_energy_load_power_uncontrolled_smoothed_5m"
+    unique_id: "hass_energy_load_power_uncontrolled_smoothed_5m"
+    entity_id: sensor.hass_energy_load_power_uncontrolled
+    filters:
+      - filter: time_simple_moving_average
+        window_size: "00:05"
+        precision: 2
+
+  - platform: filter
+    name: "hass_energy_pv_power_smoothed_1m"
+    unique_id: "hass_energy_pv_power_smoothed_1m"
+    entity_id: sensor.inverter_pv_total_power
+    filters:
+      - filter: time_simple_moving_average
+        window_size: "00:01"
+        precision: 2
+
+  - platform: filter
+    name: "hass_energy_pv_power_smoothed_5m"
+    unique_id: "hass_energy_pv_power_smoothed_5m"
+    entity_id: sensor.inverter_pv_total_power
+    filters:
+      - filter: time_simple_moving_average
+        window_size: "00:05"
+        precision: 2
+
+  - platform: filter
+    name: "hass_energy_pv_power_smoothed_15m"
+    unique_id: "hass_energy_pv_power_smoothed_15m"
+    entity_id: sensor.inverter_pv_total_power
+    filters:
+      - filter: time_simple_moving_average
+        window_size: "00:15"
+        precision: 2
+
+  - platform: filter
+    name: "hass_energy_battery_power_smoothed_15m"
+    unique_id: "hass_energy_battery_power_smoothed_15m"
+    entity_id: sensor.inverter_battery_power
+    filters:
+      - filter: time_simple_moving_average
+        window_size: "00:15"
+        precision: 2

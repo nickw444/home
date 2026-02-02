@@ -1,0 +1,14 @@
+# packages/holman-bx1-ble.yaml
+#
+# Shared BLE setup for Holman BX1 tap timers.
+# Include this once per node that uses BX1 tap packages.
+
+esp32_ble:
+  io_capability: keyboard_display
+
+esp32_ble_tracker:
+  id: ble_tracker
+  scan_parameters:
+    interval: 320ms
+    window: 160ms
+    active: true

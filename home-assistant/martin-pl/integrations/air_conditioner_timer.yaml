@@ -1,0 +1,70 @@
+script:
+  lounge_ac_shutoff:
+    alias: "AC: lounge shutoff"
+    icon: mdi:air-conditioner
+    mode: restart
+    sequence:
+      - choose:
+          - conditions:
+              - condition: template
+                value_template: >-
+                  {{ is_state('climate.lounge_ac', 'cool')
+                    or state_attr('climate.lounge_ac', 'hvac_action') == 'cooling' }}
+            sequence:
+              - service: climate.set_hvac_mode
+                target:
+                  entity_id: climate.lounge_ac
+                data:
+                  hvac_mode: fan_only
+              - delay: "00:30:00"
+      - service: climate.turn_off
+        target:
+          entity_id: climate.lounge_ac
+
+  hallway_ac_shutoff:
+    alias: "AC: hallway shutoff"
+    icon: mdi:air-conditioner
+    mode: restart
+    sequence:
+      - choose:
+          - conditions:
+              - condition: template
+                value_template: >-
+                  {{ is_state('climate.hallway', 'cool')
+                    or state_attr('climate.hallway', 'hvac_action') == 'cooling' }}
+            sequence:
+              - service: climate.set_hvac_mode
+                target:
+                  entity_id: climate.hallway
+                data:
+                  hvac_mode: fan_only
+              - delay: "00:30:00"
+      - service: climate.turn_off
+        target:
+          entity_id: climate.hallway
+
+  hallway_ac_off_timer:
+    alias: "AC: hallway off timer"
+    icon: mdi:timer-outline
+    mode: restart
+    fields:
+      hours:
+        description: Runtime hours before shutting off the hallway AC
+        example: 2
+        default: 2
+        required: true
+        selector:
+          number:
+            min: 0.5
+            max: 12
+            step: 0.5
+            unit_of_measurement: h
+    sequence:
+      - variables:
+          runtime_minutes: >-
+            {{ (hours | float(0)) * 60 }}
+      - condition: template
+        value_template: "{{ runtime_minutes | int > 0 }}"
+      - delay:
+          minutes: "{{ runtime_minutes | int }}"
+      - service: script.hallway_ac_shutoff

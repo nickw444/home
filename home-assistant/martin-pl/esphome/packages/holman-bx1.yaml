@@ -1,0 +1,221 @@
+# packages/holman-bx1.yaml
+#
+# Reusable module for a single Holman BX1 tap timer.
+# Exposes a valve entity plus a duration number (minutes).
+# Creates a Home Assistant sub-device using tap_id/tap_name.
+#
+# Required vars when including:
+#   tap_id: unique id-safe token (letters/numbers/_)
+#   tap_name: friendly name shown in Home Assistant
+#   tap_mac: BLE MAC address
+#   tap_passkey: BLE passkey (numeric)
+#
+# Expects a shared esp32_ble_tracker with id: ble_tracker
+
+
+esphome:
+  devices:
+    - id: ${tap_id}
+      name: "${tap_name}"
+  on_boot:
+    priority: -100
+    then:
+      - valve.template.publish:
+          id: ${tap_id}_valve
+          state: CLOSED
+          current_operation: IDLE
+
+globals:
+  # -1 for OFF, 0 for NO_ACTION, >0 for ON (minutes)
+  - id: ${tap_id}_watering_triggered_min
+    type: int
+    restore_value: no
+    initial_value: '0'
+
+
+number:
+  - platform: template
+    id: ${tap_id}_duration
+    name: "${tap_name} Duration"
+    device_id: ${tap_id}
+    unit_of_measurement: "min"
+    optimistic: true
+    restore_value: true
+    min_value: 1
+    max_value: 59
+    step: 1
+    initial_value: 10
+    icon: "mdi:timer-outline"
+
+
+valve:
+  - platform: template
+    id: ${tap_id}_valve
+    name: "${tap_name}"
+    device_id: ${tap_id}
+    device_class: water
+    optimistic: true
+    open_action:
+      - lambda: |-
+          int mins = (int) id(${tap_id}_duration).state;
+          if (mins <= 0 || mins >= 60) {
+            ESP_LOGE("holman_bx1", "[%s] Invalid run time: %d", "${tap_name}", mins);
+          } else {
+            id(${tap_id}_watering_triggered_min) = mins;
+            ESP_LOGI("holman_bx1", "[%s] Starting for %d minutes; starting BLE scan", "${tap_name}", mins);
+          }
+      - if:
+          condition:
+            lambda: 'return id(${tap_id}_watering_triggered_min) > 0;'
+          then:
+            - esp32_ble_tracker.start_scan:
+    close_action:
+      - lambda: |-
+          ESP_LOGI("holman_bx1", "[%s] Stopping; starting BLE scan", "${tap_name}");
+          id(${tap_id}_watering_triggered_min) = -1;
+      - esp32_ble_tracker.start_scan:
+    stop_action:
+      - lambda: |-
+          ESP_LOGI("holman_bx1", "[%s] Stopping; starting BLE scan", "${tap_name}");
+          id(${tap_id}_watering_triggered_min) = -1;
+      - esp32_ble_tracker.start_scan:
+
+
+ble_client:
+  - mac_address: "${tap_mac}"
+    id: ${tap_id}_ble
+    # Default auto_connect is true – we rely on esp32_ble_tracker.start_scan to trigger a connect.
+
+    on_passkey_request:
+      then:
+        - lambda: |-
+            ESP_LOGI("ble_client", "[%s] Passkey requested by tap, sending configured passkey", "${tap_name}");
+        - ble_client.passkey_reply:
+            id: ${tap_id}_ble
+            passkey: ${tap_passkey}
+
+    on_numeric_comparison_request:
+      then:
+        - lambda: |-
+            ESP_LOGI("ble_client", "[%s] Numeric comparison requested (auto-accepting)", "${tap_name}");
+        - ble_client.numeric_comparison_reply:
+            id: ${tap_id}_ble
+            accept: true
+
+    on_connect:
+      then:
+        - lambda: |-
+            ESP_LOGI("ble_client", "[%s] Connected to tap, waiting for characteristics 0x21 & 0x18...", "${tap_name}");
+
+        - wait_until: # wait until characteristic is discovered
+            condition:
+              lambda: |-
+                esphome::ble_client::BLEClient* client = id(${tap_id}_ble);
+                auto chr_passcode = client->get_characteristic(0x21);
+                auto chr_watering = client->get_characteristic(0x18);
+                bool ok = (chr_passcode != nullptr) && (chr_watering != nullptr);
+                if (!ok) {
+                  ESP_LOGD("ble_client", "[%s] Still waiting for characteristics... (passcode=%p, watering=%p)", "${tap_name}", chr_passcode, chr_watering);
+                }
+                return ok;
+            timeout: 5s
+
+        - lambda: |-
+            ESP_LOGD("ble_client", "[%s] Characteristics discovered, handling watering_triggered_min logic", "${tap_name}");
+            esphome::ble_client::BLEClient* client = id(${tap_id}_ble);
+            int mins = id(${tap_id}_watering_triggered_min);
+            ESP_LOGI("ble_client", "[%s] watering_triggered_min currently=%d", "${tap_name}", mins);
+            int status = 0;
+
+            if (mins == 0) {
+              ESP_LOGI("main", "[%s] Setting up passcode to stop advertising!", "${tap_name}");
+              auto chr = client->get_characteristic(0x21);
+
+              if (chr == nullptr) {
+                ESP_LOGW("main", "[%s] [0x21] Characteristic not found. State update cannot be written.", "${tap_name}");
+                status = -1;
+              } else {
+                unsigned char val[2] = {0xae, 0x8e};
+                status = esp_ble_gattc_write_char(
+                  client->get_gattc_if(),
+                  client->get_conn_id(),
+                  chr->handle,
+                  sizeof(val),
+                  val,
+                  ESP_GATT_WRITE_TYPE_NO_RSP,
+                  ESP_GATT_AUTH_REQ_NONE
+                );
+                if (status) {
+                  ESP_LOGW("main", "[%s] Error setting up passcode, status=%d", "${tap_name}", status);
+                } else {
+                  ESP_LOGI("main", "[%s] Passcode setup successfully", "${tap_name}");
+                }
+              }
+
+            } else if (mins > 0) {
+              ESP_LOGI("main", "[%s] Starting tap for %d minutes!", "${tap_name}", mins);
+              auto chr = client->get_characteristic(0x18);
+              if (chr == nullptr) {
+                ESP_LOGW("main", "[%s] [0x18] Characteristic not found. State update cannot be written.", "${tap_name}");
+                status = -1;
+              } else {
+                unsigned char val[10] = {
+                  0x01, 0x00, 0x00, (char) mins,
+                  0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+                };
+                status = esp_ble_gattc_write_char(
+                  client->get_gattc_if(),
+                  client->get_conn_id(),
+                  chr->handle,
+                  sizeof(val),
+                  val,
+                  ESP_GATT_WRITE_TYPE_NO_RSP,
+                  ESP_GATT_AUTH_REQ_NONE
+                );
+                if (status) {
+                  ESP_LOGW("main", "[%s] Error sending start value to BLE gattc server, status=%d", "${tap_name}", status);
+                } else {
+                  ESP_LOGI("main", "[%s] Tap started successfully!", "${tap_name}");
+                }
+              }
+              id(${tap_id}_watering_triggered_min) = 0;
+
+            } else {  // mins < 0
+              ESP_LOGI("main", "[%s] Stopping tap!", "${tap_name}");
+              auto chr = client->get_characteristic(0x18);
+              if (chr == nullptr) {
+                ESP_LOGW("main", "[%s] [0x18] Characteristic not found. State update cannot be written.", "${tap_name}");
+                status = -1;
+              } else {
+                unsigned char val[10] = {
+                  0x00, 0x00, 0x00, 0x00, 0x00,
+                  0x00, 0x00, 0x00, 0x00, 0x00
+                };
+                status = esp_ble_gattc_write_char(
+                  client->get_gattc_if(),
+                  client->get_conn_id(),
+                  chr->handle,
+                  sizeof(val),
+                  val,
+                  ESP_GATT_WRITE_TYPE_NO_RSP,
+                  ESP_GATT_AUTH_REQ_NONE
+                );
+                if (status) {
+                  ESP_LOGW("main", "[%s] Error sending stop value to BLE gattc server, status=%d", "${tap_name}", status);
+                } else {
+                  ESP_LOGI("main", "[%s] Tap stopped successfully!", "${tap_name}");
+                }
+              }
+              id(${tap_id}_watering_triggered_min) = 0;
+            }
+
+            ESP_LOGI("ble_client", "[%s] on_connect handler complete, status=%d, watering_triggered_min=%d", "${tap_name}", status, id(${tap_id}_watering_triggered_min));
+
+        - lambda: |-
+            ESP_LOGI("ble_client", "[%s] Stopping BLE scan after on_connect handler", "${tap_name}");
+            id(ble_tracker).stop_scan();
+
+    on_disconnect:
+      then:
+        - lambda: |-
+            ESP_LOGW("ble_client", "[%s] Disconnected from tap", "${tap_name}");

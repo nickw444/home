@@ -29,27 +29,6 @@ input_number:
     step: 5
 
 automation:
-  - id: "1725332898491"
-    alias: "tesla charger: reset charging amps at midnight"
-    description: ""
-    trigger:
-      - platform: time_pattern
-        hours: "23"
-        minutes: "59"
-        seconds: "00"
-      - platform: time_pattern
-        hours: "0"
-        minutes: "05"
-        seconds: "00"
-    condition: []
-    action:
-      - action: number.set_value
-        metadata: {}
-        data:
-          value: "32"
-        target:
-          entity_id: number.tessie_charging_amps
-    mode: single
   - id: "1753855873546"
     alias: "tesla charger: set/reset charge limit"
     description: ""

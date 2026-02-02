@@ -13,3 +13,17 @@ binary_sensor:
             is_state('climate.hallway', 'dry') or
             is_state('climate.hallway', 'fan_only'))
           }}
+
+sensor:
+  - platform: template
+    sensors:
+      air_conditioner_combined_power:
+        friendly_name: "Air Conditioner Combined Power"
+        unit_of_measurement: "W"
+        availability_template: >
+          {{ has_value('sensor.air_conditioning_power') and has_value('sensor.heat_transfer_current_consumption') }}
+        value_template: >
+          {{
+            (states('sensor.air_conditioning_power') | float(0)) +
+            (states('sensor.heat_transfer_current_consumption') | float(0))
+          }}

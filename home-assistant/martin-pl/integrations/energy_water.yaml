@@ -58,3 +58,25 @@ sensor:
     unit_time: h
     time_window: "01:00:00"
     max_sub_interval: "00:01:00"
+
+utility_meter:
+  water_usage_daily:
+    name: "Water Usage Daily"
+    source: sensor.water_usage
+    cycle: daily
+
+binary_sensor:
+  - platform: template
+    sensors:
+      abnormal_daily_water_usage:
+        friendly_name: "Abnormal Daily Water Usage"
+        unique_id: abnormal_daily_water_usage
+        device_class: problem
+        icon_template: mdi:water-alert
+        availability_template: >
+          {{ states('sensor.water_usage_daily')|is_number }}
+        value_template: >
+          {{ states('sensor.water_usage_daily')|float(0) > 500 }}
+        attribute_templates:
+          current_daily_usage: "{{ states('sensor.water_usage_daily')|float(0) }}"
+          alert_threshold: 500

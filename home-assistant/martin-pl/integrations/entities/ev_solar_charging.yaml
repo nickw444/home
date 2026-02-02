@@ -1,0 +1,95 @@
+input_boolean:
+  ev_charge_rate_solar_tracking:
+    name: EV Charge Rate Solar Tracking
+    icon: mdi:solar-power-variant
+
+input_number:
+  ev_solar_reserve_watts:
+    name: EV Solar Reserve Watts
+    min: 0
+    max: 2000
+    step: 50
+    unit_of_measurement: W
+    icon: mdi:transmission-tower-export
+
+template:
+  - sensor:
+      - name: EV Solar Target Amps
+        unique_id: ev_solar_target_amps
+        unit_of_measurement: A
+        device_class: current
+        state_class: measurement
+        state: >-
+          {% set pv_w = states('sensor.inverter_pv_total_power_mean_15m')|float(0) %}
+          {% set reserve_w = states('input_number.ev_solar_reserve_watts')|float(0) %}
+          {% set avail_w = pv_w - reserve_w %}
+          {% set v = states('sensor.tesla_wall_connector_grid_voltage')|float(230) %}
+          {% set raw = (avail_w / v) if v > 0 else 0 %}
+          {% set max_a = state_attr('number.tesla_ble_972a00_charging_amps','max')|float(32) %}
+          {% set min_a = state_attr('number.tesla_ble_972a00_charging_amps','min')|float(5) %}
+          {% set step = state_attr('number.tesla_ble_972a00_charging_amps','step')|float(1) %}
+          {% set floored = (raw // step) * step %}
+          {{ [ [ floored, max_a ] | min, 0 ] | max | round(0) }}
+        attributes:
+          min_amps: "{{ state_attr('number.tesla_ble_972a00_charging_amps','min')|float(5) }}"
+          max_amps: "{{ state_attr('number.tesla_ble_972a00_charging_amps','max')|float(32) }}"
+          step: "{{ state_attr('number.tesla_ble_972a00_charging_amps','step')|float(1) }}"
+          avail_watts: "{{ (states('sensor.inverter_pv_total_power_mean_15m')|float(0) - states('input_number.ev_solar_reserve_watts')|float(0)) | round(0) }}"
+
+automation:
+  - id: ev_solar_charge_tracking
+    alias: "ev: track charge amps to solar"
+    description: >-
+      Adjust EV charging amps to match available solar export, aiming to avoid
+      grid import. Acts only when charge tracking is enabled and the car is
+      home, plugged in, and actively charging.
+    mode: restart
+    triggers:
+      - trigger: state
+        entity_id: sensor.ev_solar_target_amps
+        for: "00:00:10"
+      - trigger: state
+        entity_id: switch.tessie_charger
+      - trigger: state
+        entity_id: input_boolean.ev_charge_rate_solar_tracking
+      - trigger: time_pattern
+        seconds: "/30"
+    conditions:
+      - condition: state
+        entity_id: input_boolean.ev_charge_rate_solar_tracking
+        state: "on"
+      - condition: numeric_state
+        entity_id: sensor.inverter_total_active_power
+        above: 0
+      - condition: state
+        entity_id: device_tracker.tessie
+        state: home
+      - condition: state
+        entity_id: binary_sensor.tessie_charger
+        state: "on"
+      - condition: state
+        entity_id: switch.tessie_charger
+        state: "on"
+      - condition: template
+        value_template: >-
+          {{ states('number.tesla_ble_972a00_charging_amps') not in ['unknown','unavailable'] }}
+    actions:
+      - variables:
+          current_amps: "{{ states('number.tesla_ble_972a00_charging_amps')|float(0) }}"
+          target_amps: "{{ states('sensor.ev_solar_target_amps')|float(0) }}"
+          min_amps: "{{ state_attr('number.tesla_ble_972a00_charging_amps','min')|float(5) }}"
+          max_amps: "{{ state_attr('number.tesla_ble_972a00_charging_amps','max')|float(32) }}"
+          step: "{{ state_attr('number.tesla_ble_972a00_charging_amps','step')|float(1) }}"
+      - choose:
+          - conditions:
+              - condition: template
+                value_template: >-
+                  {% set applied = [ [ target_amps, max_amps ] | min, min_amps ] | max %}
+                  {{ (applied - current_amps) | abs >= step }}
+            sequence:
+              - action: number.set_value
+                target:
+                  entity_id: number.tesla_ble_972a00_charging_amps
+                data:
+                  value: >-
+                    {{ [ [ target_amps, max_amps ] | min, min_amps ] | max }}

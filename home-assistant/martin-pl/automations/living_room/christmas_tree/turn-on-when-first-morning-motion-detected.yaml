@@ -1,0 +1,20 @@
+id: "1766817653000"
+alias: "living_room: turn on christmas tree on first AM motion"
+description: ""
+trigger:
+  - platform: numeric_state
+    entity_id: sensor.internal_motion_occupancy_since_dawn
+    above: "0"
+condition:
+  - condition: time
+    before: "12:00:00"
+  - condition: state
+    entity_id: group.all_people
+    state: home
+  - condition: state
+    entity_id: light.christmas_tree
+    state: "off"
+action:
+  - service: light.turn_on
+    data: {}
+    entity_id: light.christmas_tree

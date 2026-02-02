@@ -1,0 +1,10 @@
+smartir:
+
+climate:
+  - platform: smartir
+    name: Lounge AC
+    unique_id: lounge_ac
+    device_code: 1682
+    controller_data: remote.lounge_remote
+    temperature_sensor: sensor.kitchen_climate_temperature
+    humidity_sensor: sensor.kitchen_climate_humidity
