@@ -3,35 +3,14 @@ template:
   ###  Electricity
   ### -------------
   - sensor:
-      - name: Electricity Feed In Tariff
-        unique_id: electricity_feed_in_tariff
-        unit_of_measurement: AUD/kWh
-        state: >
-          0.04
+      # Network Fixed Fee 49.23 ¢/day
+      # Metering Charge 44.47 ¢/day
+      # Amber subscription fee $25 /month
       - name: Electricity Supply Tariff
         unique_id: electricity_supply_tariff
         unit_of_measurement: AUD
         state: >
-          0.9724
-      - name: Electricity Consumption GU Tariff
-        unique_id: electricity_consumption_gu_tariff
-        unit_of_measurement: AUD/kWh
-        state: >
-          0.3512
-      - name: Electricity Consumption EV Tariff
-        unique_id: electricity_consumption_ev_tariff
-        unit_of_measurement: AUD/kWh
-        state: >
-          0.08
-      - name: Electricity Consumption Tariff
-        unique_id: electricity_consumption_tariff
-        unit_of_measurement: AUD/kWh
-        state: >
-          {% if 0 <= now().hour < 6 %}
-            {{ states('sensor.electricity_consumption_ev_tariff') }}
-          {% else %}
-            {{ states('sensor.electricity_consumption_gu_tariff') }}
-          {% endif %}
+          {{ 0.4923 + 0.4447 + (25 * 12 / 365) }}
 
       - name: Electricity Cumulative Supply Charge
         unique_id: electricity_cumulative_supply_charge
@@ -39,7 +18,7 @@ template:
         device_class: monetary
         state_class: total
         state: >
-          {% set days = (now() - strptime('2025-07-01T00:00:00.000+10:00', '%Y-%m-%dT%H:%M:%S.%f%z')).days + 1 %}
+          {% set days = (now() - strptime('2025-11-28T00:00:00.000+10:00', '%Y-%m-%dT%H:%M:%S.%f%z')).days + 1 %}
           {{ states('sensor.electricity_supply_tariff')|float * days }}
       # Special _hack_ sensor to report daily charge to energy dashboard, report 0
       # usage, but apply "Use an entity tracking the total costs" with cumulative supply

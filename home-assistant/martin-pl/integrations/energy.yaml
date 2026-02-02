@@ -3,23 +3,14 @@ utility_meter:
     source: sensor.inverter_total_imported_energy
     unique_id: "mains_energy_consumed_quarterly"
     cycle: quarterly
-    tariffs:
-      - general
-      - ev
   mains_energy_consumed_weekly:
     source: sensor.inverter_total_imported_energy
     unique_id: "mains_energy_consumed_weekly"
     cycle: weekly
-    tariffs:
-      - general
-      - ev
   mains_energy_consumed_daily:
     source: sensor.inverter_total_imported_energy
     unique_id: "mains_energy_consumed_daily"
     cycle: daily
-    tariffs:
-      - general
-      - ev
 
   mains_energy_exported_quarterly:
     source: sensor.inverter_total_exported_energy
@@ -38,23 +29,14 @@ utility_meter:
     source: sensor.air_conditioning_energy
     unique_id: "air_conditioning_energy_consumed_quarterly"
     cycle: quarterly
-    tariffs:
-      - general
-      - ev
   air_conditioning_energy_consumed_weekly:
     source: sensor.air_conditioning_energy
     unique_id: "air_conditioning_energy_consumed_weekly"
     cycle: weekly
-    tariffs:
-      - general
-      - ev
   air_conditioning_energy_consumed_daily:
     source: sensor.air_conditioning_energy
     unique_id: "air_conditioning_energy_consumed_daily"
     cycle: daily
-    tariffs:
-      - general
-      - ev
 
 template:
   - sensor:
@@ -78,68 +60,23 @@ template:
         state_class: measurement
         availability: >
           {{ has_value('sensor.inverter_meter_power') 
-            and has_value('sensor.electricity_consumption_tariff') 
-            and has_value('sensor.electricity_feed_in_tariff') }}
+            and has_value('sensor.amber_general_price')
+            and has_value('sensor.amber_feed_in_price') }}
         state: >
           {% if states('sensor.inverter_meter_power')|float >= 0 %}
-          {{ (states('sensor.electricity_consumption_tariff')|float * 100 * states('sensor.inverter_meter_power')|float / 1000) | round(2) }}
+          {{ (states('sensor.amber_general_price')|float * 100 * states('sensor.inverter_meter_power')|float / 1000) | round(2) }}
           {% else %}
-          {{ (states('sensor.electricity_feed_in_tariff')|float * 100 * states('sensor.inverter_meter_power')|float / 1000) | round(2) }}
-          {% endif %}
-      - name: "Air Conditioning Power Instantaneous Cost"
-        unique_id: "air_conditioning_power_instantaneous_cost"
-        unit_of_measurement: c/h
-        state_class: measurement
-        availability: >
-          {{ has_value('sensor.inverter_meter_power')
-            and has_value('sensor.air_conditioning_power') 
-            and has_value('sensor.electricity_consumption_tariff') 
-            and has_value('sensor.electricity_feed_in_tariff') }}
-        state: >
-          {% if states('sensor.inverter_meter_power')|float >= 0 %}
-          {{ (states('sensor.electricity_consumption_tariff')|float * 100 * states('sensor.air_conditioning_power')|float / 1000) | round(2) }}
-          {% else %}
-          {{ (states('sensor.electricity_feed_in_tariff')|float * 100 * states('sensor.air_conditioning_power')|float / 1000) | round(2) }}
+          {{ (states('sensor.amber_feed_in_price')|float * 100 * states('sensor.inverter_meter_power')|float / 1000) | round(2) }}
           {% endif %}
 
-automation:
-  - description: "energy: set consumption tariff"
-    mode: single
-    trigger:
-      - platform: homeassistant
-        event: start
-      - platform: time
-        at: "00:00:00"
-      - platform: time
-        at: "06:00:00"
-    condition: []
-    action:
-      - choose:
-          - conditions:
-              - condition: time
-                after: "00:00:00"
-                before: "06:00:00"
-            sequence:
-              - service: select.select_option
-                target:
-                  entity_id:
-                    - select.mains_energy_consumed_quarterly
-                    - select.mains_energy_consumed_weekly
-                    - select.mains_energy_consumed_daily
-                    - select.air_conditioning_energy_consumed_quarterly
-                    - select.air_conditioning_energy_consumed_weekly
-                    - select.air_conditioning_energy_consumed_daily
-                data:
-                  option: "ev"
-        default:
-          - service: select.select_option
-            target:
-              entity_id:
-                - select.mains_energy_consumed_quarterly
-                - select.mains_energy_consumed_weekly
-                - select.mains_energy_consumed_daily
-                - select.air_conditioning_energy_consumed_quarterly
-                - select.air_conditioning_energy_consumed_weekly
-                - select.air_conditioning_energy_consumed_daily
-            data:
-              option: "general"
+      - name: "Mains Net Energy Cost Today"
+        unique_id: "net_energy_cost_today"
+        icon: "mdi:cash"
+        unit_of_measurement: AUD
+        state_class: measurement
+        device_class: monetary
+        availability: >
+          {{ has_value('sensor.inverter_total_imported_energy_cost') 
+            and has_value('sensor.inverter_total_exported_energy_compensation') }}
+        state: >
+          {{ states('sensor.inverter_total_imported_energy_cost')|float - states('sensor.inverter_total_exported_energy_compensation')|float }}
