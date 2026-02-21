@@ -1,0 +1,195 @@
+esphome:
+  name: "inverter-fan"
+  friendly_name: Inverter Fan
+  min_version: 2025.11.0
+  name_add_mac_suffix: false
+
+esp32:
+  variant: esp32c3
+  framework:
+    type: esp-idf
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+
+# Allow Over-The-Air updates
+ota:
+- platform: esphome
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+output:
+  - platform: ledc
+    frequency: 25000
+    id: fan_pwm_out
+    pin:
+      number: GPIO2
+      mode:
+        output: true
+        open_drain: true
+
+
+fan:
+  - platform: speed
+    output: fan_pwm_out
+    id: inv_fan_raw
+    name: "Inverter Fan (Raw PWM)"
+    restore_mode: RESTORE_DEFAULT_ON
+    entity_category: diagnostic
+
+  - platform: template
+    id: inv_fan
+    name: "Inverter Fan"
+    speed_count: 100
+    restore_mode: RESTORE_DEFAULT_ON
+
+    on_turn_on:
+      - lambda: |-
+          // If HA turns the fan on without setting speed first,
+          // use the template fan's current speed (or default to 100).
+          int s = (int) id(inv_fan).speed;
+          if (s <= 0) s = 100;
+          id(user_speed_pct) = s;
+      - script.execute: apply_calibrated_fan_speed
+
+    on_turn_off:
+      - lambda: |-
+          id(user_speed_pct) = 0;
+          auto call = id(inv_fan_raw).turn_off();
+          call.perform();
+
+    on_speed_set:
+      - lambda: |-
+          id(user_speed_pct) = (int) x;
+      - script.execute: apply_calibrated_fan_speed
+
+
+sensor:
+  - platform: pulse_counter
+    pin:
+      number: GPIO3
+      mode:
+        input: true
+        pullup: true
+    name: "Inverter Fan Speed"
+    update_interval: 1s
+    unit_of_measurement: "RPM"
+    accuracy_decimals: 0
+    filters:
+      # pulse_counter reports pulses per minute by default
+      # Most PC fans output 2 pulses per revolution
+      - multiply: 0.5
+      # Round to nearest 10 RPM
+      - lambda: |-
+          if (isnan(x)) return x;
+          return roundf(x / 10.0f) * 10.0f;
+      - throttle: 15s
+
+  # Home Assistant temperature sensor imported into ESPHome
+  - platform: homeassistant
+    id: inv_temp
+    entity_id: sensor.inverter_modbus_invtemp
+    internal: true
+    filters:
+      - throttle: 30s
+    on_value:
+      then:
+        - if:
+            condition:
+              switch.is_on: fan_curve_enabled
+            then:
+              - lambda: |-
+                  // Stepped curve:
+                  // <25°C  -> OFF
+                  // <35°C  -> 25%
+                  // <45°C  -> 50%
+                  // <50°C  -> 70%
+                  // else   -> 85%
+                  int speed = 0;
+
+                  if (!isnan(x)) {
+                    if (x < 25.0f) {
+                      speed = 0;
+                    } else if (x < 35.0f) {
+                      speed = 25;
+                    } else if (x < 45.0f) {
+                      speed = 50;
+                    } else if (x < 50.0f) {
+                      speed = 70;
+                    } else if (x < 55.0f) {
+                      speed = 85;
+                    } else {
+                      speed = 100;
+                    }
+                  }
+
+                  if (speed <= 0) {
+                    id(inv_fan).turn_off();
+                  } else {
+                    auto call = id(inv_fan).turn_on();
+                    call.set_speed(speed);
+                    call.perform();
+                  }
+
+switch:
+  - platform: template
+    name: "Inverter Fan Curve Automation Enabled"
+    id: fan_curve_enabled
+    restore_mode: RESTORE_DEFAULT_ON
+    optimistic: true
+
+globals:
+  - id: pwm_min_effective
+    type: int
+    restore_value: yes
+    initial_value: "35"   # start of "non-dead" region from your logs
+
+  - id: pwm_max_effective
+    type: int
+    restore_value: yes
+    initial_value: "95"   # avoid 100% constant-level edge case
+
+  - id: user_speed_pct
+    type: int
+    restore_value: yes
+    initial_value: "0"
+
+script:
+  - id: apply_calibrated_fan_speed
+    mode: restart
+    then:
+      - lambda: |-
+          int u = id(user_speed_pct);
+          int pmin = id(pwm_min_effective);
+          int pmax = id(pwm_max_effective);
+
+          // Sanity clamp
+          if (pmin < 0) pmin = 0;
+          if (pmax > 100) pmax = 100;
+          if (pmax < pmin) pmax = pmin;
+
+          ESP_LOGI("fan_cal", "apply: user=%d%% -> pwm_range=[%d..%d]", u, pmin, pmax);
+
+          if (u <= 0) {
+            auto call = id(inv_fan_raw).turn_off();
+            call.perform();
+            return;
+          }
+
+          // Scale 1..100 -> pmin..pmax
+          float t = (float) u / 100.0f;
+          int pwm = (int) lroundf((float)pmin + t * (float)(pmax - pmin));
+
+          // Avoid exact 100% PWM
+          if (pwm >= 100) pwm = 99;
+
+          ESP_LOGI("fan_cal", "apply: raw_pwm_speed=%d", pwm);
+
+          auto call = id(inv_fan_raw).turn_on();
+          call.set_speed(pwm);   // this actually commands the fan component
+          call.perform();
