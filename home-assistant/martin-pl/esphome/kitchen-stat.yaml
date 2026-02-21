@@ -96,6 +96,44 @@ binary_sensor:
         - light.toggle:
             id: back_light
 
+number:
+  - platform: template
+    id: grid_zero_threshold_w
+    name: "Grid Zero Threshold"
+    unit_of_measurement: "W"
+    entity_category: config
+    min_value: 0
+    max_value: 200
+    step: 1
+    mode: box
+    optimistic: true
+    restore_value: true
+    initial_value: 25
+  - platform: template
+    id: pv_inactive_threshold_w
+    name: "PV Inactive Threshold"
+    unit_of_measurement: "W"
+    entity_category: config
+    min_value: 0
+    max_value: 200
+    step: 1
+    mode: box
+    optimistic: true
+    restore_value: true
+    initial_value: 0
+  - platform: template
+    id: battery_inactive_threshold_w
+    name: "Battery Inactive Threshold"
+    unit_of_measurement: "W"
+    entity_category: config
+    min_value: 0
+    max_value: 200
+    step: 1
+    mode: box
+    optimistic: true
+    restore_value: true
+    initial_value: 0
+
 display:
   - platform: ili9xxx
     model: gc9a01a
@@ -117,34 +155,38 @@ sensor:
         then:
           - lvgl.image.update:
               id: img_inverter_meter_power
-              src: !lambda "return x >= 0 ? id(mdi_home_import_outline) : id(mdi_home_export_outline);"
-          - if:
-              condition:
-                lambda: 'return fabsf(x) > 1000;'
-              then:
-                - lvgl.label.update:
-                    id: label_inverter_meter_power
-                    text:
-                      format: "%.1f"  
-                      args: ['x/1000']
-              else:
-                - lvgl.label.update:
-                    id: label_inverter_meter_power
-                    text:
-                      format: "%.0f"  
-                      args: ['(fabsf(x) < 0.5f) ? 0 : x']
+              src: !lambda |-
+                float threshold = fmaxf(id(grid_zero_threshold_w).state, 0.0f);
+                float grid = (fabsf(x) < threshold) ? 0.0f : x;
+                return grid >= 0.0f ? id(mdi_home_import_outline) : id(mdi_home_export_outline);
+          - lvgl.label.update:
+              id: label_inverter_meter_power
+              text: !lambda |-
+                float threshold = fmaxf(id(grid_zero_threshold_w).state, 0.0f);
+                float grid = (fabsf(x) < threshold) ? 0.0f : x;
+                char buf[16];
+                if (fabsf(grid) >= 1000.0f) {
+                  snprintf(buf, sizeof(buf), "%.1f", grid / 1000.0f);
+                } else {
+                  snprintf(buf, sizeof(buf), "%.0f", grid);
+                }
+                return std::string(buf);
           - lvgl.label.update:
               id: label_inverter_meter_power_unit
               text: !lambda |-
-                return std::string(fabsf(x) > 1000.0f ? "kW" : "W");
+                float threshold = fmaxf(id(grid_zero_threshold_w).state, 0.0f);
+                float grid = (fabsf(x) < threshold) ? 0.0f : x;
+                return std::string(fabsf(grid) >= 1000.0f ? "kW" : "W");
           - lvgl.label.update:
               id: label_grid_price
               text: !lambda |-
+                float threshold = fmaxf(id(grid_zero_threshold_w).state, 0.0f);
+                float grid = (fabsf(x) < threshold) ? 0.0f : x;
                 float buy = id(ha_amber_general_price).state;
                 if (isnan(buy)) buy = id(ha_amber_general_price_non_estimate).state;
                 float sell = id(ha_amber_feed_in_price).state;
                 if (isnan(sell)) sell = id(ha_amber_feed_in_price_non_estimate).state;
-                float price = x >= 0 ? buy : sell;
+                float price = grid >= 0.0f ? buy : sell;
                 if (isnan(price)) {
                   return std::string("--");
                 }
@@ -279,11 +321,14 @@ sensor:
           - lvgl.label.update:
               id: label_grid_price
               text: !lambda |-
+                float threshold = fmaxf(id(grid_zero_threshold_w).state, 0.0f);
+                float grid = id(ha_inverter_meter_power).state;
+                float grid_resolved = (fabsf(grid) < threshold) ? 0.0f : grid;
                 float buy = id(ha_amber_general_price).state;
                 if (isnan(buy)) buy = id(ha_amber_general_price_non_estimate).state;
                 float sell = id(ha_amber_feed_in_price).state;
                 if (isnan(sell)) sell = id(ha_amber_feed_in_price_non_estimate).state;
-                float price = id(ha_inverter_meter_power).state >= 0 ? buy : sell;
+                float price = grid_resolved >= 0.0f ? buy : sell;
                 if (isnan(price)) {
                   return std::string("--");
                 }
@@ -302,11 +347,14 @@ sensor:
           - lvgl.label.update:
               id: label_grid_price
               text: !lambda |-
+                float threshold = fmaxf(id(grid_zero_threshold_w).state, 0.0f);
+                float grid = id(ha_inverter_meter_power).state;
+                float grid_resolved = (fabsf(grid) < threshold) ? 0.0f : grid;
                 float buy = id(ha_amber_general_price).state;
                 if (isnan(buy)) buy = id(ha_amber_general_price_non_estimate).state;
                 float sell = id(ha_amber_feed_in_price).state;
                 if (isnan(sell)) sell = id(ha_amber_feed_in_price_non_estimate).state;
-                float price = id(ha_inverter_meter_power).state >= 0 ? buy : sell;
+                float price = grid_resolved >= 0.0f ? buy : sell;
                 if (isnan(price)) {
                   return std::string("--");
                 }
@@ -326,11 +374,14 @@ sensor:
           - lvgl.label.update:
               id: label_grid_price
               text: !lambda |-
+                float threshold = fmaxf(id(grid_zero_threshold_w).state, 0.0f);
+                float grid = id(ha_inverter_meter_power).state;
+                float grid_resolved = (fabsf(grid) < threshold) ? 0.0f : grid;
                 float buy = id(ha_amber_general_price).state;
                 if (isnan(buy)) buy = x;
                 float sell = id(ha_amber_feed_in_price).state;
                 if (isnan(sell)) sell = id(ha_amber_feed_in_price_non_estimate).state;
-                float price = id(ha_inverter_meter_power).state >= 0 ? buy : sell;
+                float price = grid_resolved >= 0.0f ? buy : sell;
                 if (isnan(price)) {
                   return std::string("--");
                 }
@@ -350,11 +401,14 @@ sensor:
           - lvgl.label.update:
               id: label_grid_price
               text: !lambda |-
+                float threshold = fmaxf(id(grid_zero_threshold_w).state, 0.0f);
+                float grid = id(ha_inverter_meter_power).state;
+                float grid_resolved = (fabsf(grid) < threshold) ? 0.0f : grid;
                 float buy = id(ha_amber_general_price).state;
                 if (isnan(buy)) buy = id(ha_amber_general_price_non_estimate).state;
                 float sell = id(ha_amber_feed_in_price).state;
                 if (isnan(sell)) sell = x;
-                float price = id(ha_inverter_meter_power).state >= 0 ? buy : sell;
+                float price = grid_resolved >= 0.0f ? buy : sell;
                 if (isnan(price)) {
                   return std::string("--");
                 }
@@ -375,10 +429,22 @@ interval:
           }
       - lambda: |-
           // Allocate source->sink flows so simultaneous paths can be shown together.
+          float pv_threshold = fmaxf(id(pv_inactive_threshold_w).state, 0.0f);
+          float batt_threshold = fmaxf(id(battery_inactive_threshold_w).state, 0.0f);
+          float grid_threshold = fmaxf(id(grid_zero_threshold_w).state, 0.0f);
           float pv = fmaxf(id(ha_inverter_total_active_power).state, 0.0f);
+          if (pv < pv_threshold) {
+            pv = 0.0f;
+          }
           float load = fmaxf(id(ha_inverter_load_power).state, 0.0f);
           float batt = id(ha_inverter_battery_power).state;
+          if (fabsf(batt) < batt_threshold) {
+            batt = 0.0f;
+          }
           float grid = id(ha_inverter_meter_power).state;
+          if (fabsf(grid) < grid_threshold) {
+            grid = 0.0f;
+          }
 
           float batt_dis = fmaxf(batt, 0.0f);
           float batt_chg = fmaxf(-batt, 0.0f);
@@ -417,6 +483,269 @@ interval:
           id(flow_batt_grid) = batt_to_grid;
           id(flow_grid_house) = grid_to_house;
           id(flow_grid_battery) = grid_to_batt;
+      - if:
+          condition:
+            lambda: |-
+              float grid = id(ha_inverter_meter_power).state;
+              float grid_threshold = fmaxf(id(grid_zero_threshold_w).state, 0.0f);
+              if (fabsf(grid) < grid_threshold) {
+                grid = 0.0f;
+              }
+              return fabsf(grid) < 0.001f;
+          then:
+            - lvgl.obj.update:
+                id: obj_grid_node
+                opa: 80%
+          else:
+            - lvgl.obj.update:
+                id: obj_grid_node
+                opa: 100%
+      - if:
+          condition:
+            lambda: |-
+              float threshold = fmaxf(id(pv_inactive_threshold_w).state, 0.0f);
+              float pv = fmaxf(id(ha_inverter_total_active_power).state, 0.0f);
+              if (pv < threshold) {
+                pv = 0.0f;
+              }
+              return pv < 0.001f;
+          then:
+            - lvgl.obj.update:
+                id: obj_solar_node
+                opa: 80%
+          else:
+            - lvgl.obj.update:
+                id: obj_solar_node
+                opa: 100%
+      - if:
+          condition:
+            lambda: |-
+              float threshold = fmaxf(id(battery_inactive_threshold_w).state, 0.0f);
+              float batt = id(ha_inverter_battery_power).state;
+              if (fabsf(batt) < threshold) {
+                batt = 0.0f;
+              }
+              return fabsf(batt) < 0.001f;
+          then:
+            - lvgl.obj.update:
+                id: obj_battery_node
+                opa: 80%
+          else:
+            - lvgl.obj.update:
+                id: obj_battery_node
+                opa: 100%
+      - if:
+          condition:
+            lambda: |-
+              float pv_threshold = fmaxf(id(pv_inactive_threshold_w).state, 0.0f);
+              float pv = fmaxf(id(ha_inverter_total_active_power).state, 0.0f);
+              if (pv < pv_threshold) {
+                pv = 0.0f;
+              }
+              float grid_threshold = fmaxf(id(grid_zero_threshold_w).state, 0.0f);
+              float grid = id(ha_inverter_meter_power).state;
+              if (fabsf(grid) < grid_threshold) {
+                grid = 0.0f;
+              }
+              return pv < 0.001f || fabsf(grid) < 0.001f;
+          then:
+            - lvgl.line.update:
+                id: line_pv_stub_left
+                points:
+                  - 112,76
+                  - 112,92
+                line_color: 0xcc9d00
+            - lvgl.line.update:
+                id: line_pv_grid
+                points:
+                  - 112,92
+                  - 112,112
+                  - 86,112
+                line_color: 0xcc9d00
+          else:
+            - lvgl.line.update:
+                id: line_pv_stub_left
+                points:
+                  - 112,76
+                  - 112,92
+                line_color: 0xffc400
+            - lvgl.line.update:
+                id: line_pv_grid
+                points:
+                  - 112,92
+                  - 112,112
+                  - 86,112
+                line_color: 0xffc400
+      - if:
+          condition:
+            lambda: |-
+              float pv_threshold = fmaxf(id(pv_inactive_threshold_w).state, 0.0f);
+              float pv = fmaxf(id(ha_inverter_total_active_power).state, 0.0f);
+              if (pv < pv_threshold) {
+                pv = 0.0f;
+              }
+              float load = fmaxf(id(ha_inverter_load_power).state, 0.0f);
+              return pv < 0.001f || load < 0.001f;
+          then:
+            - lvgl.line.update:
+                id: line_pv_stub_right
+                points:
+                  - 128,76
+                  - 128,92
+                line_color: 0xcc9d00
+            - lvgl.line.update:
+                id: line_pv_house
+                points:
+                  - 128,92
+                  - 128,112
+                  - 154,112
+                line_color: 0xcc9d00
+          else:
+            - lvgl.line.update:
+                id: line_pv_stub_right
+                points:
+                  - 128,76
+                  - 128,92
+                line_color: 0xffc400
+            - lvgl.line.update:
+                id: line_pv_house
+                points:
+                  - 128,92
+                  - 128,112
+                  - 154,112
+                line_color: 0xffc400
+      - if:
+          condition:
+            lambda: |-
+              float batt_threshold = fmaxf(id(battery_inactive_threshold_w).state, 0.0f);
+              float batt = id(ha_inverter_battery_power).state;
+              if (fabsf(batt) < batt_threshold) {
+                batt = 0.0f;
+              }
+              float grid_threshold = fmaxf(id(grid_zero_threshold_w).state, 0.0f);
+              float grid = id(ha_inverter_meter_power).state;
+              if (fabsf(grid) < grid_threshold) {
+                grid = 0.0f;
+              }
+              return fabsf(batt) < 0.001f || fabsf(grid) < 0.001f;
+          then:
+            - lvgl.line.update:
+                id: line_batt_stub_left
+                points:
+                  - 112,162
+                  - 112,146
+                line_color: 0xcc6689
+            - lvgl.line.update:
+                id: line_batt_grid
+                points:
+                  - 112,146
+                  - 112,128
+                  - 86,128
+                line_color: 0xcc6689
+          else:
+            - lvgl.line.update:
+                id: line_batt_stub_left
+                points:
+                  - 112,162
+                  - 112,146
+                line_color: 0xff80ab
+            - lvgl.line.update:
+                id: line_batt_grid
+                points:
+                  - 112,146
+                  - 112,128
+                  - 86,128
+                line_color: 0xff80ab
+      - if:
+          condition:
+            lambda: |-
+              float batt_threshold = fmaxf(id(battery_inactive_threshold_w).state, 0.0f);
+              float batt = id(ha_inverter_battery_power).state;
+              if (fabsf(batt) < batt_threshold) {
+                batt = 0.0f;
+              }
+              float load = fmaxf(id(ha_inverter_load_power).state, 0.0f);
+              return fabsf(batt) < 0.001f || load < 0.001f;
+          then:
+            - lvgl.line.update:
+                id: line_batt_stub_right
+                points:
+                  - 128,162
+                  - 128,146
+                line_color: 0xcc6689
+            - lvgl.line.update:
+                id: line_batt_house
+                points:
+                  - 128,146
+                  - 128,128
+                  - 154,128
+                line_color: 0xcc6689
+          else:
+            - lvgl.line.update:
+                id: line_batt_stub_right
+                points:
+                  - 128,162
+                  - 128,146
+                line_color: 0xff80ab
+            - lvgl.line.update:
+                id: line_batt_house
+                points:
+                  - 128,146
+                  - 128,128
+                  - 154,128
+                line_color: 0xff80ab
+      - if:
+          condition:
+            lambda: |-
+              float grid = id(ha_inverter_meter_power).state;
+              float grid_threshold = fmaxf(id(grid_zero_threshold_w).state, 0.0f);
+              if (fabsf(grid) < grid_threshold) {
+                grid = 0.0f;
+              }
+              float load = fmaxf(id(ha_inverter_load_power).state, 0.0f);
+              return fabsf(grid) < 0.001f || load < 0.001f;
+          then:
+            - lvgl.line.update:
+                id: line_grid_house
+                points:
+                  - 86,120
+                  - 154,120
+                line_color: 0x589ecc
+          else:
+            - lvgl.line.update:
+                id: line_grid_house
+                points:
+                  - 86,120
+                  - 154,120
+                line_color: 0x6ec6ff
+      - if:
+          condition:
+            lambda: |-
+              float pv_threshold = fmaxf(id(pv_inactive_threshold_w).state, 0.0f);
+              float pv = fmaxf(id(ha_inverter_total_active_power).state, 0.0f);
+              if (pv < pv_threshold) {
+                pv = 0.0f;
+              }
+              float batt_threshold = fmaxf(id(battery_inactive_threshold_w).state, 0.0f);
+              float batt = id(ha_inverter_battery_power).state;
+              if (fabsf(batt) < batt_threshold) {
+                batt = 0.0f;
+              }
+              return pv < 0.001f || fabsf(batt) < 0.001f;
+          then:
+            - lvgl.line.update:
+                id: line_pv_batt
+                points:
+                  - 120,76
+                  - 120,162
+                line_color: 0xcc9d00
+          else:
+            - lvgl.line.update:
+                id: line_pv_batt
+                points:
+                  - 120,76
+                  - 120,162
+                line_color: 0xffc400
       - lvgl.obj.update:
           id: dot_pv_house
           hidden: !lambda "return id(flow_pv_house) < 10.0f;"
@@ -870,6 +1199,7 @@ lvgl:
                                 align: center
                                 text: ""
                 - obj: # Solar (top)
+                    id: obj_solar_node
                     width: 72
                     height: 72
                     radius: 36
@@ -919,6 +1249,7 @@ lvgl:
                                 align: center
                                 text: ""
                 - obj: # Grid (left)
+                    id: obj_grid_node
                     width: 72
                     height: 72
                     radius: 36
@@ -976,6 +1307,7 @@ lvgl:
                           y: 22
                           text: ""
                 - obj: # Battery (bottom)
+                    id: obj_battery_node
                     width: 72
                     height: 72
                     radius: 36
