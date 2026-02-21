@@ -16,6 +16,34 @@ globals:
     type: float
     restore_value: no
     initial_value: '0'
+  - id: flow_pv_house
+    type: float
+    restore_value: no
+    initial_value: '0'
+  - id: flow_pv_battery
+    type: float
+    restore_value: no
+    initial_value: '0'
+  - id: flow_pv_grid
+    type: float
+    restore_value: no
+    initial_value: '0'
+  - id: flow_batt_house
+    type: float
+    restore_value: no
+    initial_value: '0'
+  - id: flow_batt_grid
+    type: float
+    restore_value: no
+    initial_value: '0'
+  - id: flow_grid_house
+    type: float
+    restore_value: no
+    initial_value: '0'
+  - id: flow_grid_battery
+    type: float
+    restore_value: no
+    initial_value: '0'
 
 api:
   encryption:
@@ -112,11 +140,20 @@ sensor:
           - lvgl.label.update:
               id: label_grid_price
               text: !lambda |-
-                float price = x >= 0
-                  ? id(ha_amber_general_price_non_estimate).state
-                  : id(ha_amber_feed_in_price_non_estimate).state;
-                char buf[16];
-                snprintf(buf, sizeof(buf), "%.2f", price);
+                float buy = id(ha_amber_general_price).state;
+                if (isnan(buy)) buy = id(ha_amber_general_price_non_estimate).state;
+                float sell = id(ha_amber_feed_in_price).state;
+                if (isnan(sell)) sell = id(ha_amber_feed_in_price_non_estimate).state;
+                float price = x >= 0 ? buy : sell;
+                if (isnan(price)) {
+                  return std::string("--");
+                }
+                char buf[24];
+                if (fabsf(price) < 1.0f) {
+                  snprintf(buf, sizeof(buf), "%.0fc/", price * 100.0f);
+                } else {
+                  snprintf(buf, sizeof(buf), "%.2f$/", price);
+                }
                 return std::string(buf);
     - platform: homeassistant
       id: ha_inverter_total_active_power
@@ -193,8 +230,13 @@ sensor:
           - lvgl.label.update:
               id: label_inverter_battery_soc
               text: !lambda |-
+                float soc = id(ha_inverter_battery_soc).state;
+                if (isnan(soc)) soc = id(ha_inverter_modbus_battery_soc).state;
+                if (isnan(soc)) {
+                  return std::string("--");
+                }
                 char buf[8];
-                snprintf(buf, sizeof(buf), "%.0f%%", id(ha_inverter_battery_soc).state);
+                snprintf(buf, sizeof(buf), "%.0f%%", soc);
                 return std::string(buf);
     - platform: homeassistant
       id: ha_inverter_battery_soc
@@ -204,36 +246,124 @@ sensor:
           - lvgl.label.update:
               id: label_inverter_battery_soc
               text: !lambda |-
+                float soc = x;
+                if (isnan(soc)) soc = id(ha_inverter_modbus_battery_soc).state;
+                if (isnan(soc)) {
+                  return std::string("--");
+                }
                 char buf[8];
-                snprintf(buf, sizeof(buf), "%.0f%%", x);
+                snprintf(buf, sizeof(buf), "%.0f%%", soc);
+                return std::string(buf);
+    - platform: homeassistant
+      id: ha_inverter_modbus_battery_soc
+      entity_id: sensor.inverter_modbus_battery_soc
+      internal: true
+      on_value:
+        then:
+          - lvgl.label.update:
+              id: label_inverter_battery_soc
+              text: !lambda |-
+                float soc = id(ha_inverter_battery_soc).state;
+                if (isnan(soc)) soc = x;
+                if (isnan(soc)) {
+                  return std::string("--");
+                }
+                char buf[8];
+                snprintf(buf, sizeof(buf), "%.0f%%", soc);
+                return std::string(buf);
+    - platform: homeassistant
+      id: ha_amber_general_price
+      entity_id: sensor.amber_general_price
+      on_value:
+        then:
+          - lvgl.label.update:
+              id: label_grid_price
+              text: !lambda |-
+                float buy = id(ha_amber_general_price).state;
+                if (isnan(buy)) buy = id(ha_amber_general_price_non_estimate).state;
+                float sell = id(ha_amber_feed_in_price).state;
+                if (isnan(sell)) sell = id(ha_amber_feed_in_price_non_estimate).state;
+                float price = id(ha_inverter_meter_power).state >= 0 ? buy : sell;
+                if (isnan(price)) {
+                  return std::string("--");
+                }
+                char buf[24];
+                if (fabsf(price) < 1.0f) {
+                  snprintf(buf, sizeof(buf), "%.0fc/", price * 100.0f);
+                } else {
+                  snprintf(buf, sizeof(buf), "%.2f$/", price);
+                }
+                return std::string(buf);
+    - platform: homeassistant
+      id: ha_amber_feed_in_price
+      entity_id: sensor.amber_feed_in_price
+      on_value:
+        then:
+          - lvgl.label.update:
+              id: label_grid_price
+              text: !lambda |-
+                float buy = id(ha_amber_general_price).state;
+                if (isnan(buy)) buy = id(ha_amber_general_price_non_estimate).state;
+                float sell = id(ha_amber_feed_in_price).state;
+                if (isnan(sell)) sell = id(ha_amber_feed_in_price_non_estimate).state;
+                float price = id(ha_inverter_meter_power).state >= 0 ? buy : sell;
+                if (isnan(price)) {
+                  return std::string("--");
+                }
+                char buf[24];
+                if (fabsf(price) < 1.0f) {
+                  snprintf(buf, sizeof(buf), "%.0fc/", price * 100.0f);
+                } else {
+                  snprintf(buf, sizeof(buf), "%.2f$/", price);
+                }
                 return std::string(buf);
     - platform: homeassistant
       id: ha_amber_general_price_non_estimate
       entity_id: sensor.amber_general_price_non_estimate
+      internal: true
       on_value:
         then:
           - lvgl.label.update:
               id: label_grid_price
               text: !lambda |-
-                if (id(ha_inverter_meter_power).state < 0) {
-                  return std::string("");
+                float buy = id(ha_amber_general_price).state;
+                if (isnan(buy)) buy = x;
+                float sell = id(ha_amber_feed_in_price).state;
+                if (isnan(sell)) sell = id(ha_amber_feed_in_price_non_estimate).state;
+                float price = id(ha_inverter_meter_power).state >= 0 ? buy : sell;
+                if (isnan(price)) {
+                  return std::string("--");
                 }
-                char buf[16];
-                snprintf(buf, sizeof(buf), "%.2f", x);
+                char buf[24];
+                if (fabsf(price) < 1.0f) {
+                  snprintf(buf, sizeof(buf), "%.0fc/", price * 100.0f);
+                } else {
+                  snprintf(buf, sizeof(buf), "%.2f$/", price);
+                }
                 return std::string(buf);
     - platform: homeassistant
       id: ha_amber_feed_in_price_non_estimate
       entity_id: sensor.amber_feed_in_price_non_estimate
+      internal: true
       on_value:
         then:
           - lvgl.label.update:
               id: label_grid_price
               text: !lambda |-
-                if (id(ha_inverter_meter_power).state >= 0) {
-                  return std::string("");
+                float buy = id(ha_amber_general_price).state;
+                if (isnan(buy)) buy = id(ha_amber_general_price_non_estimate).state;
+                float sell = id(ha_amber_feed_in_price).state;
+                if (isnan(sell)) sell = x;
+                float price = id(ha_inverter_meter_power).state >= 0 ? buy : sell;
+                if (isnan(price)) {
+                  return std::string("--");
                 }
-                char buf[16];
-                snprintf(buf, sizeof(buf), "%.2f", x);
+                char buf[24];
+                if (fabsf(price) < 1.0f) {
+                  snprintf(buf, sizeof(buf), "%.0fc/", price * 100.0f);
+                } else {
+                  snprintf(buf, sizeof(buf), "%.2f$/", price);
+                }
                 return std::string(buf);
 interval:
   - interval: 150ms
@@ -243,13 +373,57 @@ interval:
           if (id(flow_phase) > 1.0f) {
             id(flow_phase) -= 1.0f;
           }
+      - lambda: |-
+          // Allocate source->sink flows so simultaneous paths can be shown together.
+          float pv = fmaxf(id(ha_inverter_total_active_power).state, 0.0f);
+          float load = fmaxf(id(ha_inverter_load_power).state, 0.0f);
+          float batt = id(ha_inverter_battery_power).state;
+          float grid = id(ha_inverter_meter_power).state;
+
+          float batt_dis = fmaxf(batt, 0.0f);
+          float batt_chg = fmaxf(-batt, 0.0f);
+          float grid_import = fmaxf(grid, 0.0f);
+          float grid_export = fmaxf(-grid, 0.0f);
+
+          // Supply house load priority: PV, then battery, then grid.
+          float pv_to_house = fminf(pv, load);
+          float load_remaining = fmaxf(load - pv_to_house, 0.0f);
+
+          float batt_to_house = fminf(batt_dis, load_remaining);
+          load_remaining = fmaxf(load_remaining - batt_to_house, 0.0f);
+
+          float grid_to_house = fminf(grid_import, load_remaining);
+          float grid_import_remaining = fmaxf(grid_import - grid_to_house, 0.0f);
+
+          // Charge battery from remaining PV, then remaining grid import.
+          float pv_remaining = fmaxf(pv - pv_to_house, 0.0f);
+          float pv_to_batt = fminf(pv_remaining, batt_chg);
+          float batt_chg_remaining = fmaxf(batt_chg - pv_to_batt, 0.0f);
+
+          float grid_to_batt = fminf(grid_import_remaining, batt_chg_remaining);
+
+          // Export leftovers: PV first, then battery.
+          float pv_after_batt = fmaxf(pv_remaining - pv_to_batt, 0.0f);
+          float pv_to_grid = fminf(pv_after_batt, grid_export);
+          float grid_export_remaining = fmaxf(grid_export - pv_to_grid, 0.0f);
+
+          float batt_after_house = fmaxf(batt_dis - batt_to_house, 0.0f);
+          float batt_to_grid = fminf(batt_after_house, grid_export_remaining);
+
+          id(flow_pv_house) = pv_to_house;
+          id(flow_pv_battery) = pv_to_batt;
+          id(flow_pv_grid) = pv_to_grid;
+          id(flow_batt_house) = batt_to_house;
+          id(flow_batt_grid) = batt_to_grid;
+          id(flow_grid_house) = grid_to_house;
+          id(flow_grid_battery) = grid_to_batt;
       - lvgl.obj.update:
-          id: dot_solar
-          hidden: !lambda "return fabsf(id(ha_inverter_total_active_power).state) < 10;"
+          id: dot_pv_house
+          hidden: !lambda "return id(flow_pv_house) < 10.0f;"
           x: !lambda |-
             float t = id(flow_phase);
             if (id(ha_inverter_total_active_power).state < 0) t = 1.0f - t;
-            float d = t * 50.0f;
+            float d = t * 46.0f;
             float x;
             if (d < 20.0f) {
               x = 128.0f;
@@ -260,7 +434,7 @@ interval:
           y: !lambda |-
             float t = id(flow_phase);
             if (id(ha_inverter_total_active_power).state < 0) t = 1.0f - t;
-            float d = t * 50.0f;
+            float d = t * 46.0f;
             float y;
             if (d < 20.0f) {
               y = 92.0f + d;
@@ -269,69 +443,44 @@ interval:
             }
             return (int)(y - 3.0f);
       - lvgl.obj.update:
-          id: dot_grid
-          hidden: !lambda "return fabsf(id(ha_inverter_meter_power).state) < 10;"
-          bg_color: !lambda |-
-            float grid = id(ha_inverter_meter_power).state;
-            float batt = id(ha_inverter_battery_power).state;
-            if (grid < 0) {
-              return batt > 0 ? lv_color_hex(0xff80ab) : lv_color_hex(0xffc400);
-            }
-            return lv_color_hex(0x6ec6ff);
+          id: dot_pv_battery
+          hidden: !lambda "return id(flow_pv_battery) < 10.0f;"
           x: !lambda |-
-            float grid = id(ha_inverter_meter_power).state;
-            float batt = id(ha_inverter_battery_power).state;
             float t = id(flow_phase);
-            float x = 82.0f;
-            if (grid >= 0) {
-              float d = t * 76.0f;
-              x = 82.0f + d;
-            } else if (batt > 0) {
-              float d = t * 48.0f;
-              if (d < 18.0f) {
-                x = 112.0f;
-              } else {
-                x = 112.0f - (d - 18.0f);
-              }
+            return (int)(120.0f - 3.0f);
+          y: !lambda |-
+            float t = id(flow_phase);
+            float y = 76.0f + t * 86.0f;
+            return (int)(y - 3.0f);
+      - lvgl.obj.update:
+          id: dot_pv_grid
+          hidden: !lambda "return id(flow_pv_grid) < 10.0f;"
+          x: !lambda |-
+            float t = id(flow_phase);
+            float d = t * 46.0f;
+            float x;
+            if (d < 20.0f) {
+              x = 112.0f;
             } else {
-              float d = t * 50.0f;
-              if (d < 20.0f) {
-                x = 112.0f;
-              } else {
-                x = 112.0f - (d - 20.0f);
-              }
+              x = 112.0f - (d - 20.0f);
             }
             return (int)(x - 3.0f);
           y: !lambda |-
-            float grid = id(ha_inverter_meter_power).state;
-            float batt = id(ha_inverter_battery_power).state;
             float t = id(flow_phase);
-            float y = 120.0f;
-            if (grid >= 0) {
-              y = 120.0f;
-            } else if (batt > 0) {
-              float d = t * 48.0f;
-              if (d < 18.0f) {
-                y = 146.0f - d;
-              } else {
-                y = 128.0f;
-              }
+            float d = t * 46.0f;
+            float y;
+            if (d < 20.0f) {
+              y = 92.0f + d;
             } else {
-              float d = t * 50.0f;
-              if (d < 20.0f) {
-                y = 92.0f + d;
-              } else {
-                y = 112.0f;
-              }
+              y = 112.0f;
             }
             return (int)(y - 3.0f);
       - lvgl.obj.update:
-          id: dot_battery
-          hidden: !lambda "return fabsf(id(ha_inverter_battery_power).state) < 10;"
+          id: dot_batt_house
+          hidden: !lambda "return id(flow_batt_house) < 10.0f;"
           x: !lambda |-
             float t = id(flow_phase);
-            if (id(ha_inverter_battery_power).state < 0) t = 1.0f - t;
-            float d = t * 48.0f;
+            float d = t * 44.0f;
             float x;
             if (d < 18.0f) {
               x = 128.0f;
@@ -341,13 +490,67 @@ interval:
             return (int)(x - 3.0f);
           y: !lambda |-
             float t = id(flow_phase);
-            if (id(ha_inverter_battery_power).state < 0) t = 1.0f - t;
-            float d = t * 48.0f;
+            float d = t * 44.0f;
             float y;
             if (d < 18.0f) {
               y = 146.0f - d;
             } else {
               y = 128.0f;
+            }
+            return (int)(y - 3.0f);
+      - lvgl.obj.update:
+          id: dot_batt_grid
+          hidden: !lambda "return id(flow_batt_grid) < 10.0f;"
+          x: !lambda |-
+            float t = id(flow_phase);
+            float d = t * 44.0f;
+            float x;
+            if (d < 18.0f) {
+              x = 112.0f;
+            } else {
+              x = 112.0f - (d - 18.0f);
+            }
+            return (int)(x - 3.0f);
+          y: !lambda |-
+            float t = id(flow_phase);
+            float d = t * 44.0f;
+            float y;
+            if (d < 18.0f) {
+              y = 146.0f - d;
+            } else {
+              y = 128.0f;
+            }
+            return (int)(y - 3.0f);
+      - lvgl.obj.update:
+          id: dot_grid_house
+          hidden: !lambda "return id(flow_grid_house) < 10.0f;"
+          x: !lambda |-
+            float t = id(flow_phase);
+            float x = 86.0f + t * 68.0f;
+            return (int)(x - 3.0f);
+          y: !lambda |-
+            return (int)(120.0f - 3.0f);
+      - lvgl.obj.update:
+          id: dot_grid_battery
+          hidden: !lambda "return id(flow_grid_battery) < 10.0f;"
+          x: !lambda |-
+            float t = id(flow_phase);
+            float d = t * 44.0f;
+            float x;
+            if (d < 26.0f) {
+              x = 86.0f + d;
+            } else {
+              x = 112.0f;
+            }
+            return (int)(x - 3.0f);
+          y: !lambda |-
+            float t = id(flow_phase);
+            float d = t * 44.0f;
+            float y;
+            if (d < 26.0f) {
+              y = 128.0f;
+            } else {
+              y = 128.0f + (d - 26.0f);
             }
             return (int)(y - 3.0f);
 
@@ -377,26 +580,32 @@ touchscreen:
 image:
   - file: mdi:home-lightning-bolt-outline
     type: GRAYSCALE
+    transparency: alpha_channel
     id: mdi_home_lightning_bolt_outlint
     resize: 24x24
   - file: mdi:home-export-outline
     type: GRAYSCALE
+    transparency: alpha_channel
     id: mdi_home_export_outline
     resize: 24x24
   - file: mdi:home-import-outline
     type: GRAYSCALE
+    transparency: alpha_channel
     id: mdi_home_import_outline
     resize: 24x24
   - file: mdi:solar-power-variant-outline
     type: GRAYSCALE
+    transparency: alpha_channel
     id: mdi_solar_power_variant_outline
     resize: 24x24
   - file: mdi:battery-plus
     type: GRAYSCALE
+    transparency: alpha_channel
     id: mdi_battery_plus
     resize: 20x20
   - file: mdi:battery-minus
     type: GRAYSCALE
+    transparency: alpha_channel
     id: mdi_battery_minus
     resize: 20x20
 
@@ -419,13 +628,13 @@ lvgl:
         radius: 4
         pad_all: 2 
       - id: power_style
-        text_font: MONTSERRAT_24
+        text_font: MONTSERRAT_26
         align: center
         text_color: 0xFFFFFF
         bg_opa: TRANSP
         bg_color: 0
         radius: 4
-        pad_all: 2 
+        pad_all: 0
       - id: unit_style
         text_font: MONTSERRAT_12
         align: center
@@ -433,6 +642,7 @@ lvgl:
         bg_opa: TRANSP
         bg_color: 0
         radius: 4
+        translate_y: 4
         pad_all: 0
       - id: details_style
         text_font: MONTSERRAT_16
@@ -462,21 +672,21 @@ lvgl:
                 - line: # PV center (vertical to battery)
                     id: line_pv_batt
                     points:
-                      - 120,72
-                      - 120,166
+                      - 120,76
+                      - 120,162
                     line_width: 2
                     line_color: 0xffc400
                 - line: # PV left stub
                     id: line_pv_stub_left
                     points:
-                      - 112,72
+                      - 112,76
                       - 112,92
                     line_width: 2
                     line_color: 0xffc400
                 - line: # PV right stub
                     id: line_pv_stub_right
                     points:
-                      - 128,72
+                      - 128,76
                       - 128,92
                     line_width: 2
                     line_color: 0xffc400
@@ -485,7 +695,7 @@ lvgl:
                     points:
                       - 112,92
                       - 112,112
-                      - 82,112
+                      - 86,112
                     line_width: 2
                     line_color: 0xffc400
                 - line: # PV -> Load (right angle)
@@ -493,20 +703,20 @@ lvgl:
                     points:
                       - 128,92
                       - 128,112
-                      - 158,112
+                      - 154,112
                     line_width: 2
                     line_color: 0xffc400
                 - line: # Battery left stub
                     id: line_batt_stub_left
                     points:
-                      - 112,166
+                      - 112,162
                       - 112,146
                     line_width: 2
                     line_color: 0xff80ab
                 - line: # Battery right stub
                     id: line_batt_stub_right
                     points:
-                      - 128,166
+                      - 128,162
                       - 128,146
                     line_width: 2
                     line_color: 0xff80ab
@@ -515,7 +725,7 @@ lvgl:
                     points:
                       - 112,146
                       - 112,128
-                      - 82,128
+                      - 86,128
                     line_width: 2
                     line_color: 0xff80ab
                 - line: # Battery -> Load (right angle)
@@ -523,18 +733,29 @@ lvgl:
                     points:
                       - 128,146
                       - 128,128
-                      - 158,128
+                      - 154,128
                     line_width: 2
                     line_color: 0xff80ab
                 - line: # Grid -> Load (straight)
                     id: line_grid_house
                     points:
-                      - 82,120
-                      - 158,120
+                      - 86,120
+                      - 154,120
                     line_width: 2
                     line_color: 0x6ec6ff
-                - obj: # Solar flow dot
-                    id: dot_solar
+                - obj: # PV -> House flow dot
+                    id: dot_pv_house
+                    width: 6
+                    height: 6
+                    radius: 3
+                    x: 125
+                    y: 109
+                    bg_color: 0xffc400
+                    bg_opa: COVER
+                    border_width: 0
+                    hidden: true
+                - obj: # PV -> Battery flow dot
+                    id: dot_pv_battery
                     width: 6
                     height: 6
                     radius: 3
@@ -544,8 +765,41 @@ lvgl:
                     bg_opa: COVER
                     border_width: 0
                     hidden: true
-                - obj: # Grid flow dot
-                    id: dot_grid
+                - obj: # PV -> Grid flow dot
+                    id: dot_pv_grid
+                    width: 6
+                    height: 6
+                    radius: 3
+                    x: 109
+                    y: 109
+                    bg_color: 0xffc400
+                    bg_opa: COVER
+                    border_width: 0
+                    hidden: true
+                - obj: # Battery -> House flow dot
+                    id: dot_batt_house
+                    width: 6
+                    height: 6
+                    radius: 3
+                    x: 125
+                    y: 125
+                    bg_color: 0xff80ab
+                    bg_opa: COVER
+                    border_width: 0
+                    hidden: true
+                - obj: # Battery -> Grid flow dot
+                    id: dot_batt_grid
+                    width: 6
+                    height: 6
+                    radius: 3
+                    x: 109
+                    y: 125
+                    bg_color: 0xff80ab
+                    bg_opa: COVER
+                    border_width: 0
+                    hidden: true
+                - obj: # Grid -> House flow dot
+                    id: dot_grid_house
                     width: 6
                     height: 6
                     radius: 3
@@ -555,14 +809,14 @@ lvgl:
                     bg_opa: COVER
                     border_width: 0
                     hidden: true
-                - obj: # Battery flow dot
-                    id: dot_battery
+                - obj: # Grid -> Battery flow dot
+                    id: dot_grid_battery
                     width: 6
                     height: 6
                     radius: 3
-                    x: 117
-                    y: 148
-                    bg_color: 0xff80ab
+                    x: 90
+                    y: 125
+                    bg_color: 0x6ec6ff
                     bg_opa: COVER
                     border_width: 0
                     hidden: true
@@ -577,27 +831,20 @@ lvgl:
                     border_width: 0
                     pad_all: 1
                     scrollable: false
-                    layout:
-                      type: grid
-                      grid_rows: [CONTENT, CONTENT]
-                      grid_columns: [CONTENT]
-                      grid_row_align: CENTER
-                      grid_column_align: CENTER
-                      pad_row: 0px
                     widgets:
                       - image:
                           src: mdi_home_lightning_bolt_outlint
                           width: 24
                           height: 24
                           align: center
-                          grid_cell_x_align: CENTER
-                          grid_cell_y_align: CENTER
+                          y: -24
                           image_recolor: 0x4dd0e1
                           image_recolor_opa: 100%
                       - obj:
                           align: center
-                          grid_cell_x_align: CENTER
-                          grid_cell_y_align: CENTER
+                          y: 0
+                          width: SIZE_CONTENT
+                          height: SIZE_CONTENT
                           bg_opa: TRANSP
                           border_width: 0
                           pad_all: 0
@@ -608,6 +855,7 @@ lvgl:
                             flex_align_main: CENTER
                             flex_align_cross: CENTER
                             flex_align_track: CENTER
+                            pad_column: 1px
                           widgets:
                             - label:
                                 styles: power_style
@@ -632,27 +880,20 @@ lvgl:
                     border_width: 0
                     pad_all: 1
                     scrollable: false
-                    layout:
-                      type: grid
-                      grid_rows: [CONTENT, CONTENT]
-                      grid_columns: [CONTENT]
-                      grid_row_align: CENTER
-                      grid_column_align: CENTER
-                      pad_row: 0px
                     widgets:
                       - image:
                           src: mdi_solar_power_variant_outline
                           width: 24
                           height: 24
                           align: center
-                          grid_cell_x_align: CENTER
-                          grid_cell_y_align: CENTER
+                          y: -18
                           image_recolor: 0xffc400
                           image_recolor_opa: 100%
                       - obj:
                           align: center
-                          grid_cell_x_align: CENTER
-                          grid_cell_y_align: CENTER
+                          y: 10
+                          width: SIZE_CONTENT
+                          height: SIZE_CONTENT
                           bg_opa: TRANSP
                           border_width: 0
                           pad_all: 0
@@ -663,6 +904,7 @@ lvgl:
                             flex_align_main: CENTER
                             flex_align_cross: CENTER
                             flex_align_track: CENTER
+                            pad_column: 1px
                           widgets:
                             - label:
                                 styles: power_style
@@ -687,28 +929,21 @@ lvgl:
                     border_width: 0
                     pad_all: 1
                     scrollable: false
-                    layout:
-                      type: grid
-                      grid_rows: [CONTENT, CONTENT, CONTENT]
-                      grid_columns: [CONTENT]
-                      grid_row_align: CENTER
-                      grid_column_align: CENTER
-                      pad_row: 0px
                     widgets:
                       - image:
                           src: mdi_home_import_outline
                           width: 24
                           height: 24
                           align: center
-                          grid_cell_x_align: CENTER
-                          grid_cell_y_align: CENTER
+                          y: -24
                           image_recolor: 0x6ec6ff
                           image_recolor_opa: 100%
                           id: img_inverter_meter_power
                       - obj:
                           align: center
-                          grid_cell_x_align: CENTER
-                          grid_cell_y_align: CENTER
+                          y: 0
+                          width: SIZE_CONTENT
+                          height: SIZE_CONTENT
                           bg_opa: TRANSP
                           border_width: 0
                           pad_all: 0
@@ -719,6 +954,7 @@ lvgl:
                             flex_align_main: CENTER
                             flex_align_cross: CENTER
                             flex_align_track: CENTER
+                            pad_column: 1px
                           widgets:
                             - label:
                                 styles: power_style
@@ -737,8 +973,7 @@ lvgl:
                           id: label_grid_price
                           text_color: 0xffffff
                           align: center
-                          grid_cell_x_align: CENTER
-                          grid_cell_y_align: CENTER
+                          y: 22
                           text: ""
                 - obj: # Battery (bottom)
                     width: 72
@@ -752,28 +987,21 @@ lvgl:
                     pad_all: 1
                     pad_top: 2
                     scrollable: false
-                    layout:
-                      type: grid
-                      grid_rows: [CONTENT, CONTENT, CONTENT]
-                      grid_columns: [CONTENT]
-                      grid_row_align: CENTER
-                      grid_column_align: CENTER
-                      pad_row: 0px
                     widgets:
                       - image:
                           src: mdi_battery_plus
                           width: 20
                           height: 20
                           align: center
-                          grid_cell_x_align: CENTER
-                          grid_cell_y_align: CENTER
+                          y: -22
                           image_recolor: 0xff80ab
                           image_recolor_opa: 100%
                           id: img_inverter_battery
                       - obj:
                           align: center
-                          grid_cell_x_align: CENTER
-                          grid_cell_y_align: CENTER
+                          y: 2
+                          width: SIZE_CONTENT
+                          height: SIZE_CONTENT
                           bg_opa: TRANSP
                           border_width: 0
                           pad_all: 0
@@ -784,6 +1012,7 @@ lvgl:
                             flex_align_main: CENTER
                             flex_align_cross: CENTER
                             flex_align_track: CENTER
+                            pad_column: 1px
                           widgets:
                             - label:
                                 styles: power_style
@@ -802,6 +1031,5 @@ lvgl:
                           id: label_inverter_battery_soc
                           text_color: 0xffffff
                           align: center
-                          grid_cell_x_align: CENTER
-                          grid_cell_y_align: CENTER
+                          y: 24
                           text: ""
