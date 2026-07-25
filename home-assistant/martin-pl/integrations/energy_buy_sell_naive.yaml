@@ -46,8 +46,8 @@ automation:
     triggers:
       - trigger: state
         entity_id:
-          - sensor.amber_general_price_non_estimate
-          - sensor.amber_feed_in_price_non_estimate
+          - sensor.amber_general_price
+          - sensor.amber_feed_in_price
           - sensor.inverter_battery_soc
           - binary_sensor.ebsn_demand_window
       - trigger: state
@@ -60,7 +60,7 @@ automation:
       - choose:
           - conditions:
               - condition: numeric_state
-                entity_id: sensor.amber_feed_in_price_non_estimate
+                entity_id: sensor.amber_feed_in_price
                 above: input_number.energy_buy_sell_naive_sell_price_threshold
               - condition: numeric_state
                 entity_id: sensor.inverter_battery_soc
@@ -78,7 +78,7 @@ automation:
                   option: Force Discharge
           - conditions:
               - condition: numeric_state
-                entity_id: sensor.amber_general_price_non_estimate
+                entity_id: sensor.amber_general_price
                 below: input_number.energy_buy_sell_naive_buy_price_threshold
               - condition: numeric_state
                 entity_id: sensor.inverter_battery_soc
@@ -110,13 +110,13 @@ automation:
     triggers:
       - trigger: state
         entity_id:
-          - sensor.amber_feed_in_price_non_estimate
+          - sensor.amber_feed_in_price
         for: "00:00:10"
     actions:
       - choose:
           - conditions:
               - condition: numeric_state
-                entity_id: sensor.amber_feed_in_price_non_estimate
+                entity_id: sensor.amber_feed_in_price
                 below: 0
             sequence:
               - action: number.set_value

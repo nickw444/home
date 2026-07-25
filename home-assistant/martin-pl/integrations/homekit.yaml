@@ -38,6 +38,7 @@ homekit:
       - cover.kitchen_screen
 
       - climate.hallway
+      - climate.lounge_ac
       - climate.tessie_hvac_climate_system
 
     exclude_entities:

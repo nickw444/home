@@ -27,8 +27,6 @@ dependencies:
 - https://github.com/BJReplay/ha-solcast-solar.git
 - https://github.com/Digital-Alchemy-TS/synapse-extension.git
 - https://github.com/piitaya/lovelace-mushroom.git
-- https://github.com/modrzew/lovelace-temperature-map.git
-- https://github.com/AlexxIT/WebRTC.git
 - https://github.com/andystewart999/ha_transportnsw.git
 - https://github.com/aukedejong/lovelace-windrose-card.git
 - https://github.com/alexpfau/calendar-card-pro.git
@@ -41,3 +39,4 @@ dependencies:
 - https://github.com/smartHomeHub/SmartIR.git
 - https://github.com/Patrick762/hassio-bluetti-bt.git
 - https://github.com/cabberley/HA_AemoNemData
+- https://github.com/hass-energy/amber-express.git

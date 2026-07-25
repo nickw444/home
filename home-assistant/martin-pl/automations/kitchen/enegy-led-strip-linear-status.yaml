@@ -5,132 +5,151 @@ description: ""
 triggers:
   - trigger: state
     entity_id:
-      - sensor.inverter_meter_power
+      - sensor.inverter_grid_meter_power_mean_10s
+  - trigger: state
+    entity_id:
+      - light.kitchen_strip
+  - trigger: state
+    entity_id:
+      - light.kitchen_strip
+    attribute: brightness
+  - trigger: state
+    entity_id:
+      - light.kitchen_strip
+    attribute: color_temp
 conditions:
   - condition: state
-    entity_id: light.dishwasher
+    entity_id: light.dishwasher_main
     state: "on"
 actions:
-  - action: rest_command.wled_set_colors
-    data:
-      wled_host: 192.168.2.138
-      segment: 0
-      brightness: 255
-      speed: >-
-        {% set v = states('sensor.inverter_meter_power')|float %}
-        {% set steps = 5 %}
-        {% set min_speed = 64 %}
-        {% set max_speed = 148 %}
-        {% set range = 2000 %}  {# how much above/below the bounds you want to scale #}
+  - variables:
+      near_zero_threshold_w: 50
+      grid_w: >-
+        {% set smoothed = states('sensor.inverter_grid_meter_power_mean_10s') %}
+        {% if smoothed not in ['unknown', 'unavailable', 'none', ''] %}
+          {{ smoothed | float(0) }}
+        {% else %}
+          {{ states('sensor.inverter_grid_meter_power') | float(0) }}
+        {% endif %}
+      near_zero: "{{ (grid_w | float(0) | abs) <= (near_zero_threshold_w | float(0)) }}"
+      kitchen_on: "{{ is_state('light.kitchen_strip', 'on') }}"
+      kitchen_brightness: "{{ state_attr('light.kitchen_strip', 'brightness') | int(26) }}"
+      kitchen_ct: "{{ state_attr('light.kitchen_strip', 'color_temp') | int(475) }}"
+  - choose:
+      - conditions:
+          - condition: template
+            value_template: "{{ near_zero and kitchen_on }}"
+        sequence:
+          - action: light.turn_on
+            target:
+              entity_id: light.dishwasher
+          - action: rest_command.wled_set_colors
+            data:
+              wled_host: 192.168.2.138
+              segment: 0
+              brightness: "{{ kitchen_brightness }}"
+              speed: 128
+              intensity: 128
+              effect: 0
+              color1: >-
+                {% set ct = kitchen_ct | int(475) %}
+                {% set min_ct = 200 %}
+                {% set max_ct = 500 %}
+                {% set t = (ct - min_ct) / (max_ct - min_ct) %}
+                {% set t = [0, t] | max %}
+                {% set t = [1, t] | min %}
+                {% set cool = [255, 224, 180] %}
+                {% set warm = [255, 184, 116] %}
+                {% set r = (cool[0] + (warm[0] - cool[0]) * t) | round | int %}
+                {% set g = (cool[1] + (warm[1] - cool[1]) * t) | round | int %}
+                {% set b = (cool[2] + (warm[2] - cool[2]) * t) | round | int %}
+                {{ "%02x%02x%02x" | format(r, g, b) }}
+              color2: >-
+                {% set ct = kitchen_ct | int(475) %}
+                {% set min_ct = 200 %}
+                {% set max_ct = 500 %}
+                {% set t = (ct - min_ct) / (max_ct - min_ct) %}
+                {% set t = [0, t] | max %}
+                {% set t = [1, t] | min %}
+                {% set cool = [140, 116, 88] %}
+                {% set warm = [111, 76, 48] %}
+                {% set r = (cool[0] + (warm[0] - cool[0]) * t) | round | int %}
+                {% set g = (cool[1] + (warm[1] - cool[1]) * t) | round | int %}
+                {% set b = (cool[2] + (warm[2] - cool[2]) * t) | round | int %}
+                {{ "%02x%02x%02x" | format(r, g, b) }}
+              color3: "000000"
+              reverse: 0
+      - conditions:
+          - condition: template
+            value_template: "{{ near_zero and not kitchen_on }}"
+        sequence:
+          - action: light.turn_off
+            target:
+              entity_id: light.dishwasher
+    default:
+      - action: light.turn_on
+        target:
+          entity_id: light.dishwasher
+      - action: rest_command.wled_set_colors
+        data:
+          wled_host: 192.168.2.138
+          segment: 0
+          brightness: 255
+          speed: >-
+            {% set v = grid_w | float(0) %}
+            {% set steps = 5 %}
+            {% set min_speed = 64 %}
+            {% set max_speed = 148 %}
+            {% set range = 2000 %}  {# how much above/below the bounds you want to scale #}
 
-        {% if v < -3000 %}
-          {% set scale = ((-v - 3000) / range) %}
-          {% set val = ([scale * steps, steps - 1] | min) | int %}
-          {{ min_speed + val * ((max_speed - min_speed) / (steps - 1)) | round }}
-        {% elif v > 2000 %}
-          {% set scale = ((v - 2000) / range) %}
-          {% set val = ([scale * steps, steps - 1] | min) | int %}
-          {{ min_speed + val * ((max_speed - min_speed) / (steps - 1)) | round }}
-        {% else %}
-          {{ min_speed }}
-        {% endif %}
-      # speed: >-
-      #   {% set v = states('sensor.inverter_meter_power')|float %}
-      #   {% set steps = 10 %}
-      #   {% set min_speed = 64 %}
-      #   {% set max_speed = 148 %}
-      #   {% set abs_v = v | abs %}
-      #   {% set max_val = 4000 %}
-      #   {% set val = (([abs_v, max_val]|min) / max_val * steps) | int %}
-      #   {{ min_speed + val * ((max_speed - min_speed) / (steps - 1)) | round }}
-      # Running:
-      # intensity: 110
-      # effect: 15
-      # Chase:
-      intensity: 128
-      effect: 28
-      color1: >-
-        {% set v = states('sensor.inverter_meter_power')|float %}
-        {% if v < -3000 %}
-          00bb2c
-        {% elif v < -500 %}
-          00a2bb
-        {% elif v < 0 %}
-          a8a5a5
-        {% elif v < 500 %}
-          9da3a5
-        {% elif v < 2000 %}
-          c17a00
-        {% else %}
-          c11000
-        {% endif %}
-      color2: >-
-        {% set v = states('sensor.inverter_meter_power')|float %}
-        {% if v < -3000 %}
-          00731a
-        {% elif v < -500 %}
-          005e6b
-        {% elif v < 0 %}
-          5b5a5a
-        {% elif v < 500 %}
-          525657
-        {% elif v < 2000 %}
-          704400
-        {% else %}
-          6e0900
-        {% endif %}
-      # color1: >-
-      #   {% set v = states('sensor.inverter_meter_power')|float %}
-      #   {% set points = [
-      #     [-3000, [0, 187, 44]],
-      #     [-500,  [0, 162, 187]],
-      #     [0,     [168, 165, 165]],
-      #     [500,   [157, 163, 165]],
-      #     [2000,  [193, 122, 0]],
-      #     [3000,  [193, 16, 0]]
-      #   ] %}
-      #   {% for i in range(points|length - 1) %}
-      #     {% set x0, c0 = points[i] %}
-      #     {% set x1, c1 = points[i+1] %}
-      #     {% if v >= x0 and v <= x1 %}
-      #       {% set t = (v - x0) / (x1 - x0) %}
-      #       {% set r = (c0[0] + (c1[0] - c0[0]) * t)|round %}
-      #       {% set g = (c0[1] + (c1[1] - c0[1]) * t)|round %}
-      #       {% set b = (c0[2] + (c1[2] - c0[2]) * t)|round %}
-      #       {{ "{:02x}{:02x}{:02x}".format(r, g, b) }}
-      #     {% endif %}
-      #   {% endfor %}
-      #   {% if v < points[0][0] %}00bb2c{% endif %}
-      #   {% if v > points[-1][0] %}c11000{% endif %}
-      # color2: >-
-      #   {% set v = states('sensor.inverter_meter_power')|float %}
-      #   {% set points = [
-      #     [-3000, [0, 187, 44]],
-      #     [-500,  [0, 162, 187]],
-      #     [0,     [168, 165, 165]],
-      #     [500,   [157, 163, 165]],
-      #     [2000,  [193, 122, 0]],
-      #     [3000,  [193, 16, 0]]
-      #   ] %}
-      #   {% set darken = 0.5 %}
-      #   {% for i in range(points|length - 1) %}
-      #     {% set x0, c0 = points[i] %}
-      #     {% set x1, c1 = points[i+1] %}
-      #     {% if v >= x0 and v <= x1 %}
-      #       {% set t = (v - x0) / (x1 - x0) %}
-      #       {% set r = ((c0[0] + (c1[0] - c0[0]) * t) * darken)|round %}
-      #       {% set g = ((c0[1] + (c1[1] - c0[1]) * t) * darken)|round %}
-      #       {% set b = ((c0[2] + (c1[2] - c0[2]) * t) * darken)|round %}
-      #       {{ "{:02x}{:02x}{:02x}".format(r, g, b) }}
-      #     {% endif %}
-      #   {% endfor %}
-      #   {% if v < points[0][0] %}005e16{% endif %}
-      #   {% if v > points[-1][0] %}600a00{% endif %}
-      color3: "000000"
-      reverse: >-
-        {% set v = states('sensor.inverter_meter_power')|float %}
-        {% if v > 0 %}
-        0
-        {% else %}
-        1
-        {% endif %}
+            {% if v < -3000 %}
+              {% set scale = ((-v - 3000) / range) %}
+              {% set val = ([scale * steps, steps - 1] | min) | int %}
+              {{ min_speed + val * ((max_speed - min_speed) / (steps - 1)) | round }}
+            {% elif v > 2000 %}
+              {% set scale = ((v - 2000) / range) %}
+              {% set val = ([scale * steps, steps - 1] | min) | int %}
+              {{ min_speed + val * ((max_speed - min_speed) / (steps - 1)) | round }}
+            {% else %}
+              {{ min_speed }}
+            {% endif %}
+          intensity: 128
+          effect: 28
+          color1: >-
+            {% set v = grid_w | float(0) %}
+            {% if v < -3000 %}
+              00bb2c
+            {% elif v < -500 %}
+              00a2bb
+            {% elif v < 0 %}
+              a8a5a5
+            {% elif v < 500 %}
+              9da3a5
+            {% elif v < 2000 %}
+              c17a00
+            {% else %}
+              c11000
+            {% endif %}
+          color2: >-
+            {% set v = grid_w | float(0) %}
+            {% if v < -3000 %}
+              00731a
+            {% elif v < -500 %}
+              005e6b
+            {% elif v < 0 %}
+              5b5a5a
+            {% elif v < 500 %}
+              525657
+            {% elif v < 2000 %}
+              704400
+            {% else %}
+              6e0900
+            {% endif %}
+          color3: "000000"
+          reverse: >-
+            {% set v = grid_w | float(0) %}
+            {% if v > 0 %}
+            0
+            {% else %}
+            1
+            {% endif %}

@@ -1,0 +1,142 @@
+template:
+  - binary_sensor:
+      - name: Bathroom Motion Active 10m
+        unique_id: bathroom_motion_active_10m
+        device_class: occupancy
+        state: >-
+          {{ is_state('binary_sensor.bathroom_motion_occupancy', 'on') }}
+        delay_off: "00:10:00"
+
+      - name: Bathroom Motion Active 20m
+        unique_id: bathroom_motion_active_20m
+        device_class: occupancy
+        state: >-
+          {{ is_state('binary_sensor.bathroom_motion_occupancy', 'on') }}
+        delay_off: "00:20:00"
+
+      - name: Bathroom Cabinet Activity Active
+        unique_id: bathroom_cabinet_activity_active
+        device_class: occupancy
+        state: >-
+          {{
+            is_state('binary_sensor.bathroom_motion_active_10m', 'on')
+            or (
+              is_state('binary_sensor.bathroom_motion_active_20m', 'on')
+              and is_state('light.bathroom', 'on')
+              and is_state('fan.bathroom', 'on')
+            )
+          }}
+
+automation:
+  - id: "1759744678947"
+    alias: "bathroom: toggle cabinet strip state"
+    description: ""
+    mode: restart
+    triggers:
+      - trigger: state
+        entity_id:
+          - binary_sensor.bathroom_motion_occupancy
+        from: "off"
+        to: "on"
+        id: on_bathroom
+
+      - trigger: state
+        entity_id:
+          - binary_sensor.hallway_motion_occupancy
+        from: "off"
+        to: "on"
+        id: on_hallway
+
+      - trigger: state
+        entity_id:
+          - binary_sensor.hallway_motion_occupancy
+        from: "on"
+        to: "off"
+        for:
+          hours: 0
+          minutes: 10
+          seconds: 0
+        id: hallway_idle_timeout
+
+      - trigger: state
+        entity_id:
+          - binary_sensor.bathroom_cabinet_activity_active
+        from: "on"
+        to: "off"
+        id: bathroom_timeout
+
+    conditions: []
+    actions:
+      - choose:
+          - conditions:
+              - condition: trigger
+                id:
+                  - on_bathroom
+            sequence:
+              - action: light.turn_on
+                target:
+                  entity_id: light.bathroom_cabinet
+                data:
+                  transition: 1
+                  brightness_pct: 55
+                  color_temp_kelvin: 2500
+
+          - conditions:
+              - condition: trigger
+                id:
+                  - on_hallway
+              - condition: state
+                entity_id: binary_sensor.bathroom_cabinet_activity_active
+                state: "off"
+            sequence:
+              - action: light.turn_on
+                target:
+                  entity_id: light.bathroom_cabinet
+                data:
+                  transition: 1
+                  brightness_pct: 10
+                  color_temp_kelvin: 2500
+
+          - conditions:
+              - condition: trigger
+                id:
+                  - hallway_idle_timeout
+              - condition: state
+                entity_id: binary_sensor.bathroom_cabinet_activity_active
+                state: "off"
+            sequence:
+              - action: light.turn_off
+                target:
+                  entity_id: light.bathroom_cabinet
+                data:
+                  transition: 1
+
+          - conditions:
+              - condition: trigger
+                id:
+                  - bathroom_timeout
+              - condition: state
+                entity_id: binary_sensor.hallway_motion_occupancy
+                state: "on"
+            sequence:
+              - action: light.turn_on
+                target:
+                  entity_id: light.bathroom_cabinet
+                data:
+                  transition: 1
+                  brightness_pct: 10
+                  color_temp_kelvin: 2500
+
+          - conditions:
+              - condition: trigger
+                id:
+                  - bathroom_timeout
+              - condition: state
+                entity_id: binary_sensor.hallway_motion_occupancy
+                state: "off"
+            sequence:
+              - action: light.turn_off
+                target:
+                  entity_id: light.bathroom_cabinet
+                data:
+                  transition: 1

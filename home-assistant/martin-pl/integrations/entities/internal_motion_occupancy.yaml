@@ -1,4 +1,10 @@
 binary_sensor:
+  - platform: group
+    name: "Kitchen Motion Occupancy"
+    device_class: motion
+    entities:
+      - binary_sensor.kitchen_motion_1_occupancy
+      - binary_sensor.kitchen_motion_2_occupancy
   - platform: template
     sensors:
       internal_motion_occupancy:

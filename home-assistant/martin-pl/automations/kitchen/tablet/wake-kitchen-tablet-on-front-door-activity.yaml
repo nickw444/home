@@ -1,5 +1,5 @@
-id: "1668130130306"
-alias: Wake entry tablet on Front Door Activity
+id: "kitchen_tablet_wake_on_front_door_activity"
+alias: Wake kitchen tablet on front door activity
 description: ""
 trigger:
   - platform: state
@@ -24,9 +24,22 @@ trigger:
     to: "on"
 condition: []
 action:
+  - choose:
+      - conditions:
+          - condition: template
+            value_template: >
+              {{ states('light.kitchen_tablet_screen') in ['unknown', 'unavailable'] }}
+        sequence:
+          - service: notify.mobile_app_kates_ipad
+            data:
+              message: wake
+  - wait_template: >
+      {{ states('light.kitchen_tablet_screen') not in ['unknown', 'unavailable'] }}
+    timeout: "00:00:10"
+    continue_on_timeout: true
   - service: light.turn_on
     target:
-      entity_id: light.hallway_tablet_fully_screen
+      entity_id: light.kitchen_tablet_screen
   - delay:
       hours: 0
       minutes: 0
@@ -34,6 +47,7 @@ action:
       milliseconds: 0
   - service: browser_mod.popup
     data:
+      browser_id: browser_mod_f0a0a61b_7f9662df
       size: wide
       timeout: 180000
       title: Front Door
@@ -49,6 +63,4 @@ action:
           action: none
         hold_action:
           action: none
-    target:
-      device_id: entry-tablet
 mode: single

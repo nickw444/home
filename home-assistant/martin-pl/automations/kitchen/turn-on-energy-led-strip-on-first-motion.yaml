@@ -22,8 +22,9 @@ action:
     data: {}
     entity_id:
       - light.dishwasher_main
-      - light.dishwasher
   - service: automation.trigger
-    entity_id:
-      - automation.energy_status_linear
+    target:
+      entity_id: automation.energy_status_linear
+    data:
+      skip_condition: false
 mode: single

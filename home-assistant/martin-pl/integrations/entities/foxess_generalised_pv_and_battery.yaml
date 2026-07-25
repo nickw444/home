@@ -304,6 +304,15 @@ template:
         state: "{{ (states('sensor.inverter_modbus_rpower') | float(0)) * 1000 }}"
 
 sensor:
+  - platform: filter
+    name: Inverter Grid Meter Power Mean 10s
+    unique_id: inverter_grid_meter_power_mean_10s
+    entity_id: sensor.inverter_grid_meter_power
+    filters:
+      - filter: time_simple_moving_average
+        window_size: "00:00:10"
+        precision: 2
+
   - platform: statistics
     name: Inverter PV Total Power Mean 1m
     unique_id: inverter_pv_total_power_mean_1m

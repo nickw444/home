@@ -1,0 +1,16 @@
+id: "kitchen_tablet_sleep_after_no_motion"
+alias: Sleep kitchen tablet after no motion
+description: ""
+trigger:
+  - platform: state
+    entity_id:
+      - binary_sensor.kitchen_motion_occupancy
+    from: "on"
+    to: "off"
+    for: "00:05:00"
+condition: []
+action:
+  - service: light.turn_off
+    target:
+      entity_id: light.kitchen_tablet_screen
+mode: single

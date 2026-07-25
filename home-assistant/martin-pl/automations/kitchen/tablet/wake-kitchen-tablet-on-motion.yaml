@@ -1,0 +1,51 @@
+id: "kitchen_tablet_wake_on_motion"
+alias: Wake kitchen tablet on kitchen motion
+description: ""
+trigger:
+  - platform: state
+    id: motion_on
+    entity_id:
+      - binary_sensor.kitchen_motion_occupancy
+    from: "off"
+    to: "on"
+  - platform: state
+    id: screen_unavailable
+    entity_id:
+      - light.kitchen_tablet_screen
+    to:
+      - "unavailable"
+      - "unknown"
+    for: "00:00:20"
+condition: []
+action:
+  - choose:
+      - conditions:
+          - condition: trigger
+            id:
+              - screen_unavailable
+          - condition: state
+            entity_id: binary_sensor.kitchen_motion_occupancy
+            state: "on"
+        sequence:
+          - service: notify.mobile_app_kates_ipad
+            data:
+              message: wake
+      - conditions:
+          - condition: trigger
+            id:
+              - motion_on
+          - condition: template
+            value_template: >
+              {{ states('light.kitchen_tablet_screen') in ['unknown', 'unavailable'] }}
+        sequence:
+          - service: notify.mobile_app_kates_ipad
+            data:
+              message: wake
+  - wait_template: >
+      {{ states('light.kitchen_tablet_screen') not in ['unknown', 'unavailable'] }}
+    timeout: "00:00:10"
+    continue_on_timeout: true
+  - service: light.turn_on
+    target:
+      entity_id: light.kitchen_tablet_screen
+mode: single
