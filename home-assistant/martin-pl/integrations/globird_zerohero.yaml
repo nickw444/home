@@ -1,0 +1,139 @@
+# Globird ZEROHERO and Super Export tracking.
+# Tracks the 18:00-21:00 import/export windows and books the daily ZeroHero credit.
+
+utility_meter:
+  globird_zerohero_import_since_18:
+    source: sensor.inverter_modbus_grid_consumption_energy_today
+    unique_id: globird_zerohero_import_since_18
+    cycle: daily
+    offset:
+      hours: 18
+  globird_zerohero_import_since_21:
+    source: sensor.inverter_modbus_grid_consumption_energy_today
+    unique_id: globird_zerohero_import_since_21
+    cycle: daily
+    offset:
+      hours: 21
+  globird_super_export_since_18:
+    source: sensor.inverter_modbus_feed_in_energy_today
+    unique_id: globird_super_export_since_18
+    cycle: daily
+    offset:
+      hours: 18
+  globird_super_export_since_21:
+    source: sensor.inverter_modbus_feed_in_energy_today
+    unique_id: globird_super_export_since_21
+    cycle: daily
+    offset:
+      hours: 21
+
+input_number:
+  globird_zerohero_credit_booked_total:
+    name: "Globird ZeroHero Credit Booked Total"
+    icon: mdi:cash-refund
+    min: 0
+    max: 100000
+    step: 1
+    mode: box
+    unit_of_measurement: AUD
+
+input_text:
+  globird_zerohero_credit_last_booked_date:
+    name: "Globird ZeroHero Credit Last Booked Date"
+    max: 10
+
+template:
+  - sensor:
+      - name: "Globird Super Export Today"
+        unique_id: globird_super_export_today
+        icon: mdi:transmission-tower-export
+        unit_of_measurement: kWh
+        device_class: energy
+        state_class: measurement
+        state: >-
+          {% set since_18 = states('sensor.globird_super_export_since_18') | float(0) %}
+          {% set since_21 = states('sensor.globird_super_export_since_21') | float(0) %}
+          {% if now() < today_at('18:00') %}
+            0
+          {% elif now() < today_at('21:00') %}
+            {{ since_18 | round(3) }}
+          {% else %}
+            {{ [since_18 - since_21, 0] | max | round(3) }}
+          {% endif %}
+        attributes:
+          cap_kwh: 15
+
+      - name: "Globird ZeroHero Import Today"
+        unique_id: globird_zerohero_import_today
+        icon: mdi:transmission-tower-import
+        unit_of_measurement: kWh
+        device_class: energy
+        state_class: measurement
+        state: >-
+          {% set since_18 = states('sensor.globird_zerohero_import_since_18') | float(0) %}
+          {% set since_21 = states('sensor.globird_zerohero_import_since_21') | float(0) %}
+          {% if now() < today_at('18:00') %}
+            0
+          {% elif now() < today_at('21:00') %}
+            {{ since_18 | round(3) }}
+          {% else %}
+            {{ [since_18 - since_21, 0] | max | round(3) }}
+          {% endif %}
+        attributes:
+          threshold_kwh: 0.09
+          remaining: >-
+            {% set since_18 = states('sensor.globird_zerohero_import_since_18') | float(0) %}
+            {% set since_21 = states('sensor.globird_zerohero_import_since_21') | float(0) %}
+            {% if now() < today_at('18:00') %}
+              0.09
+            {% elif now() < today_at('21:00') %}
+              {{ [0.09 - since_18, 0] | max | round(3) }}
+            {% else %}
+              {{ [0.09 - ([since_18 - since_21, 0] | max), 0] | max | round(3) }}
+            {% endif %}
+          eligibility: >-
+            {% set since_18 = states('sensor.globird_zerohero_import_since_18') | float(0) %}
+            {% set since_21 = states('sensor.globird_zerohero_import_since_21') | float(0) %}
+            {% if now() < today_at('18:00') %}
+              false
+            {% elif now() < today_at('21:00') %}
+              {{ since_18 <= 0.09 }}
+            {% else %}
+              {{ ([since_18 - since_21, 0] | max) <= 0.09 }}
+            {% endif %}
+
+      - name: "Globird ZeroHero Credit Cumulative"
+        unique_id: globird_zerohero_credit_cumulative
+        icon: mdi:cash-refund
+        unit_of_measurement: AUD
+        device_class: monetary
+        state_class: total
+        state: >-
+          {{ states('input_number.globird_zerohero_credit_booked_total') | float(0) }}
+
+automation:
+  - id: globird_book_zerohero_credit
+    alias: "Globird: book ZeroHero credit"
+    mode: single
+    trigger:
+      - platform: time
+        at: "21:05:00"
+    condition:
+      - condition: template
+        value_template: >-
+          {{ state_attr('sensor.globird_zerohero_import_today', 'eligibility') in [true, 'true', 'True'] }}
+      - condition: template
+        value_template: >-
+          {{ states('input_text.globird_zerohero_credit_last_booked_date') != now().strftime('%Y-%m-%d') }}
+    action:
+      - action: input_number.set_value
+        target:
+          entity_id: input_number.globird_zerohero_credit_booked_total
+        data:
+          value: >-
+            {{ states('input_number.globird_zerohero_credit_booked_total') | float(0) + 1 }}
+      - action: input_text.set_value
+        target:
+          entity_id: input_text.globird_zerohero_credit_last_booked_date
+        data:
+          value: "{{ now().strftime('%Y-%m-%d') }}"

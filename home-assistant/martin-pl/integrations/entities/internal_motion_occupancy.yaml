@@ -5,10 +5,11 @@ binary_sensor:
     entities:
       - binary_sensor.kitchen_motion_1_occupancy
       - binary_sensor.kitchen_motion_2_occupancy
-  - platform: template
-    sensors:
-      internal_motion_occupancy:
-        value_template: >
+
+template:
+  - binary_sensor:
+      - name: "Internal Motion Occupancy"
+        state: >
           {{
             is_state('binary_sensor.living_room_motion_occupancy', 'on') or
             is_state('binary_sensor.hallway_motion_occupancy', 'on') or

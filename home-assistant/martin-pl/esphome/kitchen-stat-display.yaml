@@ -8,8 +8,8 @@ esphome:
       - script.execute: refresh_solar_ui
       - script.execute: refresh_grid_ui
       - script.execute: refresh_cost_ui
+      - script.execute: compute_flow_mode
       - script.execute: refresh_flow_ring
-      - script.execute: refresh_flow_subtitle
 
 esp32:
   board: esp32dev
@@ -119,6 +119,49 @@ display:
     update_interval: never
 
 script:
+  - id: compute_flow_mode
+    mode: restart
+    then:
+      - lambda: |-
+          const float batt_thr = 0.08f;
+          const float grid_imp_thr = 0.12f;
+          const float pv_active_thr = 0.10f;
+          const float pv_surplus_thr = 0.05f;
+
+          float batt_kw = id(ha_inverter_battery_power).state;
+          float grid_kw = id(ha_inverter_meter_power).state;
+          float pv_kw_raw = id(ha_inverter_total_active_power).state;
+          float load_kw_raw = id(ha_inverter_load_power).state;
+
+          float pv_kw = isnan(pv_kw_raw) ? 0.0f : fmaxf(0.0f, pv_kw_raw);
+          float load_kw = isnan(load_kw_raw) ? 0.0f : fmaxf(0.0f, load_kw_raw);
+          float grid_import_kw = isnan(grid_kw) ? 0.0f : fmaxf(0.0f, -grid_kw);
+          float pv_surplus_kw = pv_kw - load_kw;
+
+          int mode = 0;
+          if (isnan(batt_kw) || fabsf(batt_kw) <= batt_thr) {
+            mode = 0;
+          } else if (batt_kw > batt_thr) {
+            mode = 3;
+          } else {
+            // batt < -batt_thr => charging
+            if (grid_import_kw > grid_imp_thr && pv_surplus_kw < pv_surplus_thr) {
+              mode = 2;
+            } else if (pv_kw > pv_active_thr) {
+              mode = 1;
+            } else {
+              mode = 2;
+            }
+          }
+
+          id(flow_ring_mode) = mode;
+
+          if (mode != id(flow_ring_mode_prev)) {
+            id(flow_ring_phase) = 0.0f;
+            id(flow_ring_mode_prev) = mode;
+          }
+      - script.execute: refresh_flow_subtitle
+
   - id: refresh_battery_ui
     mode: restart
     then:
@@ -126,7 +169,6 @@ script:
           id: label_battery_soc
           text: !lambda |-
             float soc = id(ha_inverter_battery_soc).state;
-            if (isnan(soc)) soc = id(ha_inverter_modbus_battery_soc).state;
             if (isnan(soc)) {
               return std::string("--%");
             }
@@ -138,7 +180,6 @@ script:
           id: indicator_soc_green
           end_value: !lambda |-
             float soc = id(ha_inverter_battery_soc).state;
-            if (isnan(soc)) soc = id(ha_inverter_modbus_battery_soc).state;
             if (isnan(soc)) {
               return 0;
             }
@@ -148,7 +189,6 @@ script:
           id: indicator_soc_yellow
           end_value: !lambda |-
             float soc = id(ha_inverter_battery_soc).state;
-            if (isnan(soc)) soc = id(ha_inverter_modbus_battery_soc).state;
             if (isnan(soc)) {
               return 0;
             }
@@ -158,7 +198,6 @@ script:
           id: indicator_soc_red
           end_value: !lambda |-
             float soc = id(ha_inverter_battery_soc).state;
-            if (isnan(soc)) soc = id(ha_inverter_modbus_battery_soc).state;
             if (isnan(soc)) {
               return 0;
             }
@@ -168,7 +207,6 @@ script:
           condition:
             lambda: |-
               float soc = id(ha_inverter_battery_soc).state;
-              if (isnan(soc)) soc = id(ha_inverter_modbus_battery_soc).state;
               return isnan(soc);
           then:
             - lvgl.indicator.update:
@@ -185,7 +223,6 @@ script:
                 condition:
                   lambda: |-
                     float soc = id(ha_inverter_battery_soc).state;
-                    if (isnan(soc)) soc = id(ha_inverter_modbus_battery_soc).state;
                     return soc >= 60.0f;
                 then:
                   - lvgl.indicator.update:
@@ -202,7 +239,6 @@ script:
                       condition:
                         lambda: |-
                           float soc = id(ha_inverter_battery_soc).state;
-                          if (isnan(soc)) soc = id(ha_inverter_modbus_battery_soc).state;
                           return soc >= 30.0f;
                       then:
                         - lvgl.indicator.update:
@@ -231,16 +267,16 @@ script:
       - lvgl.label.update:
           id: label_solar_value
           text: !lambda |-
-            float solar_w = id(ha_inverter_total_active_power).state;
-            if (isnan(solar_w)) {
+            float solar_kw = id(ha_inverter_total_active_power).state;
+            if (isnan(solar_kw)) {
               return std::string("--W");
             }
-            solar_w = fmaxf(solar_w, 0.0f);
+            solar_kw = fmaxf(solar_kw, 0.0f);
             char buf[16];
-            if (solar_w >= 1000.0f) {
-              snprintf(buf, sizeof(buf), "%.1fkW", solar_w / 1000.0f);
+            if (solar_kw >= 1.0f) {
+              snprintf(buf, sizeof(buf), "%.1fkW", solar_kw);
             } else {
-              snprintf(buf, sizeof(buf), "%.0fW", solar_w);
+              snprintf(buf, sizeof(buf), "%.0fW", solar_kw * 1000.0f);
             }
             return std::string(buf);
 
@@ -250,18 +286,18 @@ script:
       - lvgl.label.update:
           id: label_grid_value
           text: !lambda |-
-            float grid_w = id(ha_inverter_meter_power).state;
-            if (isnan(grid_w)) {
+            float grid_kw = id(ha_inverter_meter_power).state;
+            if (isnan(grid_kw)) {
               return std::string("--W");
             }
-            if (fabsf(grid_w) < 25.0f) {
-              grid_w = 0.0f;
+            if (fabsf(grid_kw) < 0.025f) {
+              grid_kw = 0.0f;
             }
             char buf[16];
-            if (fabsf(grid_w) >= 1000.0f) {
-              snprintf(buf, sizeof(buf), "%.1fkW", grid_w / 1000.0f);
+            if (fabsf(grid_kw) >= 1.0f) {
+              snprintf(buf, sizeof(buf), "%.1fkW", grid_kw);
             } else {
-              snprintf(buf, sizeof(buf), "%.0fW", grid_w);
+              snprintf(buf, sizeof(buf), "%.0fW", grid_kw * 1000.0f);
             }
             return std::string(buf);
 
@@ -271,9 +307,7 @@ script:
       - lvgl.label.update:
           id: label_daily_cost
           text: !lambda |-
-            // Testing uses kitchen-stat entities; swap this source to your true daily cost entity later.
             float cost = id(ha_daily_cost).state;
-            if (isnan(cost)) cost = id(ha_daily_cost_non_estimate).state;
             if (isnan(cost)) {
               return std::string("$--");
             }
@@ -291,7 +325,6 @@ script:
           opa: !lambda |-
             if (!id(flow_segment_visible)) return 0;
             float soc = id(ha_inverter_battery_soc).state;
-            if (isnan(soc)) soc = id(ha_inverter_modbus_battery_soc).state;
             if (isnan(soc)) return 0;
             return soc >= 60.0f ? 255 : 0;
       - lvgl.indicator.update:
@@ -301,7 +334,6 @@ script:
           opa: !lambda |-
             if (!id(flow_segment_visible)) return 0;
             float soc = id(ha_inverter_battery_soc).state;
-            if (isnan(soc)) soc = id(ha_inverter_modbus_battery_soc).state;
             if (isnan(soc)) return 0;
             return (soc >= 30.0f && soc < 60.0f) ? 255 : 0;
       - lvgl.indicator.update:
@@ -311,7 +343,6 @@ script:
           opa: !lambda |-
             if (!id(flow_segment_visible)) return 0;
             float soc = id(ha_inverter_battery_soc).state;
-            if (isnan(soc)) soc = id(ha_inverter_modbus_battery_soc).state;
             if (isnan(soc)) return 0;
             return soc < 30.0f ? 255 : 0;
 
@@ -348,79 +379,51 @@ script:
 sensor:
   - platform: homeassistant
     id: ha_inverter_battery_soc
-    entity_id: sensor.inverter_battery_soc
-    on_value:
-      then:
-        - script.execute: refresh_battery_ui
-
-  - platform: homeassistant
-    id: ha_inverter_modbus_battery_soc
-    entity_id: sensor.inverter_modbus_battery_soc
-    internal: true
+    entity_id: sensor.foxess_inverter_battery_soc_1
     on_value:
       then:
         - script.execute: refresh_battery_ui
 
   - platform: homeassistant
     id: ha_inverter_total_active_power
-    entity_id: sensor.inverter_total_active_power
+    entity_id: sensor.foxess_inverter_ct2_meter
     on_value:
       then:
         - script.execute: refresh_solar_ui
 
   - platform: homeassistant
     id: ha_inverter_meter_power
-    entity_id: sensor.inverter_meter_power
+    entity_id: sensor.foxess_inverter_grid_ct
     on_value:
       then:
         - script.execute: refresh_grid_ui
 
   - platform: homeassistant
     id: ha_inverter_battery_power
-    entity_id: sensor.inverter_battery_power
+    entity_id: sensor.foxess_inverter_invbatpower_1
+
+  - platform: homeassistant
+    id: ha_inverter_load_power
+    entity_id: sensor.foxess_inverter_load_power
 
   - platform: homeassistant
     id: ha_daily_cost
-    entity_id: sensor.amber_general_price
-    on_value:
-      then:
-        - script.execute: refresh_cost_ui
-
-  - platform: homeassistant
-    id: ha_daily_cost_non_estimate
-    entity_id: sensor.amber_general_price_non_estimate
-    internal: true
+    entity_id: sensor.mains_energy_consumed_daily_cost
     on_value:
       then:
         - script.execute: refresh_cost_ui
 
 interval:
+  - interval: 500ms
+    then:
+      - script.execute: compute_flow_mode
+
   - interval: 80ms
     then:
       - lambda: |-
-          const float batt_threshold_w = 80.0f;
-          const float grid_import_threshold_w = 120.0f;
           const float segment_len = 14.0f;
-          int mode = 0;
-
-          float batt = id(ha_inverter_battery_power).state;
-          float grid = id(ha_inverter_meter_power).state;
+          int mode = id(flow_ring_mode);
           float soc = id(ha_inverter_battery_soc).state;
-          if (isnan(soc)) soc = id(ha_inverter_modbus_battery_soc).state;
-
-          if (!isnan(batt)) {
-            if (batt < -batt_threshold_w) {
-              mode = (!isnan(grid) && grid > grid_import_threshold_w) ? 2 : 1;
-            } else if (batt > batt_threshold_w) {
-              mode = 3;
-            }
-          }
-
-          int prev_mode = id(flow_ring_mode);
-          if (mode != prev_mode) {
-            id(flow_ring_phase) = 0.0f;
-          }
-          id(flow_ring_mode) = mode;
 
           if (isnan(soc)) soc = 0.0f;
           soc = fmaxf(0.0f, fminf(100.0f, soc));
@@ -459,13 +462,6 @@ interval:
           id(flow_seg_start) = (int)fmaxf(0.0f, fminf(100.0f, seg_s));
           id(flow_seg_end) = (int)fmaxf(0.0f, fminf(100.0f, seg_e));
       - script.execute: refresh_flow_ring
-      - if:
-          condition:
-            lambda: 'return id(flow_ring_mode) != id(flow_ring_mode_prev);'
-          then:
-            - script.execute: refresh_flow_subtitle
-            - lambda: |-
-                id(flow_ring_mode_prev) = id(flow_ring_mode);
 
 touchscreen:
   id: touch

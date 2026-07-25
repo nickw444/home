@@ -1,0 +1,23 @@
+id: "1784943533293"
+alias: "hallway ac: turn on heat on cold mornings"
+description: >-
+  At 7am, if people are home and the hallway is colder than 22°C,
+  turn on the hallway AC to heat at 28°C.
+trigger:
+  - platform: time
+    at: "07:00:00"
+condition:
+  - condition: state
+    entity_id: group.all_people
+    state: home
+  - condition: numeric_state
+    entity_id: sensor.hallway_climate_temperature
+    below: 22
+action:
+  - service: climate.set_temperature
+    target:
+      entity_id: climate.hallway
+    data:
+      hvac_mode: heat
+      temperature: 28
+mode: single

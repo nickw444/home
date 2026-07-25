@@ -85,7 +85,7 @@ https://github.com/Aleks130699/ha-fpp.git:
   components:
   - falcon_pi_player
 https://github.com/simbaja/ha_gehome.git:
-  version: 10bf0e8
+  version: 2026.5.x-working
   type: core
   components:
   - ge_home
@@ -137,8 +137,8 @@ https://github.com/kcoffau/AUS_BOM_Space_Weather_Alert_System.git:
   type: core
   components:
   - aus_space_weather
-https://github.com/mystardious/foxess_modbus.git:
-  version: 79d55d3
+https://github.com/nathanmarlor/foxess_modbus.git:
+  version: 897c802
   type: core
   components:
   - foxess_modbus
@@ -166,8 +166,8 @@ https://github.com/cabberley/HA_AemoNemData:
   type: core
   components:
   - aemo_nem
-https://github.com/hass-energy/amber-express.git:
-  version: d50440b
+https://github.com/tolwi/hassio-ecoflow-cloud.git:
+  version: 95dc51e
   type: core
   components:
-  - amber_express
+  - ecoflow_cloud

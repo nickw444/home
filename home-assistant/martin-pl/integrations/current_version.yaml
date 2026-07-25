@@ -1,6 +1,4 @@
-sensor:
-  - platform: template
-    sensors:
-      updater_newest_version:
-        friendly_name: "Newest Version"
-        value_template: "{{ state_attr('binary_sensor.updater', 'newest_version') }}"
+template:
+  - sensor:
+      - name: "Newest Version"
+        state: "{{ state_attr('binary_sensor.updater', 'newest_version') }}"

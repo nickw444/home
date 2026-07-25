@@ -10,6 +10,16 @@ action:
     data:
       message: clear_notification
       data:
+        tag: washing-complete-normal
+  - service: notify.everyone
+    data:
+      message: clear_notification
+      data:
+        tag: washing-complete-critical
+  - service: notify.everyone
+    data:
+      message: clear_notification
+      data:
         tag: washing-complete
   - service: notify.everyone
     data:

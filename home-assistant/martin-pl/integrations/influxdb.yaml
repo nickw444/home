@@ -1,8 +1,30 @@
 influxdb:
-  host: a0d7b954-influxdb
-  port: 8086
-  database: homeassistant
-  username: !secret influxdb_username
-  password: !secret influxdb_password
   max_retries: 3
   default_measurement: state
+  # We query InfluxDB for state history only; attributes add substantial write volume.
+  ignore_attributes:
+    - advanced
+    - assumed_state
+    - attribution
+    - device_class
+    - detailedForecast
+    - editable
+    - entity_picture
+    - forecast
+    - forecasts
+    - friendly_name
+    - icon
+    - initial
+    - last_reset
+    - max
+    - min
+    - mode
+    - options
+    - source_entity
+    - source_entities
+    - source_role
+    - state_class
+    - step
+    - supported_features
+    - unit_load_cost_forecasts
+    - unit_prod_price_forecasts

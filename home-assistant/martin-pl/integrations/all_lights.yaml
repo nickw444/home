@@ -1,7 +1,21 @@
-binary_sensor:
-  - platform: template
-    sensors:
-      some_lights_on:
-        friendly_name: "Some Lights On"
-        value_template: >-
-          {{ states.light | selectattr('state','eq','on') | list | length  > 0}}
+template:
+  - binary_sensor:
+      - name: "Some Lights On"
+        state: >-
+          {# Exclude hidden, intentionally always-on, or otherwise non-meaningful user-facing lights. #}
+          {% set excluded = (label_entities('quick-access-hidden') | list) + (label_entities('always-on') | list) %}
+          {{ states.light
+            | selectattr('state','eq','on')
+            | rejectattr('entity_id','is_hidden_entity')
+            | rejectattr('entity_id','in', excluded)
+            | list
+            | length > 0 }}
+        attributes:
+          lights: >-
+            {% set excluded = (label_entities('quick-access-hidden') | list) + (label_entities('always-on') | list) %}
+            {{ states.light
+              | selectattr('state','eq','on')
+              | rejectattr('entity_id','is_hidden_entity')
+              | rejectattr('entity_id','in', excluded)
+              | map(attribute='entity_id')
+              | list }}

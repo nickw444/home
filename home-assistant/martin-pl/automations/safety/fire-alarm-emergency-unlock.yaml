@@ -1,0 +1,43 @@
+id: fire_safety_emergency_unlock_procedure
+alias: "fire safety: emergency unlock procedure"
+description: ""
+trigger:
+  - platform: state
+    entity_id:
+      - binary_sensor.nest_protect_kitchen_co_status
+      - binary_sensor.nest_protect_kitchen_smoke_status
+      - binary_sensor.nest_protect_kitchen_heat_status
+    to: "on"
+  - platform: event
+    event_type: fire_safety_unlock_procedure_requested
+condition: []
+action:
+  - service: notify.everyone
+    data:
+      title: Fire Safety Alarm
+      message: Smoke, carbon monoxide, or heat has been detected. Turning on lights and unlocking exit doors now.
+      data:
+        tag: fire-safety-alarm
+        group: safety
+        push:
+          sound:
+            name: default
+            critical: 1
+            volume: 1.0
+  - service: light.turn_on
+    data:
+      brightness_pct: 100
+    target:
+      entity_id:
+        - light.bedroom
+        - light.kitchen
+        - light.laundry
+        - light.bathroom
+        - light.lounge
+  - service: lock.unlock
+    data: {}
+    target:
+      entity_id:
+        - lock.front_door
+        - lock.backyard_locked_in
+mode: queued

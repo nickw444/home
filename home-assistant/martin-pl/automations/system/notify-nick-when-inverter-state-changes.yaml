@@ -1,0 +1,44 @@
+id: "1746417600000"
+alias: "system: notify Nick when inverter state changes"
+description: ""
+trigger:
+  - platform: state
+    entity_id:
+      - sensor.inverter_modbus_inverter_state
+action:
+  - choose:
+      - conditions:
+          - condition: template
+            value_template: "{{ trigger.to_state.state == 'Off Grid / EPS' }}"
+        sequence:
+          - service: notify.mobile_app_nicks_iphone
+            metadata: {}
+            data:
+              title: Inverter State
+              message: >-
+                Inverter changed to {{ trigger.to_state.state }}{% if
+                trigger.from_state is not none and trigger.from_state.state not
+                in ['unknown', 'unavailable'] %} from {{
+                trigger.from_state.state }}{% endif %}
+              data:
+                tag: inverter-state
+                group: power-system
+                push:
+                  sound:
+                    name: none
+                    critical: 1
+                    volume: 0
+    default:
+      - service: notify.mobile_app_nicks_iphone
+        metadata: {}
+        data:
+          title: Inverter State
+          message: >-
+            Inverter changed to {{ trigger.to_state.state }}{% if
+            trigger.from_state is not none and trigger.from_state.state not in
+            ['unknown', 'unavailable'] %} from {{ trigger.from_state.state }}{%
+            endif %}
+          data:
+            tag: inverter-state
+            group: power-system
+mode: single

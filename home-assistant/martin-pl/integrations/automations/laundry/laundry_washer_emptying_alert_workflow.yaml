@@ -1,0 +1,398 @@
+input_boolean:
+  washing_machine_needs_emptying:
+    name: Washing Machine Needs Emptying
+    icon: mdi:washing-machine-alert
+
+  washing_machine_nag_active:
+    name: Washing Machine Nag Active
+    icon: mdi:bell-ring
+
+  washing_machine_nag_dismissed:
+    name: Washing Machine Nag Dismissed
+    icon: mdi:bell-off
+
+  washing_machine_tts_announced:
+    name: Washing Machine TTS Announced
+    icon: mdi:account-voice
+
+input_datetime:
+  washing_machine_pending_since:
+    name: Washing Machine Pending Since
+    has_date: true
+    has_time: true
+
+timer:
+  washing_machine_nag_grace_5m:
+    name: Washing Machine Nag Grace
+    duration: "00:05:00"
+
+template:
+  - binary_sensor:
+      - name: Washing Machine Nag Eligible
+        unique_id: washing_machine_nag_eligible
+        state: >-
+          {{
+            is_state('input_boolean.washing_machine_needs_emptying', 'on')
+            and is_state('input_boolean.washing_machine_nag_dismissed', 'off')
+            and is_state('group.all_people', 'home')
+            and states('sensor.internal_motion_occupancy_since_dawn') | int(0) > 0
+          }}
+
+      - name: Washing Machine Nag Normal Window
+        unique_id: washing_machine_nag_normal_window
+        state: >-
+          {% set pending_ts = as_timestamp(states('input_datetime.washing_machine_pending_since'), 0) %}
+          {% set elapsed_minutes = ((as_timestamp(now()) - pending_ts) / 60) if pending_ts > 0 else 0 %}
+          {{
+            is_state('input_boolean.washing_machine_needs_emptying', 'on')
+            and is_state('input_boolean.washing_machine_nag_active', 'on')
+            and pending_ts > 0
+            and elapsed_minutes < 120
+          }}
+
+      - name: Washing Machine Nag Critical Window
+        unique_id: washing_machine_nag_critical_window
+        state: >-
+          {% set pending_ts = as_timestamp(states('input_datetime.washing_machine_pending_since'), 0) %}
+          {% set elapsed_minutes = ((as_timestamp(now()) - pending_ts) / 60) if pending_ts > 0 else 0 %}
+          {{
+            is_state('input_boolean.washing_machine_needs_emptying', 'on')
+            and is_state('input_boolean.washing_machine_nag_active', 'on')
+            and pending_ts > 0
+            and elapsed_minutes >= 120
+          }}
+
+alert:
+  washing_machine_needs_emptying:
+    name: Washing Machine Ready
+    title: Washing Complete!
+    message: The washing machine has completed. Time to hang out the clothes.
+    done_message: clear_notification
+    entity_id: binary_sensor.washing_machine_nag_normal_window
+    state: "on"
+    repeat: 30
+    skip_first: false
+    notifiers:
+      - mobile_app_kates_iphone
+      - mobile_app_nicks_iphone
+    data:
+      tag: washing-complete-normal
+      group: laundry-appliance
+      actions:
+        - action: WASHING_MACHINE_DISMISS
+          title: Dismiss
+          destructive: true
+
+  washing_machine_needs_emptying_critical:
+    name: Washing Machine Still Full
+    title: Washing Machine Still Full
+    message: The washing machine still needs to be emptied.
+    done_message: clear_notification
+    entity_id: binary_sensor.washing_machine_nag_critical_window
+    state: "on"
+    repeat: 30
+    skip_first: false
+    notifiers:
+      - mobile_app_kates_iphone
+      - mobile_app_nicks_iphone
+    data:
+      tag: washing-complete-critical
+      group: laundry-appliance
+      actions:
+        - action: WASHING_MACHINE_DISMISS
+          title: Dismiss
+          destructive: true
+      push:
+        sound:
+          name: default
+          critical: 1
+          volume: 1.0
+
+script:
+  laundry_washing_machine_completion_tts:
+    alias: "laundry: washing machine completion tts"
+    mode: single
+    sequence:
+      - service: media_player.turn_on
+        target:
+          entity_id:
+            - media_player.living_room_homepod
+            - media_player.bedroom_homepod
+      - service: media_player.volume_set
+        data:
+          volume_level: 0.5
+        target:
+          entity_id:
+            - media_player.living_room_homepod
+            - media_player.bedroom_homepod
+      - service: tts.google_translate_say
+        data:
+          message: The washing machine has finished!
+        target:
+          entity_id:
+            - media_player.living_room_homepod
+            - media_player.bedroom_homepod
+
+automation:
+  - id: "laundry_washing_machine_mark_pending_on_complete"
+    alias: "laundry: mark washing machine pending on completion"
+    description: ""
+    mode: single
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.washing_machine
+        from: "on"
+        to: "off"
+    condition: []
+    action:
+      - service: input_boolean.turn_on
+        target:
+          entity_id: input_boolean.washing_machine_needs_emptying
+      - service: input_datetime.set_datetime
+        target:
+          entity_id: input_datetime.washing_machine_pending_since
+        data:
+          datetime: "{{ now().strftime('%Y-%m-%d %H:%M:%S') }}"
+      - service: input_boolean.turn_off
+        target:
+          entity_id:
+            - input_boolean.washing_machine_nag_active
+            - input_boolean.washing_machine_nag_dismissed
+            - input_boolean.washing_machine_tts_announced
+      - service: timer.cancel
+        target:
+          entity_id: timer.washing_machine_nag_grace_5m
+      - choose:
+          - conditions:
+              - condition: state
+                entity_id: group.all_people
+                state: not_home
+            sequence:
+              - service: notify.everyone
+                data:
+                  title: Washing Complete!
+                  message: The washing machine has completed. Time to hang out the clothes.
+                  data:
+                    tag: washing-complete-normal
+                    group: laundry-appliance
+                    actions:
+                      - action: WASHING_MACHINE_DISMISS
+                        title: Dismiss
+                        destructive: true
+      - choose:
+          - conditions:
+              - condition: state
+                entity_id: group.all_people
+                state: home
+              - condition: template
+                value_template: "{{ states('sensor.internal_motion_occupancy_since_dawn') | int(0) > 0 }}"
+            sequence:
+              - service: timer.start
+                target:
+                  entity_id: timer.washing_machine_nag_grace_5m
+                data:
+                  duration: "00:05:00"
+
+  - id: "laundry_washing_machine_clear_pending_on_door_open"
+    alias: "laundry: clear washing machine pending on door open"
+    description: ""
+    mode: single
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.washing_machine_door_contact
+        to: "on"
+    condition:
+      - condition: state
+        entity_id: input_boolean.washing_machine_needs_emptying
+        state: "on"
+    action:
+      - service: input_boolean.turn_off
+        target:
+          entity_id:
+            - input_boolean.washing_machine_needs_emptying
+            - input_boolean.washing_machine_nag_active
+            - input_boolean.washing_machine_nag_dismissed
+            - input_boolean.washing_machine_tts_announced
+      - service: timer.cancel
+        target:
+          entity_id: timer.washing_machine_nag_grace_5m
+      - service: notify.everyone
+        data:
+          message: clear_notification
+          data:
+            tag: washing-complete-normal
+      - service: notify.everyone
+        data:
+          message: clear_notification
+          data:
+            tag: washing-complete-critical
+      - service: notify.everyone
+        data:
+          message: clear_notification
+          data:
+            tag: washing-complete
+
+  - id: "laundry_washing_machine_clear_stale_pending_on_cycle_restart"
+    alias: "laundry: clear stale washing pending on cycle restart"
+    description: ""
+    mode: single
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.washing_machine
+        from: "off"
+        to: "on"
+    condition:
+      - condition: state
+        entity_id: input_boolean.washing_machine_needs_emptying
+        state: "on"
+    action:
+      - service: input_boolean.turn_off
+        target:
+          entity_id:
+            - input_boolean.washing_machine_needs_emptying
+            - input_boolean.washing_machine_nag_active
+            - input_boolean.washing_machine_nag_dismissed
+            - input_boolean.washing_machine_tts_announced
+      - service: timer.cancel
+        target:
+          entity_id: timer.washing_machine_nag_grace_5m
+      - service: notify.everyone
+        data:
+          message: clear_notification
+          data:
+            tag: washing-complete-normal
+      - service: notify.everyone
+        data:
+          message: clear_notification
+          data:
+            tag: washing-complete-critical
+      - service: notify.everyone
+        data:
+          message: clear_notification
+          data:
+            tag: washing-complete
+
+  - id: "laundry_washing_machine_start_nag_grace_on_eligible"
+    alias: "laundry: start washing nag grace when eligible"
+    description: ""
+    mode: restart
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.washing_machine_nag_eligible
+        to: "on"
+    condition:
+      - condition: state
+        entity_id: input_boolean.washing_machine_needs_emptying
+        state: "on"
+      - condition: state
+        entity_id: input_boolean.washing_machine_nag_active
+        state: "off"
+    action:
+      - service: timer.start
+        target:
+          entity_id: timer.washing_machine_nag_grace_5m
+        data:
+          duration: "00:05:00"
+
+  - id: "laundry_washing_machine_pause_nag_when_not_eligible"
+    alias: "laundry: pause washing nag when not eligible"
+    description: ""
+    mode: single
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.washing_machine_nag_eligible
+        to: "off"
+    condition: []
+    action:
+      - service: timer.cancel
+        target:
+          entity_id: timer.washing_machine_nag_grace_5m
+      - service: input_boolean.turn_off
+        target:
+          entity_id: input_boolean.washing_machine_nag_active
+
+  - id: "laundry_washing_machine_activate_nag_on_grace_complete"
+    alias: "laundry: activate washing nag on grace timer complete"
+    description: ""
+    mode: single
+    trigger:
+      - platform: event
+        event_type: timer.finished
+        event_data:
+          entity_id: timer.washing_machine_nag_grace_5m
+    condition:
+      - condition: state
+        entity_id: input_boolean.washing_machine_needs_emptying
+        state: "on"
+      - condition: state
+        entity_id: binary_sensor.washing_machine_nag_eligible
+        state: "on"
+    action:
+      - service: input_boolean.turn_on
+        target:
+          entity_id: input_boolean.washing_machine_nag_active
+
+  - id: "laundry_washing_machine_tts_once_when_nag_starts"
+    alias: "laundry: tts once when washing nag starts"
+    description: ""
+    mode: single
+    trigger:
+      - platform: state
+        entity_id: input_boolean.washing_machine_nag_active
+        from: "off"
+        to: "on"
+    condition:
+      - condition: state
+        entity_id: input_boolean.washing_machine_needs_emptying
+        state: "on"
+      - condition: state
+        entity_id: input_boolean.washing_machine_tts_announced
+        state: "off"
+    action:
+      - service: script.laundry_washing_machine_completion_tts
+      - service: input_boolean.turn_on
+        target:
+          entity_id: input_boolean.washing_machine_tts_announced
+
+  - id: "laundry_washing_machine_dismiss_nag_from_notification_action"
+    alias: "laundry: dismiss washing nag from notification action"
+    description: ""
+    mode: single
+    trigger:
+      - platform: event
+        event_type: mobile_app_notification_action
+        event_data:
+          action: WASHING_MACHINE_DISMISS
+      - platform: event
+        event_type: ios.notification_action_fired
+        event_data:
+          actionName: WASHING_MACHINE_DISMISS
+    condition:
+      - condition: state
+        entity_id: input_boolean.washing_machine_needs_emptying
+        state: "on"
+    action:
+      - service: input_boolean.turn_on
+        target:
+          entity_id: input_boolean.washing_machine_nag_dismissed
+      - service: input_boolean.turn_off
+        target:
+          entity_id: input_boolean.washing_machine_nag_active
+      - service: timer.cancel
+        target:
+          entity_id: timer.washing_machine_nag_grace_5m
+      - service: notify.everyone
+        data:
+          message: clear_notification
+          data:
+            tag: washing-complete-normal
+      - service: notify.everyone
+        data:
+          message: clear_notification
+          data:
+            tag: washing-complete-critical
+      - service: notify.everyone
+        data:
+          message: clear_notification
+          data:
+            tag: washing-complete

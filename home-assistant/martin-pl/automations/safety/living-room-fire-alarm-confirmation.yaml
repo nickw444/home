@@ -1,0 +1,73 @@
+id: fire_safety_living_room_alarm_confirmation
+alias: "fire safety: living room alarm confirmation"
+description: ""
+trigger:
+  - platform: state
+    entity_id:
+      - binary_sensor.living_room_smoke_alarm_detected
+      - binary_sensor.living_room_co_alarm_detected
+    to: "on"
+condition: []
+action:
+  - choose:
+      - conditions:
+          - condition: state
+            entity_id: group.all_people
+            state: home
+        sequence:
+          - event: fire_safety_unlock_procedure_requested
+            event_data:
+              source: living_room_alarm_home
+    default:
+      - variables:
+          action_cancel: "{{ 'CANCEL_FIRE_UNLOCK_' ~ context.id }}"
+          action_start: "{{ 'START_FIRE_UNLOCK_' ~ context.id }}"
+      - service: notify.everyone
+        data:
+          title: Living Room Fire Safety Alarm
+          message: Smoke or carbon monoxide was detected in the living room. Doors will unlock in 2 minutes unless cancelled.
+          data:
+            tag: fire-safety-living-room-confirmation
+            group: safety
+            actions:
+              - action: "{{ action_cancel }}"
+                title: Cancel Unlock Procedure
+                destructive: true
+              - action: "{{ action_start }}"
+                title: Unlock Now
+                authenticationRequired: true
+            push:
+              sound:
+                name: default
+                critical: 1
+                volume: 1.0
+      - wait_for_trigger:
+          - platform: event
+            event_type: mobile_app_notification_action
+            event_data:
+              action: "{{ action_cancel }}"
+          - platform: event
+            event_type: mobile_app_notification_action
+            event_data:
+              action: "{{ action_start }}"
+        timeout: "00:02:00"
+      - choose:
+          - conditions: "{{ wait.trigger is not none and wait.trigger.event.data.action == action_cancel }}"
+            sequence:
+              - service: notify.everyone
+                data:
+                  title: Living Room Fire Safety Alarm
+                  message: Unlock procedure cancelled.
+                  data:
+                    tag: fire-safety-living-room-confirmation
+                    group: safety
+          - conditions: "{{ wait.trigger is not none and wait.trigger.event.data.action == action_start }}"
+            sequence:
+              - event: fire_safety_unlock_procedure_requested
+                event_data:
+                  source: living_room_alarm_unlock_now
+        default:
+          - event: fire_safety_unlock_procedure_requested
+            event_data:
+              source: living_room_alarm_timeout
+mode: single

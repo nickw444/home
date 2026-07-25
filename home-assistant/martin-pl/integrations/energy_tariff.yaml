@@ -3,14 +3,13 @@ template:
   ###  Electricity
   ### -------------
   - sensor:
-      # Network Fixed Fee 49.23 ¢/day
-      # Metering Charge 44.47 ¢/day
-      # Amber subscription fee $25 /month
       - name: Electricity Supply Tariff
         unique_id: electricity_supply_tariff
-        unit_of_measurement: AUD
+        unit_of_measurement: AUD/day
+        device_class: monetary
+        state_class: measurement
         state: >
-          {{ 0.4923 + 0.4447 + (25 * 12 / 365) }}
+          {{ states('sensor.globird_daily_supply_charge') | float(0) }}
 
       - name: Electricity Cumulative Supply Charge
         unique_id: electricity_cumulative_supply_charge
@@ -18,13 +17,30 @@ template:
         device_class: monetary
         state_class: total
         state: >
-          {% set days = (now() - strptime('2025-11-28T00:00:00.000+10:00', '%Y-%m-%dT%H:%M:%S.%f%z')).days + 1 %}
-          {{ states('sensor.electricity_supply_tariff')|float * days }}
+          {% set days = (now() - strptime('2026-05-13T00:00:00.000+10:00', '%Y-%m-%dT%H:%M:%S.%f%z')).days + 1 %}
+          {{ states('sensor.electricity_supply_tariff') | float(0) * days }}
       # Special _hack_ sensor to report daily charge to energy dashboard, report 0
       # usage, but apply "Use an entity tracking the total costs" with cumulative supply
       # charge entity above.
       - name: Electricity Supply Charge (Usage)
         unique_id: electricity_supply_charge_usage
+        unit_of_measurement: kWh
+        device_class: energy
+        state_class: total_increasing
+        state: >
+          0
+
+      - name: Electricity ZeroHero Credit Cumulative
+        unique_id: electricity_zerohero_credit_cumulative
+        unit_of_measurement: $
+        device_class: monetary
+        state_class: total
+        state: >
+          {{ states('sensor.globird_zerohero_credit_cumulative') | float(0) }}
+      # Special _hack_ sensor to report the booked daily ZeroHero credit to the energy
+      # dashboard. Report 0 usage and attach the cumulative credit entity above.
+      - name: Electricity ZeroHero Credit (Usage)
+        unique_id: electricity_zerohero_credit_usage
         unit_of_measurement: kWh
         device_class: energy
         state_class: total_increasing

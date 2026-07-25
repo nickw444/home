@@ -1,0 +1,123 @@
+# Globird tariff price sensors and daily supply charge.
+# Prices are AUD/kWh unless otherwise noted.
+
+template:
+  - sensor:
+      - name: "Globird General Price"
+        unique_id: globird_general_price
+        icon: mdi:cash-clock
+        unit_of_measurement: "AUD/kWh"
+        device_class: monetary
+        state_class: measurement
+        state: >-
+          {% set h = now().hour %}
+          {% if 11 <= h < 14 %}
+            0
+          {% elif 16 <= h < 23 %}
+            0.528
+          {% else %}
+            0.407
+          {% endif %}
+        attributes:
+          period: >-
+            {% set h = now().hour %}
+            {% if 11 <= h < 14 %}
+              zerocharge
+            {% elif 16 <= h < 23 %}
+              peak
+            {% else %}
+              shoulder
+            {% endif %}
+          meter_charge: 0
+          interpolation_mode: previous
+          forecast: >-
+            {% set n = now() %}
+            {% set start = n.replace(second=0, microsecond=0) - timedelta(minutes=n.minute % 5) %}
+            {% set horizon = start + timedelta(hours=120) %}
+            {% set midnight = today_at('00:00') %}
+            {% set h = start.hour %}
+            {% set current = 0 if 11 <= h < 14 else 0.528 if 16 <= h < 23 else 0.407 %}
+            {% set ns = namespace(items=[{'time': start.isoformat(), 'value': current}]) %}
+            {% for day in range(0, 6) %}
+              {% set base = midnight + timedelta(days=day) %}
+              {% set changes = [
+                {'time': base, 'value': 0.407},
+                {'time': base + timedelta(hours=11), 'value': 0},
+                {'time': base + timedelta(hours=14), 'value': 0.407},
+                {'time': base + timedelta(hours=16), 'value': 0.528},
+                {'time': base + timedelta(hours=23), 'value': 0.407}
+              ] %}
+              {% for change in changes %}
+                {% if change.time > start and change.time <= horizon %}
+                  {% set ns.items = ns.items + [{'time': change.time.isoformat(), 'value': change.value}] %}
+                {% endif %}
+              {% endfor %}
+            {% endfor %}
+            {{ ns.items }}
+
+      - name: "Globird Feed In Price"
+        unique_id: globird_feed_in_price
+        icon: mdi:cash-plus
+        unit_of_measurement: "AUD/kWh"
+        device_class: monetary
+        state_class: measurement
+        state: >-
+          {% set h = now().hour %}
+          {% set super_export_today = states('sensor.globird_super_export_today') | float(0) %}
+          {% if 18 <= h < 21 and super_export_today < 15 %}
+            0.10
+          {% elif 16 <= h < 23 %}
+            0.02
+          {% else %}
+            0
+          {% endif %}
+        attributes:
+          period: >-
+            {% set h = now().hour %}
+            {% set super_export_today = states('sensor.globird_super_export_today') | float(0) %}
+            {% if 18 <= h < 21 and super_export_today < 15 %}
+              super_export
+            {% elif 16 <= h < 23 %}
+              standard_feed_in
+            {% else %}
+              no_feed_in
+            {% endif %}
+          standard_feed_in: 0.02
+          super_export_top_up: 0.08
+          super_export_cap_kwh: 15
+          super_export_kwh_today: "{{ states('sensor.globird_super_export_today') | float(0) }}"
+          interpolation_mode: previous
+          forecast: >-
+            {% set n = now() %}
+            {% set start = n.replace(second=0, microsecond=0) - timedelta(minutes=n.minute % 5) %}
+            {% set horizon = start + timedelta(hours=120) %}
+            {% set midnight = today_at('00:00') %}
+            {% set h = start.hour %}
+            {% set current = 0.10 if 18 <= h < 21 else 0.02 if 16 <= h < 23 else 0 %}
+            {% set ns = namespace(items=[{'time': start.isoformat(), 'value': current}]) %}
+            {% for day in range(0, 6) %}
+              {% set base = midnight + timedelta(days=day) %}
+              {% set changes = [
+                {'time': base, 'value': 0},
+                {'time': base + timedelta(hours=16), 'value': 0.02},
+                {'time': base + timedelta(hours=18), 'value': 0.10},
+                {'time': base + timedelta(hours=21), 'value': 0.02},
+                {'time': base + timedelta(hours=23), 'value': 0}
+              ] %}
+              {% for change in changes %}
+                {% if change.time > start and change.time <= horizon %}
+                  {% set ns.items = ns.items + [{'time': change.time.isoformat(), 'value': change.value}] %}
+                {% endif %}
+              {% endfor %}
+            {% endfor %}
+            {{ ns.items }}
+
+      - name: "Globird Daily Supply Charge"
+        unique_id: globird_daily_supply_charge
+        icon: mdi:cash-clock
+        unit_of_measurement: AUD/day
+        device_class: monetary
+        state_class: measurement
+        state: 1.584
+        attributes:
+          meter_charge: 0

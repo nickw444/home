@@ -4,7 +4,6 @@ dependencies:
 - https://github.com/thomasloven/lovelace-card-tools.git
 - https://github.com/kalkih/mini-graph-card.git
 - https://github.com/custom-cards/secondaryinfo-entity-row.git
-- https://github.com/azuwis/zigbee2mqtt-networkmap.git
 - https://github.com/kalkih/mini-media-player.git
 - https://github.com/thomasloven/lovelace-card-mod
 - source: https://github.com/matejdro/login_control.git
@@ -33,10 +32,10 @@ dependencies:
 - https://github.com/NemesisRE/kiosk-mode.git
 - https://github.com/agittins/bermuda.git
 - https://github.com/kcoffau/AUS_BOM_Space_Weather_Alert_System.git
-- https://github.com/mystardious/foxess_modbus.git
+- https://github.com/nathanmarlor/foxess_modbus.git
 - https://github.com/RomRider/apexcharts-card.git
 - https://github.com/nickw444/ha-foxess-cloud.git
 - https://github.com/smartHomeHub/SmartIR.git
 - https://github.com/Patrick762/hassio-bluetti-bt.git
 - https://github.com/cabberley/HA_AemoNemData
-- https://github.com/hass-energy/amber-express.git
+- https://github.com/tolwi/hassio-ecoflow-cloud.git

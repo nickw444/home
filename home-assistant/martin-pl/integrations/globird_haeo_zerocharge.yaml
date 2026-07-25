@@ -1,0 +1,148 @@
+# Globird HAEO ZeroCharge charging forecast.
+# Spreads free-window charging across the 11:00-14:00 zero-cost import window,
+# aiming to finish by 13:30 so the final 30 minutes remain as a recovery buffer.
+
+input_number:
+  globird_haeo_minimum_charge_rate_kw:
+    name: "Globird HAEO Minimum Charge Rate"
+    icon: mdi:battery-arrow-up
+    min: 0
+    max: 10
+    step: 0.5
+    mode: box
+    unit_of_measurement: kW
+    initial: 2
+  globird_haeo_maximum_charge_rate_kw:
+    name: "Globird HAEO Maximum Charge Rate"
+    icon: mdi:sine-wave
+    min: 0
+    max: 10
+    step: 0.5
+    mode: box
+    unit_of_measurement: kW
+    initial: 5
+
+template:
+  - sensor:
+      - name: Globird HAEO Charge Limit
+        state: >-
+          {% set capacity_kwh = 41.9 %}
+          {% set target_soc = 100 %}
+          {% set current_soc = states('sensor.inverter_modbus_battery_soc') | float(0) %}
+          {% set minimum_charge_kw = states('input_number.globird_haeo_minimum_charge_rate_kw') | float(2) %}
+          {% set max_charge_kw = states('input_number.globird_haeo_maximum_charge_rate_kw') | float(5) %}
+          {% set remaining_kwh = capacity_kwh * ([target_soc - current_soc, 0] | max) / 100 %}
+          {% set now_ts = now() %}
+          {% set window_start = today_at('11:00') %}
+          {% set window_end = today_at('14:00') %}
+          {% set target_end = window_end - timedelta(minutes=30) %}
+          {% if now_ts < window_start %}
+            {% set active_start = window_start %}
+          {% elif now_ts < window_end %}
+            {% set active_start = now_ts %}
+          {% else %}
+            {% set active_start = window_end %}
+          {% endif %}
+          {% set planning_end = target_end if active_start < target_end else window_end %}
+          {% set hours_left = (planning_end - active_start).total_seconds() / 3600 %}
+
+          {% if now_ts >= window_start and now_ts < window_end and hours_left > 0 and remaining_kwh > 0 and max_charge_kw > 0 %}
+            {% set catch_up_kw = remaining_kwh / hours_left %}
+            {{ [[minimum_charge_kw, catch_up_kw] | max, max_charge_kw] | min | round(3) }}
+          {% else %}
+            0
+          {% endif %}
+        unit_of_measurement: kW
+        device_class: power
+        attributes:
+          remaining: >-
+            {% set capacity_kwh = 41.9 %}
+            {% set target_soc = 100 %}
+            {% set current_soc = states('sensor.inverter_modbus_battery_soc') | float(0) %}
+            {{ (capacity_kwh * ([target_soc - current_soc, 0] | max) / 100) | round(3) }}
+          current_soc: "{{ states('sensor.inverter_modbus_battery_soc') | float(0) }}"
+          target_soc: 100
+          battery_capacity_kwh: 41.9
+          eagerness_buffer_minutes: 30
+          interpolation_mode: previous
+          forecast: >-
+            {% set capacity_kwh = 41.9 %}
+            {% set target_soc = 100 %}
+            {% set current_soc = states('sensor.inverter_modbus_battery_soc') | float(0) %}
+            {% set minimum_charge_kw = states('input_number.globird_haeo_minimum_charge_rate_kw') | float(2) %}
+            {% set max_charge_kw = states('input_number.globird_haeo_maximum_charge_rate_kw') | float(5) %}
+            {% set remaining_kwh = capacity_kwh * ([target_soc - current_soc, 0] | max) / 100 %}
+            {% set now_ts = now() %}
+            {% set window_start = today_at('11:00') %}
+            {% set window_end = today_at('14:00') %}
+            {% set target_end = window_end - timedelta(minutes=30) %}
+            {% set next_window_start = window_start + timedelta(days=1) %}
+            {% set next_window_end = window_end + timedelta(days=1) %}
+            {% set next_target_end = next_window_end - timedelta(minutes=30) %}
+            {% if now_ts < window_start %}
+              {% set active_start = window_start %}
+            {% elif now_ts < window_end %}
+              {% set active_start = now_ts %}
+            {% else %}
+              {% set active_start = window_end %}
+            {% endif %}
+            {% set planning_end = target_end if active_start < target_end else window_end %}
+            {% set hours_left = (planning_end - active_start).total_seconds() / 3600 %}
+
+            {% if hours_left > 0 and remaining_kwh > 0 and max_charge_kw > 0 %}
+              {% set catch_up_kw = remaining_kwh / hours_left %}
+              {% set target_kw = [[minimum_charge_kw, catch_up_kw] | max, max_charge_kw] | min %}
+              {% set available_hours = (window_end - active_start).total_seconds() / 3600 %}
+              {% set charge_hours = [remaining_kwh / target_kw, available_hours] | min %}
+              {% set charge_end = active_start + timedelta(hours=charge_hours) %}
+            {% else %}
+              {% set target_kw = 0 %}
+              {% set charge_end = active_start %}
+            {% endif %}
+
+            {% set ns = namespace(items=[]) %}
+            {% set ns.items = ns.items + [{
+              "time": active_start.isoformat(),
+              "value": target_kw | round(3)
+            }] %}
+
+            {% if charge_end > active_start and charge_end < window_end %}
+              {% set ns.items = ns.items + [{
+                "time": charge_end.isoformat(),
+                "value": 0
+              }] %}
+            {% endif %}
+
+            {% if window_end > active_start %}
+              {% set ns.items = ns.items + [{
+                "time": window_end.isoformat(),
+                "value": 0
+              }] %}
+            {% endif %}
+
+            {% if now_ts >= window_start and remaining_kwh > 0 and max_charge_kw > 0 %}
+              {% set next_hours = (next_target_end - next_window_start).total_seconds() / 3600 %}
+              {% set next_catch_up_kw = remaining_kwh / next_hours %}
+              {% set next_target_kw = [[minimum_charge_kw, next_catch_up_kw] | max, max_charge_kw] | min %}
+              {% set next_available_hours = (next_window_end - next_window_start).total_seconds() / 3600 %}
+              {% set next_charge_hours = [remaining_kwh / next_target_kw, next_available_hours] | min %}
+              {% set next_charge_end = next_window_start + timedelta(hours=next_charge_hours) %}
+              {% set ns.items = ns.items + [{
+                "time": next_window_start.isoformat(),
+                "value": next_target_kw | round(3)
+              }] %}
+
+              {% if next_charge_end > next_window_start and next_charge_end < next_window_end %}
+                {% set ns.items = ns.items + [{
+                  "time": next_charge_end.isoformat(),
+                  "value": 0
+                }] %}
+              {% endif %}
+
+              {% set ns.items = ns.items + [{
+                "time": next_window_end.isoformat(),
+                "value": 0
+              }] %}
+            {% endif %}
+
+            {{ ns.items }}

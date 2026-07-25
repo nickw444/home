@@ -3,28 +3,26 @@ template:
       - name: Play Music
         icon: "mdi:speaker"
         state: >
-          {{ is_state('media_player.multiroom', 'playing') }}
+          {{ is_state('media_player.multi_room', 'playing') }}
         turn_on:
           - action: media_player.play_media
             data:
-              media_content_id: library://radio/9
+              media_content_id: radiobrowser://radio/340c29cb-7e10-44f9-9f7b-cfc5bc5b3f95
               media_content_type: channel
             target:
-              entity_id: media_player.multiroom
+              entity_id: media_player.multi_room
           - action: media_player.unjoin
             target:
-              entity_id: media_player.multiroom
+              entity_id: media_player.multi_room
           - action: media_player.join
             data:
               group_members:
                 - media_player.soundbar
                 - media_player.study_soundbar
-                - media_player.bedroom
-                - media_player.living_room
                 - media_player.bathroom
             target:
-              entity_id: media_player.multiroom
+              entity_id: media_player.multi_room
         turn_off:
-          - service: media_player.turn_off
+          - service: media_player.media_stop
             target:
-              entity_id: media_player.multiroom
+              entity_id: media_player.multi_room

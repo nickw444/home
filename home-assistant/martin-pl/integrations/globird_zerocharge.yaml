@@ -1,0 +1,37 @@
+# Globird zero-charge window automation for the FoxESS BESS.
+
+automation:
+  - id: '1778630519523'
+    alias: "Globird Zerocharge: charge FoxESS BESS"
+    description: "Charge the FoxESS battery during the 11:00-14:00 zero-cost import window."
+    triggers:
+      - trigger: time
+        at: '11:01:00'
+        id: force-charge
+      - trigger: time
+        at: '13:58:00'
+        id: self-use
+    conditions: []
+    actions:
+      - choose:
+          - conditions:
+              - condition: trigger
+                id:
+                  - force-charge
+            sequence:
+              - action: select.select_option
+                target:
+                  entity_id: select.inverter_modbus_work_mode
+                data:
+                  option: Force Charge
+          - conditions:
+              - condition: trigger
+                id:
+                  - self-use
+            sequence:
+              - action: select.select_option
+                target:
+                  entity_id: select.inverter_modbus_work_mode
+                data:
+                  option: Self Use
+    mode: single

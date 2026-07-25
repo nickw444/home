@@ -5,8 +5,8 @@ automation:
     trigger:
       - platform: state
         entity_id:
-          - sensor.hass_energy_plan_updated
-          - sensor.hass_energy_plan_status
+          - sensor.plant_updated
+          - sensor.plant_status
       - platform: time_pattern
         minutes: "/1"
     variables:
@@ -16,25 +16,34 @@ automation:
       max_discharge_kw: 10.0
       export_limit_normal_kw: 10.0
       battery_full_pct: 99.0
+      backup_import_kw_on: 0.5
+      backup_import_kw_off: 0.2
 
       plan_age_s: >-
-        {{ (as_timestamp(now()) - as_timestamp(states('sensor.hass_energy_plan_updated'), default=0)) | int }}
+        {{ (as_timestamp(now()) - as_timestamp(states('sensor.plant_updated'), default=0)) | int }}
       plan_ok: >-
-        {{ states('sensor.hass_energy_plan_status') == 'Optimal' and plan_age_s < max_age_s }}
+        {{ states('sensor.plant_status') == 'Optimal' and plan_age_s < max_age_s }}
 
+      current_mode: "{{ states('select.inverter_modbus_work_mode') }}"
       ac_net_kw: "{{ states('sensor.inverter_primary_inverter_net_power')|float(0) }}"
       charge_kw: "{{ states('sensor.inverter_primary_battery_charge_power')|float(0) }}"
       discharge_kw: "{{ states('sensor.inverter_primary_battery_discharge_power')|float(0) }}"
-      grid_export_kw: "{{ states('sensor.hass_energy_grid_export_power')|float(0) }}"
-      grid_import_kw: "{{ states('sensor.hass_energy_grid_import_power')|float(0) }}"
-      price_export: "{{ states('sensor.hass_energy_price_export')|float(0) }}"
+      grid_export_kw: "{{ states('sensor.plant_grid_export_power')|float(0) }}"
+      grid_import_kw: "{{ states('sensor.plant_grid_import_power')|float(0) }}"
+      price_export: "{{ states('sensor.plant_price_export')|float(0) }}"
       no_export: "{{ price_export < 0 }}"
       export_limit_current_kw: "{{ states('number.inverter_modbus_export_limit')|float(0) }}"
       battery_soc_pct: "{{ states('sensor.inverter_primary_battery_soc') | float(0) }}"
       battery_full: "{{ battery_soc_pct >= battery_full_pct }}"
+      backup_hold: >-
+        {% if current_mode == 'Back-up' -%}
+        {{ ac_net_kw >= -eps and discharge_kw <= eps and grid_import_kw > backup_import_kw_off }}
+        {%- else -%}
+        {{ ac_net_kw >= -eps and discharge_kw <= eps and grid_import_kw > backup_import_kw_on }}
+        {%- endif %}
 
       mode_desired: >-
-        {% if discharge_kw <= eps and grid_import_kw > eps and ac_net_kw >= -eps -%}
+        {% if backup_hold -%}
         Back-up
         {%- elif no_export -%}
         {%- if ac_net_kw < -eps -%}
@@ -167,8 +176,8 @@ automation:
     trigger:
       - platform: state
         entity_id:
-          - sensor.hass_energy_plan_updated
-          - sensor.hass_energy_plan_status
+          - sensor.plant_updated
+          - sensor.plant_status
       - platform: time_pattern
         minutes: "/1"
     variables:
@@ -180,9 +189,9 @@ automation:
       max_amps: 32
 
       plan_age_s: >-
-        {{ (as_timestamp(now()) - as_timestamp(states('sensor.hass_energy_plan_updated'), default=0)) | int }}
+        {{ (as_timestamp(now()) - as_timestamp(states('sensor.plant_updated'), default=0)) | int }}
       plan_ok: >-
-        {{ states('sensor.hass_energy_plan_status') == 'Optimal' and plan_age_s < max_age_s }}
+        {{ states('sensor.plant_status') == 'Optimal' and plan_age_s < max_age_s }}
 
       ev_kw: "{{ states('sensor.load_tessie_charge_power')|float(0) }}"
       amps_raw: "{{ (ev_kw * 1000 / (volts * phases)) if ev_kw > eps else 0 }}"

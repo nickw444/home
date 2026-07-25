@@ -1,0 +1,186 @@
+input_number:
+  globird_haeo_preferred_export_rate_kw:
+    name: "Globird HAEO Preferred Export Rate"
+    icon: mdi:transmission-tower-export
+    min: 0
+    max: 10
+    step: 0.5
+    mode: box
+    unit_of_measurement: kW
+    initial: 7
+  globird_haeo_super_export_target_kwh:
+    name: "Globird HAEO Super Export Target"
+    icon: mdi:target
+    min: 0
+    max: 15
+    step: 0.5
+    mode: box
+    unit_of_measurement: kWh
+    initial: 15
+
+template:
+  - sensor:
+      - name: Globird HAEO Export Limit
+        state: >-
+          {% set cap_kwh = states('input_number.globird_haeo_super_export_target_kwh') | float(state_attr('sensor.globird_super_export_today', 'cap_kwh') | float(15)) %}
+          {% set frontload_kw = states('input_number.globird_haeo_preferred_export_rate_kw') | float(7) %}
+          {% set max_export_kw = 10 %}
+          {% set exported_kwh = states('sensor.globird_super_export_today') | float(0) %}
+          {% set remaining_kwh = [cap_kwh - exported_kwh, 0] | max %}
+          {% set now_ts = now() %}
+          {% set window_start = today_at('18:00') %}
+          {% set window_end = today_at('21:00') %}
+          {% if now_ts < window_start %}
+            {% set active_start = window_start %}
+          {% elif now_ts < window_end %}
+            {% set active_start = now_ts %}
+          {% else %}
+            {% set active_start = window_end %}
+          {% endif %}
+          {% set hours_left = (window_end - active_start).total_seconds() / 3600 %}
+
+          {% if now_ts >= window_start and now_ts < window_end and hours_left > 0 and remaining_kwh > 0 %}
+            {% set catch_up_kw = remaining_kwh / hours_left %}
+            {{ [[frontload_kw, catch_up_kw] | max, max_export_kw] | min | round(3) }}
+          {% else %}
+            0
+          {% endif %}
+        unit_of_measurement: kW
+        device_class: power
+        attributes:
+          remaining: >-
+            {% set cap_kwh = states('input_number.globird_haeo_super_export_target_kwh') | float(state_attr('sensor.globird_super_export_today', 'cap_kwh') | float(15)) %}
+            {% set exported_kwh = states('sensor.globird_super_export_today') | float(0) %}
+            {{ [cap_kwh - exported_kwh, 0] | max | round(3) }}
+          interpolation_mode: previous
+          forecast: >-
+            {% set cap_kwh = states('input_number.globird_haeo_super_export_target_kwh') | float(state_attr('sensor.globird_super_export_today', 'cap_kwh') | float(15)) %}
+            {% set frontload_kw = states('input_number.globird_haeo_preferred_export_rate_kw') | float(7) %}
+            {% set max_export_kw = 10 %}
+            {% set exported_kwh = states('sensor.globird_super_export_today') | float(0) %}
+            {% set remaining_kwh = [cap_kwh - exported_kwh, 0] | max %}
+            {% set now_ts = now() %}
+            {% set window_start = today_at('18:00') %}
+            {% set window_end = today_at('21:00') %}
+            {% set next_window_start = window_start + timedelta(days=1) %}
+            {% set next_window_end = window_end + timedelta(days=1) %}
+            {% if now_ts < window_start %}
+              {% set active_start = window_start %}
+            {% elif now_ts < window_end %}
+              {% set active_start = now_ts %}
+            {% else %}
+              {% set active_start = window_end %}
+            {% endif %}
+            {% set hours_left = (window_end - active_start).total_seconds() / 3600 %}
+
+            {% if hours_left > 0 and remaining_kwh > 0 %}
+              {% set catch_up_kw = remaining_kwh / hours_left %}
+              {% set target_kw = [[frontload_kw, catch_up_kw] | max, max_export_kw] | min %}
+              {% set export_hours = [remaining_kwh / target_kw, hours_left] | min %}
+              {% set export_end = active_start + timedelta(hours=export_hours) %}
+            {% else %}
+              {% set target_kw = 0 %}
+              {% set export_end = active_start %}
+            {% endif %}
+
+            {% set ns = namespace(items=[]) %}
+            {% set ns.items = ns.items + [{
+              "time": active_start.isoformat(),
+              "value": target_kw | round(3)
+            }] %}
+
+            {% if export_end > active_start and export_end < window_end %}
+              {% set ns.items = ns.items + [{
+                "time": export_end.isoformat(),
+                "value": 0
+              }] %}
+            {% endif %}
+
+            {% if window_end > active_start %}
+              {% set ns.items = ns.items + [{
+                "time": window_end.isoformat(),
+                "value": 0
+              }] %}
+            {% endif %}
+
+            {% if now_ts >= window_start and cap_kwh > 0 %}
+              {% set next_hours = (next_window_end - next_window_start).total_seconds() / 3600 %}
+              {% set next_catch_up_kw = cap_kwh / next_hours %}
+              {% set next_target_kw = [[frontload_kw, next_catch_up_kw] | max, max_export_kw] | min %}
+              {% set next_export_hours = [cap_kwh / next_target_kw, next_hours] | min %}
+              {% set next_export_end = next_window_start + timedelta(hours=next_export_hours) %}
+              {% set ns.items = ns.items + [{
+                "time": next_window_start.isoformat(),
+                "value": next_target_kw | round(3)
+              }] %}
+
+              {% if next_export_end > next_window_start and next_export_end < next_window_end %}
+                {% set ns.items = ns.items + [{
+                  "time": next_export_end.isoformat(),
+                  "value": 0
+                }] %}
+              {% endif %}
+
+              {% set ns.items = ns.items + [{
+                "time": next_window_end.isoformat(),
+                "value": 0
+              }] %}
+            {% endif %}
+
+            {{ ns.items }}
+
+      - name: Globird HAEO Afternoon Load
+        state: >-
+          {% set now_ts = now() %}
+          {% set window_start = today_at('12:00') %}
+          {% set window_end = today_at('17:00') %}
+          {% if now_ts >= window_start and now_ts < window_end %}
+            0.5
+          {% else %}
+            0
+          {% endif %}
+        unit_of_measurement: kW
+        device_class: power
+        attributes:
+          interpolation_mode: previous
+          forecast: >-
+            {% set load_kw = 0.5 %}
+            {% set now_ts = now() %}
+            {% set horizon_end = now_ts + timedelta(hours=120) %}
+            {% set today_start = today_at('12:00') %}
+            {% set today_end = today_at('17:00') %}
+            {% set ns = namespace(items=[]) %}
+            {% set current_value = load_kw if now_ts >= today_start and now_ts < today_end else 0 %}
+
+            {% set ns.items = ns.items + [{
+              "time": now_ts.isoformat(),
+              "value": current_value
+            }] %}
+
+            {% for offset in range(0, 6) %}
+              {% set window_start = today_start + timedelta(days=offset) %}
+              {% set window_end = today_end + timedelta(days=offset) %}
+
+              {% if window_start > now_ts and window_start <= horizon_end %}
+                {% set ns.items = ns.items + [{
+                  "time": window_start.isoformat(),
+                  "value": load_kw
+                }] %}
+              {% endif %}
+
+              {% if window_end > now_ts and window_end <= horizon_end %}
+                {% set ns.items = ns.items + [{
+                  "time": window_end.isoformat(),
+                  "value": 0
+                }] %}
+              {% endif %}
+            {% endfor %}
+
+            {% if ns.items[-1].time != horizon_end.isoformat() %}
+              {% set ns.items = ns.items + [{
+                "time": horizon_end.isoformat(),
+                "value": ns.items[-1].value
+              }] %}
+            {% endif %}
+
+            {{ ns.items }}

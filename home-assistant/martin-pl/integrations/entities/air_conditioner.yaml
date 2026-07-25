@@ -1,9 +1,7 @@
-binary_sensor:
-  - platform: template
-    sensors:
-      heat_transfer_fan_desired_state:
-        friendly_name: "Heat Transfer Fan Desired State"
-        value_template: |
+template:
+  - binary_sensor:
+      - name: "Heat Transfer Fan Desired State"
+        state: |
           {{ 
             (is_state('binary_sensor.study_door_contact', 'on') or is_state('binary_sensor.kates_study_door_contact', 'on'))
             and 
@@ -14,15 +12,12 @@ binary_sensor:
             is_state('climate.hallway', 'fan_only'))
           }}
 
-sensor:
-  - platform: template
-    sensors:
-      air_conditioner_combined_power:
-        friendly_name: "Air Conditioner Combined Power"
+  - sensor:
+      - name: "Air Conditioner Combined Power"
         unit_of_measurement: "W"
-        availability_template: >
+        availability: >
           {{ has_value('sensor.air_conditioning_power') and has_value('sensor.heat_transfer_current_consumption') }}
-        value_template: >
+        state: >
           {{
             (states('sensor.air_conditioning_power') | float(0)) +
             (states('sensor.heat_transfer_current_consumption') | float(0))

@@ -23,7 +23,7 @@ conditions:
     state: "on"
 actions:
   - variables:
-      near_zero_threshold_w: 50
+      power_status_threshold_w: 500
       grid_w: >-
         {% set smoothed = states('sensor.inverter_grid_meter_power_mean_10s') %}
         {% if smoothed not in ['unknown', 'unavailable', 'none', ''] %}
@@ -31,14 +31,84 @@ actions:
         {% else %}
           {{ states('sensor.inverter_grid_meter_power') | float(0) }}
         {% endif %}
-      near_zero: "{{ (grid_w | float(0) | abs) <= (near_zero_threshold_w | float(0)) }}"
+      power_status_active: "{{ (grid_w | float(0) | abs) >= (power_status_threshold_w | float(0)) }}"
       kitchen_on: "{{ is_state('light.kitchen_strip', 'on') }}"
       kitchen_brightness: "{{ state_attr('light.kitchen_strip', 'brightness') | int(26) }}"
       kitchen_ct: "{{ state_attr('light.kitchen_strip', 'color_temp') | int(475) }}"
   - choose:
       - conditions:
           - condition: template
-            value_template: "{{ near_zero and kitchen_on }}"
+            value_template: "{{ power_status_active }}"
+        sequence:
+          - action: light.turn_on
+            target:
+              entity_id: light.dishwasher
+          - action: rest_command.wled_set_colors
+            data:
+              wled_host: 192.168.2.138
+              segment: 0
+              brightness: 255
+              speed: >-
+                {% set v = grid_w | float(0) %}
+                {% set steps = 5 %}
+                {% set min_speed = 64 %}
+                {% set max_speed = 148 %}
+                {% set range = 2000 %}  {# how much above/below the bounds you want to scale #}
+
+                {% if v < -3000 %}
+                  {% set scale = ((-v - 3000) / range) %}
+                  {% set val = ([scale * steps, steps - 1] | min) | int %}
+                  {{ min_speed + val * ((max_speed - min_speed) / (steps - 1)) | round }}
+                {% elif v > 2000 %}
+                  {% set scale = ((v - 2000) / range) %}
+                  {% set val = ([scale * steps, steps - 1] | min) | int %}
+                  {{ min_speed + val * ((max_speed - min_speed) / (steps - 1)) | round }}
+                {% else %}
+                  {{ min_speed }}
+                {% endif %}
+              intensity: 128
+              effect: 28
+              color1: >-
+                {% set v = grid_w | float(0) %}
+                {% if v < -3000 %}
+                  00bb2c
+                {% elif v < -500 %}
+                  00a2bb
+                {% elif v < 0 %}
+                  a8a5a5
+                {% elif v < 500 %}
+                  9da3a5
+                {% elif v < 2000 %}
+                  c17a00
+                {% else %}
+                  c11000
+                {% endif %}
+              color2: >-
+                {% set v = grid_w | float(0) %}
+                {% if v < -3000 %}
+                  00731a
+                {% elif v < -500 %}
+                  005e6b
+                {% elif v < 0 %}
+                  5b5a5a
+                {% elif v < 500 %}
+                  525657
+                {% elif v < 2000 %}
+                  704400
+                {% else %}
+                  6e0900
+                {% endif %}
+              color3: "000000"
+              reverse: >-
+                {% set v = grid_w | float(0) %}
+                {% if v > 0 %}
+                0
+                {% else %}
+                1
+                {% endif %}
+      - conditions:
+          - condition: template
+            value_template: "{{ kitchen_on }}"
         sequence:
           - action: light.turn_on
             target:
@@ -79,77 +149,7 @@ actions:
                 {{ "%02x%02x%02x" | format(r, g, b) }}
               color3: "000000"
               reverse: 0
-      - conditions:
-          - condition: template
-            value_template: "{{ near_zero and not kitchen_on }}"
-        sequence:
-          - action: light.turn_off
-            target:
-              entity_id: light.dishwasher
     default:
-      - action: light.turn_on
+      - action: light.turn_off
         target:
           entity_id: light.dishwasher
-      - action: rest_command.wled_set_colors
-        data:
-          wled_host: 192.168.2.138
-          segment: 0
-          brightness: 255
-          speed: >-
-            {% set v = grid_w | float(0) %}
-            {% set steps = 5 %}
-            {% set min_speed = 64 %}
-            {% set max_speed = 148 %}
-            {% set range = 2000 %}  {# how much above/below the bounds you want to scale #}
-
-            {% if v < -3000 %}
-              {% set scale = ((-v - 3000) / range) %}
-              {% set val = ([scale * steps, steps - 1] | min) | int %}
-              {{ min_speed + val * ((max_speed - min_speed) / (steps - 1)) | round }}
-            {% elif v > 2000 %}
-              {% set scale = ((v - 2000) / range) %}
-              {% set val = ([scale * steps, steps - 1] | min) | int %}
-              {{ min_speed + val * ((max_speed - min_speed) / (steps - 1)) | round }}
-            {% else %}
-              {{ min_speed }}
-            {% endif %}
-          intensity: 128
-          effect: 28
-          color1: >-
-            {% set v = grid_w | float(0) %}
-            {% if v < -3000 %}
-              00bb2c
-            {% elif v < -500 %}
-              00a2bb
-            {% elif v < 0 %}
-              a8a5a5
-            {% elif v < 500 %}
-              9da3a5
-            {% elif v < 2000 %}
-              c17a00
-            {% else %}
-              c11000
-            {% endif %}
-          color2: >-
-            {% set v = grid_w | float(0) %}
-            {% if v < -3000 %}
-              00731a
-            {% elif v < -500 %}
-              005e6b
-            {% elif v < 0 %}
-              5b5a5a
-            {% elif v < 500 %}
-              525657
-            {% elif v < 2000 %}
-              704400
-            {% else %}
-              6e0900
-            {% endif %}
-          color3: "000000"
-          reverse: >-
-            {% set v = grid_w | float(0) %}
-            {% if v > 0 %}
-            0
-            {% else %}
-            1
-            {% endif %}

@@ -25,14 +25,42 @@ condition:
     entity_id: input_boolean.guest_mode
     state: "off"
 action:
+  - variables:
+      action_turn_off_lights: "{{ 'TURN_OFF_LIGHTS_' ~ context.id }}"
+      lights: "{{ state_attr('binary_sensor.some_lights_on', 'lights') or [] }}"
   - service: notify.everyone
     data:
       title: The lights are on but nobody is home
       message: |
-        {{ states.light | selectattr('state','eq','on') | map(attribute='name') | join(', ') }} are turned on.
+        {% set names = namespace(value=[]) %}
+        {% for light in lights %}
+          {% set names.value = names.value + [state_attr(light, 'friendly_name') or light] %}
+        {% endfor %}
+        {% if names.value | count == 0 %}
+          No relevant lights are turned on.
+        {% elif names.value | count == 1 %}
+          {{ names.value[0] }} is turned on.
+        {% elif names.value | count == 2 %}
+          {{ names.value | join(', and ') }} are turned on.
+        {% else %}
+          {{ names.value[:-1] | join(', ') }}, and {{ names.value[-1] }} are turned on.
+        {% endif %}
       data:
         group: lights-on-nobody-home
         actions:
-          - action: TURN_OFF_LIGHTS
+          - action: "{{ action_turn_off_lights }}"
             title: "Turn Off Lights"
+  - wait_for_trigger:
+      - platform: event
+        event_type: mobile_app_notification_action
+        event_data:
+          action: "{{ action_turn_off_lights }}"
+    timeout: "01:00:00"
+  - if:
+      - condition: template
+        value_template: "{{ wait.trigger is not none and lights | count > 0 }}"
+    then:
+      - service: light.turn_off
+        target:
+          entity_id: "{{ lights }}"
 mode: single
