@@ -55,7 +55,7 @@ https://github.com/dummylabs/thewatchman.git:
   components:
   - watchman
 https://github.com/greghesp/ha-bambulab.git:
-  version: b5a9494
+  version: v2.2.22
   type: core
   components:
   - bambu_lab
@@ -171,3 +171,7 @@ https://github.com/tolwi/hassio-ecoflow-cloud.git:
   type: core
   components:
   - ecoflow_cloud
+https://github.com/nickw444/hass-lightning-card.git:
+  version: v0.1.0
+  type: lovelace
+  is_release: true

@@ -39,3 +39,4 @@ dependencies:
 - https://github.com/Patrick762/hassio-bluetti-bt.git
 - https://github.com/cabberley/HA_AemoNemData
 - https://github.com/tolwi/hassio-ecoflow-cloud.git
+- https://github.com/nickw444/hass-lightning-card.git

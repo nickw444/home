@@ -1,0 +1,42 @@
+id: comms_ups_weekly_battery_maintenance
+alias: "comms ups: weekly battery maintenance"
+description: >-
+  Once per week, raise max charge level to 100%, wait for a full charge,
+  hold at 100% for 30 minutes for cell balancing, then restore max charge
+  level to 80%. If HA reboots mid-cycle, the boot fallback automation
+  restores 80%.
+mode: single
+triggers:
+  - trigger: time
+    at: "11:00:00"
+conditions:
+  - condition: time
+    weekday:
+      - sun
+  - condition: template
+    value_template: >-
+      {{ states('sensor.comms_ups_battery_level') not in ['unknown', 'unavailable'] }}
+actions:
+  - action: number.set_value
+    target:
+      entity_id: number.comms_ups_max_charge_level
+    data:
+      value: 100
+  - wait_for_trigger:
+      - trigger: numeric_state
+        entity_id:
+          - sensor.comms_ups_battery_level
+        above: 99
+    timeout:
+      hours: 24
+      minutes: 0
+      seconds: 0
+  - delay:
+      hours: 0
+      minutes: 30
+      seconds: 0
+  - action: number.set_value
+    target:
+      entity_id: number.comms_ups_max_charge_level
+    data:
+      value: 80

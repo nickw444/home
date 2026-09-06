@@ -33,10 +33,12 @@ action:
             - media_player.bedroom_homepod
           data:
             volume_level: 0.5
-        - service: tts.google_translate_say
-          entity_id:
-            - media_player.living_room_homepod
-            - media_player.bedroom_homepod
+        - action: tts.speak
+          target:
+            entity_id: tts.piper
           data:
             message: The dryer has finished!
+            media_player_entity_id:
+              - media_player.living_room_homepod
+              - media_player.bedroom_homepod
         - delay: "00:25:00"

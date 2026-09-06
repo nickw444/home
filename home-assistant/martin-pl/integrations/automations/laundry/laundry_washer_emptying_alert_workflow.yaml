@@ -113,25 +113,15 @@ script:
     alias: "laundry: washing machine completion tts"
     mode: single
     sequence:
-      - service: media_player.turn_on
+      - action: tts.speak
         target:
-          entity_id:
-            - media_player.living_room_homepod
-            - media_player.bedroom_homepod
-      - service: media_player.volume_set
-        data:
-          volume_level: 0.5
-        target:
-          entity_id:
-            - media_player.living_room_homepod
-            - media_player.bedroom_homepod
-      - service: tts.google_translate_say
+          entity_id: tts.piper
         data:
           message: The washing machine has finished!
-        target:
-          entity_id:
-            - media_player.living_room_homepod
-            - media_player.bedroom_homepod
+          cache: true
+          media_player_entity_id:
+            - media_player.living_room
+            - media_player.bedroom
 
 automation:
   - id: "laundry_washing_machine_mark_pending_on_complete"

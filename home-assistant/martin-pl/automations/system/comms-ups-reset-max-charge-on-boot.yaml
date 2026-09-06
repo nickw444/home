@@ -1,0 +1,20 @@
+id: comms_ups_reset_max_charge_on_boot
+alias: "comms ups: reset max charge on boot"
+description: >-
+  If Home Assistant restarts during weekly battery maintenance, restore
+  max charge level to the normal 80% operating limit.
+mode: single
+triggers:
+  - trigger: homeassistant
+    event: start
+actions:
+  - delay:
+      minutes: 1
+  - condition: numeric_state
+    entity_id: number.comms_ups_max_charge_level
+    above: 80
+  - action: number.set_value
+    target:
+      entity_id: number.comms_ups_max_charge_level
+    data:
+      value: 80

@@ -1,0 +1,19 @@
+template:
+  - trigger:
+      - platform: state
+        entity_id: sensor.ecowitt_hub_last_lightning_strike
+      - platform: homeassistant
+        event: start
+    binary_sensor:
+      - name: "Lightning Strike Last Hour"
+        unique_id: lightning_strike_last_hour
+        availability: >
+          {{ has_value('sensor.ecowitt_hub_last_lightning_strike') }}
+        state: >
+          {% if trigger.platform == 'homeassistant' %}
+            {% set last = states('sensor.ecowitt_hub_last_lightning_strike') %}
+            {{ (now() - (last | as_datetime | as_local)).total_seconds() < 3600 }}
+          {% else %}
+            true
+          {% endif %}
+        delay_off: "01:00:00"

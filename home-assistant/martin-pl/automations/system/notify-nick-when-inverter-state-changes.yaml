@@ -21,7 +21,6 @@ action:
                 in ['unknown', 'unavailable'] %} from {{
                 trigger.from_state.state }}{% endif %}
               data:
-                tag: inverter-state
                 group: power-system
                 push:
                   sound:
@@ -39,6 +38,5 @@ action:
             ['unknown', 'unavailable'] %} from {{ trigger.from_state.state }}{%
             endif %}
           data:
-            tag: inverter-state
             group: power-system
 mode: single

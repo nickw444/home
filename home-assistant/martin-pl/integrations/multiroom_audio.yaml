@@ -5,12 +5,6 @@ template:
         state: >
           {{ is_state('media_player.multi_room', 'playing') }}
         turn_on:
-          - action: media_player.play_media
-            data:
-              media_content_id: radiobrowser://radio/340c29cb-7e10-44f9-9f7b-cfc5bc5b3f95
-              media_content_type: channel
-            target:
-              entity_id: media_player.multi_room
           - action: media_player.unjoin
             target:
               entity_id: media_player.multi_room
@@ -18,11 +12,49 @@ template:
             data:
               group_members:
                 - media_player.soundbar
-                - media_player.study_soundbar
+                - media_player.study_bookshelf
                 - media_player.bathroom
+                - media_player.living_room
+                - media_player.bedroom
+            target:
+              entity_id: media_player.multi_room
+          - action: media_player.volume_set
+            target:
+              entity_id: media_player.soundbar
+            data:
+              volume_level: 0.5
+          - action: media_player.volume_set
+            target:
+              entity_id: media_player.study_bookshelf
+            data:
+              volume_level: 0.2
+          - action: media_player.volume_set
+            target:
+              entity_id: media_player.bathroom
+            data:
+              volume_level: 0.15
+          - action: media_player.volume_set
+            target:
+              entity_id: media_player.living_room
+            data:
+              volume_level: 0.3
+          - action: media_player.volume_set
+            target:
+              entity_id: media_player.bedroom
+            data:
+              volume_level: 0.4
+          - action: media_player.play_media
+            data:
+              media_content_id: radiobrowser://radio/340c29cb-7e10-44f9-9f7b-cfc5bc5b3f95
+              media_content_type: channel
             target:
               entity_id: media_player.multi_room
         turn_off:
-          - service: media_player.media_stop
+          - action: media_player.media_stop
             target:
               entity_id: media_player.multi_room
+  - binary_sensor:
+      - name: Multi Room Idle 60 Minutes
+        unique_id: multi_room_idle_60_minutes
+        state: "{{ is_state('media_player.multi_room', 'idle') }}"
+        delay_on: "01:00:00"
