@@ -1,0 +1,30 @@
+automation:
+  - id: "backyard_shed_notify_when_car_put_into_drive"
+    alias: "shed: notify when car put into drive with shed open"
+    description: "Give an early critical warning when the car is put into Drive while the shed is open."
+    triggers:
+      - trigger: state
+        entity_id: sensor.tessie_shift_state
+        to: "D"
+    conditions:
+      - condition: state
+        entity_id: device_tracker.tessie
+        state: "home"
+      - condition: state
+        entity_id: binary_sensor.shed_door_contact
+        state: "on"
+    actions:
+      - action: notify.everyone
+        data:
+          title: "Shed Door Open"
+          message: "The car was put into Drive while the shed door is open."
+          data:
+            tag: "shed-door-open"
+            group: "shed-security"
+            url: "/lovelace/security"
+            push:
+              sound:
+                name: "default"
+                critical: 1
+                volume: 1.0
+    mode: single

@@ -1,0 +1,38 @@
+automation:
+  - id: "backyard_shed_notify_when_left_open_away"
+    alias: "shed: notify when left open after everyone leaves"
+    description: "Warn when the shed door is open after the last person leaves home."
+    triggers:
+      - trigger: state
+        entity_id: group.all_people
+        to: "not_home"
+    conditions:
+      - condition: state
+        entity_id: binary_sensor.shed_door_contact
+        state: "on"
+    actions:
+      - action: notify.everyone
+        data:
+          title: "Shed Door Open"
+          message: "The shed door was left open when everyone left home."
+          data:
+            tag: "shed-door-open"
+            group: "shed-security"
+            url: "/lovelace/security"
+    mode: single
+
+  - id: "backyard_shed_clear_open_notification"
+    alias: "shed: clear open notification when door closes"
+    description: "Clear the shed-open notification after the shed door closes."
+    triggers:
+      - trigger: state
+        entity_id: binary_sensor.shed_door_contact
+        to: "off"
+    conditions: []
+    actions:
+      - action: notify.everyone
+        data:
+          message: "clear_notification"
+          data:
+            tag: "shed-door-open"
+    mode: single
