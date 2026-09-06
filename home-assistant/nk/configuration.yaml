@@ -3,6 +3,12 @@ default_config:
 homeassistant:
   name: "Home"
   auth_providers:
+    - type: trusted_networks
+      trusted_networks:
+        - 192.168.60.0/24
+      trusted_users:
+        192.168.60.0/24: !secret guest_user_id
+      allow_bypass_login: true
     - type: homeassistant
   packages: !include_dir_named packages
   internal_url: !secret http_base_url_internal
