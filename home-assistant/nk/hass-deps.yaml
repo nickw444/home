@@ -6,8 +6,6 @@ dependencies:
 - https://github.com/custom-cards/secondaryinfo-entity-row.git
 - https://github.com/kalkih/mini-media-player.git
 - https://github.com/thomasloven/lovelace-card-mod
-- source: https://github.com/matejdro/login_control.git
-  root_is_custom_components: true
 - https://github.com/iMicknl/ha-nest-protect.git
 - https://github.com/thomasloven/lovelace-fold-entity-row.git
 - https://github.com/denysdovhan/vacuum-card.git

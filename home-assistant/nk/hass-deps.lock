@@ -22,11 +22,6 @@ https://github.com/kalkih/mini-media-player.git:
 https://github.com/thomasloven/lovelace-card-mod:
   version: 8ef73d4
   type: lovelace
-https://github.com/matejdro/login_control.git:
-  version: b15f725
-  type: core
-  components:
-  - login_control
 https://github.com/iMicknl/ha-nest-protect.git:
   version: d44e482
   type: core
