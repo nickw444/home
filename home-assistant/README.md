@@ -1,21 +1,40 @@
 # home-assistant
 
-Configuration for my various home-assistant instances.
+Configuration for Home Assistant instances living in this mono-repo.
 
-## Installation
+| Directory |
+|-----------|
+| [`nk/`](nk/) |
+| [`wh/`](wh/) |
 
-Both of these configurations are deployed via the [hassio supervisor](https://github.com/home-assistant/hassio). hassio puts it's configuration at `/usr/share/hassio` and within it, it has the `homeassistant` configuration directory.
+## Live install (Home Assistant OS)
 
-In a perfect world, a symbolic link from `/usr/share/hassio/homeassistant` to `/path/to/this/repo/home-assistant/313a` would be fine, however in the hassio supervisor container it expects to find `/config/homeassistant`. This means it stumbles upon a symbolic link which it cannot resolve from within it's own world.
+Home Assistant's config directory is `/config`. This repo is not the config
+directory itself — it is cloned beside it and wired in:
 
-To resolve this, we can mount the config directory with `bindfs`:
+1. **Clone** the mono-repo to `/config/.home`
+   (`git@github.com:nickw444/home.git`).
+2. **Gitfile** at `/config/.git` pointing at the real gitdir:
+   ```
+   gitdir: /config/.home/.git
+   ```
+   The worktree remains `/config/.home` (see `core.worktree` in that git
+   config), so `git` from `/config` talks to the same repo.
+3. **Symlinks** from `/config` into the instance tree, e.g.:
+   ```
+   /config/configuration.yaml → ./.home/home-assistant/nk/configuration.yaml
+   /config/automations        → ./.home/home-assistant/nk/automations
+   /config/integrations       → ./.home/home-assistant/nk/integrations
+   /config/esphome            → ./.home/home-assistant/nk/esphome
+   …etc.
+   ```
 
-```sh
-sudo mount --bind /usr/share/nickw444_home/home-assistant/martin-pl /usr/share/hassio/homeassistant
-```
+Tracked YAML/layout lives under `home-assistant/<instance>/`. Runtime state
+stays on the `/config` volume as real directories/files (for example
+`.storage/`, `secrets.yaml`, the recorder DB, and `custom_components/`
+managed via `hass-deps`).
 
-And to make permanent, can add the following to `/etc/fstab`:
+## Tools
 
-```
-/usr/share/nickw444_home/home-assistant/martin-pl   /usr/share/hassio/homeassistant     none    bind                      0       0
-```
+[`tools/test_config.sh`](tools/test_config.sh) runs `hass --script check_config`
+against an instance directory (used by CI).

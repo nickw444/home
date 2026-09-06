@@ -12,17 +12,17 @@ jobs:
       - name: '[hass] check config: 313a'
         run: |
           ./home-assistant/tools/test_config.sh 313a
-  hass_check_config_mpl:
-    name: '[hass] check config: martin-pl'
+  hass_check_config_nk:
+    name: '[hass] check config: nk'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - uses: "actions/setup-python@v2"
         with:
           python-version: "3.9"
-      - name: '[hass] check config: martin-pl'
+      - name: '[hass] check config: nk'
         run: |
-          ./home-assistant/tools/test_config.sh martin-pl
+          ./home-assistant/tools/test_config.sh nk
   hass_check_appdaemon_313a:
     name: '[hass] lint and test appdaemon: 313a'
     runs-on: ubuntu-latest
