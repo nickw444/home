@@ -11,7 +11,7 @@
 
 ## Configuration Changes
 
-- Check the syntax of changed YAML before you reload or restart Home Assistant.
+- Use the `ha` CLI to check configuration before reloads. Restart Home Assistant only when explicitly requested.
 - Tell the user if a change needs a reload or restart.
 - Do not change Home Assistant databases or registry data directly unless the user specifically requests the exact change.
 
