@@ -4,7 +4,7 @@ homeassistant:
   name: "Home"
   auth_providers:
     - type: homeassistant
-  packages: !include_dir_named integrations
+  packages: !include_dir_named packages
   internal_url: !secret http_base_url_internal
   external_url: !secret http_base_url
   latitude: !secret latitude

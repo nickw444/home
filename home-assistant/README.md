@@ -24,7 +24,7 @@ directory itself — it is cloned beside it and wired in:
    ```
    /config/configuration.yaml → ./.home/home-assistant/nk/configuration.yaml
    /config/automations        → ./.home/home-assistant/nk/automations
-   /config/integrations       → ./.home/home-assistant/nk/integrations
+   /config/packages           → /config/.home/home-assistant/nk/packages
    /config/esphome            → ./.home/home-assistant/nk/esphome
    …etc.
    ```
