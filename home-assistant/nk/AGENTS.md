@@ -3,6 +3,12 @@
 - This is a LIVE Home Assistant configuration directory. A file change can affect the running instance.
 - Avoid destructive actions unless the user requests them clearly.
 
+## Git Layout
+
+- `/config` is not a Git work tree. The `/config/.git` pointer can make it look like one.
+- Most tracked files in `/config` are symlinks to `/config/.home/home-assistant/nk/`. An edit to the symlink changes its tracked target.
+- Git uses paths from `/config/.home`. For example, `/config/AGENTS.md` is `home-assistant/nk/AGENTS.md`. Do not assume that Git tracks all files in `/config`.
+
 ## Configuration Changes
 
 - Check the syntax of changed YAML before you reload or restart Home Assistant.
