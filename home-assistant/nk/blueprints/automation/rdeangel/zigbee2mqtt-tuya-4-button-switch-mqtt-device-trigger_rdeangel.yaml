@@ -18,9 +18,9 @@ blueprint:
           - restart
           - queued
           - parallel
-          sort: false
-          custom_value: false
           multiple: false
+          custom_value: false
+          sort: false
     zigbee_device:
       name: Zigbee Device - Tuya TS0044 4 Buttons (and alike)
       description: Select the correct Zigbee device to use.
