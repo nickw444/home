@@ -9,6 +9,12 @@
 - Tell the user if a change needs a reload or restart.
 - Do not change Home Assistant databases or registry data directly unless the user specifically requests the exact change.
 
+## Package Structure
+
+- Put new YAML configuration in `/config/packages/`. Use the most relevant area folder, such as `/config/packages/kitchen/`, even if the configuration affects multiple areas.
+- Use `home/` only for configuration that applies to the full home. Use `system/` for system configuration. Do not add files to `legacy/`.
+- Keep related helpers and automations in one package. Each YAML filename must be unique in the full `packages/` tree. Subdirectories do not make filenames unique.
+
 ## Internal Data
 
 - Use the Home Assistant MCP for history, triggers, and entity or device registry information.
