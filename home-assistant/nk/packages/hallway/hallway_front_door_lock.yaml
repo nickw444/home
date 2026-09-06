@@ -1,0 +1,40 @@
+automation:
+  - id: '1754299925764'
+    alias: 'front door: lock front door after 15m unlock timeout with door closed'
+    description: ''
+    triggers:
+    - trigger: state
+      entity_id:
+      - binary_sensor.front_door_contact
+      to: 'off'
+      for:
+        hours: 0
+        minutes: 15
+        seconds: 0
+    - trigger: state
+      entity_id:
+      - lock.front_door
+      to: unlocked
+      for:
+        hours: 0
+        minutes: 15
+        seconds: 0
+    conditions:
+    - condition: state
+      entity_id: lock.front_door
+      state: unlocked
+    - condition: state
+      entity_id: binary_sensor.front_door_contact
+      state: 'off'
+    actions:
+    - action: lock.lock
+      metadata: {}
+      data: {}
+      target:
+        entity_id: lock.front_door
+    - action: notify.everyone
+      metadata: {}
+      data:
+        title: Front Door
+        message: Front door was locked after timeout
+    mode: single

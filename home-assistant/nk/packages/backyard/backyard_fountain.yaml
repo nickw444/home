@@ -1,0 +1,53 @@
+automation:
+  - id: '1754297735451'
+    alias: 'backyard: turn on fountain on person detected'
+    description: ''
+    triggers:
+    - trigger: state
+      entity_id:
+      - binary_sensor.shed_fp2_presence_sensor_deck
+      to: 'on'
+      for:
+        hours: 0
+        minutes: 2
+        seconds: 0
+    conditions:
+    - condition: state
+      entity_id: binary_sensor.back_yard_person_detected_last_hour
+      state: 'on'
+    - condition: state
+      entity_id: group.all_people
+      state: home
+    - condition: sun
+      after: sunrise
+    - condition: time
+      before: '21:00:00'
+    - condition: state
+      entity_id: switch.front_garden_fountain
+      state: 'off'
+    actions:
+    - action: switch.turn_on
+      metadata: {}
+      data: {}
+      target:
+        entity_id: switch.front_garden_fountain
+    - wait_for_trigger:
+      - trigger: state
+        entity_id:
+        - binary_sensor.back_yard_person_detected
+        to: 'off'
+        for:
+          hours: 0
+          minutes: 30
+          seconds: 0
+      timeout:
+        hours: 2
+        minutes: 0
+        seconds: 0
+        milliseconds: 0
+    - action: switch.turn_off
+      metadata: {}
+      data: {}
+      target:
+        entity_id: switch.front_garden_fountain
+    mode: single

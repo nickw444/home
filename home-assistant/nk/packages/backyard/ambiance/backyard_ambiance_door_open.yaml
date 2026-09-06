@@ -1,0 +1,48 @@
+automation:
+  - id: '1754298218488'
+    alias: 'backyard: turn on ambiance on door open'
+    description: ''
+    triggers:
+    - trigger: state
+      entity_id:
+      - binary_sensor.back_door_contact
+      to: 'on'
+    conditions:
+    - condition: numeric_state
+      entity_id: sensor.ecowitt_hub_solar_lux
+      below: 500
+    - condition: time
+      before: '23:59:00'
+    - condition: state
+      entity_id: light.back_yard_ambiance
+      state: 'off'
+    actions:
+    - action: light.turn_on
+      metadata: {}
+      data: {}
+      target:
+        entity_id: light.back_yard_ambiance
+    - wait_for_trigger:
+      - trigger: state
+        entity_id:
+        - binary_sensor.back_yard_person_detected
+        to: 'off'
+        for:
+          hours: 0
+          minutes: 15
+          seconds: 0
+      - trigger: state
+        entity_id:
+        - light.back_yard_ambiance
+        to: 'off'
+      timeout:
+        hours: 1
+        minutes: 0
+        seconds: 0
+        milliseconds: 0
+    - action: light.turn_off
+      metadata: {}
+      data: {}
+      target:
+        entity_id: light.back_yard_ambiance
+    mode: restart
