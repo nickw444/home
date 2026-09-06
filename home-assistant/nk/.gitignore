@@ -19,6 +19,3 @@ ip_bans.yaml
 image
 frigate.yml
 zigbee2mqtt
-
-# Managed by hass-deps (see hass-deps.yaml)
-www/community/*
