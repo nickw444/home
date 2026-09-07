@@ -1,5 +1,11 @@
 influxdb:
-  max_retries: 3
+  api_version: 2
+  host: 95a1225f-influxdb2
+  port: 8086
+  ssl: false
+  token: !secret influxdb_token
+  organization: homeassistant
+  bucket: homeassistant
   default_measurement: state
   # We query InfluxDB for state history only; attributes add substantial write volume.
   ignore_attributes:
