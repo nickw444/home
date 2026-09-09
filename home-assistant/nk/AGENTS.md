@@ -11,6 +11,9 @@
 
 ## Configuration Changes
 
+- Use YAML configuration first for automations, helpers, groups, scripts, scenes, template entities, and input controls.
+- Use the Home Assistant MCP to get information. Use it for setup only when YAML configuration cannot do the work.
+- Home Assistant MCP reads are allowed. Before an edit through the Home Assistant MCP, ask the user whether to use the MCP.
 - Use the `ha` CLI to check configuration before reloads. Restart Home Assistant only when explicitly requested.
 - Tell the user if a change needs a reload or restart.
 - Do not change Home Assistant databases or registry data directly unless the user specifically requests the exact change.
